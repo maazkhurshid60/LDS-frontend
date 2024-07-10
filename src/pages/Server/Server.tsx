@@ -28,7 +28,28 @@ const Server = () => {
     const firstIndexItem = lastIndexItem - dataLimit;
     const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
     return <>
-        {showModal ? <AdministrationServerModal/>
+    <OutletLayout>
+                <div className="">
+                    <OutletLayoutHeader heading="Servers">
+                        {userInfo?.role === "admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
+                        <BorderButton buttonText="filter" disabled />
+                    </OutletLayoutHeader>
+                    <div className="mt-4 flex flex-col  gap-4
+                            sm:flex-row sm:items-center">
+                        <Searchbar />
+                        <Filter />
+                    </div>
+                    <Table headers={headers} tableData={currentTableData} />
+                        <Pagination
+                            totalPages={totalPages}
+                            currentPage={currentPage}
+                            dataLimit={dataLimit}
+                            tableData={tableData?.tableData}
+                            onchange={onPageChange} // Pass onPageChange as onchange prop
+                        />
+                </div>
+            </OutletLayout>
+        {/* {showModal ? <AdministrationServerModal/>
             :
             <OutletLayout>
                 <div className="">
@@ -50,7 +71,7 @@ const Server = () => {
                             onchange={onPageChange} // Pass onPageChange as onchange prop
                         />
                 </div>
-            </OutletLayout>}
+            </OutletLayout>} */}
     </>
 }
 export default Server

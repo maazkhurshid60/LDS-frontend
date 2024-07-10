@@ -2,17 +2,17 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { LuUser2 } from "react-icons/lu";
 
 export const linkData = [
-    {
-        name: "operations",
-       submenu:true,
-       icon:IoSettingsOutline,
-        subMenu: [
-                    { linkName: "Service", to: "/service"},
-                    { linkName: "Result", to: "/result"},
-                    { linkName: "Legal Delivery", to: "/legal-delivery"},
+    // {
+    //     name: "operations",
+    //    submenu:true,
+    //    icon:IoSettingsOutline,
+    //     subMenu: [
+    //                 { linkName: "Service", to: "/service"},
+    //                 { linkName: "Result", to: "/result"},
+    //                 { linkName: "Legal Delivery", to: "/legal-delivery"},
                   
-                ]
-    },
+    //             ]
+    // },
     {
         name: "Administration",
         icon:LuUser2,

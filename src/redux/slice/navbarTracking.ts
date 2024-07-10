@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    mainMenu: "Operations", // Initially main menu selected
-    subMenu: "Service", // Initially submenu selected
+    mainMenu: "Administeration", // Initially main menu selected
+    subMenu: "User", // Initially submenu selected
 }
 const navbarTracking = createSlice({
     name: "navbarTracking",

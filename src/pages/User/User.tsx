@@ -45,7 +45,8 @@ const User = () => {
     disptach(getLastUser())
   }
   return <>
-  {showModal? <AddUserModal/>:<OutletLayout>
+  {/* {showModal? <AddUserModal/>: */}
+  <OutletLayout>
       <div className="h-[66vh] overflow-y-scroll">
         <OutletLayoutHeader heading="User">
           <div className="w-full flex flex-wrap items-center gap-2">
@@ -77,7 +78,8 @@ const User = () => {
         </div>
         {/* DISPLAY ALL USERS SECTION ENDS */}
       </div>
-    </OutletLayout>}
+    </OutletLayout>
+    {/* } */}
    
     
     </>
