@@ -14,15 +14,18 @@ import { showModalReducer } from "../../redux/slice/showModal";
 import ServiceResultModal from "../../components/Modal/ServiceResultModal"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 import { DataLoader } from "../../components/Loader/DataLoader";
+import { toast } from "react-toastify";
+import { deleteServiceResultApi } from "../../apiservices/serviceResult/serviceResult";
+
 const ServiceResult = () => {
-    const userInfo = useSelector((state: RootState) => state?.userDetail);
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
     // const [allServiceResultData,setAllServiceResultData]=useState<serviceResultType[]>([])
 const dispatch=useDispatch()
 const {isLoading,error,data}=useGetAllData("/service-result/all-service-results")
 // console.log(isLoading,error,data)
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    const dataLimit = 1; // Define your data limit here
+    const dataLimit = 10; // Define your data limit here
     const totalPages = Math.ceil(data?.length / dataLimit);
     const onPageChange = (page: number) => {
         setCurrentPage(page); // Update current page state
@@ -49,6 +52,18 @@ const {isLoading,error,data}=useGetAllData("/service-result/all-service-results"
 //     }
 // }
 
+const deleteData=async(id:number)=>{
+    const data={serviceResultId:JSON.stringify(id)}
+try {
+    const response=await deleteServiceResultApi(data)
+    console.log(response)
+} catch (error) {
+    console.log(error)
+
+   toast.error("something went wrong") 
+}
+}
+
  if (isLoading) return <DataLoader text="Service result"/>
 
     if (error) return <div>An error has occurred: {error.message}</div>;
@@ -60,7 +75,7 @@ const {isLoading,error,data}=useGetAllData("/service-result/all-service-results"
                 <OutletLayout>
                     <div className="">
                         <OutletLayoutHeader heading="Service Results">
-                            {userInfo?.role === "admin" && (
+                            {userInfo?.roles[0]?.name === "Admin" && (
                                 <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />
                             )}
                             <BorderButton buttonText="filter" disabled />
@@ -69,7 +84,7 @@ const {isLoading,error,data}=useGetAllData("/service-result/all-service-results"
                             <Searchbar />
                             <Filter />
                         </div>
-                        <Table headers={headers} tableData={currentTableData} />
+                        <Table headers={headers} tableData={currentTableData} onClick={deleteData}/>
                         <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}

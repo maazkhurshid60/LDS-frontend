@@ -39,6 +39,7 @@
 // export default Table2Col;
 
 import React from "react";
+import { DeleteIcon } from "../Icons/DeleteIcon";
 
 interface Table2ColProps {
     headers: string[];
@@ -57,6 +58,10 @@ const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick }) =>
         });
         return filteredData;
     };
+
+    const deleteData=(id:number)=>{
+console.log(id)
+    }
 
     return (
         <div className="relative w-full overflow-x-auto rounded-lg mt-4 border-[1px] border-borderColor border-solid rounded-xl capitalize text-sm sm:text-base">
@@ -77,13 +82,17 @@ const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick }) =>
                             <tr
                                 key={rowIndex}
                                 className={`cursor-pointer bg-white ${rowIndex % 2 === 0 ? "bg-XwhiteColor" : "bg-[#F1F5F8]"} font-medium text-sm sm:text-base`}
-                                onClick={() => onClick && onClick(rowIndex)}
+                               
                             >
                                 {Object.values(filteredData).map((value, colIndex) => (
                                     <td key={colIndex} className="px-6 py-2 font-normal text-sm">
                                         {value}
                                     </td>
                                 ))}
+  <td key={rowIndex} className="px-6 py-2 font-normal text-sm">
+                                       <DeleteIcon  onClick={() => onClick && onClick(rowData?._id)}/>
+                                    </td>
+
                             </tr>
                         );
                     })}

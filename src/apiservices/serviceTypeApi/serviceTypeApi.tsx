@@ -1,12 +1,11 @@
-import axios from "axios"
-import { baseUrl } from "../baseUrl/baseUrl"
-
+import axios from "axios";
+import { baseUrl } from "../baseUrl/baseUrl";
 
 // GET ADD SERVICE RESULT API
-export const addServiceResultApi=async(data:any)=>{
+export const addServiceTypeApi=async(data:any)=>{
     try {
         const accessToken = localStorage.getItem("accessToken");
-        const response= await axios.post(`${baseUrl}/service-result/create`,data, { headers: {
+        const response= await axios.post(`${baseUrl}/service-type/create`,data, { headers: {
             "Authorization": `Bearer ${accessToken}`
         } })
         return response
@@ -15,9 +14,10 @@ export const addServiceResultApi=async(data:any)=>{
     }
     }
 
-
+    
 // DELETE SERVICE RESULT API
-export const deleteServiceResultApi=async(data:any)=>{
+export const deleteServiceTypeApi=async(data:any)=>{
+    console.log(data)
     try {
         const accessToken = localStorage.getItem("accessToken");
         console.log(accessToken,data)
@@ -34,17 +34,3 @@ export const deleteServiceResultApi=async(data:any)=>{
         throw Error (error)
     }
     }
-
-// // GET ALLRESULT API
-// export const getAllServiceResultApi=async()=>{
-// try {
-//     const accessToken = localStorage.getItem("accessToken");
-//     const response= await axios.get(`${baseUrl}/service-result/all-service-results`, { headers: {
-//         "Authorization": `Bearer ${accessToken}`
-//     } })
-//     return response?.data
-// } catch (error) {
-//     throw Error (error)
-// }
-// }
-

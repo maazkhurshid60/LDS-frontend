@@ -8,4 +8,4 @@ export const tableData = {
 
     ]
 }
-export const headers = ["Service Result Code", "Service Result Description"];
+export const headers = ["Service Result Code", "Service Result Description","action"];

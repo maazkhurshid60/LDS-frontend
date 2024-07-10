@@ -8,11 +8,11 @@ import { openMenuFunction } from "../redux/slice/menuOpen";
 import { RootState } from "../redux/store";
 import "./Sidebar.css"
 const Layout = () => {
-    const userInfo = useSelector((state: RootState) => state?.userDetail)
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user)
     const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
     const menu = useSelector((state: RootState) => state.menuOpen.menuOpenStatus);
     const dispatch = useDispatch()
-    // console.log(menu)
+    console.log(userInfo?.email)
     return <>
         {userInfo?.email !== null ? <div className="flex items-start">
             {/* <IoMdMenu size={24} className=" absolute top-0 right-0 "

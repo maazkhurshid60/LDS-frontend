@@ -4,4 +4,4 @@ export const tableData = {
     { ServiceTypeCode: "L&T Commercial", ServiceTypeDescription: "L&T Commercial" },
     { ServiceTypeCode: "standard", ServiceTypeDescription: "standard" }
 ]}
-export const headers = ["Service Type Code", "Service Type Description"];
+export const headers = ["Service Type Code", "Service Type Description","action"];

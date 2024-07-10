@@ -11,8 +11,14 @@ function App() {
     <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <Routing/>
-      <ToastContainer />
-
+      {/* <ToastContainer /> */}
+      <ToastContainer
+            toastContainerClassName="toast-container z-[99999999999999]"
+            position="top-right"
+            autoClose={5000}
+            closeOnClick
+            pauseOnHover
+          />
       </PersistGate>  
     </Provider>
     </>

@@ -21,10 +21,10 @@ const Login = () => {
         try {
             const response=await loginApi(data) 
             console.log(response?.data?.data)
-            toast.success(`${response?.data?.message}`)
             dispatch(loginUser(response?.data?.data))
             const accessToken = response?.data?.data?.accessToken;
             localStorage.setItem("accessToken", accessToken); 
+            toast.success(`${response?.data?.message}`)
             navigate("/")
         } catch (error) {
             toast.error(`${error?.response?.data?.message}`)
