@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Links from "./Links";
 import { IoIosArrowBack } from "react-icons/io";
-import Tooltip from "../Tooltip/Tooltip";
+
 import { IoMdMenu } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { isSideBarWidth } from "../../redux/slice/sideBarWidth";
@@ -13,7 +13,7 @@ const Sidebar = () => {
     // const [menuOpen, setMenuOpen] = useState(false)
     const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
     // const menu = useSelector(state => state.menuOpen.menuOpenStatus);
-
+    const userData = useSelector((state: RootState) => state?.userDetail)
     const dispatch = useDispatch()
 
     return <>
@@ -44,17 +44,17 @@ const Sidebar = () => {
                     text-xs
                                 md:text-[8px]
                                 lg:text-[10px]
-                                xl:text-xs">admin</h1>  {/* ADMIN is user role will come from api currently its hardcoded */}
+                                xl:text-xs">{userData?.userDetails?.user?.roles[0]?.name}</h1>  {/* ADMIN is user role will come from api currently its hardcoded */}
                     <h1 className="capitalize   font-medium tracking-wide 
                 text-xs
                 lg:text-sm
-                xl:text-md">Roger Dokidis</h1>  {/* ADMIN is user role will come from api currently its hardcoded */}
+                xl:text-md">{userData?.userDetails?.user?.userName}</h1>  {/* ADMIN is user role will come from api currently its hardcoded */}
                 </div>}
 
             </div>
             {/* USER DETAILS ENDS */}
             {/* LINKS STARTS*/}
-            <Links widthSmall={widthSmall} />
+            <Links widthSmall={widthSmall} userData={userData?.userDetails?.user?.roles[0]?.name} />
             {/* LINKS ENDS*/}
         </div>
     </>

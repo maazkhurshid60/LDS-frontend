@@ -6,20 +6,35 @@ import { loginSchema } from "../../schemas/auth.schema"
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/slice/userDetail";
 import { useNavigate } from "react-router-dom";
-// IMPORTING COMPONENTS
-const ButtonComponent=lazy(()=> import ("../../components/Buttons/Button/Button"));
-const PasswordComponent = lazy(() => import("../../components/InputFields/PasswordField/PasswordField"));
-const EmailComponent = lazy(() => import("../../components/InputFields/TextField/TextField"));
+
+import { toast } from "react-toastify";
+import { loginApi } from "../../apiservices/user/userApi";
+import Button from "../../components/Buttons/Button/Button";
+import PasswordField from "../../components/InputFields/PasswordField/PasswordField"
 const Login = () => {
-    const { register, formState: { errors }, handleSubmit } = useForm({ resolver: zodResolver(loginSchema) },)
+    const { register, formState: { errors ,isSubmitting}, handleSubmit } = useForm({ resolver: zodResolver(loginSchema) },)
     const dispatch=useDispatch();
     const navigate=useNavigate()
     // LOGIN FUNCTION STARTS
-    const loginFunction = (data) => {
-        const role="admin"
-        const userData={email:data?.email,role}
-       dispatch(loginUser(userData))
-       navigate("/")
+    const loginFunction = async(data) => {
+        // alert(",mcxznv,mcxznv")
+        try {
+            const response=await loginApi(data) 
+            console.log(response?.data?.data)
+            toast.success(`${response?.data?.message}`)
+            dispatch(loginUser(response?.data?.data))
+            const accessToken = response?.data?.data?.accessToken;
+            localStorage.setItem("accessToken", accessToken); 
+            navigate("/")
+        } catch (error) {
+            toast.error(`${error?.response?.data?.message}`)
+            console.log(error)
+        }
+        // const role="admin"
+        // const userData={name:data?.userName,role}
+        // console.log(userData)
+    //    dispatch(loginUser(userData))
+    //    navigate("/")
     }
     // LOGIN FUNCTION ENDS
     return <div className="w-full bg-whiteColor flex items-center justify-center h-[100vh] ">
@@ -41,15 +56,15 @@ const Login = () => {
             {/* HEADER ENDS */}
             {/* FORM STARTS */}
             <form onSubmit={handleSubmit(loginFunction)} className="flex flex-col gap-4 mt-8">
-                <Suspense fallback={<div>Loading...</div>}>
-                    <EmailComponent label="Email" register={register} error={errors?.email} name="email"/>
-                </Suspense>
-                <Suspense fallback={<div>Loading...</div>}>
-                    <PasswordComponent label="Password" register={register} error={errors?.password} name="password"/>
-                </Suspense>
-                <Suspense fallback={<div>Loading...</div>}>
-                    <ButtonComponent  text="login"/>
-                </Suspense>
+         
+                    <TextField label="User Name" register={register} error={errors?.userName} name="userName"/>
+             
+         
+                    <PasswordField label="Password" register={register} error={errors?.password} name="password"/>
+             
+         
+                    <Button  text={isSubmitting?"logging":"login"}/>
+             
             </form>
             {/* FORM ENDS */}
         </div>

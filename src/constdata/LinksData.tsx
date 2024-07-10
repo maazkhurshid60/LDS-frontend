@@ -6,6 +6,8 @@ export const linkData = [
         name: "operations",
        submenu:true,
        icon:IoSettingsOutline,
+       to:"#",
+
         subMenu: [
                     { linkName: "Service", to: "/service"},
                     { linkName: "Result", to: "/result"},
@@ -17,6 +19,8 @@ export const linkData = [
         name: "Administration",
         icon:LuUser2,
         submenu:true,
+        to:"#",
+
         subMenu: [
                     { linkName: "User", to: "/user" },
                     { linkName: "Service Result", to: "/service-result" },
@@ -27,5 +31,19 @@ export const linkData = [
                     { linkName: "Holidays", to: "/holiday" },
                     { linkName: "Settings", to: "/setting" },
                 ]
+    },
+    {
+        name: "Users",
+        to:"/all-users",
+        icon:LuUser2,
+        submenu:false,
+       
+    },
+    {
+        name: "Roles",
+        to:"/all-roles",
+        icon:LuUser2,
+        submenu:false,
+       
     }
 ]
