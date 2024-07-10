@@ -20,9 +20,7 @@ const Routing = () => {
                 <Route path="/login" element={<Login />} />
                 <Route element={<Layout />}>
                         {/* Place the /service route at the top */}
-                        {/* <Route path="/" element={<Navigate to="/service" />} /> */}
-                        <Route path="/" element={<Navigate to="/user" />} />
-
+                        <Route path="/" element={<Navigate to="/service" />} />
                     <Route path="/service-result" element={<ServiceResult />} />
                     <Route path="/service-type" element={<ServiceType />} />
                     <Route path="/user" element={<User />} />

@@ -31,7 +31,7 @@ const [currentPage, setCurrentPage] = useState(1); // State to manage current pa
     const firstIndexItem = lastIndexItem - dataLimit;
     const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
     return <>
-    <OutletLayout>
+{showModal?<ClientModal/>:<OutletLayout>
             <div className="">
                 <OutletLayoutHeader heading="Clients">
                     {userInfo?.role === "admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
@@ -51,28 +51,7 @@ const [currentPage, setCurrentPage] = useState(1); // State to manage current pa
                             onchange={onPageChange} // Pass onPageChange as onchange prop
                         />
             </div>
-        </OutletLayout>
-{/* {showModal?<ClientModal/>:<OutletLayout>
-            <div className="">
-                <OutletLayoutHeader heading="Clients">
-                    {userInfo?.role === "admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
-                    <BorderButton buttonText="filter" disabled />
-                </OutletLayoutHeader>
-                <div className="mt-4 flex flex-col  gap-4
-                            sm:flex-row sm:items-center">
-                    <Searchbar />
-                    <Filter />
-                </div>
-                <Table headers={headers} tableData={currentTableData} />
-                <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            dataLimit={dataLimit}
-                            tableData={tableData?.tableData}
-                            onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
-            </div>
-        </OutletLayout>} */}
+        </OutletLayout>}
         
     </>
 }
