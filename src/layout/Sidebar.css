@@ -1,0 +1,6 @@
+.sticky-sidebar {
+    position: sticky;
+    top: 85px; /* Adjust this value based on your layout */
+    height: calc(100vh - 85px); /* Adjust height to fill remaining viewport */
+    overflow-y: auto; /* Enable scrolling within the sidebar if content overflows */
+}
