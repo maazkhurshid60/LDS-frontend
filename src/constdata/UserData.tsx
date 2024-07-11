@@ -7,4 +7,4 @@ export const tableData = {
     { userName: "AD Symonds", firstName: "AD",lastName:"Symonds" ,email:" adsymonds@gmail.com"},
 
 ]}
-export const headers = ["User name", "First name","last name","email","Action"];
+export const headers = ["User name", "First name","last name","email"];

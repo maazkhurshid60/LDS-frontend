@@ -16,24 +16,26 @@ import Button from "../../../components/Buttons/Button/Button";
 export type FormFields = z.infer<typeof userInputSectionSchema>
 
 const UserInputSection = () => {
-const userId=useSelector((state:RootState)=>state.userId.userId)
-    const { register, formState: { errors,isSubmitting }, handleSubmit,setValue,control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
-    const alluserDetail=useSelector((state:RootState)=>state.userId)
-    const alluserData=useSelector((state:RootState)=>state.userId.allUser.tableData)
-    const { isLoading, error, data } = useGetAllData("/role/all-roles")
-const [singleUserId,setSingleUserId]=useState("")
+    const userId = useSelector((state: RootState) => state.userId.userId)
+    const { register, formState: { errors, isSubmitting }, handleSubmit, setValue, control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
+    const alluserDetail = useSelector((state: RootState) => state.userId)
+    const alluserData = useSelector((state: RootState) => state.userId.allUser.tableData)
+    // const { isLoading, error, data } = useGetAllData("/role/all-roles")
+    const data = useSelector((state: RootState) => state?.roles?.allRoles?.tableData)
+
+    const [singleUserId, setSingleUserId] = useState("")
     const options = data?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
-    const dispatch=useDispatch()
-    const oneUser=useSelector((state:RootState)=>state.userId.singleUser)
-   
-      useEffect(() => {
-            dispatch(getOneUser())
-            }, [userId,alluserData]);
-// const userDetail=userData?.filter((_,id)=>id===userId)
-// console.log(oneUser!==null&& oneUser[0])
+    const dispatch = useDispatch()
+    const oneUser = useSelector((state: RootState) => state.userId.singleUser)
+
     useEffect(() => {
-        if (oneUser!==null&& oneUser[0]&&alluserData.length>0) {
+        dispatch(getOneUser())
+    }, [userId, alluserData]);
+    // const userDetail=userData?.filter((_,id)=>id===userId)
+    // console.log(oneUser!==null&& oneUser[0])
+    useEffect(() => {
+        if (oneUser !== null && oneUser[0] && alluserData.length > 0) {
             setValue("userName", oneUser[0].userName || "");
             setValue("firstName", oneUser[0].firstName || "");
             setValue("lastName", oneUser[0].lastName || "");
@@ -41,23 +43,25 @@ const [singleUserId,setSingleUserId]=useState("")
             setAllSelectedRoles(oneUser[0].roles)
             setSingleUserId(oneUser[0]._id)
         }
-        else{ setValue("userName", "");
+        else {
+            setValue("userName", "");
             setValue("firstName", "");
             setValue("lastName", "");
-            setValue("email", "")}
+            setValue("email", "")
+        }
     }, [alluserDetail, setValue]);
 
 
     // UPDATE USER
     const userUpdateFunction = (data) => {
-        const onlyName=allSelectedRoles?.map(data=>data?.name)
-        const allData={...data,roles:onlyName,userId:singleUserId}
+        const onlyName = allSelectedRoles?.map(data => data?.name)
+        const allData = { ...data, roles: onlyName, userId: singleUserId }
         dispatch(updateUser(allData))
-        console.log("data",allData)
+        console.log("data", allData)
     }
 
-      // GET SELECTED ROLES
-      const getSelectedRoles = (optionValue) => {
+    // GET SELECTED ROLES
+    const getSelectedRoles = (optionValue) => {
         // console.log("getselectedfunciton", optionValue)
         const selected = data?.find((options, index: number) => { return options?._id === optionValue })
         // console.log(selected)
@@ -101,9 +105,9 @@ const [singleUserId,setSingleUserId]=useState("")
                         getMailFunction={getSelectedRoles}
                     />)} />
             </div>
-            
+
         </div>
-        <Button text={isSubmitting?"saving":"save" }/>
+        <Button text={isSubmitting ? "saving" : "save"} />
     </form>
 
 }

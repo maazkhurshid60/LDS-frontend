@@ -5,7 +5,9 @@ const initialState = {
     // showAdministrationServerModal: false,
     // showServiceResultModal: false,
     // showServiceTypeModal: false,
-    isShowModal:false
+    isShowModal:false,
+    isShowRoleModal:false
+
 
 }
 
@@ -14,10 +16,10 @@ const showModal = createSlice({
     initialState: initialState,
     reducers: {
         // // REDUCER FOR ADD USER MODAL
-        // showAddUserModalReducer: (state, action) => {
-        //     state.showAddUserModal = action.payload
+        showRoleModalReducer: (state, action) => {
+            state.isShowRoleModal = action.payload
 
-        // },
+        },
         // // REDUCER FOR ADMINISTRATION SERVER MODAL
         // showAdministrationServerModalReducer: (state, action) => {
         //     state.showAdministrationServerModal = action.payload
@@ -36,5 +38,5 @@ const showModal = createSlice({
     }
 })
 
-export const {showModalReducer} = showModal.actions
+export const {showModalReducer,showRoleModalReducer} = showModal.actions
 export default showModal.reducer

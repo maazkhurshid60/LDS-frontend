@@ -4,6 +4,7 @@ import { headers, userRoleData } from "../../../constdata/UserPerRole";
 import Pagination from "../../../components/Pagination/Pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import TableWithoutAction from "../../../components/Tables/TableWithoutAction";
 
 const RolePerUserSection = () => {
     const alluserDetail=useSelector((state:RootState)=>state.userId)
@@ -14,7 +15,7 @@ const RolePerUserSection = () => {
             <h1 className="font-semibold mb-4
                 md:text-md
                 lg:text-xl">Role per users </h1>
-            <Table headers={headers} tableData={alluserDetail.singleUser ? alluserDetail.singleUser[0]?.roles : []}/>
+            <TableWithoutAction headers={headers} tableData={alluserDetail.singleUser ? alluserDetail.singleUser[0]?.roles : []}/>
             
         </div>
     );

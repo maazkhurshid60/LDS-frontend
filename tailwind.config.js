@@ -7,6 +7,7 @@ export default {
   theme: {
     colors:{
       primaryColor:"#4338CA",
+      greenColor:"#008000",
       whiteColor:"#fff",
       borderColor:"#00000021",
       redColor:"#bb2124",

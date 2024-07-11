@@ -9,6 +9,7 @@ import sideBarWidthReducer from "./slice/sideBarWidth";
 import userIdReducer from "./slice/userId";
 import showModalReducer from "./slice/showModal";
 import mailingAdressesReducer from "./slice/mailingAdresses";
+import rolesReducer from "./slice/roles";
 
 
 // Combine all reducers
@@ -20,6 +21,8 @@ const rootReducer = combineReducers({
     userId:userIdReducer,
     showModal:showModalReducer,
     mailingAdress:mailingAdressesReducer,
+    roles:rolesReducer,
+
 });
 
 // Define RootState to encompass all slices

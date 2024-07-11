@@ -34,7 +34,7 @@ export const getAllUserApi=async()=>{
     }
     }
 
-    // GET ALL USER API
+    // UPDATE USER API
 export const updateUserApi=async(data)=>{
     try {
         const response= await axios.patch (`${baseUrl}/user/update`,data,{ headers: {
