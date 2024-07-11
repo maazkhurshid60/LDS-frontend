@@ -32,18 +32,18 @@ export const linkData = [
                     { linkName: "Settings", to: "/setting" },
                 ]
     },
-    {
-        name: "Users",
-        to:"/all-users",
-        icon:LuUser2,
-        submenu:false,
+    // {
+    //     name: "Users",
+    //     to:"/all-users",
+    //     icon:LuUser2,
+    //     submenu:false,
        
-    },
-    {
-        name: "Roles",
-        to:"/all-roles",
-        icon:LuUser2,
-        submenu:false,
+    // },
+    // {
+    //     name: "Roles",
+    //     to:"/all-roles",
+    //     icon:LuUser2,
+    //     submenu:false,
        
-    }
+    // }
 ]
