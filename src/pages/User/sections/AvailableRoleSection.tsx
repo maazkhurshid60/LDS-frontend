@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Table from "../../../components/Tables/Table";
 import { availableRoleData, headers } from "../../../constdata/AvailableRoleData";
 import Pagination from "../../../components/Pagination/Pagination";
-const AvailableRoleSection=()=>{
+import Button from "../../../components/Buttons/Button/Button";
+const AvailableRoleSection = () => {
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
     const dataLimit = 1; // Define your data limit here
     const totalPages = Math.ceil(availableRoleData?.tableData?.length / dataLimit);
@@ -16,17 +17,24 @@ const AvailableRoleSection=()=>{
     const currentTableData = availableRoleData?.tableData.slice(firstIndexItem, lastIndexItem);
 
     return <>
+        <div className="flex items-center flex-row justify-between  flex-wrap w-[99%]">
+
             <h1 className="font-semibold md:text-md
                 lg:text-xl">Available Roles</h1>
-            <Table headers={headers} tableData={currentTableData}/>
-            <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            dataLimit={dataLimit}
-                            tableData={availableRoleData?.tableData}
-                            onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
-            </>
+            <div className="w-[13%]">
+
+                <Button text="Add New Role" />
+            </div>
+        </div>
+        <Table headers={headers} tableData={currentTableData} />
+        <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            dataLimit={dataLimit}
+            tableData={availableRoleData?.tableData}
+            onchange={onPageChange} // Pass onPageChange as onchange prop
+        />
+    </>
 }
 
 export default AvailableRoleSection

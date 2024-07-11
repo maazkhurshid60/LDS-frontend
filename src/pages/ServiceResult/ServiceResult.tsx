@@ -52,10 +52,9 @@ const {isLoading,error,data}=useGetAllData("/service-result/all-service-results"
 //     }
 // }
 
-const deleteData=async(id:number)=>{
-    const data={serviceResultId:JSON.stringify(id)}
+const deleteData=async(id:string)=>{
 try {
-    const response=await deleteServiceResultApi(data)
+    const response=await deleteServiceResultApi(id)
     console.log(response)
 } catch (error) {
     console.log(error)
@@ -89,7 +88,7 @@ try {
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
-                            tableData={tableData?.tableData}
+                            tableData={currentTableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
                         />
                     </div>

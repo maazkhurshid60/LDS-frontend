@@ -1,11 +1,11 @@
 import axios from "axios";
 import { baseUrl } from "../baseUrl/baseUrl";
 
-const accessToken = localStorage.getItem("accessToken");
 // GET ADD SERVICE RESULT API
-export const addServiceTypeApi=async(data:any)=>{
+export const addClientApi=async(data:any)=>{
     try {
-        const response= await axios.post(`${baseUrl}/service-type/create`,data, { headers: {
+        const accessToken = localStorage.getItem("accessToken");
+        const response= await axios.post(`${baseUrl}/client/create`,data, { headers: {
             "Authorization": `Bearer ${accessToken}`
         } })
         return response
@@ -19,6 +19,7 @@ export const addServiceTypeApi=async(data:any)=>{
 export const deleteServiceTypeApi=async(data:any)=>{
     console.log(data)
     try {
+        const accessToken = localStorage.getItem("accessToken");
         console.log(accessToken,data)
 
         const response = await axios.delete(`${baseUrl}/service-result/delete`, {

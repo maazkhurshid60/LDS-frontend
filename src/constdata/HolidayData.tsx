@@ -8,4 +8,4 @@ export const tableData =  {   totalDocs: 5, tableData: [
     { HolidayYear: "2013", HolidayDate: "20/11/2013",HolidayDescripiton:"Description" },
 
 ]}
-export const headers = ["Holiday year", "holiday date","holiday description"];
+export const headers = ["Holiday year", "holiday date","holiday description","Action"];

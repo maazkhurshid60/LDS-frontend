@@ -1,10 +1,16 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getAllUserApi, updateUserApi } from "../../apiservices/user/userApi";
+
+
+
 
 export type User = {
     userName: string;
     firstName: string;
     lastName: string;
     email: string;
+    roles:string[]
+    _id?:any
 };
 
 interface InitialStateType {
@@ -14,6 +20,7 @@ interface InitialStateType {
         tableData: User[];
     };
     singleUser: User[] | null;
+    status: "idle" | "loading" | "success" | "error"; // Add status field
 }
 
 const initialState: InitialStateType = {
@@ -21,19 +28,18 @@ const initialState: InitialStateType = {
     allUser: {
         totalDocs: 5,
         tableData: [
-            { userName: "Harry Poter", firstName: "Harry", lastName: "Poter", email: "harry@gmail.com" },
-            { userName: "Samith Park", firstName: "Samith", lastName: "Park", email: "samith@gmail.com" },
-            { userName: "Starck Smith", firstName: "Starck", lastName: "Smith", email: "starck@gmail.com" },
-            { userName: "Mornie Morkel", firstName: "Mornie", lastName: "Morkel", email: "mornie@gmail.com" },
-            { userName: "AD Symonds", firstName: "AD", lastName: "Symonds", email: "adsymonds@gmail.com" },
+
         ],
     },
     singleUser: null,
+    status: "idle", // Initial status
+
 };
 
 const userId = createSlice({
     name: "userId",
     initialState: initialState,
+    
     reducers: {
         getUserId: (state, action: PayloadAction<number>) => {
             state.userId = action.payload;
@@ -68,70 +74,67 @@ const userId = createSlice({
             state.singleUser = null; // Reset singleUser after deletion
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(getAllUsers.pending, (state) => {
+            state.status = "loading"; // Set status to "loading" while fetching
+        });
+        builder.addCase(getAllUsers.fulfilled, (state, action) => {
+            // Update state with the fetched data
+            state.allUser.tableData = action.payload;
+            console.log("action..pakod",action.payload);
+            state.status = "success"; // Set status to "success" on successful fetch
+        });
+        builder.addCase(getAllUsers.rejected, (state, action) => {
+            // Handle error state if needed
+            console.error("Error fetching all users:", action.error);
+            state.status = "error"; // Set status to "error" on fetch failure
+        });
+        /////////////////
+        builder.addCase(updateUser.pending, (state) => {
+            state.status = "loading"; // Set status to "loading" while fetching
+        });
+        builder.addCase(updateUser.fulfilled, (state, action) => {
+            // Update state with the fetched data
+            // state.allUser.tableData = action.payload;
+            // console.log("action..pakod",action.payload);
+            state.status = "success"; // Set status to "success" on successful fetch
+        });
+        builder.addCase(updateUser.rejected, (state, action) => {
+            // Handle error state if needed
+            console.error("update use failed:", action.error);
+            state.status = "error"; // Set status to "error" on fetch failure
+        });
+    },
+   
 });
 
 export const { getUserId, deleteUser, getOneUser, getPreviousUser, getNextUser, getFirstUser, getLastUser } = userId.actions;
 export default userId.reducer;
 
 
-// import { createSlice } from "@reduxjs/toolkit";
-// export type User = {
-//     userName: string;
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-// };
-// const initialState = {
-//     userId: 0, allUser: {
-//         totalDocs: 5, tableData: [
-//         { userName: "Harry Poter", firstName: "Harry", lastName: "Poter", email: "harry@gmail.com" },
-//         { userName: "Samith Park", firstName: "Samith", lastName: "Park", email: "samith@gmail.com" },
-//         { userName: "Starck Smith", firstName: "Starck", lastName: "Smith", email: "starck@gmail.com" },
-//         { userName: "Mornie Morkel", firstName: "Mornie", lastName: "Morkel", email: "mornie@gmail.com" },
-//         { userName: "AD Symonds", firstName: "AD", lastName: "Symonds", email: " adsymonds@gmail.com" },
-//     ]},
-//     singleUser: null,  
-// }
-// const userId = createSlice({
-//     name: "userId",
-//     initialState: initialState,
-//     reducers: {
-//         getUserId: (state, action) => { state.userId = action.payload },
-//         getOneUser: (state) => {
-//             const allUserData = JSON.stringify(state.allUser.tableData)
-//             const allUserDataArray = JSON.parse(allUserData)
-//             const oneUser = allUserDataArray?.filter((_, id) => id === state.userId)
-//             state.singleUser = oneUser
-//         },
-//         getPreviousUser: (state) => {
-//             if (state.userId > 0) {
-//                 state.userId--; // Decrement userId to get the previous user
-//                 state.singleUser = state.allUser.tableData[state.userId]; // Update singleUser based on new userId
-//             }
-            
-//         },
-//         getNextUser: (state) => {
-//                      if (state.userId < state.allUser.tableData.length - 1) {
-//                 state.userId++;
-//             }
+// GET ALL USERS API
+export const getAllUsers = createAsyncThunk<User[]>(
+    "userId/getAllUsers",
+    async () => {
+        try {
+            const res = await getAllUserApi();
+            return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
+        } catch (error) {
+            throw new Error("Failed to fetch all users");
+        }
+    }
+);
 
-//         },
-//         getFirstUser:(state)=>{
-//             state.userId=0
-//         },
-//         getLastUser:(state)=>{
-//             state.userId=state.allUser.tableData.length-1
-            
-//         },
-//         deleteUser: (state, action) => {
-//             const { userId } = action.payload
-//             const allUserData = JSON.stringify(state.allUser.tableData)
-//             const allUserDataArray = JSON.parse(allUserData)
-//             const oneUser = allUserDataArray?.filter((_, id) => id !== userId)
-//             state.allUser.tableData = oneUser
 
-//         }
-//     }
-// })
-// export const { getUserId, deleteUser, getOneUser, getPreviousUser, getNextUser ,getFirstUser,getLastUser} = userId.actions
-// export default userId.reducer
+// GET ALL USERS API
+export const updateUser = createAsyncThunk<any>(
+    "userId/updateUser",
+    async (data) => {
+        try {
+            const res = await updateUserApi(data);
+            return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
+        } catch (error) {
+            throw new Error("Failed to fetch all users");
+        }
+    }
+);

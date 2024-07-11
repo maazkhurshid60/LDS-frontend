@@ -20,7 +20,7 @@ import Button from "../../components/Buttons/Button/Button";
 import AddUserModal from "../../components/Modal/AddUserModal";
 import { showModalReducer } from "../../redux/slice/showModal";
 const User = () => {
-  const userInfo = useSelector((state: RootState) => state?.userDetail)
+  const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
   const userId = useSelector((state: RootState) => state.userId)
   const showModal=useSelector((state:RootState)=>state.showModal.isShowModal)
   const disptach = useDispatch()
@@ -49,7 +49,7 @@ const User = () => {
       <div className="h-[66vh] overflow-y-scroll">
         <OutletLayoutHeader heading="User">
           <div className="w-full flex flex-wrap items-center gap-2">
-            {userInfo?.role === "admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>disptach(showModalReducer(true))} />}
+            {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>disptach(showModalReducer(true))} />}
             <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />
             <BorderButton buttonText="submit" icon={<MdOutlineDone />} isIcon />
             <BorderButton buttonText="delete" icon={<MdDeleteOutline />} isIcon onClick={deleteUserFunction} />

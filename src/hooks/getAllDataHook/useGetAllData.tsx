@@ -11,7 +11,9 @@ export const useGetAllData = (endPointName: string) => {
     const { isLoading, error, data } = useQuery< any, Error>({
       queryKey: ['data', endPointName], // Specify queryKey array here
       queryFn: async () => {
-        const response= await axios.get(`${baseUrl}${endPointName}`, { headers: {
+        const response= await axios.get(`${baseUrl}${endPointName}`, { 
+          
+          headers: {
             "Authorization": `Bearer ${accessToken}`
         } })
           if (!response) {

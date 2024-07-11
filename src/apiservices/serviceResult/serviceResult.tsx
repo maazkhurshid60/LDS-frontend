@@ -17,16 +17,19 @@ export const addServiceResultApi=async(data:any)=>{
 
 
 // DELETE SERVICE RESULT API
-export const deleteServiceResultApi=async(data:any)=>{
+export const deleteServiceResultApi=async(id:string)=>{
+    console.log(id)
     try {
         const accessToken = localStorage.getItem("accessToken");
-        console.log(accessToken,data)
+        console.log(accessToken,id)
 
         const response = await axios.delete(`${baseUrl}/service-result/delete`, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             },
-            data  // Assuming 'data' contains any parameters for the delete request
+            data:{
+                serviceResultId: id
+            } // Assuming 'data' contains any parameters for the delete request
         });
         console.log(response)
         return response;
