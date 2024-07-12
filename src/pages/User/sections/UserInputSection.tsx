@@ -27,7 +27,7 @@ const UserInputSection = () => {
     const options = data?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
     const dispatch = useDispatch()
-    const oneUser = useSelector((state: RootState) => state.userId.singleUser)
+    const oneUser = useSelector((state: RootState) => state.userId.singleUser) 
 
     useEffect(() => {
         dispatch(getOneUser())
@@ -55,7 +55,11 @@ const UserInputSection = () => {
     // UPDATE USER
     const userUpdateFunction = (data) => {
         const onlyName = allSelectedRoles?.map(data => data?.name)
-        const allData = { ...data, roles: onlyName, userId: singleUserId }
+        // const allData = { ...data, roles: onlyName, userId: singleUserId }
+        const allData={userId:oneUser[0]?._id, userName: data?.userName,
+            firstName:  data?.firstName,
+            lastName: data?.lastName,
+            email: data?.email}
         dispatch(updateUser(allData))
         console.log("data", allData)
     }
@@ -82,7 +86,7 @@ const UserInputSection = () => {
         <TextField label="email" name="email" register={register} error={errors?.email} />
         <div className="w-full md:w-[38%] xl:w-[100%] flex flex-col items-start gap-x-10 mb-2">
             {/* SELECTED ROLES FOR USER WILL BE DISPLAYED*/}
-            {allSelectedRoles?.length > 0 && <div className="w-[65%] mt-2">
+            {/* {allSelectedRoles?.length > 0 && <div className="w-[65%] mt-2">
                 <h1 className="font-semibold capitalize text-sm">User Role</h1>
                 <div className="flex items-center justify-start  gap-x-14 gap-y-1 flex-wrap w-full">
                     {allSelectedRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
@@ -104,7 +108,7 @@ const UserInputSection = () => {
                         error={errors.roles?.message as string}
                         getMailFunction={getSelectedRoles}
                     />)} />
-            </div>
+            </div> */}
 
         </div>
         <Button text={isSubmitting ? "saving" : "save"} />

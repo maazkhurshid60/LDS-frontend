@@ -1,6 +1,9 @@
 import { z } from "zod";
 export const userInputSectionSchema = z.object({
-    code: z.string().min(1, { message: "Code is required" }),
+    serverCode: z.string().min(1, { message: "Server Code is required" }),
+    deviceCode: z.boolean().refine((value) => value === true, {
+        message: "This Checked is required",
+      }),
     firstName: z.string().min(1, { message: "First Name is required" }),
     lastName: z.string().min(1, { message: "Last Name is required" }),
     MI: z.string().min(1, { message: "MI is required" }),
@@ -12,5 +15,9 @@ export const userInputSectionSchema = z.object({
     zip:z.string().min(1,{message:"Zip is required"}).regex(/^\d+$/,{message:"zip must be number"}) ,
     fax:z.string().min(1,{message:"Fax is required"}).regex(/^\d+$/,{message:"Fax must be number"}),
     licenseNo:z.string().min(1,{message:"License is required"}).regex(/^\d+$/,{message:"License must be Number"}),
-    apt:z.string().min(1,{message:"Apt is required"}).regex(/^\d+$/,{message:"Apt must be Number"})
+    apt:z.string().min(1,{message:"Apt is required"}).regex(/^\d+$/,{message:"Apt must be Number"}),
+    isActive: z.boolean().refine((value) => value === true, {
+        message: "This Checked is required",
+      }),
+
 })

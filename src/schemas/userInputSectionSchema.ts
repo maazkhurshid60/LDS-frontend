@@ -7,5 +7,7 @@ export const userInputSectionSchema=z.object({
     userName:z.string().min(1,{message:"User Name is required"}),
     password:z.string().min(1,{message:"password is required"}).optional(),
 
-    roles: z.string().min(1, "Please select role.").optional(),
+})
+
+export const userInputSectionRolesSchema=z.object({    roles: z.string().min(1, "Please select role.").optional(),
 })

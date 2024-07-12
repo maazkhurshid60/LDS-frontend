@@ -45,3 +45,20 @@ export const updateUserApi=async(data)=>{
         throw Error (error)
     }
     }
+
+
+    
+    // UPDATE USER ROLE API
+export const updateUserRoleApi=async(data:any)=>{
+    console.log("><><><><",data)
+    try {
+        const response= await axios.patch (`${baseUrl}/user/update-user-roles`,data,{ headers: {
+            "Authorization": `Bearer ${accessToken}`
+        } })
+        return response
+    } catch (error) {
+        throw Error (error)
+    }
+    }
+
+    

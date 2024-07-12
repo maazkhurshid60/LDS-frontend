@@ -8,9 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import TextField from "../InputFields/TextField/TextField"
 import { serviceTypeSchema } from "../../schemas/serviceTypeSchema"
 import { addServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTypeApi"
+import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 const ServiceTypeModal = () => {
     const disptach = useDispatch()
     const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm({resolver:zodResolver(serviceTypeSchema)})
+    const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-types")
+
     const modalBody = <form className="mb-6">
         <TextField label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode"/>
 <div className="mt-4" >
@@ -22,6 +25,7 @@ const ServiceTypeModal = () => {
         try {
             const res=await addServiceTypeApi(data)
             alert(`${res?.data?.message}`)
+            refetch()
         disptach(showModalReducer(false))
 
         } catch (error) {

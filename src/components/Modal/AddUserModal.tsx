@@ -9,11 +9,9 @@ import { showModalReducer } from "../../redux/slice/showModal";
 import TextField from "../InputFields/TextField/TextField";
 import SelectMultipleDropdown from "../dropdown/SelectMultipleDropdown";
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
-import { MdDeleteOutline } from "react-icons/md";
 import { DeleteIcon } from "../Icons/DeleteIcon";
 import { z } from "zod";
 import { registerUserApi } from "../../apiservices/user/userApi";
-import { toast } from "react-toastify";
 export type FormFields = z.infer<typeof userInputSectionSchema>
 
 
@@ -36,6 +34,7 @@ const AddUserModal = () => {
         try {
             const res= await registerUserApi(allData)
             alert(`${res?.data?.message}`)
+            
         } catch (error) {
             alert("Something went wrong or Network later.")
         }

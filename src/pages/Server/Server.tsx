@@ -13,7 +13,7 @@ import AdministrationServerModal from "../../components/Modal/AdministrationServ
 import { showModalReducer } from "../../redux/slice/showModal";
 import Pagination from "../../components/Pagination/Pagination";
 const Server = () => {
-    const userInfo = useSelector((state: RootState) => state?.userDetail)
+    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state.showModal.isShowModal)
     const dispatch = useDispatch()
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
@@ -33,7 +33,7 @@ const Server = () => {
             <OutletLayout>
                 <div className="">
                     <OutletLayoutHeader heading="Servers">
-                        {userInfo?.role === "admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
+                        {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
                         <BorderButton buttonText="filter" disabled />
                     </OutletLayoutHeader>
                     <div className="mt-4 flex flex-col  gap-4

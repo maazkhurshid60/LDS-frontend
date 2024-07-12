@@ -10,57 +10,45 @@ import { headers, tableData } from "../../constdata/ServiceResultData";
 import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../components/Pagination/Pagination";
-import { showModalReducer } from "../../redux/slice/showModal";
+import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
 import ServiceResultModal from "../../components/Modal/ServiceResultModal"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 import { DataLoader } from "../../components/Loader/DataLoader";
 import { toast } from "react-toastify";
 import { deleteServiceResultApi } from "../../apiservices/serviceResult/serviceResult";
+import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
+import ServiceResultModalUpdate from "../../components/Modal/ServiceResultModalUpdate";
+import { serviceResultType } from "../../type/serviceResultType/serviceResultType";
 
 const ServiceResult = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
-    // const [allServiceResultData,setAllServiceResultData]=useState<serviceResultType[]>([])
+    const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
+
 const dispatch=useDispatch()
-const {isLoading,error,data}=useGetAllData("/service-result/all-service-results")
-// console.log(isLoading,error,data)
-    const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    const dataLimit = 10; // Define your data limit here
-    const totalPages = Math.ceil(data?.length / dataLimit);
-    const onPageChange = (page: number) => {
-        setCurrentPage(page); // Update current page state
-        // You can perform any additional actions here, such as fetching data for the new page
-    };
-    // Calculate the indices for the current page's data slice
-    const lastIndexItem = dataLimit * currentPage;
-    const firstIndexItem = lastIndexItem - dataLimit;
-    const currentTableData = data?.slice(firstIndexItem, lastIndexItem);
+const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-results")
+const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
+const [getSingleResultData,setGetSingleResultData]=useState<serviceResultType>()
 
-// useEffect(()=>{
-//     getAllDataFunction()
-    
-// },[])
-
-// const getAllDataFunction=async()=>{
-//     try {
-//         const res=await getAllServiceResultApi()
-//         console.log(">>>>>>>>>>>>>>>>>>>>>>",res?.data)
-//         setAllServiceResultData(res?.data)
-//     } catch (error) {
-        
-//         console.log(error)
-//     }
-// }
-
+// DELETE DATA FUNCTION
 const deleteData=async(id:string)=>{
 try {
     const response=await deleteServiceResultApi(id)
     console.log(response)
+    toast.success(`${response?.data?.message}`)
+    refetch()
 } catch (error) {
     console.log(error)
 
    toast.error("something went wrong") 
 }
+}
+
+// UPDATE DATA FUNCTION
+const resultUpdateFunction=(id:string)=>{
+     console.log(id)
+     setGetSingleResultData(data?.find((data,index)=>data?._id === id))
+     dispatch(showUpdateModalReducer(true))
 }
 
  if (isLoading) return <DataLoader text="Service result"/>
@@ -70,7 +58,7 @@ try {
         <>
             {showModal ? (
                 <ServiceResultModal />
-            ) : (
+            ) : showUpdateModal ? <ServiceResultModalUpdate singledata={getSingleResultData}/> : (
                 <OutletLayout>
                     <div className="">
                         <OutletLayoutHeader heading="Service Results">
@@ -83,7 +71,7 @@ try {
                             <Searchbar />
                             <Filter />
                         </div>
-                        <Table headers={headers} tableData={currentTableData} onClick={deleteData}/>
+                        <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={resultUpdateFunction}/>
                         <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}

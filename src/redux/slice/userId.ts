@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getAllUserApi, updateUserApi } from "../../apiservices/user/userApi";
+import { getAllUserApi, updateUserApi, updateUserRoleApi } from "../../apiservices/user/userApi";
+import { toast } from "react-toastify";
+import { Dispatch } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
-
-
-
+// const dispatch=useDispatch()
 export type User = {
     userName: string;
     firstName: string;
@@ -104,6 +105,21 @@ const userId = createSlice({
             console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
+        /////////////////
+         builder.addCase(updateUserRole.pending, (state) => {
+            state.status = "loading"; // Set status to "loading" while fetching
+        });
+        builder.addCase(updateUserRole.fulfilled, (state, action) => {
+            // Update state with the fetched data
+            // state.allUser.tableData = action.payload;
+            // console.log("action..pakod",action.payload);
+            state.status = "success"; // Set status to "success" on successful fetch
+        });
+        builder.addCase(updateUserRole.rejected, (state, action) => {
+            // Handle error state if needed
+            console.error("update use failed:", action.error);
+            state.status = "error"; // Set status to "error" on fetch failure
+        });
     },
    
 });
@@ -129,12 +145,32 @@ export const getAllUsers = createAsyncThunk<User[]>(
 // GET ALL USERS API
 export const updateUser = createAsyncThunk<any>(
     "userId/updateUser",
-    async (data) => {
+    async (data,{ dispatch }) => {
+ 
         try {
             const res = await updateUserApi(data);
-            return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
+            toast.success(`${res?.data.message}`)
+            // TO GET UPDATED DATA
+            dispatch(getAllUsers());
+      
         } catch (error) {
-            throw new Error("Failed to fetch all users");
+           toast.error("notupdated yet")
         }
     }
 );
+
+// UPDATE USER ROLE API
+export const updateUserRole = createAsyncThunk<any>(
+    "userId/updateUserRole",
+    async (data,{ dispatch }) => {
+                try {
+            const res = await updateUserRoleApi(data);
+            toast.success(`${res?.data.message}`)
+            // TO GET UPDATED DATA
+            dispatch(getAllUsers());
+        } catch (error) {
+           toast.error("notupdated yet")
+        }
+    }
+);
+

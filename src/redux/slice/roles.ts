@@ -52,7 +52,7 @@ const userId = createSlice({
         builder.addCase(getAllRoles.fulfilled, (state, action) => {
             // Update state with the fetched data
             state.allRoles.tableData = action.payload;
-            console.log("action..pakod", action.payload);
+            // console.log("action..pakod", action.payload);
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(getAllRoles.rejected, (state, action) => {

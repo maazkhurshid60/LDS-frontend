@@ -1,5 +1,6 @@
 import axios from "axios"
 import { baseUrl } from "../baseUrl/baseUrl"
+import { serviceResultType } from "../../type/serviceResultType/serviceResultType";
 
 
 // GET ADD SERVICE RESULT API
@@ -38,16 +39,18 @@ export const deleteServiceResultApi=async(id:string)=>{
     }
     }
 
-// // GET ALLRESULT API
-// export const getAllServiceResultApi=async()=>{
-// try {
-//     const accessToken = localStorage.getItem("accessToken");
-//     const response= await axios.get(`${baseUrl}/service-result/all-service-results`, { headers: {
-//         "Authorization": `Bearer ${accessToken}`
-//     } })
-//     return response?.data
-// } catch (error) {
-//     throw Error (error)
-// }
-// }
+
+    // UPDATE SERVICE RESULT API
+export const updateServiceResultApi=async(data:serviceResultType)=>{
+    console.log(">>>>>>>>>>>",data)
+    try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response= await axios.patch(`${baseUrl}/service-result/update`,data, { headers: {
+            "Authorization": `Bearer ${accessToken}`
+        } })
+        return response
+    } catch (error) {
+        throw Error (error)
+    }
+    }
 

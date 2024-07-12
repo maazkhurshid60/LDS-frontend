@@ -15,10 +15,11 @@ import Pagination from "../../components/Pagination/Pagination";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 import { DataLoader } from "../../components/Loader/DataLoader";
+import { useGetAllDataParameter } from "../../hooks/getAllDataHook/useGetAllDataParameter";
 const Client = () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
-    const {isLoading,error,data}=useGetAllData("/client/all-clients")
+    const {isLoading,error,data}=useGetAllDataParameter("/client/all-clients")
     console.log(">>>>>>>>>>>>>>>>",data)
     const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
     const dispatch =useDispatch()
@@ -39,9 +40,9 @@ const Client = () => {
 // PAGE CALCULATION ENDS
 
 
-if (isLoading) return <DataLoader text="Client"/>
+// if (isLoading) return <DataLoader text="Client"/>
 
-if (error) return <div>An error has occurred: {error.message}</div>;
+// if (error) return <div>An error has occurred: {error.message}</div>;
 
     return <>
 {showModal?<ClientModal/>:<OutletLayout>
@@ -55,14 +56,14 @@ if (error) return <div>An error has occurred: {error.message}</div>;
                     <Searchbar />
                     <Filter />
                 </div>
-                <Table headers={headers} tableData={currentTableData} />
+                {/* <Table headers={headers} tableData={currentTableData} />
                 <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={currentTableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
+                        /> */}
             </div>
         </OutletLayout>}
         

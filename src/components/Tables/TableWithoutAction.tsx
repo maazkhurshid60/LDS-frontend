@@ -79,7 +79,7 @@ console.log(id)
                 <tbody>
                     {tableData.map((rowData, rowIndex) => {
                         const filteredData = filterOutIdKeys(rowData); // Filter out _id key
-                        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.",filteredData)
+                        // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.",filteredData)
                         return (
                             <tr
                                 key={rowIndex}

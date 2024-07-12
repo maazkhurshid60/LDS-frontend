@@ -2,17 +2,30 @@ import React from "react";
 import Modal from "./Modal";
 import { useDispatch } from "react-redux";
 import TextField from "../InputFields/TextField/TextField"
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userInputSectionSchema } from "../../schemas/addAdministrationServerSchema";
 import { showModalReducer } from "../../redux/slice/showModal";
+import Dropdown from "../dropdown/Dropdown"
 const AdministrationServerModal = () => {
     const dispatch = useDispatch()
-const {register,handleSubmit,formState:{errors}}=useForm({resolver:zodResolver(userInputSectionSchema)})
+const {register,handleSubmit,formState:{errors,isSubmitting},control}=useForm({resolver:zodResolver(userInputSectionSchema)})
     const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-
-        <TextField label="code" register={register} error={errors.code} name="code" placeholder="Enter Code"/>
+        <TextField label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code"/>
+        </div>
+        {/* <div className="w-[30%]">
+                <Controller name="deviceCode" control={control} render={({ field }) => (
+                    <Dropdown
+                        // options={options}
+                        value={field.value}
+                        onChange={field.onChange}
+                        label="Device Code"
+                        error={errors.deviceCode?.message as string}
+                    />)} />
+            </div> */}
+        <div className="w-full md:w-[38%] xl:w-[30%]">
+        <TextField label="device Code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Code"/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
         <TextField label="firstName" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name"/>
@@ -62,7 +75,7 @@ const {register,handleSubmit,formState:{errors}}=useForm({resolver:zodResolver(u
             modalHeading="Server"
             onBorderButtonClick={() => dispatch(showModalReducer(false))}
             onFilledButtonClick={handleSubmit(administrationFunction)}
-            filledButtonText="Add"
+            filledButtonText={isSubmitting?"adding":"Add"}
             borderButtonText="cancel"
             modalBody={modalBody} />
     </>
