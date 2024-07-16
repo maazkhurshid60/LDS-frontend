@@ -17,7 +17,7 @@ const Modal: React.FC<ModalProps> = ({ modalHeading, modalBody, borderButtonText
         <div className=" w-[90%] md:w-[60%] p-8 bg-whiteColor rounded-lg   ">
 
             {/* MODAL HEADING */}
-            <h1 className="font-semibold mb-4
+            <h1 className="font-semibold mb-4 capitalize
                 md:text-md
                 lg:text-xl">{modalHeading}</h1>
 

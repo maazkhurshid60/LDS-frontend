@@ -25,6 +25,8 @@ const Dropdown: React.FC<DropdownProp> = ({ options,
         onChange(optionValue)
         setIsOpen(false)
     }
+
+
     return <div className="w-full">
         <label className="sm:font-medium text-sm capitalize">{label}</label>
         <div className="w-full relative">

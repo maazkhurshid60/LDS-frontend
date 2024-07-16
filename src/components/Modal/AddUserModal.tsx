@@ -77,7 +77,7 @@ const AddUserModal = () => {
                         options={options}
                         value={field.value}
                         onChange={field.onChange}
-                        label="Client Mailing Addresses"
+                        label="Available Roles"
                         error={errors.roles?.message as string}
                         getMailFunction={getSelectedRoles}
                     />)} />

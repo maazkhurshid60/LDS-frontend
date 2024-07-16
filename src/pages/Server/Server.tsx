@@ -10,25 +10,53 @@ import Table from "../../components/Tables/Table";
 import { headers, tableData } from "../../constdata/ServerData";
 import { RootState } from "../../redux/store";
 import AdministrationServerModal from "../../components/Modal/AdministrationServerModal";
-import { showModalReducer } from "../../redux/slice/showModal";
+import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
 import Pagination from "../../components/Pagination/Pagination";
+import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
+import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
+import { deleteServerApi, updateServerApi } from "../../apiservices/serverApi/serverApi";
+import { toast } from "react-toastify";
+import { serverType } from "../../type/serverType/serverType";
+import { DataLoader } from "../../components/Loader/DataLoader";
+import AdministrationServerUpdateModal from "../../components/Modal/AdministrationServerUpdateModal";
 const Server = () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state.showModal.isShowModal)
+    const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
+    const {isLoading,error,data,refetch}=useGetAllData("/server/all-servers")
+    const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
+    const [getSingleServerData,setGetSingleServerData]=useState<serverType>()
+
     const dispatch = useDispatch()
-    const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    const dataLimit = 1; // Define your data limit here
-    const totalPages = Math.ceil(tableData?.tableData?.length / dataLimit);
-    const onPageChange = (page: number) => {
-        setCurrentPage(page); // Update current page state
-        // You can perform any additional actions here, such as fetching data for the new page
-    };
-    // Calculate the indices for the current page's data slice
-    const lastIndexItem = dataLimit * currentPage;
-    const firstIndexItem = lastIndexItem - dataLimit;
-    const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
+const deleteData=async(id:string)=>{
+    // const response =deleteServerApi(id)
+    try {
+        const response=await deleteServerApi(id)
+        toast.success(`${response?.data?.message}`)
+        refetch()
+    } catch (error) {
+        console.log(error)
+    
+       toast.error("something went wrong") 
+    }
+}
+
+const clientUpdateFunction=(id:string)=>{
+    setGetSingleServerData(data?.find((data:serverType,index:number)=>data?._id === id))
+    dispatch(showUpdateModalReducer(true))
+    console.log(id)
+    // updateServerApi(data?.find((data,index:number)=>data?._id === id))
+    // updateServerApi
+}
+
+
+
+if (isLoading) return <DataLoader text="Server"/>
+
+if (error) return <div>An error has occurred: {error.message}</div>;
+
     return <>
-        {showModal ? <AdministrationServerModal/>
+        {showModal ? <AdministrationServerModal/> :showUpdateModal?<AdministrationServerUpdateModal singledata={getSingleServerData}/>
             :
             <OutletLayout>
                 <div className="">
@@ -41,15 +69,19 @@ const Server = () => {
                         <Searchbar />
                         <Filter />
                     </div>
-                    <Table headers={headers} tableData={currentTableData} />
+           
+                    <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction}/>
                         <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={tableData?.tableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
+
                         />
-                </div>
+                    </div>
+
+         
             </OutletLayout>}
     </>
 }

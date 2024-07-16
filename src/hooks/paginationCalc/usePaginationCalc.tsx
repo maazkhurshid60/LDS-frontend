@@ -3,7 +3,7 @@ import { useState } from "react";
 export const usePaginationCalc=({tableData})=>{
     // PAGE CALCULATION STARTS
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    const dataLimit = 6; // Define your data limit here
+    const dataLimit = 4; // Define your data limit here
     const totalPages = Math.ceil(tableData?.length / dataLimit);
     const onPageChange = (page: number) => {
         setCurrentPage(page); // Update current page state

@@ -12,24 +12,18 @@ import { RootState } from "../../redux/store";
 import { showModalReducer } from "../../redux/slice/showModal";
 import DeviceModal from "../../components/Modal/DeviceModal";
 import Pagination from "../../components/Pagination/Pagination";
+import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
+import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 const Devices= () => {
-      const userInfo=useSelector((state: RootState )=>state?.userDetail)
+    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
       const showModal=useSelector((state: RootState )=>state?.showModal.isShowModal)
+      const {isLoading,error,data,refetch}=useGetAllData("/device/all-devices")
+      console.log(">>>>>>>>>>>>>>>>",isLoading,error,data)
+      const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
 const dispatch=useDispatch()
-
-const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-const dataLimit = 1; // Define your data limit here
-const totalPages = Math.ceil(tableData?.tableData?.length / dataLimit);
-const onPageChange = (page: number) => {
-    setCurrentPage(page); // Update current page state
-    // You can perform any additional actions here, such as fetching data for the new page
-};
-// Calculate the indices for the current page's data slice
-const lastIndexItem = dataLimit * currentPage;
-const firstIndexItem = lastIndexItem - dataLimit;
-const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
     return <>
-    <OutletLayout>
+    
+    {showModal?<DeviceModal/>: <OutletLayout>
         <div className="">
             <OutletLayoutHeader heading="Devices">
                 {userInfo?.role ==="admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
@@ -49,28 +43,7 @@ const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexIte
                             onchange={onPageChange} // Pass onPageChange as onchange prop
                         />
         </div>
-    </OutletLayout>
-    {/* {showModal?<DeviceModal/>: <OutletLayout>
-        <div className="">
-            <OutletLayoutHeader heading="Devices">
-                {userInfo?.role ==="admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
-                <BorderButton buttonText="filter" disabled />
-            </OutletLayoutHeader>
-            <div className="mt-4 flex flex-col  gap-4
-                            sm:flex-row sm:items-center">
-                <Searchbar />
-                <Filter />
-            </div>
-            <Table headers={headers} tableData={currentTableData} />
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            dataLimit={dataLimit}
-                            tableData={tableData?.tableData}
-                            onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
-        </div>
-    </OutletLayout>} */}
+    </OutletLayout>}
     
    
     </>

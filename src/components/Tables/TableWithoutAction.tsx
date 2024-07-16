@@ -44,7 +44,7 @@ import { EditIcon } from "../Icons/EditIcon";
 
 interface TableWithoutActionProps {
     headers: string[];
-    tableData: Record<string, any>[]; // Assuming all rows have similar structure
+    tableData: any; // Assuming all rows have similar structure
       getRowData?: (rowIndex: number) => void;
 }
 

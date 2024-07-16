@@ -14,6 +14,7 @@ import { z } from "zod";
 import { getAllUsers, getOneUser, updateUserRole } from "../../../redux/slice/userId";
 import Button from "../../../components/Buttons/Button/Button";
 import TextField from "../../../components/InputFields/TextField/TextField";
+import { CrossIcon } from "../../../components/Icons/CrossIcon";
 export type FormFields = z.infer<typeof userInputSectionRolesSchema>
 
 const RolePerUserSection = () => {
@@ -84,19 +85,19 @@ const RolePerUserSection = () => {
                 md:text-md
                 lg:text-xl">Role per users </h1>
             <TableWithoutAction headers={headers} tableData={alluserDetail.singleUser ? alluserDetail.singleUser[0]?.roles : []} />
-            <form className="mt-6 w-[80%] m-auto" onSubmit={handleSubmit(updateUserRoleFunction)}>
-                <h1 className="font-semibold mb-4
+            <form className="mt-6 w-[100%] m-auto" onSubmit={handleSubmit(updateUserRoleFunction)}>
+                <h1 className="font-semibold
                 md:text-md
-                lg:text-xl">Update User Role</h1>
-                <div className="w-full md:w-[38%] xl:w-[100%] flex flex-col items-start gap-x-10 mb-2">
+                lg:text-base">Update User Role</h1>
+                <div className="w-full md:w-[40%]  flex flex-col items-start gap-x-10 mb-4">
 
                     {/* SELECTED ROLES FOR USER WILL BE DISPLAYED*/}
-                    {allSelectedRoles?.length > 0 && <div className="w-[65%] mt-2">
-                        <h1 className="font-semibold capitalize text-sm">User Role</h1>
+                    {allSelectedRoles?.length > 0 && <div className="w-[100%] mt-2">
+                        {/* <h1 className="font-semibold capitalize text-sm">User Role</h1> */}
                         <div className="flex items-center justify-start  gap-x-14 gap-y-1 flex-wrap w-full">
                             {allSelectedRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
                                 <p className="text-sm font-normal capitalize" key={index}>{data?.name}</p>
-                                <DeleteIcon onClick={() => deleteRole(data?._id)} />
+                                <CrossIcon onClick={() => deleteRole(data?._id)} />
                             </div>
                             )}
 

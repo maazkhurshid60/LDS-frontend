@@ -72,7 +72,7 @@ console.log(id)
                 <thead className="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="bg-[#5D87B2] text-whiteColor">
                         {headers.map((header, index) => (
-                            <th key={index} scope="col" className="px-6 py-3">
+                            <th key={index} scope="col" className="px-2 py-3">
                                 {header}
                             </th>
                         ))}
@@ -89,8 +89,8 @@ console.log(id)
                             >
                                 {Object.values(filteredData).map((value, colIndex) => (
                                     <td key={colIndex} className="px-6 py-2 font-normal text-sm">
-                                        {value}
-                                    </td>
+                                        {typeof value === "string" && value.length > 10 ? `${value.slice(0, 15)}...` : value}
+                                        </td>
                                 ))}
   <td key={rowIndex} className="px-6 py-2 font-normal text-sm flex flex-row gap-x-4 items-center justify-center">
                                        <DeleteIcon  onClick={() => onClick && onClick(rowData?._id)}/>

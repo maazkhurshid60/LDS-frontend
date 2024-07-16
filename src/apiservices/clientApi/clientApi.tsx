@@ -1,10 +1,11 @@
 import axios from "axios";
 import { baseUrl } from "../baseUrl/baseUrl";
+import { clientType } from "../../type/clientType/clientType";
+const accessToken = localStorage.getItem("accessToken");
 
 // GET ADD SERVICE RESULT API
 export const addClientApi=async(data:any)=>{
     try {
-        const accessToken = localStorage.getItem("accessToken");
         const response= await axios.post(`${baseUrl}/client/create`,data, { headers: {
             "Authorization": `Bearer ${accessToken}`
         } })
@@ -14,23 +15,39 @@ export const addClientApi=async(data:any)=>{
     }
     }
 
-    
-// DELETE SERVICE RESULT API
-export const deleteServiceTypeApi=async(data:any)=>{
-    console.log(data)
-    try {
-        const accessToken = localStorage.getItem("accessToken");
-        console.log(accessToken,data)
 
-        const response = await axios.delete(`${baseUrl}/service-result/delete`, {
+    // DELETE SERVICE RESULT API
+export const deleteClientApi=async(id:string)=>{
+    try {
+             const response = await axios.delete(`${baseUrl}/client/delete`, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             },
-            data  // Assuming 'data' contains any parameters for the delete request
+            data:{
+                clientId: id
+            } 
         });
         console.log(response)
         return response;
     } catch (error) {
+        console.log("error",error)
         throw Error (error)
+    }
+    }
+
+    // UPDATE SERVICE RESULT API
+export const updateClientApi=async(data:clientType)=>{
+    console.log(">>>>>>>>>>>",data)
+    try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response= await axios.patch(`${baseUrl}/client/update`,data, { headers: {
+            "Authorization": `Bearer ${accessToken}`
+        } })
+        console.log(response)
+        return response
+    } catch (error) {
+        console.log(error)
+        throw Error (error)
+ 
     }
     }

@@ -13,7 +13,6 @@ import LegalDelivery from "../pages/LegalDelivery/LegalDelivery";
 import Result from "../pages/Result/Result"
 import Service from "../pages/Service/Service"
 import Devices from "../pages/Devices/Devices";
-import AllUsers from "../pages/AllUsers/AllUsers";
 import { AllRoles } from "../pages/AllRoles/AllRoles";
 
 
@@ -36,8 +35,8 @@ const Routing = () => {
                     <Route path="/legal-delivery" element={<LegalDelivery />} />
                     <Route path="/result" element={<Result />} />
                     <Route path="/service" element={<Service />} />
-                    <Route path="/all-users" element={<AllUsers />} />
-                    <Route path="/all-roles" element={<AllRoles />} />
+                    {/* <Route path="/all-users" element={<AllUsers />} />
+                    <Route path="/all-roles" element={<AllRoles />} /> */}
 
 
                 </Route>

@@ -2,26 +2,33 @@ import React, { useState } from "react";
 import OutletLayout from "../../components/OutletLayout/OutletLayout";
 import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import BorderButton from "../../components/Buttons/BorderButton/BorderButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import CustomCheckBox from "../../components/CheckBox/CustomCheckBox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { settingSchema } from "../../schemas/setting";
 import { z } from "zod";
+import { MdOutlineAdd } from "react-icons/md";
+import { showModalReducer } from "../../redux/slice/showModal";
+import SettingModal from "../../components/Modal/SettingModal";
 
 export type FormFields=z.infer<typeof settingSchema> 
 const Setting = () => {
-    const userInfo = useSelector((state: RootState) => state?.userDetail);
+    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const dispatch=useDispatch()
+    const showModal=useSelector((state: RootState )=>state?.showModal.isShowModal)
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>({ resolver: zodResolver(settingSchema) })
         const settingFunction=(data)=>{
         console.log(data)
     }
     return (
-        <OutletLayout>
+        <>
+        {showModal?<SettingModal/>:  <OutletLayout>
             <div className=" ">
                 <OutletLayoutHeader heading="Settings">
-                    {userInfo?.role === "admin" && (
+                {userInfo?.roles[0]?.name === "Admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
+                    {userInfo?.roles[0]?.name === "Admin" && (
                         <BorderButton buttonText="Apply Changes" onClick={handleSubmit(settingFunction)}/>
                     )}
                 </OutletLayoutHeader>
@@ -41,7 +48,9 @@ const Setting = () => {
                     /> */}
                 </form>
             </div>
-        </OutletLayout>
+        </OutletLayout>}
+      
+        </>
     );
 };
 

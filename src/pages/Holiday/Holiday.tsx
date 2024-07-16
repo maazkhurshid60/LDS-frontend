@@ -13,7 +13,8 @@ import HolidayModal from "../../components/Modal/HolidayModal";
 import { showModalReducer } from "../../redux/slice/showModal";
 import Pagination from "../../components/Pagination/Pagination";
 const Holiday= () => {
-      const userInfo=useSelector((state: RootState )=>state?.userDetail)
+    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    
       const showModal=useSelector((state: RootState )=>state?.showModal.isShowModal)
       const dispatch=useDispatch()
       const [currentPage, setCurrentPage] = useState(1); // State to manage current page
@@ -32,7 +33,7 @@ const Holiday= () => {
     {showModal?<HolidayModal/>:<OutletLayout>
         <div className="">
             <OutletLayoutHeader heading="Holidays">
-                {userInfo?.role ==="admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
+                {userInfo?.roles[0]?.name === "Admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
                 <BorderButton buttonText="filter" disabled />
             </OutletLayoutHeader>
             <div className="mt-4 flex flex-col  gap-4

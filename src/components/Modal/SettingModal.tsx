@@ -11,29 +11,30 @@ import useGenerateYears from "../../hooks/generateYears/useGenereateYears"
 import { toast } from "react-toastify"
 import { addServerApi } from "../../apiservices/serverApi/serverApi"
 import { addHolidayApi } from "../../apiservices/holidayApi/holidayApi"
+import { settingSchema } from "../../schemas/settingSchema"
+import CheckBox from "../CheckBox/CustomCheckBox"
 
-const HolidayModal = () => {
+import { z } from "zod"
+import { addSettingApi } from "../../apiservices/settingApi/settingApi"
+export type FormFields = z.infer<typeof settingSchema>
+
+const SettingModal = () => {
     const disptach = useDispatch()
-    const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm({ resolver: zodResolver(holidaySchema) })
+    const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm<FormFields>({ resolver: zodResolver(settingSchema) })
     const modalBody = <form className=" flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8">
           <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date" />
+            <TextField label="Label" register={register} error={errors.label} name="label" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear"/>
+            <CheckBox label="Active" register={register} error={errors.value?.message} name="value" />
         </div>
-        <div className="w-full ">
-            <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription" />
-        </div>
+       
         
     </form>
-    const addHolidayFunction =async (data) => {
-        const holidayYear=parseInt(data?.holidayYear)
-        const postHolidayData={...data,holidayYear}
-        console.log(postHolidayData)
-        // disptach(showModalReducer(false))
+    const addSettingFunction =async (data) => {
+        
         try {
-            const response=await addHolidayApi(postHolidayData)
+            const response=await addSettingApi(data)
             alert(`${response?.data?.message}`)
             disptach(showModalReducer(false))
         } catch (error) {
@@ -41,13 +42,13 @@ const HolidayModal = () => {
         }
     }
     return <Modal
-        modalHeading="Holiday"
+        modalHeading="Setting"
         borderButtonText="cancel"
         filledButtonText={isSubmitting?"adding":"add"}
         onBorderButtonClick={() => disptach(showModalReducer(false))}
-        onFilledButtonClick={handleSubmit(addHolidayFunction)}
+        onFilledButtonClick={handleSubmit(addSettingFunction)}
         modalBody={modalBody}
     />
 }
 
-export default HolidayModal
+export default SettingModal

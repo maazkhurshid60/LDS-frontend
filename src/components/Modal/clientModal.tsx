@@ -31,9 +31,7 @@ const ClientModal = () => {
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="address2" register={register} error={errors.address2} name="address2" placeholder="Enter Address" />
         </div>
-        <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="country" register={register} error={errors.country} name="country" placeholder="Enter Country" />
-        </div>
+
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="state" register={register} error={errors.state} name="state" placeholder="Enter State" />
         </div>
@@ -48,9 +46,6 @@ const ClientModal = () => {
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="fax" register={register} error={errors.fax} name="fax" placeholder="Enter fax" />
-        </div>
-        <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="license No" register={register} error={errors.licenseNo} name="licenseNo" placeholder="Enter License No" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="apt" register={register} error={errors.apt} name="apt" placeholder="Enter apt" />
