@@ -12,16 +12,20 @@ import { z } from "zod";
 import { MdOutlineAdd } from "react-icons/md";
 import { showModalReducer } from "../../redux/slice/showModal";
 import SettingModal from "../../components/Modal/SettingModal";
+import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 
 export type FormFields=z.infer<typeof settingSchema> 
 const Setting = () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const { isLoading, error, data, refetch } = useGetAllData("/setting/all-settings")
     const dispatch=useDispatch()
     const showModal=useSelector((state: RootState )=>state?.showModal.isShowModal)
     const { register, handleSubmit, formState: { errors } } = useForm<FormFields>({ resolver: zodResolver(settingSchema) })
         const settingFunction=(data)=>{
         console.log(data)
     }
+
+    console.log(data)
     return (
         <>
         {showModal?<SettingModal/>:  <OutletLayout>
@@ -34,14 +38,21 @@ const Setting = () => {
                 </OutletLayoutHeader>
                 <form className="flex flex-col gap-2 mt-6">
                     {/* <Checkbox text="Deliver on Saturday" onChange={handleDeliveryDayChange} /> */}
-                    <CustomCheckBox name="saturdayDelivery"
+                    {/* {data?.map((data,id)=><>
+                        <CustomCheckBox name={data?.value}
+                        register={register}
+                        label={data?.label}
+                         />
+                    
+                    </>)} */}
+                    {/* <CustomCheckBox name="saturdayDelivery"
                         register={register}
                         label="Deliver on Saturday"
                         error={errors.saturdayDelivery?.message} />
                         <CustomCheckBox name="anyTimeDelivery"
                         register={register}
                         label="Deliver Any Time Except From 10:30 PM - 05:59 AM"
-                        error={errors.anyTimeDelivery?.message} />
+                        error={errors.anyTimeDelivery?.message} /> */}
                     {/*  <Checkbox
                         text="Deliver Any Time Except From 10:30 PM - 05:59 AM"
                         onChange={handleDeliveryTimeChange}

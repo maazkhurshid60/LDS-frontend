@@ -9,14 +9,14 @@ export interface BorderButtonProps{
     icon?:React.ReactNode
     isIcon?:boolean
     isRightIcon?:boolean
-
+    borderColor?:string
     buttonText?:string
     disabled?:boolean
     onClick?:()=>void
 }
-const BorderButton:React.FC<BorderButtonProps>=({icon,isIcon,buttonText,disabled,onClick,isRightIcon})=>{
+const BorderButton:React.FC<BorderButtonProps>=({icon,isIcon,buttonText,disabled,onClick,isRightIcon,borderColor="primaryColorLight"})=>{
 return <Link to="#" className={`inner-shadow capitalize flex items-center justify-center gap-y-1  px-3 py-[10px] bg-whiteColor border-[2px]
-                                 border-primaryColorLight text-primaryColorLight rounded-lg 
+                                 border-${borderColor} text-${borderColor} rounded-lg 
                                 ${disabled?"opacity-[30%] cursor-not-allowed":""}`}
                                 onClick={onClick}>
         {isIcon && <span className="mr-2">{icon}</span>}

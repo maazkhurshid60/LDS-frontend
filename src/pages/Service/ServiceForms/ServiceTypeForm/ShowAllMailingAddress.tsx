@@ -18,7 +18,7 @@ export interface AddMailingProps {
 }
 
 export type FormFields = z.infer<typeof addingMailingSchema>
-const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
+const ShowAllAddMailingAddress: React.FC<AddMailingProps> = ({ data, id }) => {
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<FormFields>({ resolver: zodResolver(addingMailingSchema) })
     const dispatch = useDispatch()
     const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
@@ -35,15 +35,15 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
     // ADD MAILING DATA FUNCTION ENDS
     // UPDATE MAILING DATA FUNCTION STARTS
     // UPDATE MAILING DATA FUNCTION 
-    // useEffect(() => {
-    //     setValue("firstName", data?.firstName)
-    //     setValue("rRR", data?.rRR)
-    //     setValue("address", data?.address)
-    //     setValue("city", data?.city)
-    //     setValue("state", data?.state)
-    //     setValue("apt", data?.apt)
-    //     setValue("zip", JSON.stringify(data?.zip))
-    // }, [data])
+    useEffect(() => {
+        setValue("firstName", data?.firstName)
+        setValue("rRR", data?.rRR)
+        setValue("address", data?.address)
+        setValue("city", data?.city)
+        setValue("state", data?.state)
+        setValue("apt", data?.apt)
+        setValue("zip", JSON.stringify(data?.zip))
+    }, [data])
 
 
     const UpdateMailingFunction = async (newData) => {
@@ -78,7 +78,7 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
     }
     console.log(isAddMail)
     return <div>
-        <h1 className="font-semibold text-md mb-4 capitalize">Adding Mailing Addresss {id && id}</h1>
+        <h1 className="font-semibold text-md mb-4 capitalize">All Mailing Addresss {id && id}</h1>
         <form className="flex flex-col items-end">
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
@@ -110,46 +110,8 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
                         register={register} label="RRR" error={errors.rRR?.message} name="rRR" />
                 </div>
             </div>
-            <div className="flex items-center gap-x-4 w-full justify-end ">
-                {/* {data?._id !== undefined && */}
-                <div className={`w-full md:w-[25%] lg:w-[20%] xl:w-[15%] mt-4 flex items-center gap-x-4 ${isAddMail?"inline-block":"hidden"}`}>
-                    <BorderButton buttonText={`${isAddMail&&"cancel"}`} borderColor="redColor"
-                        onClick={() => {
-                            if (isAddMail) {
-                                dispatch(isAddingMailAddressReducer(false));
-                            }
-                        }}
-                    />
-                    <Button text={`${isAddMail&&"add"}`}
-                        onClick={isAddMail && handleSubmit(AddMailingFunction)}
-                    />
-                </div>
-                {/* <div className=" w-full md:w-[25%] lg:w-[20%] xl:w-[15%] mt-4 flex items-center gap-x-4">
-                        <BorderButton buttonText={`${isAddMail ? "cancel" : "delete"}`} borderColor="redColor"
-                            onClick={isAddMail ? () => dispatch(isAddingMailAddressReducer(false)) : () => handleSubmit(deleteMailingData)}
-                        />
-                        <Button text={`${isAddMail ? "Add" : "Update"}`}
-                            onClick={isAddMail ? handleSubmit(AddMailingFunction) : handleSubmit(UpdateMailingFunction)}
-                        />
-                    </div> */}
-                {/* } */}
-
-
-            </div>
-            {/* {isAddMail  &&
-             <div className=" w-full md:w-[25%] lg:w-[20%] xl:w-[15%] mt-4 flex items-center gap-x-4">
-                <BorderButton buttonText={"cancel"}
-                    onClick={() => dispatch(isAddingMailAddressReducer(false))} />
-               
-                <Button text={"add"}
-                    onClick={ handleSubmit(AddMailingFunction)} />
-
-
-            </div>} */}
-
-
         </form>
     </div>
 }
 
-export default AddMailing
+export default ShowAllAddMailingAddress

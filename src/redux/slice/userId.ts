@@ -82,7 +82,7 @@ const userId = createSlice({
         builder.addCase(getAllUsers.fulfilled, (state, action) => {
             // Update state with the fetched data
             state.allUser.tableData = action.payload;
-            console.log("action..pakod",action.payload);
+            // console.log("action..pakod",action.payload);
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(getAllUsers.rejected, (state, action) => {
@@ -142,7 +142,7 @@ export const getAllUsers = createAsyncThunk<User[]>(
 );
 
 
-// GET ALL USERS API
+// GET UPDATE USERS API
 export const updateUser = createAsyncThunk<any>(
     "userId/updateUser",
     async (data,{ dispatch }) => {

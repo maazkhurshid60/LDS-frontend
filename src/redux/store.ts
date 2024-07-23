@@ -10,7 +10,8 @@ import userIdReducer from "./slice/userId";
 import showModalReducer from "./slice/showModal";
 import mailingAdressesReducer from "./slice/mailingAdresses";
 import rolesReducer from "./slice/roles";
-
+import serviceFormReducer from "./slice/serviceForm";
+import resultFormReducer from "./slice/resultForm";
 
 // Combine all reducers
 const rootReducer = combineReducers({
@@ -22,6 +23,8 @@ const rootReducer = combineReducers({
     showModal:showModalReducer,
     mailingAdress:mailingAdressesReducer,
     roles:rolesReducer,
+    serviceForm:serviceFormReducer,
+    resultForm:resultFormReducer,
 
 });
 

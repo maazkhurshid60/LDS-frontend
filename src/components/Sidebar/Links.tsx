@@ -17,7 +17,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     const link2="roles"
     const link3="operation"
 
-console.log((link === "users" || link2 === "roles")  && userData !=="Admin" ?  "hidden":{link ,link2,link3} )
+// console.log((link === "users" || link2 === "roles")  && userData !=="Admin" ?  "hidden":{link ,link2,link3} )
     const [activeSubLink, setActiveSubLink] = useState<string>()
     const [activeLink, setActiveLink] = useState<string>()
     const [subMenu, setSubMenu] = useState(false)

@@ -1,12 +1,13 @@
 import axios from "axios";
 import { baseUrl } from "../baseUrl/baseUrl"
-import { deviceType } from "../../type/deviceType/deviceType";
+import { holidayType } from "../../type/holidayType/holidayType";
 const accessToken = localStorage.getItem("accessToken");
-//  ADD SERVICE RESULT API
-export const addDeviceApi = async (data: deviceType[]) => {
+
+//  ADD HOLIDAY API
+export const addMailingAddressApi = async (data: holidayType[]) => {
     try {
-        console.log(data)
-        const response = await axios.post(`${baseUrl}/device/create`, data, {
+        // console.log(data)
+        const response = await axios.post(`${baseUrl}/ltservice-type/create`, data, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             }
@@ -17,15 +18,17 @@ export const addDeviceApi = async (data: deviceType[]) => {
         throw new Error(error)
     }
 }
+
+
 // DELETE SERVICE RESULT API
-export const deleteDeviceApi = async (id: string) => {
+export const deleteMailingAddressApi = async (id: string) => {
     try {
-        const response = await axios.delete(`${baseUrl}/device/delete`, {
+        const response = await axios.delete(`${baseUrl}/ltservice-type/delete`, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             },
             data: {
-                id: id
+                mailingAddressId: id
             }
         });
         // console.log(response)
@@ -36,11 +39,11 @@ export const deleteDeviceApi = async (id: string) => {
     }
 }
 // UPDATE SERVICE RESULT API
-export const updateDeviceApi = async (data:deviceType) => {
+export const updateMailingAddressApi = async (data:holidayType) => {
     console.log(">>>>>>>>>>>",data)
     try {
         const accessToken = localStorage.getItem("accessToken");
-        const response = await axios.patch(`${baseUrl}/device/update`, data, {
+        const response = await axios.patch(`${baseUrl}/ltservice-type/update`, data, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             }

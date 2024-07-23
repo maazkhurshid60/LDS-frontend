@@ -2,44 +2,11 @@ import { z } from "zod";
 
 export const standardFormSchema = z.object({
     // STANDARD SERVICE TYPE VALIDATION STARTS
-    summons: z.boolean().refine((value) => value === true, {
+    standardServiceType:z.boolean().refine((value) => value === true, {
         message: "This Checked is required",
-    }),
-    judicialSubpoena: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    summonsnotice: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    judicialSubpoenaDecestecum: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    summonsVerifiedComplaint: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    judicialSubpoenaAndDecestecum: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    verifiedComplaint: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    noticeOfPetition: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    endorsedComplaint: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    orderToShowCause: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    citation: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    otherStandard: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-    }),
-    indexNo: z.string().regex(/^\d+$/, { message: "index no must be number" }),
-    otherStandardDescription: z.string().min(1, { message: "Standard Description is required" }),
+      }).optional(),
+    // indexNo: z.string().regex(/^\d+$/, { message: "index no must be number" }),
+    // otherStandardDescription: z.string().min(1, { message: "Standard Description is required" }),
     // STANDARD SERVICE TYPE VALIDATION ENDS
     // STANDARD SERVICE DETAIL VALIDATION STARTS
     court: z.string().min(1, { message: "Court is required" }),
@@ -54,9 +21,6 @@ export const standardFormSchema = z.object({
     state: z.string().min(1, { message: "state is required" }),
     apt: z.string().min(1, { message: "apt is required" }),
     // SERVE TO VALIDATION ENDS
-    // END FORM VALIDATION STARTS
-    createdByName:z.string().min(1, "Please select creator name."),
-    updatedByName:z.string().min(1, "Please select updator name."),
-    // END FORM VALIDATION ENDS
+
 
 })

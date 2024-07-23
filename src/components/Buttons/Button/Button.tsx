@@ -7,7 +7,8 @@ export interface ButtonProps{
 
 const Button:React.FC<ButtonProps>=({text,onClick})=>{
     return(
-    <button className="w-full bg-primaryColorLight py-2 rounded-md capitalize text-whiteColor" onClick={onClick}>
+    <button className="w-full bg-primaryColorLight py-2 rounded-md capitalize text-whiteColor border-[2px]
+                                 border-primaryColorLight" onClick={onClick}>
      {/* <button className="button"> */}
         {text}
     </button>)

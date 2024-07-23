@@ -10,27 +10,49 @@ import Table from "../../components/Tables/Table";
 import { headers, tableData } from "../../constdata/HolidayData";
 import { RootState } from "../../redux/store";
 import HolidayModal from "../../components/Modal/HolidayModal";
-import { showModalReducer } from "../../redux/slice/showModal";
+import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
 import Pagination from "../../components/Pagination/Pagination";
+import HolidayModalUpdate from "../../components/Modal/HolidayupdateModal";
+import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
+import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
+import { holidayType } from "../../type/holidayType/holidayType";
+import { deleteHolidayApi } from "../../apiservices/holidayApi/holidayApi";
+import { DataLoader } from "../../components/Loader/DataLoader";
 const Holiday= () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
-    
+    const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
+    const { isLoading, error, data, refetch } = useGetAllData("/holiday/all-holidays")
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange } = usePaginationCalc({ tableData: data || [] })
       const showModal=useSelector((state: RootState )=>state?.showModal.isShowModal)
       const dispatch=useDispatch()
-      const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-      const dataLimit = 1; // Define your data limit here
-      const totalPages = Math.ceil(tableData?.tableData?.length / dataLimit);
-      const onPageChange = (page: number) => {
-          setCurrentPage(page); // Update current page state
-          // You can perform any additional actions here, such as fetching data for the new page
-      };
-      // Calculate the indices for the current page's data slice
-      const lastIndexItem = dataLimit * currentPage;
-      const firstIndexItem = lastIndexItem - dataLimit;
-      const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
+      const [getSingleData,setGetSingleData]=useState<holidayType>()
+
+
+      const deleteData=async(id:string)=>{
+  
+        try {
+            const response=await deleteHolidayApi(id)
+            refetch()
+            alert(`${response?.data?.message}`)
+        } catch (error) {
+            console.log(error)
+        
+           alert("something went wrong") 
+        }
+        }
+    // UPDATE DATA FUNCTION
+    const holidayUpdateFunction=(id:string)=>{
+        setGetSingleData(data?.find((data,index)=>data?._id === id))
+        dispatch(showUpdateModalReducer(true))
+    }
+
+    if (isLoading) return <DataLoader text="holiday"/>
+
+if (error) return <div>An error has occurred: {error.message}</div>;
+
     return<> 
     
-    {showModal?<HolidayModal/>:<OutletLayout>
+    {showModal?<HolidayModal/>:showUpdateModal?<HolidayModalUpdate singledata={getSingleData}/>:<OutletLayout>
         <div className="">
             <OutletLayoutHeader heading="Holidays">
                 {userInfo?.roles[0]?.name === "Admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
@@ -41,7 +63,7 @@ const Holiday= () => {
                 <Searchbar />
                 <Filter />
             </div>
-            <Table headers={headers} tableData={currentTableData} />
+            <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={holidayUpdateFunction}/>
                         <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
