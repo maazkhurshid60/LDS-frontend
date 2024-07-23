@@ -15,7 +15,7 @@ import ServiceResultModal from "../../components/Modal/ServiceResultModal"
 const ServiceResult = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail);
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
-const dispatch=useDispatch()
+    const dispatch = useDispatch()
 
 
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
@@ -32,29 +32,7 @@ const dispatch=useDispatch()
 
     return (
         <>
-         <OutletLayout>
-                    <div className="">
-                        <OutletLayoutHeader heading="Service Results">
-                            {userInfo?.role === "admin" && (
-                                <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />
-                            )}
-                            <BorderButton buttonText="filter" disabled />
-                        </OutletLayoutHeader>
-                        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                            <Searchbar />
-                            <Filter />
-                        </div>
-                        <Table headers={headers} tableData={currentTableData} />
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            dataLimit={dataLimit}
-                            tableData={tableData?.tableData}
-                            onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
-                    </div>
-                </OutletLayout>
-            {/* {showModal ? (
+            {showModal ? (
                 <ServiceResultModal />
             ) : (
                 <OutletLayout>
@@ -79,7 +57,7 @@ const dispatch=useDispatch()
                         />
                     </div>
                 </OutletLayout>
-            )} */}
+            )}
         </>
     );
 };

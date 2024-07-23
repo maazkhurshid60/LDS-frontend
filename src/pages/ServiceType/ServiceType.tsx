@@ -15,9 +15,9 @@ import ServiceTypeModal from "../../components/Modal/ServiceTypeModal";
 import { showModalReducer } from "../../redux/slice/showModal";
 import Pagination from "../../components/Pagination/Pagination";
 const ServiceType = () => {
-    
 
-    const userInfo=useSelector((state: RootState )=>state?.userDetail)
+
+    const userInfo = useSelector((state: RootState) => state?.userDetail)
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
     const disptach = useDispatch()
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
@@ -31,53 +31,31 @@ const ServiceType = () => {
     const lastIndexItem = dataLimit * currentPage;
     const firstIndexItem = lastIndexItem - dataLimit;
     const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
-    return<>
-    <OutletLayout>
-        <div className="">
-            <OutletLayoutHeader heading="Service Types">
-                {userInfo?.role ==="admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>disptach(showModalReducer(true))}/>}
-                <BorderButton buttonText="filter" disabled />
-            </OutletLayoutHeader>
-            <div className="mt-4 flex flex-col  gap-4
+    return <>
+        {showModal ? <ServiceTypeModal /> : <OutletLayout>
+            <div className="">
+                <OutletLayoutHeader heading="Service Types">
+                    {userInfo?.role === "admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => disptach(showModalReducer(true))} />}
+                    <BorderButton buttonText="filter" disabled />
+                </OutletLayoutHeader>
+
+                <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
-                <Searchbar />
-                <Filter />
+                    <Searchbar />
+                    <Filter />
+                </div>
+                <Table headers={headers} tableData={currentTableData} />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    dataLimit={dataLimit}
+                    tableData={tableData?.tableData}
+                    onchange={onPageChange} // Pass onPageChange as onchange prop
+                />
+
             </div>
-            <Table headers={headers} tableData={currentTableData} />
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            dataLimit={dataLimit}
-                            tableData={tableData?.tableData}
-                            onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />            
-        </div>
-    </OutletLayout>
-    
-    {/* {showModal?<ServiceTypeModal/>: <OutletLayout>
-        <div className="">
-            <OutletLayoutHeader heading="Service Types">
-                {userInfo?.role ==="admin"&&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>disptach(showModalReducer(true))}/>}
-                <BorderButton buttonText="filter" disabled />
-            </OutletLayoutHeader>
-           
-            <div className="mt-4 flex flex-col  gap-4
-                            sm:flex-row sm:items-center">
-                <Searchbar />
-                <Filter />
-            </div>
-            <Table headers={headers} tableData={currentTableData} />
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            dataLimit={dataLimit}
-                            tableData={tableData?.tableData}
-                            onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />            
-                        
-        </div>
-    </OutletLayout>} */}
-    
+        </OutletLayout>}
+
     </>
 
 }
