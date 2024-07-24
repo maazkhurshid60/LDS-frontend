@@ -1,6 +1,7 @@
 import { optional, z } from "zod";
 
 export const resultFormSchema = z.object({
+    _id:z.string().optional(),
     // QUERY INFORMATION (L&T) VALIDATION STARTS
     fullName: z.string().optional(),
     indexNo: z.string().optional(),

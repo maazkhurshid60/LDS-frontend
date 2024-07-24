@@ -13,9 +13,10 @@ export interface BorderButtonProps{
     buttonText?:string
     disabled?:boolean
     onClick?:()=>void
+    to?:string
 }
-const BorderButton:React.FC<BorderButtonProps>=({icon,isIcon,buttonText,disabled,onClick,isRightIcon,borderColor="primaryColorLight"})=>{
-return <Link to="#" className={`inner-shadow capitalize flex items-center justify-center gap-y-1  px-3 py-[10px] bg-whiteColor border-[2px]
+const BorderButton:React.FC<BorderButtonProps>=({to="#",icon,isIcon,buttonText,disabled,onClick,isRightIcon,borderColor="primaryColorLight"})=>{
+return <Link to={to} className={`inner-shadow capitalize flex items-center justify-center gap-y-1  px-3 py-[10px] bg-whiteColor border-[2px]
                                  border-${borderColor} text-${borderColor} rounded-lg 
                                 ${disabled?"opacity-[30%] cursor-not-allowed":""}`}
                                 onClick={onClick}>
