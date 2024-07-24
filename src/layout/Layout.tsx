@@ -26,10 +26,10 @@ const Layout = () => {
                 <div className="w-[95%] m-auto mt-4 sm:mt-8 mb-4 h-[83vh]">
 
                     <Outlet />
-                    <div className="flex flex-col items-end justify-center gap-2 mt-4 mr-4  ">
+                    {/* <div className="flex flex-col items-end justify-center gap-2 mt-4 mr-4  ">
                         <p className="text-xs font-semibold">Designed and Developed By:</p>
                         <img src="/images/redstarlogo.png" alt="Red Star Technology" className=" w-[120px]" />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div> : <Navigate to={"/login"} />}
