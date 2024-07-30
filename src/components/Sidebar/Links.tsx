@@ -20,12 +20,12 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
 // console.log((link === "users" || link2 === "roles")  && userData !=="Admin" ?  "hidden":{link ,link2,link3} )
     const [activeSubLink, setActiveSubLink] = useState<string>()
     const dropdownRef = useRef<HTMLDivElement>(null);
-
     const [activeLink, setActiveLink] = useState<string>()
     const [subMenu, setSubMenu] = useState(false)
     const [subMenuShow, setSubMenuShow] = useState(false)
     const menu = useSelector((state: RootState) => state.menuOpen.menuOpenStatus);
     const dispatch = useDispatch()
+    console.log("activelink",activeLink,subMenu)
     const navigate = useNavigate()
     const toggleOpenFunction = (activeLinkName: string) => {
         setActiveLink(activeLinkName)
@@ -60,7 +60,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     }, []);
     return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative`}>
         <div className="mr-4 h-[65vh] md:h-[85vh] flex flex-col justify-between">
-            <div>
+            <div  ref={dropdownRef}>
                 {linkData.map((data, id) => (
                     <div key={id} className="text-sm mb-2 relative" >
 
@@ -83,7 +83,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                             />}
                         </div>
                         {/* MENU ENDS */}
-                        <div ref={dropdownRef}>
+                        <div>
                         {/*SUBMENU STARTS and Render submenus only if the current link is active */}
                         {data.name === activeLink && data.submenu && (
                             <ul   className={`
