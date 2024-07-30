@@ -56,7 +56,7 @@ const Dropdown: React.FC<DropdownProp> = ({
                 >
                     {/* {singleOption?.label|| options.find((option) => option.value === value)?.label || "Select an option"} */}
                     { options.find((option) => option.value === value)?.label ||  "Select an option" }
-                    <span className="absolute top-[14px] right-2">
+                    <span className="absolute top-[10px] right-2">
                         {isOpen ? <FaAngleUp size={15} /> : <FaAngleDown size={15} />}
                     </span>
                 </div>
