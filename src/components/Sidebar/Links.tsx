@@ -78,9 +78,10 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
 
                             {/* CHECK IF USER IS ADMIN THEN USERS LINK SHOULD SHOW 
                            ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"} */}
-                            <div className={`flex items-center justify-center `}  >
+                            <div className={`flex items-center justify-center group`}  >
                                 {React.createElement(data.icon, { size: 22, style: { marginLeft: '5px', marginRight: '5px' } })}
                                 <h2 className={`text-sm ml-1 capitalize   ${widthSmall ? "hidden" : "inline-block"} ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"}`}>{data.name}</h2>
+                                {widthSmall && <p className="hidden group-hover:inline-block">show</p>}
                             </div>
                             {!widthSmall && data.submenu && <IoIosArrowDown
                                 size={16}
