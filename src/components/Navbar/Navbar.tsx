@@ -16,10 +16,10 @@ const Navbar = () => {
 
         <IoMdMenu size={24} className=" absolute top-4 right-2 md:hidden"
             onClick={() => { dispatch(openMenuFunction(menu)) }} />
-        <div className="flex items-center gap-3 font-semibold capitalize text-grayColor text-sm
+        <div className="flex items-center gap-x-3 font-semibold capitalize text-grayColor 
                         md:text-base">
-            {navbarTrackingData?.mainMenu && <> <p>{navbarTrackingData?.mainMenu}</p>
-                < IoIosArrowForward size={14} className="font-bold" />
+            {navbarTrackingData?.mainMenu && <> <p className="">{navbarTrackingData?.mainMenu}</p>
+                < IoIosArrowForward size={16}  className="mt-[1px]"/>
                 <p className="text-primaryColorLight">{navbarTrackingData?.subMenu}</p></>}
 
         </div>
