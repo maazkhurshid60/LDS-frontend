@@ -21,7 +21,6 @@ const AddUserModal = () => {
 
     const options = data?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
-
     console.log(allSelectedRoles)
     const dipatch = useDispatch()
     // ADD USER

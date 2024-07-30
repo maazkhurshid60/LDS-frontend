@@ -9,6 +9,7 @@ import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Pagination from "../../components/Pagination/Pagination";
 import FilterMenu from "./FilterSection/FilterMenu/FilterMenu";
+import StandardReport from "../../components/Result Templates/Affidavits Reports/StandardReport/MainTemplate";
 
 const LegalDelivery = () => {
 
@@ -58,6 +59,7 @@ const LegalDelivery = () => {
                 tableData={tableData?.tableData}
                 onchange={onPageChange} // Pass onPageChange as onchange prop
             />
+        <StandardReport/>
         </OutletLayout>
 
     </div>
