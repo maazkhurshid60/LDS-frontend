@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userInputSectionSchema } from "../../schemas/userInputSectionSchema";
 import PasswordField from "../InputFields/PasswordField/PasswordField";
 import { useDispatch } from "react-redux";
-import { showModalReducer } from "../../redux/slice/showModal";
+import { showModalReducer, showRoleModalReducer } from "../../redux/slice/showModal";
 import TextField from "../InputFields/TextField/TextField";
 import SelectMultipleDropdown from "../dropdown/SelectMultipleDropdown";
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
@@ -22,17 +22,18 @@ const AddUserModal = () => {
     const options = data?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
     console.log(allSelectedRoles)
-    const dipatch = useDispatch()
+    const dispatch = useDispatch()
     // ADD USER
     const addUserFunction = async(data: any) => {
 
         const onlyName=allSelectedRoles?.map(data=>data?.name)
         const allData={...data,roles:onlyName}
         // console.log(">>>>>>>>>>>>",allData)
-        // dipatch(showModalReducer(false))
+        // dispatch(showModalReducer(false))
         try {
             const res= await registerUserApi(allData)
             alert(`${res?.data?.message}`)
+            dispatch(showModalReducer(false))
             
         } catch (error) {
             alert("Something went wrong or Network later.")
@@ -40,7 +41,7 @@ const AddUserModal = () => {
     }
     // CLOSE MODAL
     const closeModal = () => {
-        dipatch(showModalReducer(false))
+        dispatch(showModalReducer(false))
     }
     // GET SELECTED ROLES
     const getSelectedRoles = (optionValue) => {
