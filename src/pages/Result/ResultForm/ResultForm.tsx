@@ -15,7 +15,7 @@ import { Recepient, clientId, delivery, result, serverId, svcData } from "../../
 export type FormFields = z.infer<typeof resultFormSchema>
 
 const ResultForm = () => {
-    const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<FormFields>({ resolver: zodResolver(resultFormSchema) })
+    const { register, handleSubmit, formState: { errors }, control, setValue ,reset} = useForm<FormFields>({ resolver: zodResolver(resultFormSchema) })
     const { data: clientData } = useGetAllData("/client/all-clients");
     const clientIdOptions = clientData?.map((data, id) => { return { value: data?._id, label: data?.fullName } })
     const { data: serverIdData } = useGetAllData("/server/all-servers");
@@ -25,7 +25,7 @@ const ResultForm = () => {
     const allResultForm = useSelector((state: RootState) => state.resultForm.allResultFormData)
     const resultFormIndex = useSelector((state: RootState) => state.resultForm.resultFormIndex)
     const isNewResultFormAdd = useSelector((state: RootState) => state.resultForm.isNewResultFormAdd)
-
+    // console.log("add new form set true",isNewResultFormAdd)   
     console.log(allResultForm[resultFormIndex], resultFormIndex)
     // submitResultFormFunction
     const submitResultFormFunction = (data) => {
@@ -98,6 +98,12 @@ const ResultForm = () => {
     }, [handleSubmit, submitResultFormFunction])
     // USE EFFECT TO STORE DATA ON FIRST INDEX OF RESULT FORM
     useEffect(() => {
+        if (isNewResultFormAdd ===true) {
+       
+            reset()
+        }
+        else{
+        
         setValue("fullName", allResultForm[resultFormIndex]?.queryInformationLT?.fullName),
             setValue("indexNo", allResultForm[resultFormIndex]?.queryInformationLT?.indexNo),
             setValue("address", allResultForm[resultFormIndex]?.queryInformationLT?.address),
@@ -133,7 +139,8 @@ const ResultForm = () => {
         setValue("otherIdentifyingFeatures", allResultForm[resultFormIndex]?.serviceResults?.otherIdentifyingFeatures)
         setValue("dateOfMailing", allResultForm[resultFormIndex]?.serviceResults?.dateOfMailing)
         setValue("notaryDate", allResultForm[resultFormIndex]?.serviceResults?.notaryDate)
-    }, [resultFormIndex, setValue])
+    }
+    }, [resultFormIndex, setValue,isNewResultFormAdd,allResultForm])
     return <>
 
         <form onSubmit={handleSubmit(submitResultFormFunction)}>

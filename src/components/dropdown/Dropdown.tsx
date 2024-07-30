@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 export interface DropdownProp {
@@ -24,6 +24,7 @@ const Dropdown: React.FC<DropdownProp> = ({
     // singleOption
 }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 // console.log(value)
     const handleSelectClick = () => {
         setIsOpen(!isOpen);
@@ -33,9 +34,19 @@ const Dropdown: React.FC<DropdownProp> = ({
         onChange(optionValue);
         setIsOpen(false);
     };
-
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     return (
-        <div className="w-full">
+        <div className="w-full" ref={dropdownRef}>
             <label className="sm:font-medium text-sm capitalize">{label}</label>
             <div className="w-full relative">
                 <div

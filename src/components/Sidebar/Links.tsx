@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { linkData } from "../../constdata/LinksData";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
@@ -19,6 +19,8 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
 
 // console.log((link === "users" || link2 === "roles")  && userData !=="Admin" ?  "hidden":{link ,link2,link3} )
     const [activeSubLink, setActiveSubLink] = useState<string>()
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
     const [activeLink, setActiveLink] = useState<string>()
     const [subMenu, setSubMenu] = useState(false)
     const [subMenuShow, setSubMenuShow] = useState(false)
@@ -44,11 +46,23 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
             dispatch(openMenuFunction(menu))
     }
     // console.log("smallwidth",widthSmall,"subMenuShow",subMenuShow)
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            // subMenu
+            setSubMenuShow(false);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative`}>
         <div className="mr-4 h-[65vh] md:h-[85vh] flex flex-col justify-between">
             <div>
                 {linkData.map((data, id) => (
-                    <div key={id} className="text-sm mb-2 relative">
+                    <div key={id} className="text-sm mb-2 relative" >
 
                         {/* MENU STARTS */}
                         <div
@@ -69,9 +83,10 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                             />}
                         </div>
                         {/* MENU ENDS */}
+                        <div ref={dropdownRef}>
                         {/*SUBMENU STARTS and Render submenus only if the current link is active */}
                         {data.name === activeLink && data.submenu && (
-                            <ul className={`
+                            <ul   className={`
                     ${widthSmall ? `absolute top-0 left-16 border-[1px] border-borderColor border-solid rounded-xl w-[180px] shadow-lgShadow py-6 px-8
                     
                     ${subMenuShow ? "inline-block" : "hidden"}` : "relative"} bg-whiteColor overflow-hidden`}>
@@ -92,6 +107,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                             </ul>
                         )}
                         {/*SUBMENU ENDS and Render submenus only if the current link is active */}
+                        </div>
                     </div>
                 ))}</div>
             <div className="flex items-center text-sm mt-4 ml-2 mr-2 cursor-pointer" onClick={logoutFunction}>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa"
 export interface SelectMultipleDropdownProp {
     options: option[]
@@ -19,19 +19,34 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({ options,
     onChange,getMailFunction }) => {
 
     const [isOpen, setIsOpen] = useState(false)
+    const dropdownRef = useRef<HTMLDivElement>(null);
     
     const handleSelectClick = () => {
         setIsOpen(!isOpen)
     }
     const handleOptionClick = (optionValue: string) => {
         onChange(optionValue)
-        
             getMailFunction(optionValue);
-      
-        
         // setIsOpen(false)
     }
-    return <div className="w-full">
+    const handleClickOutside = (event: MouseEvent) => {
+        console.log("Click detected");
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            console.log("Click outside detected, closing dropdown");
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        console.log("Adding event listener");
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            console.log("Removing event listener");
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+    
+    return <div className="w-full" ref={dropdownRef}>
         <label className="font-medium text-sm capitalize">{label}</label>
         <div className="w-full relative">
         <div onClick={handleSelectClick}
