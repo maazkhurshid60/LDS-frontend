@@ -12,9 +12,9 @@ const Layout = () => {
     const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
     const menu = useSelector((state: RootState) => state.menuOpen.menuOpenStatus);
     const dispatch = useDispatch()
-    console.log(userInfo?.email)
+    console.log(userInfo)
     return <>
-        {userInfo?.email !== null ? <div className="flex items-start">
+        {userInfo?.email !== null && userInfo?.email !== undefined ? <div className="flex items-start">
             {/* <IoMdMenu size={24} className=" absolute top-0 right-0 "
                 onClick={() => { dispatch(openMenuFunction(menu)) }} /> */}
             <div className={`z-[9999]  absolute duration-500 transition-all   md:static  top-[85px] ${menu ? "-left-80 " : "left-0   top-0 md:top-[85px]"}  ${widthSmall ? "lg:w-[8%] xl:w-[6%]" : "md:w-[28%] lg:w-[20%]"}`}>

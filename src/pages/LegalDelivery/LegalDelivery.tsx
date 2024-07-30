@@ -59,7 +59,7 @@ const LegalDelivery = () => {
                 tableData={tableData?.tableData}
                 onchange={onPageChange} // Pass onPageChange as onchange prop
             />
-        <StandardReport/>
+        {/* <StandardReport/> */}
         </OutletLayout>
 
     </div>
