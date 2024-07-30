@@ -19,7 +19,7 @@ const Navbar = () => {
         <div className="flex items-center gap-x-3 font-semibold capitalize text-grayColor 
                         md:text-base">
             {navbarTrackingData?.mainMenu && <> <p className="">{navbarTrackingData?.mainMenu}</p>
-                < IoIosArrowForward size={16}  className="mt-[1px]"/>
+                < IoIosArrowForward size={16}  className="mt-[2px]"/>
                 <p className="text-primaryColorLight">{navbarTrackingData?.subMenu}</p></>}
 
         </div>
