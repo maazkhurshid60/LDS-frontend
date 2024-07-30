@@ -69,13 +69,16 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         {/* MENU STARTS */}
                         <div
                             onClick={() => { toggleOpenFunction(data.name), setSubMenuShow(true),navigate(`${data?.to}`) }}
-                            className={`cursor-pointer flex gap-2 items-center justify-between  px-2 py-2  transition-all duration-300 ${data.name === activeLink ? "bg-grayColorLight rounded-lg" : ""
+                            className={`cursor-pointer flex gap-2 items-center     px-2 py-2  transition-all duration-300 
+                                ${widthSmall?"justify-center":"justify-between"}
+                                
+                                ${data.name === activeLink ? "bg-grayColorLight rounded-lg" : ""
                                 } ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"}`}
                         >
 
                             {/* CHECK IF USER IS ADMIN THEN USERS LINK SHOULD SHOW 
                            ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"} */}
-                            <div className={`flex items-center jusify-start  `}  >
+                            <div className={`flex items-center justify-center `}  >
                                 {React.createElement(data.icon, { size: 22, style: { marginLeft: '5px', marginRight: '5px' } })}
                                 <h2 className={`text-sm ml-1 capitalize   ${widthSmall ? "hidden" : "inline-block"} ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"}`}>{data.name}</h2>
                             </div>
@@ -112,7 +115,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         </div>
                     </div>
                 ))}</div>
-            <div className="flex items-center text-sm mt-4 ml-2 mr-2 cursor-pointer" onClick={logoutFunction}>
+            <div className={`flex items-center text-sm mt-4 ml-2 mr-2 cursor-pointer  ${widthSmall&&"justify-center"}`} onClick={logoutFunction}>
                 <RiLogoutBoxRLine className="text-redColor mr-1" size={22} />
                 <p className={`text-sm ml-1 capitalize   ${widthSmall ? "hidden" : "inline-block"}`}>Logout</p>
             </div>

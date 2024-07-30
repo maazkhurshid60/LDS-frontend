@@ -20,8 +20,8 @@ const Sidebar = () => {
 
         <div className={`w-full 
         md:inline-block 
-     transition-all duration-300 bg-whiteColor pl-6 py-4 border-r-[1px] border-r-borderColor h-auto relative 
-    
+     transition-all duration-300 bg-whiteColor py-4 border-r-[1px] border-r-borderColor h-auto relative 
+    ${widthSmall? "pl-[14px]":" pl-6"}
      `}>
             {/* BACK ICON USED TO REDUCE WIDTH OF SIDEBAR STARTS */}
             <div className={`hidden 
@@ -37,7 +37,7 @@ const Sidebar = () => {
                 w-[60px]
             md:w-[30px]
             lg:w-[35px]
-            xl:w-[45px] "/>
+            xl:w-[50px] "/>
                 {!widthSmall && <div className="ml-2
            xl:ml-4">
                     <h1 className="uppercase  text-grayColor font-medium tracking-wide 
