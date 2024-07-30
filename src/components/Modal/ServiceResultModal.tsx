@@ -20,7 +20,7 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-
         <TextField label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode"/>
 <div className="mt-4" >
 
-        <TextArea label="Service Results Discription" register={register} error={errors.serviceResultDescription} name="serviceResultDescription"/>
+        <TextArea label="Service Results Description" register={register} error={errors.serviceResultDescription} name="serviceResultDescription"/>
 </div>
     </form>
 
@@ -40,7 +40,7 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-
         
     }
     return <Modal
-        modalHeading="Service Result"
+        modalHeading="Service Results"
         borderButtonText="cancel"
         filledButtonText={isSubmitting?"adding":"add"}
         onBorderButtonClick={() => disptach(showModalReducer(false))}   

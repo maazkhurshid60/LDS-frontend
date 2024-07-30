@@ -23,7 +23,7 @@ export const linkData = [
 
         subMenu: [
                     { linkName: "User", to: "/user" },
-                    { linkName: "Service Result", to: "/service-result" },
+                    { linkName: "Service Results", to: "/service-results" },
                     { linkName: "Service Type", to: "/service-type" },
                     { linkName: "Servers", to: "/server" },
                     { linkName: "Clients", to: "/client" },
