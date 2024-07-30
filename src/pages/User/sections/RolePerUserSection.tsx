@@ -27,7 +27,9 @@ const RolePerUserSection = () => {
     const oneUser = useSelector((state: RootState) => state.userId.singleUser)
     const userId = useSelector((state: RootState) => state.userId.userId)
     const alluserData = useSelector((state: RootState) => state.userId.allUser.tableData)
-
+   const filteredRoles= allSelectedRoles.filter((obj1, i, arr) => 
+        arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
+      )
     const dispatch = useDispatch()
     // GET SELECTED ROLES
     const getSelectedRoles = (optionValue) => {
@@ -56,10 +58,11 @@ const RolePerUserSection = () => {
 
     }, [alluserDetail, setValue]);
 
-    const updateUserRoleFunction =async (id) => {
-        const newSelectedRole = allRolesdata?.find((data, index) => data?._id === id?.roles)
+    const updateUserRoleFunction = async (id) => {
+        const newSelectedRole = filteredRoles?.find((data, index) => data?._id === id?.roles)
+
         if (newSelectedRole !== undefined) {
-            const allRoles = [...allSelectedRoles]
+            const allRoles = [...filteredRoles]
             const roles = allRoles?.map((data, index) => data?.name)
             const data = { userId: oneUser[0]._id, roles }
             dispatch(updateUserRole(data))
@@ -69,7 +72,7 @@ const RolePerUserSection = () => {
         }
         else {
 
-            const allRoles = [...allSelectedRoles]
+            const allRoles = [...filteredRoles]
             const roles = allRoles?.map((data, index) => data?.name)
             const data = { userId: oneUser[0]._id, roles }
             dispatch(updateUserRole(data))
@@ -83,19 +86,19 @@ const RolePerUserSection = () => {
         <div className=" w-full">
             <h1 className="font-semibold mb-4
                 md:text-md
-                lg:text-xl">Role per users </h1>
+                lg:text-xl capitalize">Role per users </h1>
             <TableWithoutAction headers={headers} tableData={alluserDetail.singleUser ? alluserDetail.singleUser[0]?.roles : []} />
             <form className="mt-6 w-[100%] m-auto" onSubmit={handleSubmit(updateUserRoleFunction)}>
                 <h1 className="font-semibold
                 md:text-md
                 lg:text-base">Update User Role</h1>
-                <div className="w-full md:w-[40%]  flex flex-col items-start gap-x-10 mb-4">
+                <div className="w-full md:w-[100%] flex flex-col items-start gap-x-10 mb-4">
 
                     {/* SELECTED ROLES FOR USER WILL BE DISPLAYED*/}
                     {allSelectedRoles?.length > 0 && <div className="w-[100%] mt-2">
                         {/* <h1 className="font-semibold capitalize text-sm">User Role</h1> */}
                         <div className="flex items-center justify-start  gap-x-14 gap-y-1 flex-wrap w-full">
-                            {allSelectedRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
+                            {filteredRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
                                 <p className="text-sm font-normal capitalize" key={index}>{data?.name}</p>
                                 <CrossIcon onClick={() => deleteRole(data?._id)} />
                             </div>
@@ -104,7 +107,7 @@ const RolePerUserSection = () => {
                         </div>
                     </div>
                     }
-                    <div className="w-[100%] mt-2 ">
+                    <div className="w-[40%] mt-2 ">
                         <Controller name="roles" control={control} render={({ field }) => (
                             <SelectMultipleDropdown
                                 options={options}
@@ -117,7 +120,7 @@ const RolePerUserSection = () => {
                     </div>
 
                 </div>
-                <div className="w-[30%] m-auto ">
+                <div className="w-[30%] mt-5 ">
                     <Button text={isSubmitting ? "Updating" : "Update User Role"} />
                 </div>
             </form>
