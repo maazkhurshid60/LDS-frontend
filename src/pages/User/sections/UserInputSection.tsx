@@ -55,6 +55,7 @@ const UserInputSection = () => {
     // UPDATE USER
     const userUpdateFunction = (data) => {
         const onlyName = allSelectedRoles?.map(data => data?.name)
+        // alert("clicked")
         // const allData = { ...data, roles: onlyName, userId: singleUserId }
         const allData={userId:oneUser[0]?._id, userName: data?.userName,
             firstName:  data?.firstName,

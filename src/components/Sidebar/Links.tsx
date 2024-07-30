@@ -21,14 +21,17 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     const [activeSubLink, setActiveSubLink] = useState<string>()
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [activeLink, setActiveLink] = useState<string>()
+    const [activeLinkIndex, setActiveLinkIndex] = useState<string>()
+
     const [subMenu, setSubMenu] = useState(false)
     const [subMenuShow, setSubMenuShow] = useState(false)
     const menu = useSelector((state: RootState) => state.menuOpen.menuOpenStatus);
     const dispatch = useDispatch()
     console.log("activelink",activeLink,subMenu)
     const navigate = useNavigate()
-    const toggleOpenFunction = (activeLinkName: string) => {
+    const toggleOpenFunction = (activeLinkName: string,id) => {
         setActiveLink(activeLinkName)
+        setActiveLinkIndex(id)
         setSubMenu(!subMenu);
         dispatch(setMainMenuName(activeLinkName))
     }
@@ -59,14 +62,15 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
         };
     }, []);
     return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative`}>
-        <div className="mr-4 h-[65vh] md:h-[85vh] flex flex-col justify-between">
+        
+        <div className=" w-[40px] h-[65vh] md:h-[85vh] flex flex-col justify-between items-center">
             <div  ref={dropdownRef}>
                 {linkData.map((data, id) => (
                     <div key={id} className="text-sm mb-2 relative" >
 
                         {/* MENU STARTS */}
                         <div
-                            onClick={() => { toggleOpenFunction(data.name), setSubMenuShow(true),navigate(`${data?.to}`) }}
+                            onClick={() => { toggleOpenFunction(data.name,id), setSubMenuShow(true),navigate(`${data?.to}`) }}
                             className={`cursor-pointer flex gap-2 items-center justify-between  px-2 py-2  transition-all duration-300 ${data.name === activeLink ? "bg-grayColorLight rounded-lg" : ""
                                 } ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"}`}
                         >
