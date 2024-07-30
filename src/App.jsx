@@ -3,6 +3,7 @@ import Routing from './routing/routing'
 import { Provider } from 'react-redux'
 import  {store, persistor } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
+//Static website
 function App() {
   return (
     <>
