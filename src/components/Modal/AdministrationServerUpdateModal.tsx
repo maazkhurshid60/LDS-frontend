@@ -95,6 +95,8 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
         const postData = { ...data, zip, licenseNo, serverId: singledata?._id }
         console.log("postdata", postData)
         await updateServerApi(postData)
+        dispatch(showUpdateModalReducer(false))
+
     }
     useEffect(() => {
         if (singledata) {
