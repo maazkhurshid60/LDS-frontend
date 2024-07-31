@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const clientSchema = z.object({
-    code: z.string().min(1, { message: "Code is required" }).regex(/^\d+$/,{message:"Code must be Number"}),
+    code: z.string().min(1, { message: "Code is required" }),
     fullName: z.string().min(1, { message: "Full Name is required" }),
     mi: z.string().min(1, { message: "MI is required" }),
     address1: z.string().min(1, { message: "Address1 is required" }),

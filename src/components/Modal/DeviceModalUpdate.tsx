@@ -22,9 +22,9 @@ type Props = {
 export type FormFields = z.infer<typeof deviceSchema>
 const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
     const disptach = useDispatch()
-    const { isLoading, error, data, refetch } = useGetAllData("/client/all-clients")
+    const { isLoading, error, data, refetch } = useGetAllData("/device/all-devices")
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(deviceSchema) })
-    const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-8 flex-wrap mb-8 overflow-y-scroll ">
+    const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-8 flex-wrap mb-8 overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="device code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Device Code" />
         </div>

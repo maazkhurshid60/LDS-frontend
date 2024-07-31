@@ -6,7 +6,7 @@ export const deviceSchema=z.object({
         message: "This Checked is required",
       }),
     deviceName:z.string().min(1,{message:"Device Name is required"}),
-    deviceId:z.string().min(1,{message:"Device Id is required"}),
+    // deviceId:z.string().min(1,{message:"Device Id is required"}),
 
     productType:z.string().min(1,{message:"Product Type is required"})
 })

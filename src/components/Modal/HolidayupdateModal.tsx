@@ -27,7 +27,8 @@ export type FormFields = z.infer<typeof holidaySchema>
 const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     const disptach = useDispatch()
 
-    const { isLoading, error, data, refetch } = useGetAllData("/client/all-clients")
+    const { isLoading, error, data, refetch } = useGetAllData("/holiday/all-holidays")
+
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(holidaySchema) })
     const modalBody = <form className=" flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8">
           <div className="w-full md:w-[38%] xl:w-[30%]">

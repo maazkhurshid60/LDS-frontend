@@ -18,6 +18,7 @@ import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc"
 import { holidayType } from "../../type/holidayType/holidayType";
 import { deleteHolidayApi } from "../../apiservices/holidayApi/holidayApi";
 import { DataLoader } from "../../components/Loader/DataLoader";
+import { toast } from "react-toastify";
 const Holiday= () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
@@ -33,11 +34,11 @@ const Holiday= () => {
         try {
             const response=await deleteHolidayApi(id)
             refetch()
-            alert(`${response?.data?.message}`)
+            toast.success(`${response?.data?.message}`)
         } catch (error) {
             console.log(error)
         
-           alert("something went wrong") 
+            toast.error("something went wrong") 
         }
         }
     // UPDATE DATA FUNCTION

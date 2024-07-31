@@ -19,6 +19,7 @@ import { DataLoader } from "../../components/Loader/DataLoader";
 import { deviceType } from "../../type/deviceType/deviceType";
 import DeviceModalUpdate from "../../components/Modal/DeviceModalUpdate";
 import { deleteHolidayApi } from "../../apiservices/holidayApi/holidayApi";
+import { toast } from "react-toastify";
 const Devices = () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
@@ -33,13 +34,13 @@ const Devices = () => {
     const deleteData=async(id:string)=>{
         console.log("<id>",id)
         try {
-            const response=await deleteHolidayApi(id)
+            const response=await deleteDeviceApi(id)
             refetch()
-            alert(`${response?.data?.message}`)
+            toast.success(`${response?.data?.message}`)
         } catch (error) {
             console.log(error)
         
-           alert("something went wrong") 
+           toast.error("something went wrong") 
         }
         }
     // UPDATE DATA FUNCTION

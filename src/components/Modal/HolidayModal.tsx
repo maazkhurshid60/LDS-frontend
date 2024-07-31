@@ -11,9 +11,12 @@ import useGenerateYears from "../../hooks/generateYears/useGenereateYears"
 import { toast } from "react-toastify"
 import { addServerApi } from "../../apiservices/serverApi/serverApi"
 import { addHolidayApi } from "../../apiservices/holidayApi/holidayApi"
+import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 
 const HolidayModal = () => {
     const disptach = useDispatch()
+    const { isLoading, error, data, refetch } = useGetAllData("/holiday/all-holidays")
+
     const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm({ resolver: zodResolver(holidaySchema) })
     const modalBody = <form className=" flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8">
           <div className="w-full md:w-[38%] xl:w-[30%]">
@@ -34,6 +37,7 @@ const HolidayModal = () => {
         // disptach(showModalReducer(false))
         try {
             const response=await addHolidayApi(postHolidayData)
+            refetch()
             toast.success(`${response?.data?.message}`)
             disptach(showModalReducer(false))
         } catch (error) {

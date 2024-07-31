@@ -19,7 +19,9 @@ export type FormFields = z.infer<typeof userInputSectionSchema>
 const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
     const dispatch = useDispatch()
     const { register, handleSubmit, formState: { errors, isSubmitting }, control, setValue } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
-    const { isLoading, error, data, refetch } = useGetAllData("/device/all-devices")
+    const { isLoading, error, data } = useGetAllData("/device/all-devices")
+    const {refetch } = useGetAllData("/server/all-servers")
+
     const options = data?.map((options) => ({ label: options?.deviceCode, value: options?._id }));
     console.log(":data", data, "options", options)
     console.log("singledata>>>>>>", singledata)
@@ -87,8 +89,8 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
         </div>
     </form>
 
-    // ADD ADMINISTRATION FUNCTION
-    const administrationFunction = async (data) => {
+    // UPDATE SERVER FUNCTION
+    const updateServerFunction = async (data) => {
         console.log(typeof parseInt(data?.zip))
         const zip = parseInt(data?.zip)
         const licenseNo = parseInt(data?.licenseNo)
@@ -96,7 +98,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
         console.log("postdata", postData)
         await updateServerApi(postData)
         dispatch(showUpdateModalReducer(false))
-
+        refetch()
     }
     useEffect(() => {
         if (singledata) {
@@ -121,7 +123,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
         <Modal
             modalHeading="update Server"
             onBorderButtonClick={() => dispatch(showUpdateModalReducer(false))}
-            onFilledButtonClick={handleSubmit(administrationFunction)}
+            onFilledButtonClick={handleSubmit(updateServerFunction)}
             filledButtonText="update"
             borderButtonText="cancel"
             modalBody={modalBody} />

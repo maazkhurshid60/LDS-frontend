@@ -20,46 +20,48 @@ import { serverType } from "../../type/serverType/serverType";
 import { DataLoader } from "../../components/Loader/DataLoader";
 import AdministrationServerUpdateModal from "../../components/Modal/AdministrationServerUpdateModal";
 const Server = () => {
-    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state.showModal.isShowModal)
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
-    const {isLoading,error,data,refetch}=useGetAllData("/server/all-servers")
-    const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
-    const [getSingleServerData,setGetSingleServerData]=useState<serverType>()
+    const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
+
+    const { isLoading, error, data, refetch } = useGetAllData("/server/all-servers")
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange } = usePaginationCalc({ tableData: data || [] })
+    const [getSingleServerData, setGetSingleServerData] = useState<serverType>()
 
     const dispatch = useDispatch()
-const deleteData=async(id:string)=>{
-    // const response =deleteServerApi(id)
-    try {
-        const response=await deleteServerApi(id)
-        toast.success(`${response?.data?.message}`)
-        refetch()
-    } catch (error) {
-        console.log(error)
-    
-       toast.error("something went wrong") 
+    const deleteData = async (id: string) => {
+        // const response =deleteServerApi(id)
+        try {
+            const response = await deleteServerApi(id)
+            toast.success(`${response?.data?.message}`)
+            refetch()
+        } catch (error) {
+            console.log(error)
+
+            toast.error("something went wrong")
+        }
     }
-}
 
-const clientUpdateFunction=(id:string)=>{
-    setGetSingleServerData(data?.find((data:serverType,index:number)=>data?._id === id))
-    dispatch(showUpdateModalReducer(true))
-    console.log(id)
-    // updateServerApi(data?.find((data,index:number)=>data?._id === id))
-    // updateServerApi
-}
-
+    const serverUpdateFunction = (id: string) => {
+        setGetSingleServerData(data?.find((data: serverType, index: number) => data?._id === id))
+        dispatch(showUpdateModalReducer(true))
+        console.log(id)
+        // updateServerApi(data?.find((data,index:number)=>data?._id === id))
+        // updateServerApi
+    }
 
 
-if (isLoading) return <DataLoader text="Server"/>
 
-if (error) return <div>An error has occurred: {error.message}</div>;
+    if (isLoading) return <DataLoader text="Server" />
+
+    if (error) return <div>An error has occurred: {error.message}</div>;
 
     return <>
-        {showModal ? <AdministrationServerModal/> :showUpdateModal?<AdministrationServerUpdateModal singledata={getSingleServerData}/>
+        {showModal ? <AdministrationServerModal /> : showUpdateModal ? <AdministrationServerUpdateModal singledata={getSingleServerData} />
             :
             <OutletLayout>
-                <div className="bg-grayColorLight">
+                <div className="">
                     <OutletLayoutHeader heading="Servers">
                         {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
                         <BorderButton buttonText="filter" disabled />
@@ -69,8 +71,9 @@ if (error) return <div>An error has occurred: {error.message}</div>;
                         <Searchbar />
                         <Filter />
                     </div>
-           <div>
-                    <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction}/>
+                    <div className={`${widthSmall?"w-[1310px]":"w-[1150px]"}`}>
+                   
+                    <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction}/>
                         <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
@@ -79,12 +82,23 @@ if (error) return <div>An error has occurred: {error.message}</div>;
                             onchange={onPageChange} // Pass onPageChange as onchange prop
 
                         />
-                        
-           </div>
-            
                     </div>
+{/*                                
+                    <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction}/>
+                        <Pagination
+                            totalPages={totalPages}
+                            currentPage={currentPage}
+                            dataLimit={dataLimit}
+                            tableData={tableData?.tableData}
+                            onchange={onPageChange} // Pass onPageChange as onchange prop
 
-         
+                        /> */}
+
+
+
+                </div>
+
+
             </OutletLayout>}
     </>
 }

@@ -13,11 +13,10 @@ export const addServerApi = async (data: any) => {
                 "Authorization": `Bearer ${accessToken}`
             }
         })
-        toast.success(`${response?.data?.message}`)
-    } catch (error) {
+return data   
+} catch (error) {
         console.log(">>>>error",error)
-       toast.error(`${error?.response?.data?.message}`)
-    }
+        throw Error (error)    }
 }
     // DELETE SERVICE RESULT API
     export const deleteServerApi=async(id:string)=>{
@@ -45,7 +44,7 @@ export const addServerApi = async (data: any) => {
             const response= await axios.patch(`${baseUrl}/server/update`,data, { headers: {
                 "Authorization": `Bearer ${accessToken}`
             } })
-            console.log(response)
+            toast.success(`${response?.data?.message}`)
             return response
 
         } catch (error) {

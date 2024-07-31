@@ -10,10 +10,13 @@ import CheckBox from "../CheckBox/CustomCheckBox"
 import { z } from "zod";
 import { addClientApi } from "../../apiservices/clientApi/clientApi";
 import { toast } from "react-toastify";
+import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 export type FormFields = z.infer<typeof clientSchema>
 const ClientModal = () => {
     const dispatch = useDispatch()
-    const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm<FormFields>({ resolver: zodResolver(clientSchema) })
+    const { isLoading, error, data, refetch } = useGetAllData("/client/all-clients")
+
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormFields>({ resolver: zodResolver(clientSchema) })
     const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
 
@@ -55,21 +58,22 @@ const ClientModal = () => {
         </div>
     </form>
 
-     // ADD CLIENT FUNCTION
-     const addClientFunction=async (data)=>{
-         const zip=parseInt(data?.zip)
-         const allData={...data,zip}
+    // ADD CLIENT FUNCTION
+    const addClientFunction = async (data) => {
+        const zip = parseInt(data?.zip)
+        const allData = { ...data, zip }
         try {
-            
-           const res=await addClientApi(allData)
-          toast.success(`${res?.data?.message}`)
-        dispatch(showModalReducer(false))
+
+            const res = await addClientApi(allData)
+            refetch()
+            toast.success(`${res?.data?.message}`)
+            dispatch(showModalReducer(false))
 
         } catch (error) {
             toast.error("Something went wrong or Network Error")
             dispatch(showModalReducer(false))
 
-            
+
         }
 
     }
