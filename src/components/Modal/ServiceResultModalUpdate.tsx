@@ -18,38 +18,36 @@ type Props = {
 
 const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
     const disptach = useDispatch()
-const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-results")
-    const {register,handleSubmit,formState:{errors,isSubmitting},setValue}=useForm({resolver:zodResolver(serviceResultSchema)})
+    const { isLoading, error, data, refetch } = useGetAllData("/service-result/all-service-results")
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm({ resolver: zodResolver(serviceResultSchema) })
     const modalBody = <form className="mb-6">
-        <TextField label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode"/>
-<div className="mt-4" >
+        <TextField label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode" />
+        <div className="mt-4" >
 
-        <TextArea label="Service Results Discription" register={register} error={errors.serviceResultDescription} name="serviceResultDescription"/>
-</div>
+            <TextArea label="Service Results Discription" register={register} error={errors.serviceResultDescription} name="serviceResultDescription" />
+        </div>
     </form>
     const updateServiceResultFunction = async (data) => {
         // console.log(data)
         // disptach(showModalReducer(false))
 
-        const updateData={...data,serviceResultId:singledata?._id}
-console.log(updateData)
+        const updateData = { ...data, serviceResultId: singledata?._id }
+        console.log(updateData)
         try {
-            const res=await updateServiceResultApi(updateData)
+            const res = await updateServiceResultApi(updateData)
             toast.success(`${res?.data?.message}`)
             refetch()
-        disptach(showUpdateModalReducer(false))
+            disptach(showUpdateModalReducer(false))
         } catch (error) {
-        disptach(showUpdateModalReducer(false))
+            disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
-        }   
+        }
     }
 
-useEffect(()=>{
-
-    setValue("serviceResultCode",singledata?.serviceResultCode)
-    setValue("serviceResultDescription",singledata?.serviceResultDescription)
-
-},[])
+    useEffect(() => {
+        setValue("serviceResultCode", singledata?.serviceResultCode)
+        setValue("serviceResultDescription", singledata?.serviceResultDescription)
+    }, [])
 
     return <Modal
         modalHeading="Service Result"
@@ -57,7 +55,7 @@ useEffect(()=>{
         // filledButtonText={isSubmitting?"updating":"update"}
         filledButtonText="update"
         disabled={isSubmitting}
-        onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}   
+        onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}
         modalBody={modalBody}
     />
