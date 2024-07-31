@@ -21,7 +21,7 @@ export type FormFields = z.infer<typeof settingSchema>
 const SettingModal = () => {
     const disptach = useDispatch()
     const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm<FormFields>({ resolver: zodResolver(settingSchema) })
-    const modalBody = <form className=" flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8">
+    const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
           <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="Label" register={register} error={errors.label} name="label" />
         </div>
