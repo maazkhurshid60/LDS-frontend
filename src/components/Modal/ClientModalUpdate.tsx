@@ -68,11 +68,13 @@ const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
 // console.log("<<<<<<<<<<<<<<<<<<<<<",updateData,singledata?._id)
         try {
             const res=await updateClientApi(updateData)
-            alert(`${res?.data?.message}`)
+            toast.success(`${res?.data?.message}`)
             refetch()
         disptach(showUpdateModalReducer(false))
         } catch (error) {
             toast.error(`something went wrong`)
+        disptach(showUpdateModalReducer(false))
+
         }   
     }
 
@@ -94,7 +96,8 @@ useEffect(()=>{
     return <Modal
         modalHeading="Update Client"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting?"updating":"update"}
+        // filledButtonText={isSubmitting?"updating":"update"}
+        filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}   
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}
         modalBody={modalBody}

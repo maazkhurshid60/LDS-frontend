@@ -36,10 +36,11 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-ty
 console.log(updateData)
         try {
             const res=await updateServiceTypeApi(updateData)
-            alert(`${res?.data?.message}`)
+            toast.success(`${res?.data?.message}`)
             refetch()
         disptach(showUpdateModalReducer(false))
         } catch (error) {
+        disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
         }   
     }
@@ -54,7 +55,8 @@ useEffect(()=>{
     return <Modal
         modalHeading="Service Result"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting?"updating":"update"}
+        filledButtonText="update"
+        // filledButtonText={isSubmitting?"updating":"update"}
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}   
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}
         modalBody={modalBody}

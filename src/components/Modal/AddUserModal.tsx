@@ -12,6 +12,7 @@ import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 import { DeleteIcon } from "../Icons/DeleteIcon";
 import { z } from "zod";
 import { registerUserApi } from "../../apiservices/user/userApi";
+import { toast } from "react-toastify";
 export type FormFields = z.infer<typeof userInputSectionSchema>
 
 
@@ -32,11 +33,13 @@ const AddUserModal = () => {
         // dispatch(showModalReducer(false))
         try {
             const res= await registerUserApi(allData)
-            alert(`${res?.data?.message}`)
+            toast.success(`${res?.data?.message}`)
             dispatch(showModalReducer(false))
             
         } catch (error) {
-            alert("Something went wrong or Network later.")
+            toast.success("Something went wrong or Network later.")
+            dispatch(showModalReducer(false))
+
         }
     }
     // CLOSE MODAL
@@ -98,7 +101,10 @@ const AddUserModal = () => {
         </div>
     </form>
     // MODALFOOTER ENDS
-    return <Modal modalHeading="Add user" borderButtonText="cancel" filledButtonText={isSubmitting?"adding":"add"} modalBody={body} onFilledButtonClick={handleSubmit(addUserFunction)}
+    return <Modal modalHeading="Add user" borderButtonText="cancel" 
+    // filledButtonText={isSubmitting?"adding":"add"}
+    filledButtonText="add"
+     modalBody={body} onFilledButtonClick={handleSubmit(addUserFunction)}
         onBorderButtonClick={closeModal} />
 }
 

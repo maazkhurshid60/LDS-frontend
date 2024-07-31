@@ -42,11 +42,13 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
         const updateData = { ...data, id: singledata?._id }
         try {
             const res = await updateDeviceApi(updateData)
-            alert(`${res?.data?.message}`)
+            toast.success(`${res?.data?.message}`)
             refetch()
             disptach(showUpdateModalReducer(false))
         } catch (error) {
             toast.error(`something went wrong`)
+            disptach(showUpdateModalReducer(false))
+
         }
     }
     useEffect(() => {
@@ -60,7 +62,8 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
     return <Modal
         modalHeading="Update Device"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting ? "updating" : "update"}
+        // filledButtonText={isSubmitting ? "updating" : "update"}
+        filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}
         onFilledButtonClick={handleSubmit(updateDeviceFunction)}
         modalBody={modalBody}

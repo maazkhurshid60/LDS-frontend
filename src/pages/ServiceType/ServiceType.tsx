@@ -44,7 +44,7 @@ const [getSingleTypeData,setGetSingleTypeData]=useState<serviceTypeType>()
     const deleteData=async(id:string)=>{
     try {
         const response=await deleteServiceTypeApi(id)
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
         refetch()
     } catch (error) {
         console.log(error)

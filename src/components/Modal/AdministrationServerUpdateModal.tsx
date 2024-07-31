@@ -120,7 +120,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
             modalHeading="update Server"
             onBorderButtonClick={() => dispatch(showUpdateModalReducer(false))}
             onFilledButtonClick={handleSubmit(administrationFunction)}
-            filledButtonText={isSubmitting ? "updating" : "update"}
+            filledButtonText="update"
             borderButtonText="cancel"
             modalBody={modalBody} />
     </>

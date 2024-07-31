@@ -99,7 +99,8 @@ console.log(":data",data,"options",options)
             modalHeading="Server"
             onBorderButtonClick={() => dispatch(showModalReducer(false))}
             onFilledButtonClick={handleSubmit(administrationFunction)}
-            filledButtonText={isSubmitting?"adding":"Add"}
+            // filledButtonText={isSubmitting?"adding":"Add"}
+            filledButtonText="Add"
             borderButtonText="cancel"
             modalBody={modalBody} />
     </>

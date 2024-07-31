@@ -62,7 +62,8 @@ const AddRoleModal = () => {
     return <Modal
         modalBody={modalBody}
         borderButtonText="cancel"
-        filledButtonText={isSubmitting ? "Adding" : "Add"}
+        // filledButtonText={isSubmitting ? "Adding" : "Add"}
+        filledButtonText="Add"
         onBorderButtonClick={() => { dispatch(showRoleModalReducer(false)), dispatch(emptyOneRole()) }}
         onFilledButtonClick={handleSubmit(addRoleFunction)} />
 

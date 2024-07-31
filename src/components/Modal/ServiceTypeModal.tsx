@@ -9,6 +9,7 @@ import TextField from "../InputFields/TextField/TextField"
 import { serviceTypeSchema } from "../../schemas/serviceTypeSchema"
 import { addServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTypeApi"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
+import { toast } from "react-toastify"
 const ServiceTypeModal = () => {
     const disptach = useDispatch()
     const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm({resolver:zodResolver(serviceTypeSchema)})
@@ -24,18 +25,21 @@ const ServiceTypeModal = () => {
     const addServiceResultFunction = async(data) => {
         try {
             const res=await addServiceTypeApi(data)
-            alert(`${res?.data?.message}`)
+            toast.success(`${res?.data?.message}`)
             refetch()
         disptach(showModalReducer(false))
 
         } catch (error) {
-        alert(`something went wrong`)
+        toast.error(`something went wrong`)
+        disptach(showModalReducer(false))
+
         }
     }
     return <Modal
         modalHeading="Service Type"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting?"adding":"add"}
+        // filledButtonText={isSubmitting?"adding":"add"}
+        filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addServiceResultFunction)}
         modalBody={modalBody}

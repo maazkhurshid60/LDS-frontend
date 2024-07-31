@@ -62,12 +62,13 @@ const ClientModal = () => {
         try {
             
            const res=await addClientApi(allData)
-          alert(`${res?.data?.message}`)
+          toast.success(`${res?.data?.message}`)
         dispatch(showModalReducer(false))
 
         } catch (error) {
             toast.error("Something went wrong or Network Error")
-            console.log(error)
+            dispatch(showModalReducer(false))
+
             
         }
 
@@ -75,7 +76,8 @@ const ClientModal = () => {
     return <Modal
         modalBody={modalBody}
         borderButtonText="cancel"
-        filledButtonText={isSubmitting?"adding":"add"}
+        // filledButtonText={isSubmitting?"adding":"add"}
+        filledButtonText="add"
         onBorderButtonClick={() => dispatch(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addClientFunction)} />
 

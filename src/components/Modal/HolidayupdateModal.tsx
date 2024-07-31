@@ -45,10 +45,11 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
         const updateData = { ...data, holidayId: singledata?._id }
         try {
             const res = await updateHolidayApi(updateData)
-            alert(`${res?.data?.message}`)
+            toast.success(`${res?.data?.message}`)
             refetch()
             disptach(showUpdateModalReducer(false))
         } catch (error) {
+            disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
         }
     }
@@ -60,7 +61,8 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     return <Modal
         modalHeading="Update Holiday"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting ? "updating" : "update"}
+        // filledButtonText={isSubmitting ? "updating" : "update"}
+        filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}
         onFilledButtonClick={handleSubmit(updateDeviceFunction)}
         modalBody={modalBody}

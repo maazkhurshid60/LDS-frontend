@@ -30,19 +30,21 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-
 
         try {
             const res=await addServiceResultApi(data)
-            alert(`${res?.data?.message}`)
+            toast.success(`${res?.data?.message}`)
             refetch()
         disptach(showModalReducer(false))
 
         } catch (error) {
             toast.error(`something went wrong`)
+            disptach(showModalReducer(false))
         }
         
     }
     return <Modal
         modalHeading="Service Results"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting?"adding":"add"}
+        // filledButtonText={isSubmitting?"adding":"add"}
+        filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}   
         onFilledButtonClick={handleSubmit(addServiceResultFunction)}
         modalBody={modalBody}

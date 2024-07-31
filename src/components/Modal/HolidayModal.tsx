@@ -34,16 +34,19 @@ const HolidayModal = () => {
         // disptach(showModalReducer(false))
         try {
             const response=await addHolidayApi(postHolidayData)
-            alert(`${response?.data?.message}`)
+            toast.success(`${response?.data?.message}`)
             disptach(showModalReducer(false))
         } catch (error) {
-            alert("something went wrong. Try Later")
+            toast.success("something went wrong. Try Later")
+            disptach(showModalReducer(false))
+
         }
     }
     return <Modal
         modalHeading="Holiday"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting?"adding":"add"}
+        filledButtonText="add"
+        // filledButtonText={isSubmitting?"adding":"add"}
         onBorderButtonClick={() => disptach(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addHolidayFunction)}
         modalBody={modalBody}

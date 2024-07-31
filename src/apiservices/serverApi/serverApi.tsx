@@ -1,6 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "../baseUrl/baseUrl"
 import { serverType } from "../../type/serverType/serverType";
+import { toast } from "react-toastify";
 const accessToken = localStorage.getItem("accessToken");
 //  ADD SERVICE RESULT API
 export const addServerApi = async (data: any) => {
@@ -12,10 +13,10 @@ export const addServerApi = async (data: any) => {
                 "Authorization": `Bearer ${accessToken}`
             }
         })
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
     } catch (error) {
         console.log(">>>>error",error)
-       alert(`${error?.response?.data?.message}`)
+       toast.error(`${error?.response?.data?.message}`)
     }
 }
     // DELETE SERVICE RESULT API

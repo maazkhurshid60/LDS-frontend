@@ -35,16 +35,18 @@ const SettingModal = () => {
         
         try {
             const response=await addSettingApi(data)
-            alert(`${response?.data?.message}`)
+            toast.success(`${response?.data?.message}`)
             disptach(showModalReducer(false))
         } catch (error) {
-            alert("something went wrong. Try Later")
+            disptach(showModalReducer(false))
+            toast.error("something went wrong. Try Later")
         }
     }
     return <Modal
         modalHeading="Setting"
         borderButtonText="cancel"
-        filledButtonText={isSubmitting?"adding":"add"}
+        // filledButtonText={isSubmitting?"adding":"add"}
+        filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addSettingFunction)}
         modalBody={modalBody}
