@@ -93,7 +93,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         {/* MENU ENDS */}
                         <div>
                         {/*SUBMENU STARTS and Render submenus only if the current link is active */}
-                        { data.submenu && (
+                        { data.name === activeLink && data.submenu && (
                             <ul   className={`
                     ${widthSmall ? `absolute top-0 left-16 border-[1px] border-borderColor border-solid rounded-xl w-[180px] shadow-lgShadow py-6 px-8
                     
