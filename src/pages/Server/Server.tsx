@@ -59,7 +59,7 @@ if (error) return <div>An error has occurred: {error.message}</div>;
         {showModal ? <AdministrationServerModal/> :showUpdateModal?<AdministrationServerUpdateModal singledata={getSingleServerData}/>
             :
             <OutletLayout>
-                <div className="">
+                <div className="bg-grayColorLight">
                     <OutletLayoutHeader heading="Servers">
                         {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
                         <BorderButton buttonText="filter" disabled />
@@ -69,7 +69,7 @@ if (error) return <div>An error has occurred: {error.message}</div>;
                         <Searchbar />
                         <Filter />
                     </div>
-           
+           <div>
                     <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction}/>
                         <Pagination
                             totalPages={totalPages}
@@ -79,6 +79,9 @@ if (error) return <div>An error has occurred: {error.message}</div>;
                             onchange={onPageChange} // Pass onPageChange as onchange prop
 
                         />
+                        
+           </div>
+            
                     </div>
 
          

@@ -22,7 +22,7 @@ const {isLoading,error,data,refetch}=useGetAllData("/device/all-devices")
 const options = data?.map((options, index: number) => { return { label: options?.deviceCode, value: options?._id } })
 console.log(":data",data,"options",options)
 
-    const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
+    const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
         <TextField label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code"/>
         </div>
@@ -37,16 +37,16 @@ console.log(":data",data,"options",options)
                     />)} />
             </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-        <TextField label="firstName" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name"/>
+        <TextField label="first Name" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name"/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-        <TextField label="lastName" register={register} error={errors.lastName} name="lastName" placeholder="Enter Last Name"/>
+        <TextField label="last Name" register={register} error={errors.lastName} name="lastName" placeholder="Enter Last Name"/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-        <TextField label="address1" register={register} error={errors.address1} name="address1" placeholder="Enter Address"/>
+        <TextField label="address 1" register={register} error={errors.address1} name="address1" placeholder="Enter Address"/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-        <TextField label="address2" register={register} error={errors.address2} name="address2" placeholder="Enter Address"/>
+        <TextField label="address 2" register={register} error={errors.address2} name="address2" placeholder="Enter Address"/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
         <TextField label="country" register={register} error={errors.country} name="country" placeholder="Enter Country"/>

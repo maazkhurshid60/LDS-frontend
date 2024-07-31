@@ -22,7 +22,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     const [activeSubLink, setActiveSubLink] = useState<string>()
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [activeLink, setActiveLink] = useState<string>()
-    
+    const [isOperationDropdown,setIsOperationDropdown]=useState(true)
     const [subMenu, setSubMenu] = useState(false)
     const [subMenuShow, setSubMenuShow] = useState(false)
     const menu = useSelector((state: RootState) => state.menuOpen.menuOpenStatus);
@@ -93,7 +93,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         {/* MENU ENDS */}
                         <div>
                         {/*SUBMENU STARTS and Render submenus only if the current link is active */}
-                        {data.name === activeLink && data.submenu && (
+                        { data.submenu && (
                             <ul   className={`
                     ${widthSmall ? `absolute top-0 left-16 border-[1px] border-borderColor border-solid rounded-xl w-[180px] shadow-lgShadow py-6 px-8
                     
