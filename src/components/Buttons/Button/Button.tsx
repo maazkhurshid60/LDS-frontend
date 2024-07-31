@@ -9,8 +9,11 @@ export interface ButtonProps{
 const Button:React.FC<ButtonProps>=({text,onClick,disabled})=>{
     console.log(disabled)
     return(
-    <button className="w-full bg-primaryColorLight py-2 rounded-md capitalize text-whiteColor border-[2px]
-                                 border-primaryColorLight" onClick={onClick}>
+    <button 
+    disabled={disabled}
+    className="w-full bg-primaryColorLight py-2 rounded-md capitalize text-whiteColor border-[2px]
+                                 border-primaryColorLight" onClick={onClick}
+                                 >
      {/* <button className="button"> */}
         {text}
     </button>)

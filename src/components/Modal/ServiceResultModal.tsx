@@ -44,6 +44,7 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-
         modalHeading="Service Results"
         borderButtonText="cancel"
         // filledButtonText={isSubmitting?"adding":"add"}
+        disabled={isSubmitting}
         filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}   
         onFilledButtonClick={handleSubmit(addServiceResultFunction)}

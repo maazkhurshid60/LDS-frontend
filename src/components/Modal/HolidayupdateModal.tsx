@@ -63,6 +63,7 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
         modalHeading="Update Holiday"
         borderButtonText="cancel"
         // filledButtonText={isSubmitting ? "updating" : "update"}
+        disabled={isSubmitting}
         filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}
         onFilledButtonClick={handleSubmit(updateDeviceFunction)}

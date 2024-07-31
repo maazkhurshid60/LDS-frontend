@@ -39,6 +39,7 @@ const ServiceTypeModal = () => {
         modalHeading="Service Type"
         borderButtonText="cancel"
         // filledButtonText={isSubmitting?"adding":"add"}
+        disabled={isSubmitting}
         filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addServiceResultFunction)}

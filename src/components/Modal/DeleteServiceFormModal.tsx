@@ -23,7 +23,12 @@ const DeleteServiceFormModal: React.FC<DeleteServiceFormModalProps> = ({ id }) =
        Are you sure to delete this service form?
     </p>
     // MODALFOOTER ENDS
-    return <Modal modalHeading="Delete Service Form" borderButtonText="cancel" filledButtonText={"delete"} modalBody={body} onFilledButtonClick={deleteServiceFunction}
+    return <Modal 
+    modalHeading="Delete Service Form"
+     borderButtonText="cancel" 
+     filledButtonText={"delete"} 
+     modalBody={body} 
+     onFilledButtonClick={deleteServiceFunction}
         onBorderButtonClick={()=>dispatch(showModalReducer(false))} />
 }
 

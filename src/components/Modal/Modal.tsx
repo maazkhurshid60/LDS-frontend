@@ -9,10 +9,11 @@ export interface ModalProps {
     filledButtonText?: string
 onFilledButtonClick?:any
 onBorderButtonClick?:any
+disabled?:any
 
 }
 
-const Modal: React.FC<ModalProps> = ({ modalHeading, modalBody, borderButtonText, filledButtonText ,onFilledButtonClick,onBorderButtonClick}) => {
+const Modal: React.FC<ModalProps> = ({ modalHeading, modalBody, borderButtonText, filledButtonText ,onFilledButtonClick,onBorderButtonClick,disabled}) => {
     return <div className="w-full h-[100vh] bg-[#000]/40 fixed top-0 left-0 z-50 flex items-center justify-center	backdrop-blur-[2px] z-[99999999999]">
         <div className=" w-[90%] md:w-[60%] p-8 bg-whiteColor rounded-lg   ">
 
@@ -28,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ modalHeading, modalBody, borderButtonText
             {/* MODAL FOOTER STARTS */}
             <div className="flex item-center justify-end gap-4"> 
             <div className="w-[30%] sm:w-[20%]"> <BorderButton buttonText={borderButtonText} onClick={onBorderButtonClick}/></div>
-                 <div className="w-[45%] sm:w-[20%]"><Button text={filledButtonText} onClick={onFilledButtonClick}/>
+                 <div className="w-[45%] sm:w-[20%]"><Button text={filledButtonText} onClick={onFilledButtonClick} disabled={disabled}/>
                  </div>
                 </div>
             {/* MODAL FOOTER ENDS */}

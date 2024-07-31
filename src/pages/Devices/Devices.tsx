@@ -21,43 +21,43 @@ import DeviceModalUpdate from "../../components/Modal/DeviceModalUpdate";
 import { deleteHolidayApi } from "../../apiservices/holidayApi/holidayApi";
 import { toast } from "react-toastify";
 const Devices = () => {
-    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
     const { isLoading, error, data, refetch } = useGetAllData("/device/all-devices")
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange } = usePaginationCalc({ tableData: data || [] })
-    const [getSingleData,setGetSingleData]=useState<deviceType>()
+    const [getSingleData, setGetSingleData] = useState<deviceType>()
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
 
     console.log(">>>>>>>>>>>>>>>>", isLoading, error, data)
     const dispatch = useDispatch()
 
-    const deleteData=async(id:string)=>{
-        console.log("<id>",id)
+    const deleteData = async (id: string) => {
+        console.log("<id>", id)
         try {
-            const response=await deleteDeviceApi(id)
+            const response = await deleteDeviceApi(id)
             refetch()
             toast.success(`${response?.data?.message}`)
         } catch (error) {
             console.log(error)
-        
-           toast.error("something went wrong") 
+
+            toast.error("something went wrong")
         }
-        }
+    }
     // UPDATE DATA FUNCTION
-    const clientUpdateFunction=(id:string)=>{
-        setGetSingleData(data?.find((data,index)=>data?._id === id))
+    const clientUpdateFunction = (id: string) => {
+        setGetSingleData(data?.find((data, index) => data?._id === id))
         console.log(id)
         dispatch(showUpdateModalReducer(true))
     }
 
-    if (isLoading) return <DataLoader text="device"/>
+    if (isLoading) return <DataLoader text="device" />
 
-if (error) return <div>An error has occurred: {error.message}</div>;
+    if (error) return <div>An error has occurred: {error.message}</div>;
     return <>
-        {showModal ? <DeviceModal />:showUpdateModal ?<DeviceModalUpdate singledata={getSingleData}/> : <OutletLayout>
+        {showModal ? <DeviceModal /> : showUpdateModal ? <DeviceModalUpdate singledata={getSingleData} /> : <OutletLayout>
             <div className="">
                 <OutletLayoutHeader heading="Devices">
-                {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
+                    {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
                     <BorderButton buttonText="filter" disabled />
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4

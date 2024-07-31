@@ -45,6 +45,7 @@ const SettingModal = () => {
     return <Modal
         modalHeading="Setting"
         borderButtonText="cancel"
+        disabled={isSubmitting}
         // filledButtonText={isSubmitting?"adding":"add"}
         filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}

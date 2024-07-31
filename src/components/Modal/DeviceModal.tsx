@@ -55,7 +55,10 @@ const DeviceModal = () => {
         // filledButtonText={isSubmitting?"Adding":"Add"}
         filledButtonText="Add"
         onBorderButtonClick={() => dispatch(showModalReducer(false))}
-        onFilledButtonClick={handleSubmit(addDeviceFunction)} />
+        onFilledButtonClick={handleSubmit(addDeviceFunction)} 
+        disabled={isSubmitting}
+        
+        />
 
 }
 

@@ -56,6 +56,7 @@ useEffect(()=>{
         modalHeading="Service Result"
         borderButtonText="cancel"
         filledButtonText="update"
+        disabled={isSubmitting}
         // filledButtonText={isSubmitting?"updating":"update"}
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}   
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}

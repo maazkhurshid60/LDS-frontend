@@ -20,7 +20,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
     const dispatch = useDispatch()
     const { register, handleSubmit, formState: { errors, isSubmitting }, control, setValue } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
     const { isLoading, error, data } = useGetAllData("/device/all-devices")
-    const {refetch } = useGetAllData("/server/all-servers")
+    const { refetch } = useGetAllData("/server/all-servers")
 
     const options = data?.map((options) => ({ label: options?.deviceCode, value: options?._id }));
     console.log(":data", data, "options", options)
@@ -30,23 +30,23 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
             <TextField label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" />
         </div>
         <div className="w-[30%]">
-                {options ? (
-                    <Controller
-                        name="deviceCode"
-                        control={control}
-                        render={({ field }) => (
-                            <Dropdown
-                                options={options}
-                                value={field.value}
-                                onChange={field.onChange}
-                                label="Device Code"
-                                error={errors.deviceCode?.message as string}
-                            />
-                        )}
-                    />
-                ) : (
-                    <div>Loading devices...</div>
-                )}
+            {options ? (
+                <Controller
+                    name="deviceCode"
+                    control={control}
+                    render={({ field }) => (
+                        <Dropdown
+                            options={options}
+                            value={field.value}
+                            onChange={field.onChange}
+                            label="Device Code"
+                            error={errors.deviceCode?.message as string}
+                        />
+                    )}
+                />
+            ) : (
+                <div>Loading devices...</div>
+            )}
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="firstName" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name" />
@@ -126,6 +126,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
             onFilledButtonClick={handleSubmit(updateServerFunction)}
             filledButtonText="update"
             borderButtonText="cancel"
+            disabled={isSubmitting}
             modalBody={modalBody} />
     </>
 }

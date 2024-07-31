@@ -15,7 +15,7 @@ import Button from "../../../../components/Buttons/Button/Button";
 export type FormFields = z.infer<typeof standardFormSchema>
 const StandardForm = () => {
     const userOptions = [{ value: "ZainCalzoni", label: "Zain Calzoni" }, { value: "cooperCulhane", label: "Cooper Culhane" }]
-    const { register, handleSubmit, formState: { errors }, control,setValue,reset } = useForm<FormFields>({ resolver: zodResolver(standardFormSchema) })
+    const { register, handleSubmit, formState: { errors ,isSubmitting}, control,setValue,reset } = useForm<FormFields>({ resolver: zodResolver(standardFormSchema) })
     const { data: standardServiceTypesData } = useGetAllData("/standard-service-type/all-standard-service-types");
     const [checkedName, setCheckedName] = useState<string | null>();
     const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
@@ -162,7 +162,11 @@ const StandardForm = () => {
                 {/* ADDING MAILING ENDS */}
                 <div className="w-full flex justify-end flex-row mt-6" >
                     <div className="w-[21%] " >
-                        <Button text={`${isNewFormAdding?"add Data":"Update Data"}`} onClick={handleSubmit(StandardServiceTypeFunction)}/>
+    
+        <Button text={`${isNewFormAdding?"add Data":"Update Data"}`} onClick={handleSubmit(StandardServiceTypeFunction)}
+            disabled={isSubmitting}
+        
+        />
                     </div>
                 </div>
             </form>

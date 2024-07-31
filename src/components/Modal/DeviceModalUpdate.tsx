@@ -52,7 +52,7 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
         }
     }
     useEffect(() => {
-        setValue("deviceId", singledata?.deviceId ?? "")
+        // setValue("deviceId", singledata?.deviceId ?? "")
         setValue("deviceCode", singledata?.deviceCode ?? "")
         setValue("deviceName", singledata?.deviceName ?? "")
         setValue("productType", singledata?.productType ?? "")
@@ -62,8 +62,9 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
     return <Modal
         modalHeading="Update Device"
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting ? "updating" : "update"}
         filledButtonText="update"
+        disabled={isSubmitting}
+        // filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}
         onFilledButtonClick={handleSubmit(updateDeviceFunction)}
         modalBody={modalBody}

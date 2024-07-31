@@ -56,7 +56,7 @@ useEffect(()=>{
         borderButtonText="cancel"
         // filledButtonText={isSubmitting?"updating":"update"}
         filledButtonText="update"
-
+        disabled={isSubmitting}
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}   
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}
         modalBody={modalBody}

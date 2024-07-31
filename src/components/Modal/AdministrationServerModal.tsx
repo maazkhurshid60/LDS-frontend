@@ -19,7 +19,7 @@ const AdministrationServerModal = () => {
     const dispatch = useDispatch()
     const { register, handleSubmit, formState: { errors, isSubmitting }, control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
     const { isLoading, error, data } = useGetAllData("/device/all-devices")
-    const {refetch } = useGetAllData("/server/all-servers")
+    const { refetch } = useGetAllData("/server/all-servers")
 
     const options = data?.map((options, index: number) => { return { label: options?.deviceCode, value: options?._id } })
     console.log(":data", data, "options", options)
@@ -105,6 +105,7 @@ const AdministrationServerModal = () => {
             // filledButtonText={isSubmitting?"adding":"Add"}
             filledButtonText="Add"
             borderButtonText="cancel"
+            disabled={isSubmitting}
             modalBody={modalBody} />
     </>
 }

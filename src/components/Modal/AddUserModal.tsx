@@ -104,7 +104,9 @@ const AddUserModal = () => {
     return <Modal modalHeading="Add user" borderButtonText="cancel" 
     // filledButtonText={isSubmitting?"adding":"add"}
     filledButtonText="add"
-     modalBody={body} onFilledButtonClick={handleSubmit(addUserFunction)}
+     modalBody={body} 
+     onFilledButtonClick={handleSubmit(addUserFunction)}
+     disabled={isSubmitting}
         onBorderButtonClick={closeModal} />
 }
 

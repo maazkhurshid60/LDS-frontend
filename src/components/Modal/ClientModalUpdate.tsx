@@ -100,6 +100,7 @@ useEffect(()=>{
         filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}   
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}
+        disabled={isSubmitting}
         modalBody={modalBody}
     />
 }

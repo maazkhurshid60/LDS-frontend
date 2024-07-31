@@ -16,8 +16,8 @@ import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 const HolidayModal = () => {
     const disptach = useDispatch()
     const { isLoading, error, data, refetch } = useGetAllData("/holiday/all-holidays")
-
-    const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm({ resolver: zodResolver(holidaySchema) })
+    const { register, handleSubmit, formState: { errors,isSubmitting }} = useForm({ resolver: zodResolver(holidaySchema) })
+    console.log(isSubmitting)
     const modalBody = <form className=" flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8">
           <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date" />
@@ -49,11 +49,12 @@ const HolidayModal = () => {
     return <Modal
         modalHeading="Holiday"
         borderButtonText="cancel"
-        filledButtonText="add"
-        // filledButtonText={isSubmitting?"adding":"add"}
+        // filledButtonText="add"
+        filledButtonText={isSubmitting?"adding":"add"}
         onBorderButtonClick={() => disptach(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addHolidayFunction)}
         modalBody={modalBody}
+        disabled={isSubmitting}
     />
 }
 
