@@ -8,6 +8,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { logoutUser } from "../../redux/slice/userDetail";
 import { openMenuFunction } from "../../redux/slice/menuOpen";
 import { RootState } from "../../redux/store";
+import Tooltip from "../Tooltip/Tooltip";
 export interface widthProp {
     widthSmall: boolean
     userData: string
@@ -78,10 +79,11 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
 
                             {/* CHECK IF USER IS ADMIN THEN USERS LINK SHOULD SHOW 
                            ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"} */}
-                            <div className={`flex items-center justify-center group`}  >
+                            <div className={`flex items-center justify-center group relative`}  >
                                 {React.createElement(data.icon, { size: 22, style: { marginLeft: '5px', marginRight: '5px' } })}
                                 <h2 className={`text-sm ml-1 capitalize   ${widthSmall ? "hidden" : "inline-block"} ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"}`}>{data.name}</h2>
-                                {widthSmall && <p className="hidden group-hover:inline-block">show</p>}
+                                {widthSmall && <p className="hidden group-hover:inline-block absolute -right-4 top-0 capitalize">
+                                    <Tooltip text={data?.name}/></p>}
                             </div>
                             {!widthSmall && data.submenu && <IoIosArrowDown
                                 size={16}
