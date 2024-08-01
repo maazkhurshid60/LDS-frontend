@@ -21,6 +21,8 @@ import AddUserModal from "../../components/Modal/AddUserModal";
 import { showModalReducer } from "../../redux/slice/showModal";
 const User = () => {
   const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+  const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
+
   const userId = useSelector((state: RootState) => state.userId)
   const showModal=useSelector((state:RootState)=>state.showModal.isShowModal)
   const disptach = useDispatch()
@@ -51,11 +53,11 @@ const User = () => {
         <OutletLayoutHeader heading="User">
           <div className="w-full flex flex-wrap items-center gap-2">
             {/* {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />} */}
-            {userInfo?.roles?.find((data)=>data?.name === "Admin") && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />}
+            {isAdmin && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />}
             
             {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit size={16}/>} isIcon /> */}
             {/* <BorderButton buttonText="submit" icon={<MdOutlineDone size={16}/>} isIcon /> */}
-            {userInfo?.roles?.find((data)=>data?.name === "Admin") &&<BorderButton buttonText="delete" icon={<MdDeleteOutline size={16}/>} isIcon onClick={deleteUserFunction} />}
+            {isAdmin &&<BorderButton buttonText="delete" icon={<MdDeleteOutline size={16}/>} isIcon onClick={deleteUserFunction} />}
            <BorderButton buttonText="previous" icon={<MdArrowBackIos size={13}/>} isIcon onClick={previousUserFunction} />
            <BorderButton buttonText="next" icon={<MdArrowForwardIos size={13}/>} isRightIcon onClick={nextUserFunction} />
            <BorderButton buttonText="first" icon={<MdFirstPage size={18}/>} isIcon onClick={firstUserFunction} />

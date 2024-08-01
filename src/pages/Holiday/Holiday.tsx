@@ -7,7 +7,7 @@ import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "../../components/Tables/Table";
-import { headers, tableData } from "../../constdata/HolidayData";
+import { tableData } from "../../constdata/HolidayData";
 import { RootState } from "../../redux/store";
 import HolidayModal from "../../components/Modal/HolidayModal";
 import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
@@ -21,6 +21,7 @@ import { DataLoader } from "../../components/Loader/DataLoader";
 import { toast } from "react-toastify";
 const Holiday= () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const { isLoading, error, data, refetch } = useGetAllData("/holiday/all-holidays")
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange ,checkLastRecord} = usePaginationCalc({ tableData: data || [] })
@@ -28,6 +29,13 @@ const Holiday= () => {
       const dispatch=useDispatch()
       const [getSingleData,setGetSingleData]=useState<holidayType>()
 
+      // Conditionally include "Action" in the headers array if the user is an admin
+      const headers = [
+          "Holiday year",
+          "holiday date",
+          "holiday description",
+          ...(isAdmin ? ["Action"] : [])  // Add "Action" if isAdmin is true
+      ];
 
       const deleteData=async(id:string)=>{
   

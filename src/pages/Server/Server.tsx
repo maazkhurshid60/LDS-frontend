@@ -7,7 +7,7 @@ import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "../../components/Tables/Table";
-import { headers, tableData } from "../../constdata/ServerData";
+import {  tableData } from "../../constdata/ServerData";
 import { RootState } from "../../redux/store";
 import AdministrationServerModal from "../../components/Modal/AdministrationServerModal";
 import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
@@ -21,6 +21,8 @@ import { DataLoader } from "../../components/Loader/DataLoader";
 import AdministrationServerUpdateModal from "../../components/Modal/AdministrationServerUpdateModal";
 const Server = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
+
     const showModal = useSelector((state: RootState) => state.showModal.isShowModal)
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
@@ -28,6 +30,7 @@ const Server = () => {
     const { isLoading, error, data, refetch } = useGetAllData("/server/all-servers")
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: data || [] })
     const [getSingleServerData, setGetSingleServerData] = useState<serverType>()
+    const headers = ["Server Code", "First Name", "Last name", "Device Code", "License No.","address 1", "Country","state","phone","zip",  ...(isAdmin ? ["Action"] : [])];
 
     const dispatch = useDispatch()
     const deleteData = async (id: string) => {

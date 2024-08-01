@@ -22,12 +22,13 @@ import { clientType } from "../../type/clientType/clientType";
 import ClientModalUpdate from "../../components/Modal/ClientModalUpdate";
 const Client = () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
     console.log(">>>>>>>>>>>>>>>>",isLoading,error,data)
     const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
-    const header=["code","full Name","mi","address 1","address 2","city","state","phone","zip","Action"]
+    const header=["code","full Name","mi","address 1","city","state","phone","zip",...(isAdmin?["Action"]:[])]
     const dispatch =useDispatch()
     console.log(userInfo)
     const [getSingleClientData,setGetSingleClientData]=useState<clientType>()

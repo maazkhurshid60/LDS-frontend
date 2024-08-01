@@ -8,7 +8,7 @@ import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Table from "../../components/Tables/Table";
-import { headers, tableData } from "../../constdata/ServiceTypeData";
+import {  tableData } from "../../constdata/ServiceTypeData";
 import { RootState } from "../../redux/store";
 import ServiceTypeModal from "../../components/Modal/ServiceTypeModal";
 import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
@@ -24,10 +24,12 @@ import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc"
 const ServiceType = () => {
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const { isLoading, error, data, refetch } = useGetAllData("/service-type/all-service-types");
-    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");    
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
     const [getSingleTypeData, setGetSingleTypeData] = useState<serviceTypeType>();
 const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
+ const headers = ["Service Type Code", "Service Type Description", ...(isAdmin ? ["Action"] : [])];
 
     const dispatch = useDispatch();
     // const [currentPage, setCurrentPage] = useState(1); // State to manage current page

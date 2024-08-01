@@ -4,4 +4,3 @@ export const availableRoleData = {   totalDocs: 5, tableData: [
     
 
 ]}
-export const headers = ["name", "description","Action"];

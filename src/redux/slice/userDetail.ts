@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState:any = {
-    userDetails:null
+    userDetails:null,
+    // isAdmin:userDetails?.roles?.some((data) => data?.name === "Admin")
 };
 
 const userDetailSlice = createSlice({

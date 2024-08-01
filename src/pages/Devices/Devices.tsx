@@ -7,7 +7,7 @@ import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "../../components/Tables/Table";
-import { headers, tableData } from "../../constdata/DevicesData";
+import {  tableData } from "../../constdata/DevicesData";
 import { RootState } from "../../redux/store";
 import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
 import DeviceModal from "../../components/Modal/DeviceModal";
@@ -22,11 +22,14 @@ import { deleteHolidayApi } from "../../apiservices/holidayApi/holidayApi";
 import { toast } from "react-toastify";
 const Devices = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
+
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
     const { isLoading, error, data, refetch } = useGetAllData("/device/all-devices")
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange ,checkLastRecord} = usePaginationCalc({ tableData: data || [] })
     const [getSingleData, setGetSingleData] = useState<deviceType>()
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
+    const headers = ["Device Id","Device Code", "device name","product type",...(isAdmin?["Action"]:[])];
 
     console.log(">>>>>>>>>>>>>>>>", isLoading, error, data)
     const dispatch = useDispatch()

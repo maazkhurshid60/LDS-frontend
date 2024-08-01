@@ -6,7 +6,6 @@ import BorderButton from "../../components/Buttons/BorderButton/BorderButton";
 import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import Table from "../../components/Tables/Table";
-import { headers, tableData } from "../../constdata/ServiceResultData";
 import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../components/Pagination/Pagination";
@@ -22,6 +21,9 @@ import { serviceResultType } from "../../type/serviceResultType/serviceResultTyp
 
 const ServiceResult = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");    
+ const headers = ["Service Result Code", "Service Result Description",...(isAdmin ? ["Action"] : [])];
+    
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
 
