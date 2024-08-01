@@ -165,7 +165,7 @@ export const updateUserRole = createAsyncThunk<any>(
     async (data,{ dispatch }) => {
                 try {
             const res = await updateUserRoleApi(data);
-            toast.success(`${res?.data.message}`)
+            toast.success(`User Role Updated Successfully`)
             // TO GET UPDATED DATA
             dispatch(getAllUsers());
         } catch (error) {

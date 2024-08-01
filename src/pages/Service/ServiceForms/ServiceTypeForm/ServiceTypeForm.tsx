@@ -35,7 +35,9 @@ const StandardTypeForm = () => {
     const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
     const { data: LTServiceData } = useGetAllData("/ltservice-type/all-lt-service-types");
     // console.log(LTServiceData)
-    const clientIdOptions = clientData?.map((data, id) => { return { value: data?._id, label: data?.fullName } })
+    const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
+    const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.fullName } })
+    console.log("clientIdOptions",clientIdOptions)
     const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })

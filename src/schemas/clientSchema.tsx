@@ -12,8 +12,6 @@ export const clientSchema = z.object({
     zip:z.string().min(1,{message:"Zip is required"}).regex(/^\d+$/,{message:"zip must be number"}) ,
     fax:z.string().min(1,{message:"Fax is required"}).regex(/^\d+$/,{message:"License must be Number"}),
     apt:z.string().min(1,{message:"Apt is required"}).regex(/^\d+$/,{message:"License must be Number"}),
-    isActive: z.boolean().refine((value) => value === true, {
-        message: "This Checked is required",
-      }),
+    isActive: z.boolean().optional()
 
 })

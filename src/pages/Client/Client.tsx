@@ -27,7 +27,7 @@ const Client = () => {
     const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
     console.log(">>>>>>>>>>>>>>>>",isLoading,error,data)
     const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
-    const header=["code","full Name","mi","address 1","address 2","city","state","zip","phone","fax","apt","Action"]
+    const header=["code","full Name","mi","address 1","address 2","city","state","phone","zip","Action"]
     const dispatch =useDispatch()
     console.log(userInfo)
     const [getSingleClientData,setGetSingleClientData]=useState<clientType>()
