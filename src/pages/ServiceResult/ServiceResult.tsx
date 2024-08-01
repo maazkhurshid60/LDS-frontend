@@ -27,7 +27,7 @@ const ServiceResult = () => {
 
 const dispatch=useDispatch()
 const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-results")
-const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
+const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
 const [getSingleResultData,setGetSingleResultData]=useState<serviceResultType>()
 
 // DELETE DATA FUNCTION
@@ -37,6 +37,7 @@ try {
     console.log(response)
     toast.success(`${response?.data?.message}`)
     refetch()
+    checkLastRecord() 
 } catch (error) {
     console.log(error)
 

@@ -9,11 +9,16 @@ export const usePaginationCalc=({tableData})=>{
         setCurrentPage(page); // Update current page state
         // You can perform any additional actions here, such as fetching data for the new page
     };
+    const checkLastRecord=()=>{
+        if (currentTableData?.length === 1 && currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    }
     // Calculate the indices for the current page's data slice
     const lastIndexItem = dataLimit * currentPage;
     const firstIndexItem = lastIndexItem - dataLimit;
     const currentTableData = tableData?.slice(firstIndexItem, lastIndexItem);
    
 // PAGE CALCULATION ENDS
-    return {totalPages,currentPage,currentTableData,dataLimit,onPageChange}
+    return {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}
 }

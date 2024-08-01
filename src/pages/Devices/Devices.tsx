@@ -24,7 +24,7 @@ const Devices = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
     const { isLoading, error, data, refetch } = useGetAllData("/device/all-devices")
-    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange } = usePaginationCalc({ tableData: data || [] })
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange ,checkLastRecord} = usePaginationCalc({ tableData: data || [] })
     const [getSingleData, setGetSingleData] = useState<deviceType>()
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
 
@@ -36,6 +36,7 @@ const Devices = () => {
         try {
             const response = await deleteDeviceApi(id)
             refetch()
+            checkLastRecord()
             toast.success(`${response?.data?.message}`)
         } catch (error) {
             console.log(error)

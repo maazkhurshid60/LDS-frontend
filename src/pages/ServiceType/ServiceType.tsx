@@ -20,76 +20,98 @@ import { deleteServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTy
 import ServiceTypeModalUpdate from "../../components/Modal/ServiceTypeModelUpdate";
 import { serviceTypeType } from "../../type/serviceResultType/serviceResultType";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
+
 const ServiceType = () => {
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
-    const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-types")
-    const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
-    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
-    const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
-const [getSingleTypeData,setGetSingleTypeData]=useState<serviceTypeType>()
+    const { isLoading, error, data, refetch } = useGetAllData("/service-type/all-service-types");
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
+    const [getSingleTypeData, setGetSingleTypeData] = useState<serviceTypeType>();
+const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
 
-    const disptach = useDispatch()
+    const dispatch = useDispatch();
     // const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    // const dataLimit = 10; // Define your data limit here
+    // const dataLimit = 5; // Define your data limit here
     // const totalPages = Math.ceil(data?.length / dataLimit);
+    
     // const onPageChange = (page: number) => {
     //     setCurrentPage(page); // Update current page state
-    //     // You can perform any additional actions here, such as fetching data for the new page
     // };
+
     // // Calculate the indices for the current page's data slice
     // const lastIndexItem = dataLimit * currentPage;
     // const firstIndexItem = lastIndexItem - dataLimit;
     // const currentTableData = data?.slice(firstIndexItem, lastIndexItem);
 
-    const deleteData=async(id:string)=>{
-    try {
-        const response=await deleteServiceTypeApi(id)
-        toast.success(`${response?.data?.message}`)
-        refetch()
-    } catch (error) {
-        console.log(error)
-    
-       toast.error("something went wrong") 
-    }
-    }
-// UPDATE DATA FUNCTION
-const resultUpdateFunction=(id:string)=>{
-    console.log(id)
-    setGetSingleTypeData(data?.find((data,index)=>data?._id === id))
-    disptach(showUpdateModalReducer(true))
-}
+    const deleteData = async (id: string) => {
+        try {
+            const response = await deleteServiceTypeApi(id);
+            toast.success(`${response?.data?.message}`);
+            await refetch();
 
+            // If the current page has no data after deletion, move to the previous page
+            // if (currentTableData?.length === 1 && currentPage > 1) {
+            //     setCurrentPage(currentPage - 1);
+            // }
+            checkLastRecord()
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong");
+        }
+    };
 
-    if (isLoading) return <DataLoader text="Service type"/>
+    // UPDATE DATA FUNCTION
+    const resultUpdateFunction = (id: string) => {
+        setGetSingleTypeData(data?.find((data) => data?._id === id));
+        dispatch(showUpdateModalReducer(true));
+    };
+
+    if (isLoading) return <DataLoader text="Service type" />;
 
     if (error) return <div>An error has occurred: {error.message}</div>;
-    return<>{showModal ? (
-        <ServiceTypeModal />
-    ) : showUpdateModal ? <ServiceTypeModalUpdate singledata={getSingleTypeData}/> : ( <OutletLayout>
-        <div className="">
-            <OutletLayoutHeader heading="Service Types">
-                {userInfo?.roles[0]?.name === "Admin" &&<BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>disptach(showModalReducer(true))}/>}
-                <BorderButton buttonText="filter" disabled />
-            </OutletLayoutHeader>
-            <div className="mt-4 flex flex-col  gap-4
-                            sm:flex-row sm:items-center">
-                <Searchbar />
-                <Filter />
-            </div>
-            <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={resultUpdateFunction}/>
+
+    return (
+        <>
+            {showModal ? (
+                <ServiceTypeModal />
+            ) : showUpdateModal ? (
+                <ServiceTypeModalUpdate singledata={getSingleTypeData} />
+            ) : (
+                <OutletLayout>
+                    <div className="">
+                        <OutletLayoutHeader heading="Service Types">
+                            {userInfo?.roles[0]?.name === "Admin" && (
+                                <BorderButton
+                                    buttonText="Add"
+                                    icon={<MdOutlineAdd />}
+                                    isIcon
+                                    onClick={() => dispatch(showModalReducer(true))}
+                                />
+                            )}
+                            <BorderButton buttonText="Filter" disabled />
+                        </OutletLayoutHeader>
+                        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+                            <Searchbar />
+                            <Filter />
+                        </div>
+                        <Table
+                            headers={headers}
+                            tableData={currentTableData}
+                            onClick={deleteData}
+                            onUpdateClick={resultUpdateFunction}
+                        />
                         <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={tableData?.tableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />         
- 
-        </div>
-    </OutletLayout>)}
-    
-    </>
+                        />
+                    </div>
+                </OutletLayout>
+            )}
+        </>
+    );
+};
 
-}
-
-export default ServiceType
+export default ServiceType;

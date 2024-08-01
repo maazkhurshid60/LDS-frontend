@@ -55,7 +55,11 @@ const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick,getRo
     const filterOutIdKeys = (rowData: Record<string, any>): Record<string, any> => {
         const filteredData: Record<string, any> = {};
         Object.keys(rowData).forEach((key) => {
-            if (key !== "_id" && key !== "createdAt" && key !== "updatedAt" && key !== "__v" && key !== "roles" && key !== "isActive") {
+            if (key !== "_id" && key !== "createdAt" && key !== "updatedAt" && key !== "__v" && key !== "roles" && key !== "isActive" 
+                && key !== "fax"
+            && key !== "zip"
+         
+            ) {
                 filteredData[key] = rowData[key];
             }
         });

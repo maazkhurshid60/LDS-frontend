@@ -26,7 +26,7 @@ const Client = () => {
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
     console.log(">>>>>>>>>>>>>>>>",isLoading,error,data)
-    const {totalPages,currentPage,currentTableData,dataLimit,onPageChange}=usePaginationCalc({tableData: data || []})
+    const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
     const header=["code","full Name","mi","address 1","address 2","city","state","zip","phone","fax","apt","Action"]
     const dispatch =useDispatch()
     console.log(userInfo)
@@ -49,6 +49,7 @@ const deleteData=async(id:string)=>{
     console.log("<id>",id)
     try {
         const response=await deleteClientApi(id)
+        checkLastRecord()
         toast.success(`${response?.data?.message}`)
         refetch()
     } catch (error) {

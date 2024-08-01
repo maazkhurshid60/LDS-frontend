@@ -25,7 +25,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
     const options = data?.map((options) => ({ label: options?.deviceCode, value: options?._id }));
     console.log(":data", data, "options", options)
     console.log("singledata>>>>>>", singledata)
-    const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
+    const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" />
         </div>

@@ -23,7 +23,7 @@ const Holiday= () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const { isLoading, error, data, refetch } = useGetAllData("/holiday/all-holidays")
-    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange } = usePaginationCalc({ tableData: data || [] })
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange ,checkLastRecord} = usePaginationCalc({ tableData: data || [] })
       const showModal=useSelector((state: RootState )=>state?.showModal.isShowModal)
       const dispatch=useDispatch()
       const [getSingleData,setGetSingleData]=useState<holidayType>()
@@ -35,6 +35,7 @@ const Holiday= () => {
             const response=await deleteHolidayApi(id)
             refetch()
             toast.success(`${response?.data?.message}`)
+            checkLastRecord()
         } catch (error) {
             console.log(error)
         

@@ -23,18 +23,18 @@ const Routing = () => {
                 <Route path="/login" element={<Login />} />
                 <Route element={<Layout />}>
                         {/* Place the /service route at the top */}
-                        <Route path="/" element={<Navigate to="/service" />} />
-                    <Route path="/service-results" element={<ServiceResult />} />
-                    <Route path="/service-type" element={<ServiceType />} />
-                    <Route path="/user" element={<User />} />
-                    <Route path="/device" element={<Devices />} />
-                    <Route path="/setting" element={<Setting />} />
-                    <Route path="/holiday" element={<Holiday />} />
-                    <Route path="/client" element={<Client />} />
-                    <Route path="/server" element={<Server />} />
-                    <Route path="/legal-delivery" element={<LegalDelivery />} />
-                    <Route path="/result" element={<Result />} />
-                    <Route path="/service" element={<Service />} />
+                        <Route path="/" element={<Navigate to="/operations/service" />} />
+                    <Route path="/administration/service-results" element={<ServiceResult />} />
+                    <Route path="/administration/service-type" element={<ServiceType />} />
+                    <Route path="/administration/user" element={<User />} />
+                    <Route path="/administration/device" element={<Devices />} />
+                    <Route path="/administration/setting" element={<Setting />} />
+                    <Route path="/administration/holiday" element={<Holiday />} />
+                    <Route path="/administration/client" element={<Client />} />
+                    <Route path="/administration/server" element={<Server />} />
+                    <Route path="/operations/legal-delivery" element={<LegalDelivery />} />
+                    <Route path="/operations/result" element={<Result />} />
+                    <Route path="/operations/service" element={<Service />} />
                     {/* <Route path="/all-users" element={<AllUsers />} />
                     <Route path="/all-roles" element={<AllRoles />} /> */}
 

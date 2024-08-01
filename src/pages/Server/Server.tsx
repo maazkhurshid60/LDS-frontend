@@ -26,7 +26,7 @@ const Server = () => {
     const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
 
     const { isLoading, error, data, refetch } = useGetAllData("/server/all-servers")
-    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange } = usePaginationCalc({ tableData: data || [] })
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: data || [] })
     const [getSingleServerData, setGetSingleServerData] = useState<serverType>()
 
     const dispatch = useDispatch()
@@ -36,6 +36,7 @@ const Server = () => {
             const response = await deleteServerApi(id)
             toast.success(`${response?.data?.message}`)
             refetch()
+            checkLastRecord()
         } catch (error) {
             console.log(error)
 
@@ -71,9 +72,8 @@ const Server = () => {
                         <Searchbar />
                         <Filter />
                     </div>
-                    <div className={`${widthSmall?"w-[1310px]":"w-[1150px]"}`}>
-                   
-                    <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction}/>
+                    {/* <div className={`${widthSmall ? "w-[1310px]" : "w-[1150px]"}`} > */}
+                        <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction} />
                         <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
@@ -82,8 +82,8 @@ const Server = () => {
                             onchange={onPageChange} // Pass onPageChange as onchange prop
 
                         />
-                    </div>
-{/*                                
+                    {/* </div> */}
+                    {/*                                
                     <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction}/>
                         <Pagination
                             totalPages={totalPages}
@@ -93,7 +93,6 @@ const Server = () => {
                             onchange={onPageChange} // Pass onPageChange as onchange prop
 
                         /> */}
-
 
 
                 </div>

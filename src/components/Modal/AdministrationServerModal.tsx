@@ -94,7 +94,8 @@ const AdministrationServerModal = () => {
 
         } catch (error) {
             console.log(error)
-            toast.error("Some thing went wrong. Try Later")
+            dispatch(showModalReducer(false))
+            toast.error("Some thing went wrong or already server code exist")
         }
     }
     return <>

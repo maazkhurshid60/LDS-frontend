@@ -9,9 +9,9 @@ export const linkData = [
        to:"#",
 
         subMenu: [
-                    { linkName: "Service", to: "/service"},
-                    { linkName: "Result", to: "/result"},
-                    { linkName: "Legal Delivery", to: "/legal-delivery"},
+                    { linkName: "Service", to: "/operations/service"},
+                    { linkName: "Result", to: "/operations/result"},
+                    { linkName: "Legal Delivery", to: "/operations/legal-delivery"},
                   
                 ]
     },
@@ -22,14 +22,14 @@ export const linkData = [
         to:"#",
 
         subMenu: [
-                    { linkName: "User", to: "/user" },
-                    { linkName: "Service Results", to: "/service-results" },
-                    { linkName: "Service Type", to: "/service-type" },
-                    { linkName: "Servers", to: "/server" },
-                    { linkName: "Clients", to: "/client" },
-                    { linkName: "Devices", to: "/device" },
-                    { linkName: "Holidays", to: "/holiday" },
-                    { linkName: "Settings", to: "/setting" },
+                    { linkName: "User", to: "/administration/user" },
+                    { linkName: "Service Results", to: "/administration/service-results" },
+                    { linkName: "Service Type", to: "/administration/service-type" },
+                    { linkName: "Servers", to: "/administration/server" },
+                    { linkName: "Clients", to: "/administration/client" },
+                    { linkName: "Devices", to: "/administration/device" },
+                    { linkName: "Holidays", to: "/administration/holiday" },
+                    { linkName: "Settings", to: "/administration/setting" },
                 ]
     },
     // {
