@@ -22,12 +22,15 @@ const AddUserModal = () => {
 
     const options = data?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
+    const filteredRoles= allSelectedRoles.filter((obj1, i, arr) => 
+        arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
+      )
     console.log(allSelectedRoles)
     const dispatch = useDispatch()
     // ADD USER
     const addUserFunction = async(data: any) => {
 
-        const onlyName=allSelectedRoles?.map(data=>data?.name)
+        const onlyName=filteredRoles?.map(data=>data?.name)
         const allData={...data,roles:onlyName}
         // console.log(">>>>>>>>>>>>",allData)
         // dispatch(showModalReducer(false))
@@ -37,7 +40,7 @@ const AddUserModal = () => {
             dispatch(showModalReducer(false))
             
         } catch (error) {
-            toast.success("Something went wrong or Network later.")
+            toast.error("Something went wrong or Network later.")
             dispatch(showModalReducer(false))
 
         }
@@ -86,10 +89,10 @@ const AddUserModal = () => {
                     />)} />
             </div>
             {/* SELECTED ROLES FOR USER WILL BE DISPLAYED*/}
-            {allSelectedRoles?.length > 0 && <div className="w-[65%]">
+            {filteredRoles?.length > 0 && <div className="w-[65%]">
                 <h1 className="font-semibold capitalize text-sm">User Role</h1>
                 <div className="flex items-center justify-start  gap-x-14 gap-y-1 flex-wrap w-full">
-                    {allSelectedRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
+                    {filteredRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
                         <p className="text-sm font-normal capitalize" key={index}>{data?.name}</p>
                         <DeleteIcon onClick={() => deleteRole(data?._id)} />
                     </div>
