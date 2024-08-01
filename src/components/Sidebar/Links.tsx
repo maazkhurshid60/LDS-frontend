@@ -30,10 +30,13 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     console.log("activelink",activeLink,subMenu)
     const navigate = useNavigate()
     const toggleOpenFunction = (activeLinkName: string) => {
-        setActiveLink(activeLinkName)
-        setSubMenu(!subMenu);
-        dispatch(setMainMenuName(activeLinkName))
-    }
+        if (activeLink === activeLinkName) {
+            setActiveLink(null); // Close the menu if it's already open
+        } else {
+            setActiveLink(activeLinkName);
+            dispatch(setMainMenuName(activeLinkName));
+        }
+    };
     //    LOGOUT FUNCTION
     const logoutFunction = () => {
         dispatch(logoutUser())
