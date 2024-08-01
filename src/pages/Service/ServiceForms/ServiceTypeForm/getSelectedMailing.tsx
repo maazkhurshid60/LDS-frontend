@@ -38,7 +38,7 @@ const GetSelectedMailing: React.FC<GetSelectedMailingProp> = ({ options,
                 className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
         focus:border-primaryColor focus:outline-primaryColor cursor-pointer">
                 Select a Mail
-                <span className="absolute top-[14px] right-2">
+                <span className="absolute top-[10px] right-2">
                     {isOpen ? <FaAngleUp size={15} /> : <FaAngleDown size={15} />}
                 </span></div>
             {/* LIST OF OPTIONS STARTS */}

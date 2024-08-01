@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const deviceSchema=z.object({
-    deviceCode:z.string().min(1,{message:"Device Code is required"}),
+    deviceCode:z.string().min(3,{message:"Device Code not less than 3letters"}),
     isActive: z.boolean().refine((value) => value === true, {
         message: "This Checked is required",
       }),
