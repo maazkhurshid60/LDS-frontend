@@ -29,10 +29,10 @@ const ClientModal = () => {
             <TextField label="MI" register={register} error={errors.mi} name="mi" placeholder="Enter MI" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="address1" register={register} error={errors.address1} name="address1" placeholder="Enter Address" />
+            <TextField label="address 1" register={register} error={errors.address1} name="address1" placeholder="Enter Address" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="address2" register={register} error={errors.address2} name="address2" placeholder="Enter Address" />
+            <TextField label="address 2" register={register} error={errors.address2} name="address2" placeholder="Enter Address" />
         </div>
 
         <div className="w-full md:w-[38%] xl:w-[30%]">

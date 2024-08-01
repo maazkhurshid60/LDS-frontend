@@ -16,3 +16,22 @@ export const addSettingApi = async (data: any) => {
         throw new Error(error)
     }
 }
+
+//  UPDATE SETTING RESULT API
+export const updateSettingApi = async (updatedData: any) => {
+    const accessToken = localStorage.getItem("accessToken");
+    try {
+        const response = await axios.patch(`${baseUrl}/setting/update`,{
+            settings: updatedData
+        },  {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            },
+        
+        })
+        return response
+    } catch (error) {
+        console.log(error)
+        throw new Error(error)
+    }
+}
