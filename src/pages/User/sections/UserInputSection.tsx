@@ -20,6 +20,8 @@ const UserInputSection = () => {
     const { register, formState: { errors, isSubmitting }, handleSubmit, setValue, control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
     const alluserDetail = useSelector((state: RootState) => state.userId)
     const alluserData = useSelector((state: RootState) => state.userId.allUser.tableData)
+  const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+
     // const { isLoading, error, data } = useGetAllData("/role/all-roles")
     const data = useSelector((state: RootState) => state?.roles?.allRoles?.tableData)
 
@@ -112,7 +114,7 @@ const UserInputSection = () => {
             </div> */}
 
         </div>
-        <Button text={isSubmitting ? "saving" : "save"} />
+        {userInfo?.roles?.find((data)=>data?.name === "Admin") && <Button text={isSubmitting ? "saving" : "save"} />}
     </form>
 
 }

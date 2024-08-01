@@ -44,19 +44,22 @@ const User = () => {
   const lastUserFunction = () => {
     disptach(getLastUser())
   }
+ 
   return <>
   {showModal? <AddUserModal/>:<OutletLayout>
       <div className="h-[66vh] overflow-y-scroll">
         <OutletLayoutHeader heading="User">
           <div className="w-full flex flex-wrap items-center gap-2">
-            {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />}
-            <BorderButton buttonText="edit" icon={<MdOutlineEdit size={16}/>} isIcon />
-            <BorderButton buttonText="submit" icon={<MdOutlineDone size={16}/>} isIcon />
-            <BorderButton buttonText="delete" icon={<MdDeleteOutline size={16}/>} isIcon onClick={deleteUserFunction} />
-            <BorderButton buttonText="previous" icon={<MdArrowBackIos size={13}/>} isIcon onClick={previousUserFunction} />
-            <BorderButton buttonText="next" icon={<MdArrowForwardIos size={13}/>} isRightIcon onClick={nextUserFunction} />
-            <BorderButton buttonText="first" icon={<MdFirstPage size={18}/>} isIcon onClick={firstUserFunction} />
-            <BorderButton buttonText="last" icon={<MdLastPage size={18}/>} isRightIcon onClick={lastUserFunction} />
+            {/* {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />} */}
+            {userInfo?.roles?.find((data)=>data?.name === "Admin") && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />}
+            
+            {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit size={16}/>} isIcon /> */}
+            {/* <BorderButton buttonText="submit" icon={<MdOutlineDone size={16}/>} isIcon /> */}
+            {userInfo?.roles?.find((data)=>data?.name === "Admin") &&<BorderButton buttonText="delete" icon={<MdDeleteOutline size={16}/>} isIcon onClick={deleteUserFunction} />}
+           <BorderButton buttonText="previous" icon={<MdArrowBackIos size={13}/>} isIcon onClick={previousUserFunction} />
+           <BorderButton buttonText="next" icon={<MdArrowForwardIos size={13}/>} isRightIcon onClick={nextUserFunction} />
+           <BorderButton buttonText="first" icon={<MdFirstPage size={18}/>} isIcon onClick={firstUserFunction} />
+           <BorderButton buttonText="last" icon={<MdLastPage size={18}/>} isRightIcon onClick={lastUserFunction} />
           </div>
         </OutletLayoutHeader>
         {/* USER INPUT FIELDS SECTION AND ROLES PER USER SECTION STARTS */}

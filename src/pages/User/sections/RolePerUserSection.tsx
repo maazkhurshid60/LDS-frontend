@@ -27,6 +27,8 @@ const RolePerUserSection = () => {
     const oneUser = useSelector((state: RootState) => state.userId.singleUser)
     const userId = useSelector((state: RootState) => state.userId.userId)
     const alluserData = useSelector((state: RootState) => state.userId.allUser.tableData)
+  const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+
    const filteredRoles= allSelectedRoles.filter((obj1, i, arr) => 
         arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
       )
@@ -88,6 +90,7 @@ const RolePerUserSection = () => {
                 md:text-md
                 lg:text-xl capitalize">Role per users </h1>
             <TableWithoutAction headers={headers} tableData={alluserDetail.singleUser ? alluserDetail.singleUser[0]?.roles : []} />
+            {userInfo?.roles?.find((data)=>data?.name === "Admin") &&
             <form className="mt-6 w-[100%] m-auto" onSubmit={handleSubmit(updateUserRoleFunction)}>
                 <h1 className="font-semibold
                 md:text-md
@@ -123,7 +126,7 @@ const RolePerUserSection = () => {
                 <div className="w-[30%] mt-5 ">
                     <Button text={isSubmitting ? "Updating" : "Update User Role"} />
                 </div>
-            </form>
+            </form>}
         </div>
     );
 }

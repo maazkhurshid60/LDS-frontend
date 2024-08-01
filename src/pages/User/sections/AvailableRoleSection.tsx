@@ -16,6 +16,8 @@ const dispatch=useDispatch()
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
     const dataLimit = 1; // Define your data limit here
     const totalPages = Math.ceil(availableRoleData?.tableData?.length / dataLimit);
+    const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+
     const onPageChange = (page: number) => {
         setCurrentPage(page); // Update current page state
         // You can perform any additional actions here, such as fetching data for the new page
@@ -53,7 +55,7 @@ useEffect(()=>{
     lg:text-xl">Available Roles</h1>
 <div className="w-[13%]">
 
-    <Button text="Add New Role" onClick={showModalFunction}/>
+{userInfo?.roles?.find((data)=>data?.name === "Admin") && <Button text="Add New Role" onClick={showModalFunction}/>}
 </div>
 </div>
 <Table headers={headers} tableData={allRolesData} onClick={deleteRoleFunction} onUpdateClick={updateRoleFunction}/>
