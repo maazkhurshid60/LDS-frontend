@@ -23,7 +23,6 @@ const ServiceResult = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
     const headers = ["Service Result Code", "Service Result Description", ...(isAdmin ? ["Action"] : [])];
-
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const [searchedData, setSearchedData] = useState()
