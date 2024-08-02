@@ -79,7 +79,7 @@ console.log(id)
             <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400 ">
                 <thead className="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="bg-[#5D87B2] text-whiteColor">
-                        {headers.map((header, index) => (
+                        {headers?.map((header, index) => (
                             <th key={index} scope="col" className="px-2 py-3">
                                 {header}
                             </th>
@@ -87,7 +87,7 @@ console.log(id)
                     </tr>
                 </thead>
                 <tbody>
-                    {tableData.map((rowData, rowIndex) => {
+                    {tableData?.map((rowData, rowIndex) => {
                         const filteredData = filterOutIdKeys(rowData); // Filter out _id key
                         return (
                             <tr
