@@ -6,6 +6,8 @@ export interface DropdownProp {
     // singleOption?:option
     value: string;
     onChange: (value: string) => void;
+    onValueChange?: (value: string) => void; // New prop for external value change
+
     error: string;
     label: string;
 }
@@ -21,6 +23,7 @@ const Dropdown: React.FC<DropdownProp> = ({
     value,
     label,
     onChange,
+    onValueChange
     // singleOption
 }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +35,9 @@ const Dropdown: React.FC<DropdownProp> = ({
 
     const handleOptionClick = (optionValue: string) => {
         onChange(optionValue);
+        if (onValueChange) {
+            onValueChange(optionValue); // Call the external value change handler
+        }
         setIsOpen(false);
     };
     const handleClickOutside = (event: MouseEvent) => {

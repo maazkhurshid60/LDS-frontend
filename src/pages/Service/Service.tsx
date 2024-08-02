@@ -11,7 +11,7 @@ import DeleteServiceFormModal from "../../components/Modal/DeleteServiceFormModa
 import { showModalReducer } from "../../redux/slice/showModal";
 const Service = () => {
     const serviceFormSection = ["L&T Service Type", "Standard Service"]
-    const [activeSection, setActiveAction] = useState(localStorage.getItem("serviceFormActiveSection"))
+    const [activeSection, setActiveAction] = useState(localStorage.getItem("serviceFormActiveSection")|| 0)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
     const isDataSaved = useSelector((state: RootState) => state.serviceForm.isDataSaved)
     const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)

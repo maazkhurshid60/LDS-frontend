@@ -39,6 +39,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     };
     //    LOGOUT FUNCTION
     const logoutFunction = () => {
+        localStorage.setItem("serviceFormActiveSection", 0)
         dispatch(logoutUser())
         dispatch(emptyNavbarData())
         navigate("/login")

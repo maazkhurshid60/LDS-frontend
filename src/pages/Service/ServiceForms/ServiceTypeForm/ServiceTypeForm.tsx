@@ -20,6 +20,7 @@ import Button from "../../../../components/Buttons/Button/Button";
 import { getAllServiceFormThunk, isDataSaveReducer, savedLTFormDataReducer } from "../../../../redux/slice/serviceForm";
 import Hints from "../../../Result/Hints/Hints";
 import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
+import { toast } from "react-toastify";
 export type FormFields = z.infer<typeof LTFormSchema>
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress.mailingAddressData)
@@ -195,6 +196,7 @@ const StandardTypeForm = () => {
         // const selectedLTDataService=LTServiceData?.find((data,id)=>data?._id === checkedName)
         // console.log("LT DATA SUBMIT",LTData)
         dispatch(savedLTFormDataReducer(LTData))
+        toast.success("data saved successfully temporary. Permeneant save go to standard form and save it")
     }
     // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
     useEffect(() => {

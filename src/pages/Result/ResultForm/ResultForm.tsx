@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "../../../components/InputFields/TextField/TextField";
 import Hints from "../Hints/Hints";
 import Dropdown from "../../../components/dropdown/Dropdown";
@@ -25,6 +25,7 @@ const ResultForm = () => {
     const allResultForm = useSelector((state: RootState) => state.resultForm.allResultFormData)
     const resultFormIndex = useSelector((state: RootState) => state.resultForm.resultFormIndex)
     const isNewResultFormAdd = useSelector((state: RootState) => state.resultForm.isNewResultFormAdd)
+    const[isConspicuous,setIsConspicuous]=useState()
     // console.log("add new form set true",isNewResultFormAdd)   
     console.log(allResultForm[resultFormIndex], resultFormIndex)
     // submitResultFormFunction
@@ -59,6 +60,7 @@ const ResultForm = () => {
             substituteDeliveredTo: data?.substituteDeliveredTo,
             corporateRecipient: data?.corporateRecipient,
             recipientTitle: data?.recipientTitle,
+            
             description: {
                 door: data?.door,
                 doorLocks: data?.doorLocks,
@@ -141,6 +143,8 @@ const ResultForm = () => {
         setValue("notaryDate", allResultForm[resultFormIndex]?.serviceResults?.notaryDate)
     }
     }, [resultFormIndex, setValue,isNewResultFormAdd,allResultForm])
+console.log(isConspicuous)
+
     return <>
 
         <form onSubmit={handleSubmit(submitResultFormFunction)}>
@@ -248,6 +252,8 @@ const ResultForm = () => {
                                 options={resultOptions}
                                 value={field.value}
                                 onChange={field.onChange}
+                                onValueChange={(value) => setIsConspicuous(value)} // Update state
+
                                 label="result" error={errors.results?.message as string}
                             />
                         )} />
@@ -282,13 +288,14 @@ const ResultForm = () => {
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField register={register} label="L&T Not Served" error={errors.lTNotServed} name="lTNotServed" />
                     </div>
+
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <Controller name="substituteDeliveredTo" control={control} render={({ field }) => (
                             <Dropdown
                                 options={delivery}
                                 value={field.value}
                                 onChange={field.onChange}
-                                label="delivered To" error={errors.substituteDeliveredTo?.message as string}
+                                label="substitute delivered To" error={errors.substituteDeliveredTo?.message as string}
                             />
                         )} />
                     </div>
@@ -308,33 +315,55 @@ const ResultForm = () => {
                 </div>
             </div>
             {/* SHOW RESULT  FORM ENDS */}
-            {/* DESCRIPTION FORM STARTS */}
-            <div className="w-full mt-6 border-[1px] border-solid border-borderColor rounded-lg">
-                <h1 className="px-6 py-2 bg-cyanColor rounded-t-lg text-whiteColor font-semibold text-lg">Description</h1>
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start px-8 py-4">
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="door" error={errors.door} name="door" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="door Locks" error={errors.doorLocks} name="doorLocks" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="entry" error={errors.entry} name="entry" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="wall" error={errors.wall} name="wall" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="floor" error={errors.floor} name="floor" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="lock" error={errors.lock} name="lock" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <CheckBox register={register} label="otherDescription" error={errors.otherDescription?.message} name="otherDescription" />
-                    </div>
+            {isConspicuous ==="substitute"?
+             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="sex" error={errors.sex} name="sex" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="skin Color" error={errors.skinColor} name="skinColor" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="hair" error={errors.hair} name="hair" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="age" error={errors.age} name="age" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="height" error={errors.height} name="height" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="weight" error={errors.weight} name="weight" />
                 </div>
             </div>
+            : <div className="w-full mt-6 border-[1px] border-solid border-borderColor rounded-lg">
+            <h1 className="px-6 py-2 bg-cyanColor rounded-t-lg text-whiteColor font-semibold text-lg">Description</h1>
+            <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start px-8 py-4">
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="door" error={errors.door} name="door" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="door Locks" error={errors.doorLocks} name="doorLocks" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="entry" error={errors.entry} name="entry" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="wall" error={errors.wall} name="wall" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="floor" error={errors.floor} name="floor" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <TextField register={register} label="lock" error={errors.lock} name="lock" />
+                </div>
+                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                    <CheckBox register={register} label="otherDescription" error={errors.otherDescription?.message} name="otherDescription" />
+                </div>
+            </div>
+        </div>}
+            {/* DESCRIPTION FORM STARTS */}
+            
             {/* DESCRIPTION FORM ENDS */}
             {/* OTHER  FORM STARTS */}
             <div className="mt-6">

@@ -51,6 +51,14 @@ export const resultFormSchema = z.object({
     lock: z.string().regex(/^\d+$/, { message: "lock  must be number" }),
     otherDescription: z.boolean().optional(),
     // DESCRIPTION VALIDATION ENDS
+    // SUBSTITUTE OPTIONS INFO VALIDATION STARTS
+    sex: z.string().optional(),
+    skinColor: z.string().optional(),
+    hair: z.string().optional(),
+    age: z.string().optional(),
+    height: z.string().optional(),
+    weight: z.string().optional(),
+    // SUBSTITUTE OPTIONS INFO VALIDATION ENDS
     // OTHER VALIDATION STARTS
     otherIdentifyingFeatures: z.string().optional(),
     dateOfMailing: z.string().optional(),
