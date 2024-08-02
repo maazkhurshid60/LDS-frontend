@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OutletLayout from "../../components/OutletLayout/OutletLayout";
 import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import { MdOutlineAdd } from "react-icons/md";
@@ -7,7 +7,7 @@ import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "../../components/Tables/Table";
-import {  tableData } from "../../constdata/DevicesData";
+import { tableData } from "../../constdata/DevicesData";
 import { RootState } from "../../redux/store";
 import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
 import DeviceModal from "../../components/Modal/DeviceModal";
@@ -26,12 +26,12 @@ const Devices = () => {
 
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
     const { isLoading, error, data, refetch } = useGetAllData("/device/all-devices")
-    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange ,checkLastRecord} = usePaginationCalc({ tableData: data || [] })
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: data || [] })
     const [getSingleData, setGetSingleData] = useState<deviceType>()
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
-    const headers = ["Device Id","Device Code", "device name","product type",...(isAdmin?["Action"]:[])];
-
-    console.log(">>>>>>>>>>>>>>>>", isLoading, error, data)
+    const headers = ["Device Id", "Device Code", "device name", "product type", ...(isAdmin ? ["Action"] : [])];
+    const [searchValue, setSearchValue] = useState("")
+    const [searchedData, setSearchedData] = useState()
     const dispatch = useDispatch()
 
     const deleteData = async (id: string) => {
@@ -53,6 +53,16 @@ const Devices = () => {
         console.log(id)
         dispatch(showUpdateModalReducer(true))
     }
+     // USE EFFECT TO SEARCH DATA
+     useEffect(()=>{
+        setSearchedData(data?.filter(data=>   Object.entries(data)
+        .filter(([key]) => !['_id', 'createdAt', 'updatedAt',"__v"].includes(key)) // Exclude the _id field
+        .some(([_, value]) => 
+          value?.toString().toLowerCase().includes(searchValue.toLowerCase())
+        )
+        ))
+    },[searchValue])
+console.log(searchValue)
 
     if (isLoading) return <DataLoader text="device" />
 
@@ -66,17 +76,17 @@ const Devices = () => {
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
-                    <Searchbar />
+                    <Searchbar value={searchValue} onChange={(e)=>{setSearchValue(e.target.value)}}/>
                     <Filter />
                 </div>
-                <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction} />
-                <Pagination
+                <Table headers={headers} tableData={searchValue?.length > 0 ? searchedData : currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction} />
+                {searchValue?.length===0 && <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}
                     dataLimit={dataLimit}
                     tableData={tableData?.tableData}
                     onchange={onPageChange} // Pass onPageChange as onchange prop
-                />
+                />}
             </div>
         </OutletLayout>}
 

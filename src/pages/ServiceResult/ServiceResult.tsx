@@ -21,47 +21,57 @@ import { serviceResultType } from "../../type/serviceResultType/serviceResultTyp
 
 const ServiceResult = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
-    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");    
- const headers = ["Service Result Code", "Service Result Description",...(isAdmin ? ["Action"] : [])];
-    
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
+    const headers = ["Service Result Code", "Service Result Description", ...(isAdmin ? ["Action"] : [])];
+
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
+    const [searchedData, setSearchedData] = useState()
+    const [searchValue, setSearchValue] = useState("")
+    const dispatch = useDispatch()
+    const { isLoading, error, data, refetch } = useGetAllData("/service-result/all-service-results")
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: data || [] })
+    const [getSingleResultData, setGetSingleResultData] = useState<serviceResultType>()
 
-const dispatch=useDispatch()
-const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-results")
-const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
-const [getSingleResultData,setGetSingleResultData]=useState<serviceResultType>()
+    // DELETE DATA FUNCTION
+    const deleteData = async (id: string) => {
+        try {
+            const response = await deleteServiceResultApi(id)
+            console.log(response)
+            toast.success(`${response?.data?.message}`)
+            refetch()
+            checkLastRecord()
+        } catch (error) {
+            console.log(error)
 
-// DELETE DATA FUNCTION
-const deleteData=async(id:string)=>{
-try {
-    const response=await deleteServiceResultApi(id)
-    console.log(response)
-    toast.success(`${response?.data?.message}`)
-    refetch()
-    checkLastRecord() 
-} catch (error) {
-    console.log(error)
+            toast.error("something went wrong")
+        }
+    }
 
-   toast.error("something went wrong") 
-}
-}
+    // UPDATE DATA FUNCTION
+    const resultUpdateFunction = (id: string) => {
+        console.log(id)
+        setGetSingleResultData(data?.find((data, index) => data?._id === id))
+        dispatch(showUpdateModalReducer(true))
+    }
+    // USE EFFECT TO SEARCH DATA
+    useEffect(() => {
+        setSearchedData(data?.filter(data => Object.entries(data)
+            .filter(([key]) => !['_id', 'createdAt', 'updatedAt', "__v"].includes(key)) // Exclude the _id field
+            .some(([_, value]) =>
+                value?.toString().toLowerCase().includes(searchValue.toLowerCase())
+            )
+        ))
+    }, [searchValue])
 
-// UPDATE DATA FUNCTION
-const resultUpdateFunction=(id:string)=>{
-     console.log(id)
-     setGetSingleResultData(data?.find((data,index)=>data?._id === id))
-     dispatch(showUpdateModalReducer(true))
-}
-
- if (isLoading) return <DataLoader text="Service result"/>
+    if (isLoading) return <DataLoader text="Service result" />
 
     if (error) return <div>An error has occurred: {error.message}</div>;
     return (
         <>
             {showModal ? (
                 <ServiceResultModal />
-            ) : showUpdateModal ? <ServiceResultModalUpdate singledata={getSingleResultData}/> : (
+            ) : showUpdateModal ? <ServiceResultModalUpdate singledata={getSingleResultData} /> : (
                 <OutletLayout>
                     <div className="">
                         <OutletLayoutHeader heading="Service Results">
@@ -71,17 +81,18 @@ const resultUpdateFunction=(id:string)=>{
                             <BorderButton buttonText="filter" disabled />
                         </OutletLayoutHeader>
                         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                            <Searchbar />
+                            <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                             <Filter />
                         </div>
-                        <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={resultUpdateFunction}/>
-                        <Pagination
+                        <Table headers={headers} tableData={searchValue.length > 0 ? searchedData : currentTableData}
+                            onClick={deleteData} onUpdateClick={resultUpdateFunction} />
+                        {searchValue?.length===0&&<Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={currentTableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
+                        />}
                     </div>
                 </OutletLayout>
             )}

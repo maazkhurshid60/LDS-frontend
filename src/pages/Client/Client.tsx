@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OutletLayout from "../../components/OutletLayout/OutletLayout";
 import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import { MdOutlineAdd } from "react-icons/md";
@@ -26,7 +26,8 @@ const Client = () => {
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal)
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
-    console.log(">>>>>>>>>>>>>>>>",isLoading,error,data)
+    const [searchedData,setSearchedData]=useState()
+    const [searchValue,setSearchValue]=useState("")
     const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
     const header=["code","full Name","mi","address 1","city","state","phone","zip",...(isAdmin?["Action"]:[])]
     const dispatch =useDispatch()
@@ -65,6 +66,16 @@ const clientUpdateFunction=(id:string)=>{
     console.log(id)
     dispatch(showUpdateModalReducer(true))
 }
+ // USE EFFECT TO SEARCH DATA
+ useEffect(()=>{
+    setSearchedData(data?.filter(data=>   Object.entries(data)
+    .filter(([key]) => !['_id', 'createdAt', 'updatedAt',"__v"].includes(key)) // Exclude the _id field
+    .some(([_, value]) => 
+      value?.toString().toLowerCase().includes(searchValue.toLowerCase())
+    )
+    ))
+},[searchValue])
+
 
 if (isLoading) return <DataLoader text="Client"/>
 
@@ -79,17 +90,19 @@ if (error) return <div>An error has occurred: {error.message}</div>;
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
-                    <Searchbar />
+                    <Searchbar value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
                     <Filter />
                 </div>
-                <Table headers={header} tableData={currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction}/>
-                <Pagination
+                <Table headers={header} tableData={ searchValue.length > 0 ? searchedData :currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction}/>
+               
+               {searchValue.length === 0 && <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={currentTableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
+                        />}
+               
             </div>
         </OutletLayout>}
         

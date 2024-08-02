@@ -45,9 +45,23 @@ export const updateUserApi=async(data)=>{
         throw Error (error)
     }
     }
+    // export const deleteUserApi=async(id)=>{
+        // console.log("",id)
+        // try {
+        //     const response= await axios.delete(`${baseUrl}/user/delete-user`,{ headers: {
+        //         "Authorization": `Bearer ${accessToken}`
+        //     } 
+        //     ,data:{userId:id}
+        // })
+        //     return response
+        // } catch (error) {
+        //     console.log(error)
+        //     throw Error (error)
+        // }
+        // }
 
 
-    
+      
     // UPDATE USER ROLE API
 export const updateUserRoleApi=async(data:any)=>{
     console.log("><><><><",data)

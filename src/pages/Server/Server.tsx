@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OutletLayout from "../../components/OutletLayout/OutletLayout";
 import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import { MdOutlineAdd } from "react-icons/md";
@@ -31,6 +31,8 @@ const Server = () => {
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: data || [] })
     const [getSingleServerData, setGetSingleServerData] = useState<serverType>()
     const headers = ["Server Code", "First Name", "Last name", "Device Code", "License No.","address 1", "Country","state","phone","zip",  ...(isAdmin ? ["Action"] : [])];
+const[searchedData,setSearchedData]=useState()
+const [searchValue,setSearchValue]=useState("")
 
     const dispatch = useDispatch()
     const deleteData = async (id: string) => {
@@ -55,7 +57,15 @@ const Server = () => {
         // updateServerApi
     }
 
-
+// USE EFFECT TO SEARCH DATA
+useEffect(()=>{
+    setSearchedData(data?.filter(data=>   Object.entries(data)
+    .filter(([key]) => !['_id', 'createdAt', 'updatedAt',"__v"].includes(key)) // Exclude the _id field
+    .some(([_, value]) => 
+      value?.toString().toLowerCase().includes(searchValue.toLowerCase())
+    )
+    ))
+},[searchValue])
 
     if (isLoading) return <DataLoader text="Server" />
 
@@ -72,19 +82,19 @@ const Server = () => {
                     </OutletLayoutHeader>
                     <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
-                        <Searchbar />
-                        <Filter />
+                <Searchbar value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
+                <Filter />
                     </div>
                     {/* <div className={`${widthSmall ? "w-[1310px]" : "w-[1150px]"}`} > */}
-                        <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction} />
-                        <Pagination
+                        <Table headers={headers} tableData={ searchValue?.length > 0 ? searchedData :currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction} />
+                        {searchValue?.length ===0 && <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={tableData?.tableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
 
-                        />
+                        />}
                     {/* </div> */}
                     {/*                                
                     <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction}/>

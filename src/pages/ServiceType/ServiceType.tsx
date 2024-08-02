@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OutletLayout from "../../components/OutletLayout/OutletLayout";
 import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import { MdOutlineAdd } from "react-icons/md";
@@ -8,7 +8,7 @@ import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Table from "../../components/Tables/Table";
-import {  tableData } from "../../constdata/ServiceTypeData";
+import { tableData } from "../../constdata/ServiceTypeData";
 import { RootState } from "../../redux/store";
 import ServiceTypeModal from "../../components/Modal/ServiceTypeModal";
 import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal";
@@ -24,18 +24,19 @@ import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc"
 const ServiceType = () => {
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
     const { isLoading, error, data, refetch } = useGetAllData("/service-type/all-service-types");
-    const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
-    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");    
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
     const [getSingleTypeData, setGetSingleTypeData] = useState<serviceTypeType>();
-const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}=usePaginationCalc({tableData: data || []})
- const headers = ["Service Type Code", "Service Type Description", ...(isAdmin ? ["Action"] : [])];
-
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: data || [] })
+    const headers = ["Service Type Code", "Service Type Description", ...(isAdmin ? ["Action"] : [])];
+    const [searchedData, setSearchedData] = useState()
+    const [searchValue, setSearchValue] = useState("")
     const dispatch = useDispatch();
     // const [currentPage, setCurrentPage] = useState(1); // State to manage current page
     // const dataLimit = 5; // Define your data limit here
     // const totalPages = Math.ceil(data?.length / dataLimit);
-    
+
     // const onPageChange = (page: number) => {
     //     setCurrentPage(page); // Update current page state
     // };
@@ -67,6 +68,15 @@ const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastR
         setGetSingleTypeData(data?.find((data) => data?._id === id));
         dispatch(showUpdateModalReducer(true));
     };
+    // USE EFFECT TO SEARCH DATA
+    useEffect(() => {
+        setSearchedData(data?.filter(data => Object.entries(data)
+            .filter(([key]) => !['_id', 'createdAt', 'updatedAt', "__v"].includes(key)) // Exclude the _id field
+            .some(([_, value]) =>
+                value?.toString().toLowerCase().includes(searchValue.toLowerCase())
+            )
+        ))
+    }, [searchValue])
 
     if (isLoading) return <DataLoader text="Service type" />;
 
@@ -93,22 +103,22 @@ const {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastR
                             <BorderButton buttonText="Filter" disabled />
                         </OutletLayoutHeader>
                         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                            <Searchbar />
-                            <Filter />
+                        <Searchbar value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
+                        <Filter />
                         </div>
                         <Table
                             headers={headers}
-                            tableData={currentTableData}
+                            tableData={ searchValue.length > 0 ? searchedData :currentTableData}
                             onClick={deleteData}
                             onUpdateClick={resultUpdateFunction}
                         />
-                        <Pagination
+                       {searchValue?.length===0 && <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={tableData?.tableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
+                        />}
                     </div>
                 </OutletLayout>
             )}

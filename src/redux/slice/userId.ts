@@ -3,15 +3,17 @@ import { getAllUserApi, updateUserApi, updateUserRoleApi } from "../../apiservic
 import { toast } from "react-toastify";
 import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-
+import axios from "axios";
+import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
+const accessToken = localStorage.getItem("accessToken");
 // const dispatch=useDispatch()
 export type User = {
     userName: string;
     firstName: string;
     lastName: string;
     email: string;
-    roles:string[]
-    _id?:any
+    roles: string[]
+    _id?: any
 };
 
 interface InitialStateType {
@@ -40,7 +42,7 @@ const initialState: InitialStateType = {
 const userId = createSlice({
     name: "userId",
     initialState: initialState,
-    
+
     reducers: {
         getUserId: (state, action: PayloadAction<number>) => {
             state.userId = action.payload;
@@ -76,6 +78,7 @@ const userId = createSlice({
         },
     },
     extraReducers: (builder) => {
+        /////////////////GET ALL USER ROLE API EXRTA REDUCERS
         builder.addCase(getAllUsers.pending, (state) => {
             state.status = "loading"; // Set status to "loading" while fetching
         });
@@ -90,7 +93,7 @@ const userId = createSlice({
             console.error("Error fetching all users:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
-        /////////////////
+        /////////////////UPDATE USER API EXRTA REDUCERS
         builder.addCase(updateUser.pending, (state) => {
             state.status = "loading"; // Set status to "loading" while fetching
         });
@@ -105,8 +108,8 @@ const userId = createSlice({
             console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
-        /////////////////
-         builder.addCase(updateUserRole.pending, (state) => {
+        /////////////////UPDATE USER ROLE API EXRTA REDUCERS
+        builder.addCase(updateUserRole.pending, (state) => {
             state.status = "loading"; // Set status to "loading" while fetching
         });
         builder.addCase(updateUserRole.fulfilled, (state, action) => {
@@ -120,8 +123,18 @@ const userId = createSlice({
             console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
+        /////////////////DELETE USER ROLE API EXRTA REDUCERS
+        builder.addCase(deleteUserApi.pending,(state)=>{
+            state.status="loading"
+        })
+        builder.addCase(deleteUserApi.fulfilled,(state)=>{
+            state.status="success"
+        })
+        builder.addCase(deleteUserApi.rejected,(state)=>{
+            state.status="error"
+        })
     },
-   
+
 });
 
 export const { getUserId, deleteUser, getOneUser, getPreviousUser, getNextUser, getFirstUser, getLastUser } = userId.actions;
@@ -145,31 +158,67 @@ export const getAllUsers = createAsyncThunk<User[]>(
 // GET UPDATE USERS API
 export const updateUser = createAsyncThunk<any>(
     "userId/updateUser",
-    async (data,{ dispatch }) => {
- 
+    async (data, { dispatch }) => {
+
         try {
             const res = await updateUserApi(data);
             toast.success(`${res?.data.message}`)
             // TO GET UPDATED DATA
             dispatch(getAllUsers());
-      
+
         } catch (error) {
-           toast.error("notupdated yet")
+            toast.error("notupdated yet")
         }
     }
 );
 
+// DELETE USER API
+export const deleteUserApi = createAsyncThunk<any>(
+    "deleteUser",
+    async (data, { dispatch }) => {
+        try {
+            const response = await axios.delete(`${baseUrl}/user/delete-user`, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+                , data: { userId: data }
+            })
+            toast.success(`${response?.data.message}`)
+            // TO GET UPDATED DATA
+            dispatch(getAllUsers());
+
+        } catch (error) {
+            console.log(error)
+            toast.error("notupdated yet")
+        }
+    }
+);
+// export const deleteUserApi=async(id)=>{
+//     console.log("",id)
+//     try {
+//         const response= await axios.delete(`${baseUrl}/user/delete-user`,{ headers: {
+//             "Authorization": `Bearer ${accessToken}`
+//         } 
+//         ,data:{userId:id}
+//     })
+//         return response
+//     } catch (error) {
+//         console.log(error)
+//         throw Error (error)
+//     }
+//     }
+
 // UPDATE USER ROLE API
 export const updateUserRole = createAsyncThunk<any>(
     "userId/updateUserRole",
-    async (data,{ dispatch }) => {
-                try {
+    async (data, { dispatch }) => {
+        try {
             const res = await updateUserRoleApi(data);
             toast.success(`User Role Updated Successfully`)
             // TO GET UPDATED DATA
             dispatch(getAllUsers());
         } catch (error) {
-           toast.error("notupdated yet")
+            toast.error("notupdated yet")
         }
     }
 );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OutletLayout from "../../components/OutletLayout/OutletLayout";
 import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import { MdOutlineAdd } from "react-icons/md";
@@ -28,7 +28,12 @@ const Holiday= () => {
       const showModal=useSelector((state: RootState )=>state?.showModal.isShowModal)
       const dispatch=useDispatch()
       const [getSingleData,setGetSingleData]=useState<holidayType>()
-
+const [searchValue,setSearchValue]=useState("")
+const[searchedData,setSearchedData]=useState()
+console.log(searchValue,currentTableData?.filter(data=>  Object.values(data).some(value => 
+    typeof value === 'string' && value.toLowerCase().includes(searchValue.toLowerCase())
+  )
+))
       // Conditionally include "Action" in the headers array if the user is an admin
       const headers = [
           "Holiday year",
@@ -55,6 +60,15 @@ const Holiday= () => {
         setGetSingleData(data?.find((data,index)=>data?._id === id))
         dispatch(showUpdateModalReducer(true))
     }
+    // USE EFFECT TO SEARCH DATA
+    useEffect(()=>{
+        setSearchedData(data?.filter(data=>   Object.entries(data)
+        .filter(([key]) => !['_id', 'createdAt', 'updatedAt',"__v"].includes(key)) // Exclude the _id field
+        .some(([_, value]) => 
+          value?.toString().toLowerCase().includes(searchValue.toLowerCase())
+        )
+        ))
+    },[searchValue])
 
     if (isLoading) return <DataLoader text="holiday"/>
 
@@ -70,17 +84,17 @@ if (error) return <div>An error has occurred: {error.message}</div>;
             </OutletLayoutHeader>
             <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
-                <Searchbar />
+                <Searchbar value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
                 <Filter />
             </div>
-            <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={holidayUpdateFunction}/>
-                        <Pagination
+            <Table headers={headers} tableData={ searchValue.length > 0 ? searchedData :currentTableData} onClick={deleteData} onUpdateClick={holidayUpdateFunction}/>
+                       {searchValue.length===0 && <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}
                             tableData={tableData?.tableData}
                             onchange={onPageChange} // Pass onPageChange as onchange prop
-                        />
+                        />}
         </div>
     </OutletLayout>}
     </>

@@ -7,7 +7,6 @@ export interface ButtonProps{
 }
 
 const Button:React.FC<ButtonProps>=({text,onClick,disabled})=>{
-    console.log(disabled)
     return(
     <button 
     disabled={disabled}

@@ -13,7 +13,7 @@ import { MdDeleteOutline, MdOutlineEdit, MdOutlineDone, MdArrowBackIos, MdArrowF
 import UserInputSection from "./sections/UserInputSection";
 import AllUserSection from "./sections/AllUsersSection";
 import RolePerUserSection from "./sections/RolePerUserSection";
-import { deleteUser, getFirstUser, getLastUser, getNextUser, getPreviousUser } from "../../redux/slice/userId";
+import { deleteUser, deleteUserApi, getFirstUser, getLastUser, getNextUser, getPreviousUser } from "../../redux/slice/userId";
 import AvailableRoleSection from "./sections/AvailableRoleSection";
 import Modal from "../../components/Modal/Modal";
 import Button from "../../components/Buttons/Button/Button";
@@ -26,9 +26,10 @@ const User = () => {
   const userId = useSelector((state: RootState) => state.userId)
   const showModal=useSelector((state:RootState)=>state.showModal.isShowModal)
   const disptach = useDispatch()
+  // console.log(userId?.singleUser[0]?._id)
   // DELETE USER
   const deleteUserFunction = () => {
-    disptach(deleteUser(userId))
+    disptach(deleteUserApi(userId?.singleUser[0]?._id))
   }
     // GET PREVIOUS USER
   const previousUserFunction = () => {
