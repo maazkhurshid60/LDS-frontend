@@ -17,7 +17,6 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     const link="users"
     const link2="roles"
     const link3="operation"
-
 // console.log((link === "users" || link2 === "roles")  && userData !=="Admin" ?  "hidden":{link ,link2,link3} )
     const [activeSubLink, setActiveSubLink] = useState<string>()
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -39,7 +38,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     };
     //    LOGOUT FUNCTION
     const logoutFunction = () => {
-        localStorage.setItem("serviceFormActiveSection", 0)
+        localStorage.setItem("serviceFormActiveSection", "0")
         dispatch(logoutUser())
         dispatch(emptyNavbarData())
         navigate("/login")
@@ -65,12 +64,10 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
         };
     }, []);
     return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative`}>
-        
         <div className="mr-4 h-[65vh] md:h-[85vh] flex flex-col justify-between">
             <div  ref={dropdownRef}>
                 {linkData.map((data, id) => (
                     <div key={id} className="text-sm mb-2 relative" >
-
                         {/* MENU STARTS */}
                         <div
                             onClick={() => { toggleOpenFunction(data.name), setSubMenuShow(true),navigate(`${data?.to}`) }}
@@ -80,7 +77,6 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                                 ${data.name === activeLink ? "bg-grayColorLight rounded-lg" : ""
                                 } ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"}`}
                         >
-
                             {/* CHECK IF USER IS ADMIN THEN USERS LINK SHOULD SHOW 
                            ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"} */}
                             <div className={`flex items-center justify-center group relative`}  >
@@ -100,7 +96,6 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         { data.name === activeLink && data.submenu && (
                             <ul   className={`
                     ${widthSmall ? `absolute top-0 left-16 border-[1px] border-borderColor border-solid rounded-xl w-[180px] shadow-lgShadow py-6 px-8
-                    
                     ${subMenuShow ? "inline-block" : "hidden"}` : "relative"} bg-whiteColor overflow-hidden`}>
                                 {data.subMenu &&
                                     data.subMenu.map((subLink, subLinkId) => (
@@ -110,7 +105,6 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                                                 ? "text-primaryColorLight"
                                                 : "text-grayColor"
                                                 } p-2`}
-
                                         >
                                             <Link to={subLink.to} onClick={() => subMenuFunction(subLink.linkName)}>{subLink.linkName}</Link>
                                         </li>

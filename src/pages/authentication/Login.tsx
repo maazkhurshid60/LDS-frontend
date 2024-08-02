@@ -27,7 +27,7 @@ const Login = () => {
             toast.success(`${response?.data?.message}`)
             navigate("/")
         } catch (error) {
-            toast.error(`${error?.response?.data?.message}`)
+            toast.error(`Incorrect Email or Password`)
             console.log(error)
         }
         // const role="admin"
