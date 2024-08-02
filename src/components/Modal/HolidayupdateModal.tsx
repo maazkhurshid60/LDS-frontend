@@ -30,7 +30,7 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { isLoading, error, data, refetch } = useGetAllData("/holiday/all-holidays")
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(holidaySchema) })
-    const modalBody = <form className=" flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8">
+    const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
           <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date" />
         </div>
