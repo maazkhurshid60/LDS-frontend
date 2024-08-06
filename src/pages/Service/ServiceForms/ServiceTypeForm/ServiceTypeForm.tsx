@@ -17,7 +17,7 @@ import { IoMdClose } from "react-icons/io";
 import { LTFormSchema } from "../../../../schemas/service forms/L&TFormSchema";
 import { useGetAllData } from "../../../../hooks/getAllDataHook/useGetAllData";
 import Button from "../../../../components/Buttons/Button/Button";
-import { getAllServiceFormThunk, isDataSaveReducer, savedLTFormDataReducer } from "../../../../redux/slice/serviceForm";
+import { getAllServiceFormThunk, isDataSaveReducer, savedLTFormDataReducer, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
 import Hints from "../../../Result/Hints/Hints";
 import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
 import { toast } from "react-toastify";
@@ -25,11 +25,18 @@ export type FormFields = z.infer<typeof LTFormSchema>
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress.mailingAddressData)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
-    const getMailingAddressData = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
+    const getMailingAddressDataOnFormAdding = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
+    const filterMailingAddressDataOnFormAdding=getMailingAddressDataOnFormAdding?.filter((obj1, i, arr) => 
+        arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
+      )
     const savedLTData= useSelector((state: RootState) => state.serviceForm.savedLTFormData)
-    console.log("saved lt data",savedLTData)
+    // const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
+    // console.log("saved lt data",savedLTData)
     // GET ALL MAILING ADDRESSES THAT COMMING INSIDE THE FORMS 
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress.serviceFormMailingAdress?.mailingAdresses)
+    const filterExistingFormMailingAdress= getFormMailingAdress?.filter((obj1, i, arr) => 
+        arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
+      )
     const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
     const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
     const { data: clientData } = useGetAllData("/client/all-clients");
@@ -42,15 +49,14 @@ const StandardTypeForm = () => {
     const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
-    console.log(getSelectedClientoption)
-
+  
     const dispatch = useDispatch()
     const { register, formState: { errors }, control, handleSubmit, setValue, reset } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const isAddMail=useSelector((state:RootState)=>state.mailingAdress.isAddingMailAddress)
     const isUpdateMail = useSelector((state: RootState) => state.mailingAdress.isUpdatingMailAddress)
 
     // const [isAddMail, dispatch(isAddingMailAddressReducer] = us)eState(false)
-    // console.log(serviceFormIndex)
+    console.log("allServiceFormData[serviceFormIndex]?.standardServiceDetail?.firstName",allServiceFormData[serviceFormIndex]?.standardServiceType?._id)
     const [checkedName, setCheckedName] = useState<string | null>(
         // LTServiceData?.find((data) => data?.isActive)?._id || null
     );
@@ -80,10 +86,12 @@ const StandardTypeForm = () => {
     // USE EFFECT TO SET VALUES OF INDEX 0 SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
         if (!isNewFormAdding) {
+            console.log("new form is not adding")
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
             setValue("jobNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.jobNo));
-            setValue("inputDate", convertDateFormat(allServiceFormData[serviceFormIndex]?.inputDate));
+            // setValue("inputDate", convertDateFormat(allServiceFormData[serviceFormIndex]?.inputDate));
+            setValue("inputDate", allServiceFormData[serviceFormIndex]?.inputDate);
             setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));
             setValue("caption", allServiceFormData[serviceFormIndex]?.caption);
             setValue("fullName", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.fullName);
@@ -95,11 +103,14 @@ const StandardTypeForm = () => {
             setValue("zip", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.zip);
             setValue("description", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.description);
             setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
-        }else{
+        }
+        else{
+            console.log("new form is adding")
+
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
             setValue("jobNo", JSON.stringify(savedLTData?.jobNo));
-            setValue("inputDate", convertDateFormat(savedLTData?.inputDate));
+            setValue("inputDate", savedLTData?.inputDate);
             setValue("caseNo", JSON.stringify(savedLTData?.caseNo));
             setValue("caption", savedLTData?.caption);
             setValue("fullName", savedLTData?.lTServiceDetail?.fullName);
@@ -112,33 +123,33 @@ const StandardTypeForm = () => {
             setValue("description", savedLTData?.lTServiceDetail?.description);
             setCheckedName(savedLTData?.lTServiceType?._id); 
         }
-  const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
-        const id = allServiceFormData[serviceFormIndex]?._id
-        console.log(data, id)
-        dispatch(getFormMailAddress({ data, id }))
-        const lTServiceDetail = {
-            fullName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.fullName,
-            businessName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.businessName,
-            address:allServiceFormData[serviceFormIndex]?.lTServiceDetail?.address,
-            apt: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.apt,
-            city: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.city,
-            state: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.state,
-            zip: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.zip,
-            description: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.description
-        }
-        const LTData = {
-            jobNo: allServiceFormData[serviceFormIndex]?.jobNo,
-            inputDate: allServiceFormData[serviceFormIndex]?.inputDate,
-            clientId: allServiceFormData[serviceFormIndex]?.clientId?._id,
-            serviceType: allServiceFormData[serviceFormIndex]?.serviceType?._id,
-            caseNo: allServiceFormData[serviceFormIndex]?.caseNo,
-            caption: allServiceFormData[serviceFormIndex]?.caption,
-            lTServiceType: checkedName,
-            noOfAddLMailings:isNewFormAdding? getMailingAddressData?.length : getFormMailingAdress?.length,
-            mailingAddresses:isNewFormAdding? getMailingAddressData : getFormMailingAdress,
-            lTServiceDetail
-        }
-        dispatch(savedLTFormDataReducer(LTData))
+//   const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
+//         const id = allServiceFormData[serviceFormIndex]?._id
+//         console.log(data, id)
+//         dispatch(getFormMailAddress({ data, id }))
+//         const lTServiceDetail = {
+//             fullName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.fullName,
+//             businessName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.businessName,
+//             address:allServiceFormData[serviceFormIndex]?.lTServiceDetail?.address,
+//             apt: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.apt,
+//             city: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.city,
+//             state: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.state,
+//             zip: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.zip,
+//             description: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.description
+//         }
+//         const LTData = {
+//             jobNo: allServiceFormData[serviceFormIndex]?.jobNo,
+//             inputDate: allServiceFormData[serviceFormIndex]?.inputDate,
+//             clientId: allServiceFormData[serviceFormIndex]?.clientId?._id,
+//             serviceType: allServiceFormData[serviceFormIndex]?.serviceType?._id,
+//             caseNo: allServiceFormData[serviceFormIndex]?.caseNo,
+//             caption: allServiceFormData[serviceFormIndex]?.caption,
+//             lTServiceType: checkedName,
+//             noOfAddLMailings:isNewFormAdding? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
+//             mailingAddresses:isNewFormAdding? getMailingAddressDataOnFormAdding : getFormMailingAdress,
+//             lTServiceDetail
+//         }
+//         dispatch(savedLTFormDataReducer(LTData))
     }, [allServiceFormData, serviceFormIndex, setValue,isNewFormAdding])
     
     // USE EFFECT TO GET ALL MAILING ADDRESS FROM API WHICH IS STORED IN SLICE
@@ -171,6 +182,26 @@ const StandardTypeForm = () => {
     };
 
     const StandardTypeFormSubmitFunciton = (data) => {
+    //    DATA FOR STANDARD FORM STARTS
+    const serviceFormData:any = allServiceFormData[0];
+        const standardServiceDetail={court:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.court,
+                                    defendants:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.defendants,
+                                    plaintiff:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.plaintiff,
+                                    country:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.country,
+                                    serveTo:{firstName:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.firstName,
+                                        address:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.address,
+                                        city:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.city,
+                                        state:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.state,
+                                        apt:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.apt,
+                                        zip:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.zip}
+                                    }
+        console.log(">>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>.",standardServiceDetail)
+
+    //    DATA FOR STANDARD FORM ENDS
+
+//    DATA FOR L&T FORM STARTS
+   
+           const serviceFormId= allServiceFormData[serviceFormIndex]?._id
         const lTServiceDetail = {
             fullName: data?.fullName,
             businessName: data?.businessName,
@@ -182,6 +213,7 @@ const StandardTypeForm = () => {
             description: data?.description
         }
         const LTData = {
+            serviceFormId,
             jobNo: data?.jobNo,
             inputDate: data?.inputDate,
             clientId: data?.clientId,
@@ -189,14 +221,20 @@ const StandardTypeForm = () => {
             caseNo: data?.caseNo,
             caption: data?.caption,
             lTServiceType: checkedName,
-            noOfAddLMailings:isNewFormAdding? getMailingAddressData?.length : getFormMailingAdress?.length,
-            mailingAddresses:isNewFormAdding? getMailingAddressData : getFormMailingAdress,
+            noOfAddLMailings:isNewFormAdding? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
+            mailingAddresses:isNewFormAdding? getMailingAddressDataOnFormAdding : getFormMailingAdress,
             lTServiceDetail
         }
+         //    DATA FOR L&T FORM ENDS
         // const selectedLTDataService=LTServiceData?.find((data,id)=>data?._id === checkedName)
         // console.log("LT DATA SUBMIT",LTData)
-        dispatch(savedLTFormDataReducer(LTData))
-        toast.success("data saved successfully temporary. Permeneant save go to standard form and save it")
+        const updatedData={...LTData,standardServiceDetail,serviceFormId,standardServiceType:allServiceFormData[serviceFormIndex]?.standardServiceType?._id}
+     
+        if(!isNewFormAdding){  dispatch(updateServiceFormThunk(updatedData))
+        }else{
+    dispatch(savedLTFormDataReducer(LTData))
+    toast.success("data saved successfully temporary. Permeneant save go to standard form and save it")
+}
     }
     // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
     useEffect(() => {
@@ -212,6 +250,9 @@ const StandardTypeForm = () => {
         };
     }, [handleSubmit, StandardTypeFormSubmitFunciton]);
     
+    console.log("input date",convertDateFormat(allServiceFormData[0]?.inputDate))
+
+
     return <div className="w-[100%]">
         <div className="w-full">
             <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
@@ -342,9 +383,9 @@ const StandardTypeForm = () => {
                         </div>}
 
                     {/* DISPLAY ALL EXISTING MAILING ADDRESS EXISTING INISDE FORM STARTS*/}
-                    {!isNewFormAdding && getFormMailingAdress?.length > 0 && (
+                    {!isNewFormAdding && filterExistingFormMailingAdress?.length > 0 && (
                         <div className="mt-4">
-                            {getFormMailingAdress?.map((data: any, id) => (
+                            {filterExistingFormMailingAdress?.map((data: any, id) => (
                                 <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
                                     {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
                                     <IoMdClose onClick={() => dispatch(getFormMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
@@ -358,9 +399,9 @@ const StandardTypeForm = () => {
                     )}
                     {/* DISPLAY ALL EXISTING MAILING ADDRESS EXISTING INISDE FORM STARTS*/}
                     {/* DISPLAY ALL SELECTED MAILING STARTS */}
-                    {isNewFormAdding && getMailingAddressData?.length > 0 && (
+                    {isNewFormAdding && filterMailingAddressDataOnFormAdding?.length > 0 && (
                         <div className="mt-4">
-                            {getMailingAddressData?.map((data: any, id) => (
+                            {filterMailingAddressDataOnFormAdding?.map((data: any, id) => (
                                 <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
                                     {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
                                     <IoMdClose onClick={() => dispatch(getMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />

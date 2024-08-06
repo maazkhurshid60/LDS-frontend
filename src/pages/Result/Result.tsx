@@ -12,7 +12,7 @@ const Result = () => {
     const allResultForm = useSelector((state: RootState) => state.resultForm.allResultFormData)
     const resultFormIndex = useSelector((state: RootState) => state.resultForm.resultFormIndex)
     const dispatch = useDispatch()
-    return <div className=" h-[72vh] overflow-y-scroll bg-whiteColor p-2 sm:p-8 w-[95%] m-auto border-[1px] border-borderColor border-solid rounded-xl shadow-smShadow">
+    return <div className=" h-[72vh] overflow-y-scroll bg-whiteColor p-2 sm:p-8 w-[95%] m-auto border-[1px] border-borderColor border-solid rounded-xl shadow-smShadow h-[80vh]">
         <OutletLayoutHeader heading="Result Form">
             <BorderButton buttonText="add" icon={<MdAdd />} isIcon onClick={() => dispatch(addNewResultFormAddReducer(true))} />
             <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />

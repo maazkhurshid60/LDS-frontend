@@ -53,7 +53,6 @@ const User = () => {
       <div className="h-[66vh] overflow-y-scroll">
         <OutletLayoutHeader heading="User">
           <div className="w-full flex flex-wrap items-center gap-2">
-            {/* {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />} */}
             {isAdmin && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />}
             
             {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit size={16}/>} isIcon /> */}

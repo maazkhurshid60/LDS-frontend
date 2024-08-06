@@ -41,7 +41,7 @@ const HolidayModal = () => {
             toast.success(`${response?.data?.message}`)
             disptach(showModalReducer(false))
         } catch (error) {
-            toast.success("something went wrong. Try Later")
+            toast.error("something went wrong. Try Later")
             disptach(showModalReducer(false))
 
         }

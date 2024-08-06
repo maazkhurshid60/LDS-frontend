@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
 import { resultFormType } from "../../type/resultFormType/resultFormType";
+import { toast } from "react-toastify";
 const accessToken = localStorage.getItem("accessToken");
 
 // STATES OF RESULT FORM
@@ -128,10 +129,10 @@ export const updateResultFormThunk = createAsyncThunk("updateResultForm", async 
                 "Authorization": `Bearer ${accessToken}`
             },
         })
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
         dispatch(getAllResultFormThunk())
     } catch (error) {
-        alert(`${error?.response?.data?.message}`)
+        toast.error(`${error?.response?.data?.message}`)
     }
 })
 // UPDATE RESULT FORM ENDS

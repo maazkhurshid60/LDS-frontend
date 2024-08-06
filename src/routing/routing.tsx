@@ -14,6 +14,13 @@ import Result from "../pages/Result/Result"
 import Service from "../pages/Service/Service"
 import Devices from "../pages/Devices/Devices";
 import { AllRoles } from "../pages/AllRoles/AllRoles";
+import AgencyLic from "../components/Result Templates/Affidavits Reports/Agencylic/MainTemplate";
+import LiNonReports from "../components/Result Templates/Affidavits Reports/LiNonReports/MainTemplate";
+import LTExtraNameReport from "../components/Result Templates/Affidavits Reports/LTExtraNameReport/MainTemplate";
+import MarshalReport from "../components/Result Templates/Affidavits Reports/MarshalReport/MainTemplate";
+import NonMilReport from "../components/Result Templates/Affidavits Reports/NonMilReports/MainTemplate";
+import StandardReport from "../components/Result Templates/Affidavits Reports/StandardReport/MainTemplate";
+import TransPerSlipReport from "../components/Result Templates/Affidavits Reports/TransPerSlipReport/MainTemplate";
 
 
 const Routing = () => {
@@ -35,6 +42,19 @@ const Routing = () => {
                     <Route path="/operations/legal-delivery" element={<LegalDelivery />} />
                     <Route path="/operations/result" element={<Result />} />
                     <Route path="/operations/service" element={<Service />} />
+                    <Route path="/operations/service" element={<Service />} />
+                    <Route path="/operations/legal-delivery/agency-license" element={<AgencyLic />} />
+                    <Route path="/operations/legal-delivery/li-non-reports" element={<LiNonReports />} />
+                    <Route path="/operations/legal-delivery/lT-extra-name-reports" element={<LTExtraNameReport />} />
+                    <Route path="/operations/legal-delivery/marshal-reports" element={<MarshalReport />} />
+                    <Route path="/operations/legal-delivery/non-mil-reports" element={<NonMilReport />} />
+                    <Route path="/operations/legal-delivery/standard-reports" element={<StandardReport />} />
+                    <Route path="/operations/legal-delivery/trans-per-slip-reports" element={<TransPerSlipReport />} />
+                   
+                    
+                    
+                    
+                   
                     {/* <Route path="/all-users" element={<AllUsers />} />
                     <Route path="/all-roles" element={<AllRoles />} /> */}
 

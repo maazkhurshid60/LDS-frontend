@@ -23,7 +23,7 @@ const Layout = () => {
             <div className="md:w-[100%] bg-grayColorLight  ">
                 <Navbar />
                 {/* <div className="	 p-4 sm:p-8 bg-whiteColor w-[97%] m-auto mt-4 mb-4 rounded-xl border-[1px] border-solid border-borderColor shadow-smShadow"> */}
-                <div className="w-[95%] m-auto mt-4 sm:mt-8 mb-4 h-[83vh]">
+                <div className="w-[95%] m-auto mt-4 sm:mt-8 mb-4 h-[83.5vh]">
 
                     <Outlet />
                     {/* <div className="flex flex-col items-end justify-center gap-2 mt-4 mr-4  ">

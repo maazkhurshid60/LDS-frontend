@@ -82,28 +82,41 @@ const ShowAllAddMailingAddress: React.FC<AddMailingProps> = ({ data, id }) => {
         <form className="flex flex-col items-end">
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
-                        register={register} label="full Name" error={errors.firstName} name="firstName" />
+                    {/* <TextField
+                        register={register} label="full Name" error={errors.firstName} name="firstName" /> */}
+                    <label className=" font-normal sm:font-medium text-sm capitalize">Full Name</label>
+                    <label className=" font-normal text-sm capitalize ml-10">{data?.firstName}</label>
+
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
-                        register={register} label="address" error={errors.address} name="address" />
+                    {/* <TextField
+                        register={register} label="address" error={errors.address} name="address" /> */}
+                    <label className=" font-normal sm:font-medium text-sm capitalize">Address</label>
+                    <label className=" font-normal text-sm capitalize ml-10">{data?.address}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
-                        register={register} label="city" error={errors.city} name="city" />
+                    {/* <TextField
+                        register={register} label="city" error={errors.city} name="city" /> */}
+                    <label className=" font-normal sm:font-medium text-sm capitalize">City</label>
+                    <label className=" font-normal text-sm capitalize ml-10">{data?.city}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
-                        register={register} label="state" error={errors.state} name="state" />
+                    {/* <TextField
+                        register={register} label="state" error={errors.state} name="state" /> */}
+                    <label className=" font-normal sm:font-medium text-sm capitalize">state</label>
+                    <label className=" font-normal text-sm capitalize ml-10">{data?.state}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
-                        register={register} label="apt" error={errors.apt} name="apt" />
+                    {/* <TextField
+                        register={register} label="apt" error={errors.apt} name="apt" /> */}
+                    <label className=" font-normal sm:font-medium text-sm capitalize">Apt</label>
+                    <label className=" font-normal text-sm capitalize ml-10">{data?.apt}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
-                        register={register} label="zip" error={errors.zip} name="zip" />
+                    {/* <TextField
+                        register={register} label="zip" error={errors.zip} name="zip" /> */}
+                    <label className=" font-normal sm:font-medium text-sm capitalize">zip</label>
+                    <label className=" font-normal text-sm capitalize ml-10">{data?.zip}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <CheckBox

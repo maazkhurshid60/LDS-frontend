@@ -21,6 +21,9 @@ const StandardForm = () => {
     const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
     const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
+    const getMailingAddressData = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
+    const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress.serviceFormMailingAdress?.mailingAdresses)
+
     const userData = useSelector((state: RootState) => state?.userDetail)
     const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
     console.log("LTDATA",LTData)
@@ -29,24 +32,55 @@ const StandardForm = () => {
         setCheckedName(id);
     };
     const StandardServiceTypeFunction = (data) => {
-        
+       console.log("standardServiceType:checkedName",checkedName)
         const serviceFormData:any = allServiceFormData[0];
         const standardServiceDetail={court:data?.court,defendants:data?.defendants,plaintiff:data?.plaintiff,country:data?.country,
                                     serveTo:{firstName:data?.firstName,address:data?.address,city:data?.city,state:data?.state,apt:data?.apt,zip:data?.zip}
                                     }
         const finalData = { ...serviceFormData, standardServiceDetail };
-        const LTDataa:any=LTData
+        const lTServiceDetail = {
+            fullName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.fullName,
+            businessName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.businessName,
+            address:allServiceFormData[serviceFormIndex]?.lTServiceDetail?.address,
+            apt: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.apt,
+            city: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.city,
+            state: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.state,
+            zip: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.zip,
+            description: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.description
+        }
+        const LTDataa={
+            jobNo: allServiceFormData[serviceFormIndex]?.jobNo,
+            inputDate: allServiceFormData[serviceFormIndex]?.inputDate,
+            clientId: allServiceFormData[serviceFormIndex]?.clientId?._id,
+            serviceType: allServiceFormData[serviceFormIndex]?.serviceType?._id,
+            caseNo: allServiceFormData[serviceFormIndex]?.caseNo,
+            caption: allServiceFormData[serviceFormIndex]?.caption,
+            lTServiceType: allServiceFormData[serviceFormIndex]?.lTServiceType,
+            noOfAddLMailings:isNewFormAdding? getMailingAddressData?.length : allServiceFormData[serviceFormIndex]?.noOfAddLMailings,
+            mailingAddresses:isNewFormAdding? getMailingAddressData : allServiceFormData[serviceFormIndex]?.mailingAddresses,
+            lTServiceDetail
+        }
         if(isNewFormAdding === true){
-        const updatedData={...LTDataa,standardServiceDetail,standardServiceType:checkedName,jobNo:parseInt(LTData?.jobNo),caseNo:parseInt(LTData?.caseNo)}
+            const LTDataaaaa:any=LTData
+        const updatedData={...LTDataaaaa,standardServiceDetail,standardServiceType:checkedName,jobNo:parseInt(LTData?.jobNo),caseNo:parseInt(LTData?.caseNo)}
 
             console.log("adding data to add api", updatedData);
             dispatch(addServiceFormThunk(updatedData))
 
         }else{
-        const updatedData={...LTDataa,standardServiceDetail,serviceFormId:allServiceFormData[0]?._id,standardServiceType:checkedName}
+            if(LTData === null){
 
-            console.log("updating data to update api", updatedData);
-            dispatch(updateServiceFormThunk(updatedData))
+                const updatedData={...LTDataa,standardServiceDetail,serviceFormId: allServiceFormData[serviceFormIndex]?._id,standardServiceType:checkedName}
+                dispatch(updateServiceFormThunk(updatedData))
+            }else{
+                const UpdatedLTData:any=LTData
+                const updatedData={...UpdatedLTData,standardServiceDetail,serviceFormId: allServiceFormData[serviceFormIndex]?._id,standardServiceType:checkedName}
+                console.log("updating data to update api", updatedData);
+
+                dispatch(updateServiceFormThunk(updatedData))
+
+            }
+
 
         }
     }

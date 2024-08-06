@@ -47,4 +47,12 @@ export interface descriptionData{
     floor: any,
     lock:any,
     otherDescription:string,
+    age:string,
+    hair:string,
+    weight:string,
+    skinColor:string,
+    height:string,
+    sex:string,
+
+
 }

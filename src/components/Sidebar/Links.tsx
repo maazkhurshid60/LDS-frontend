@@ -45,7 +45,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
     }
     // SUBMENU FUNCTION
     const subMenuFunction = (linkName: string) => {
-        setActiveSubLink(linkName),
+            setActiveSubLink(linkName),
             dispatch(setSubMenuName(linkName)),
             setSubMenuShow(false),
             dispatch(openMenuFunction(menu))
@@ -64,7 +64,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
         };
     }, []);
     return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative`}>
-        <div className="mr-4 h-[65vh] md:h-[85vh] flex flex-col justify-between">
+        <div className="mr-4 h-[65vh] md:h-[84vh] flex flex-col justify-between">
             <div  ref={dropdownRef}>
                 {linkData.map((data, id) => (
                     <div key={id} className="text-sm mb-2 relative" >

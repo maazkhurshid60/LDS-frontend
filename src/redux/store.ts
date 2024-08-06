@@ -12,6 +12,7 @@ import mailingAdressesReducer from "./slice/mailingAdresses";
 import rolesReducer from "./slice/roles";
 import serviceFormReducer from "./slice/serviceForm";
 import resultFormReducer from "./slice/resultForm";
+import legalDeliveryReducer from "./slice/legalDelivery";
 
 // Combine all reducers
 const rootReducer = combineReducers({
@@ -25,6 +26,8 @@ const rootReducer = combineReducers({
     roles:rolesReducer,
     serviceForm:serviceFormReducer,
     resultForm:resultFormReducer,
+    legalDelivery:legalDeliveryReducer,
+
 
 });
 
@@ -35,7 +38,7 @@ export type RootState = ReturnType<typeof rootReducer>;
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["userDetail","navbarTracking",] // reducers you want to persist
+    whitelist: ["userDetail","navbarTracking","legalDelivery"] // reducers you want to persist
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

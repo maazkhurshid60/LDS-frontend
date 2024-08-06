@@ -93,7 +93,9 @@ console.log(id)
                             <tr
                                 key={rowIndex}
                                 className={`cursor-pointer bg-white ${rowIndex % 2 === 0 ? "bg-XwhiteColor" : "bg-[#F1F5F8]"} font-medium text-sm sm:text-base`}
-                               onClick={()=>getRowData && getRowData(rowIndex)}
+                            //    onClick={()=>getRowData && getRowData(rowIndex)}
+                            onClick={()=>getRowData && getRowData(rowData?._id)}
+
                             >
                                 {Object.values(filteredData).map((value, colIndex) => (
                                     <td key={colIndex} className="px-6 py-2 font-normal text-sm">

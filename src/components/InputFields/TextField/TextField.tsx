@@ -8,13 +8,17 @@ error:any
 name:string
 placeholder?:string
 type?:string
-defaultValue?:string} 
+defaultValue?:string
+onKeyDown?:any} 
 
-const TextField:React.FC<TextFieldProps>=({label,register,error,name,placeholder, type = "text",defaultValue})=>{
+const TextField:React.FC<TextFieldProps>=({label,register,error,name,placeholder, type = "text",defaultValue,onKeyDown})=>{
     return <div className="flex flex-col w-full items-start gap-1">
         <label className=" font-normal sm:font-medium text-sm capitalize">{label}</label>
         <input type={type} className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
-        focus:border-primaryColor focus:outline-primaryColor" placeholder={placeholder} {...register(name)}    defaultValue={defaultValue} />
+        focus:border-primaryColor focus:outline-primaryColor" placeholder={placeholder} {...register(name)}    defaultValue={defaultValue} 
+        onKeyDown={onKeyDown} 
+
+        />
         {/* DISPLAY ERROR */}
         {error&&<p className="text-xs text-redColor capitalize">{error?.message}</p>}
     </div>

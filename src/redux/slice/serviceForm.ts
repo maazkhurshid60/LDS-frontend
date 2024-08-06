@@ -117,7 +117,7 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
             }
         })
         dispatch(getAllServiceFormThunk())
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
         dispatch(showModalReducer(false))
         return response?.data?.data
     } catch (error) {
@@ -138,12 +138,12 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
            
         })
         dispatch(getAllServiceFormThunk())
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
         dispatch(showModalReducer(false))
         console.log(response)
     } catch (error) {
-        console.log(error)
-        // alert(error)
+        console.log(">>>>>",error)
+        toast.error("Something went wrong. Try Later")
     }
 })
 // ADD SERVICE FORM
@@ -159,12 +159,12 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
            
         })
         dispatch(getAllServiceFormThunk())
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
         dispatch(showModalReducer(false))
         console.log(response)
     } catch (error) {
         console.log(error)
-        alert(`${error?.response?.data?.message}`)
+        toast.error(`${error?.response?.data?.message}`)
     }
 })
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa"
 export interface GetSelectedMailingProp {
     options: option[]
@@ -19,7 +19,7 @@ const GetSelectedMailing: React.FC<GetSelectedMailingProp> = ({ options,
     onChange,
     getMailFunction }) => {
     const [isOpen, setIsOpen] = useState(false)
-
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const handleSelectClick = () => {
         setIsOpen(!isOpen)
     }
@@ -29,9 +29,20 @@ const GetSelectedMailing: React.FC<GetSelectedMailingProp> = ({ options,
         getMailFunction(optionValue);
 
 
-        // setIsOpen(false)
+        setIsOpen(false)
     }
-    return <div className="w-full">
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+    return <div className="w-full" ref={dropdownRef}>
         <label className="font-medium text-sm capitalize">{label}</label>
         <div className="w-full relative">
             <div onClick={handleSelectClick}

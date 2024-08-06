@@ -112,15 +112,18 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
             </div>
             <div className="flex items-center gap-x-4 w-full justify-end ">
                 {/* {data?._id !== undefined && */}
-                <div className={`w-full md:w-[25%] lg:w-[20%] xl:w-[15%] mt-4 flex items-center gap-x-4 ${isAddMail?"inline-block":"hidden"}`}>
-                    <BorderButton buttonText={`${isAddMail&&"cancel"}`} borderColor="redColor"
-                        onClick={() => {
-                            if (isAddMail) {
-                                dispatch(isAddingMailAddressReducer(false));
-                            }
-                        }}
-                    />
-                    <Button text={`${isAddMail&&"add"}`}
+                <div className={`w-full md:w-[25%] lg:w-[20%] xl:w-[15%] mt-4 flex items-center gap-x-4 ${isAddMail ? "inline-block" : "hidden"}`}>
+
+                    <div className="w-[50%]">
+                        <BorderButton buttonText={`${isAddMail && "cancel"}`} borderColor="redColor"
+                            onClick={() => {
+                                if (isAddMail) {
+                                    dispatch(isAddingMailAddressReducer(false));
+                                }
+                            }}
+                        />
+                    </div>
+                    <Button text={`${isAddMail && "add"}`}
                         onClick={isAddMail && handleSubmit(AddMailingFunction)}
                     />
                 </div>
