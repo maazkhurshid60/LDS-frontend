@@ -15,6 +15,7 @@ import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 import { toast } from "react-toastify";
 import { updateSettingApi } from "../../apiservices/settingApi/settingApi";
 import { showSpinnerReducer } from "../../redux/slice/spinner";
+import { DataLoader } from "../../components/Loader/DataLoader";
 
 const Setting = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
@@ -62,6 +63,11 @@ const Setting = () => {
     useEffect(() => {
         mergeData();
     }, [checkedValues]);
+
+
+    if (isLoading) return <DataLoader text="Settings" />;
+
+    if (error) return <div>An error has occurred: {error.message}</div>;
 
     return (
         <>
