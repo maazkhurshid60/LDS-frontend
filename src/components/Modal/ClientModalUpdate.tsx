@@ -25,10 +25,10 @@ const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
      const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
 
-            <TextField label="code" register={register} error={errors.code} name="code" placeholder="Enter Code" />
+            <TextField label="code" register={register} error={errors.code} name="code" placeholder="Enter Code" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="full Name" register={register} error={errors.fullName} name="fullName" placeholder="Enter full Name" />
+            <TextField label="full Name" register={register} error={errors.fullName} name="fullName" placeholder="Enter full Name" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="MI" register={register} error={errors.mi} name="mi" placeholder="Enter MI" />
@@ -52,7 +52,7 @@ const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
             <TextField label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" />
+            <TextField label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="fax" register={register} error={errors.fax} name="fax" placeholder="Enter fax" />

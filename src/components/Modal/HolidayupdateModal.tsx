@@ -33,18 +33,22 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(holidaySchema) })
     const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear"/>
+            <TextField label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear" required/>
         </div>
           <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date" />
+            <TextField label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date"  required/>
         </div>
         <div className="w-full ">
-            <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription" />
+            <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription"  required/>
         </div>
         
     </form>
     const updateDeviceFunction = async (data) => {
         const updateData = { ...data, holidayId: singledata?._id }
+        // const holidayYear=parseInt(data?.holidayYear)
+       
+        console.log(JSON.stringify(updateData?.holidayYear)===updateData?.holidayDate.slice(0,4))
+        if(JSON.stringify(updateData?.holidayYear)!==updateData?.holidayDate.slice(0,4)){return alert("Holiday Year and Holiday Date's Year should be Same")}
         disptach(showSpinnerReducer(true))
 
         try {

@@ -22,10 +22,10 @@ const DeviceModal = () => {
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-8 flex-wrap mb-8 overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
 
-            <TextField label="device code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Device Code" />
+            <TextField label="device code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Device Code" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="device Name" register={register} error={errors.deviceName} name="deviceName" placeholder="Enter Device Name" />
+            <TextField label="device Name" register={register} error={errors.deviceName} name="deviceName" placeholder="Enter Device Name" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="product Type" register={register} error={errors.productType} name="productType" placeholder="Enter Product Type" />

@@ -7,13 +7,13 @@ export interface PasswordFieldProps{
     register:any
     error?:any;
     name:string
-
+    required?:boolean
 } 
 
-const PasswordField:React.FC<PasswordFieldProps>=({label,register,error,name})=>{
+const PasswordField:React.FC<PasswordFieldProps>=({label,register,error,name,required})=>{
     const [showPassword,setShowPassword]=useState(false)
     return <div className="flex flex-col items-start gap-1 ">
-        <label className="font-medium text-sm capitalize">{label}</label>
+        <label className="font-medium text-sm capitalize">{label} {required && <span className="text-redColor">*</span> }</label>
         <div className="relative w-full">
         <input type={showPassword?"text":"password"} className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
         focus:border-primaryColor focus:outline-primaryColor" placeholder="Password" {...register(name)}/>

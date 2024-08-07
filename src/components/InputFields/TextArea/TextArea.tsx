@@ -5,11 +5,12 @@ export interface TextAreaProps {
     name?: string; 
     register?: any; 
     error?: any; 
+    required?:boolean
 }
 
-const TextArea = ({ label, name, register, error }) => {
+const TextArea = ({ label, name, register, error,required }) => {
     return <div className="flex flex-col w-full items-start gap-1">
-        <label className="sm:font-medium text-sm capitalize">{label}</label>
+        <label className="sm:font-medium text-sm capitalize">{label} {required && <span className="text-redColor">*</span> }</label>
         <textarea rows={4} type="text" className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
         focus:border-primaryColor focus:outline-primaryColor" {...register(name)} />
         {/* DISPLAY ERROR */}

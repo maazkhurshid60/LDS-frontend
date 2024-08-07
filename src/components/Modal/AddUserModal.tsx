@@ -66,15 +66,16 @@ const AddUserModal = () => {
     // MODALFOOTER STARTS
     const body = <form className="flex  gap-4 mb-4  items-center justify-start gap-x-8 gap-y-4 flex-wrap">
         <div className="w-full md:w-[38%] xl:w-[30%] ">
-            <TextField label="email" register={register} name="email" error={errors?.email} /></div>
+            <TextField label="email" register={register} name="email" error={errors?.email} required/></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="user name" register={register} name="userName" error={errors?.userName} /></div>
+            <TextField label="user name" register={register} name="userName" error={errors?.userName} required/></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="first name" register={register} name="firstName" error={errors?.firstName} /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="last name" register={register} name="lastName" error={errors?.lastName} /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <PasswordField label="password" register={register} name="password" error={errors?.password} /></div>
+            <PasswordField label="password" register={register} name="password" error={errors?.password} required
+            /></div>
         <div className="w-full md:w-[38%] xl:w-[100%] flex items-center gap-x-10">
             <div className="w-[30%]">
                 <Controller name="roles" control={control} render={({ field }) => (

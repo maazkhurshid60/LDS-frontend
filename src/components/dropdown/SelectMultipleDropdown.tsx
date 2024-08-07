@@ -47,7 +47,7 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({ options,
     }, []);
     
     return <div className="w-full" ref={dropdownRef}>
-        <label className="font-medium text-sm capitalize">{label}</label>
+        <label className="font-medium text-sm capitalize">{label} <span className="text-redColor">*</span></label>
         <div className="w-full relative">
         <div onClick={handleSelectClick}
             className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1

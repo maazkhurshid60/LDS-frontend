@@ -22,7 +22,7 @@ const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { isLoading, error, data, refetch } = useGetAllData("/service-result/all-service-results")
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm({ resolver: zodResolver(serviceResultSchema) })
     const modalBody = <form className="mb-6">
-        <TextField label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode" />
+        <TextField label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode" required/>
         <div className="mt-4" >
 
             <TextArea label="Service Results Description" register={register} error={errors.serviceResultDescription} name="serviceResultDescription" />

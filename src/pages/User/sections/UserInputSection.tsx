@@ -56,10 +56,10 @@ console.log(userInfo)
     return (
         <form onSubmit={handleSubmit(userUpdateFunction)} className="w-full lg:w-[40%] flex flex-col gap-4">
             {userInfo === "Admin"? <>
-                <TextField label="User Name" name="userName" register={register} error={errors?.userName} />
+                <TextField label="User Name" name="userName" register={register} error={errors?.userName} required/>
             <TextField label="first Name" name="firstName" register={register} error={errors?.firstName} />
             <TextField label="last Name" name="lastName" register={register} error={errors?.lastName} />
-            <TextField label="email" name="email" register={register} error={errors?.email} />
+            <TextField label="email" name="email" register={register} error={errors?.email} required/>
             <Button text={isSubmitting ? "saving" : "save"} disabled={isSubmitting} />
             </>:<>
         <label className=" font-normal sm:font-medium text-sm capitalize">User Name : <span className="font-normal">{oneUser[0].userName}</span></label>

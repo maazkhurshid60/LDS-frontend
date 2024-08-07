@@ -17,7 +17,7 @@ const ServiceTypeModal = () => {
     const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-types")
 
     const modalBody = <form className="mb-6">
-        <TextField label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode"/>
+        <TextField label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required/>
 <div className="mt-4" >
 
         <TextArea label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>

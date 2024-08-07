@@ -27,7 +27,7 @@ const AdministrationServerModal = () => {
 
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" />
+            <TextField label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" required/>
         </div>
         <div className="w-[30%]">
             <Controller name="deviceCode" control={control} render={({ field }) => (
@@ -40,7 +40,7 @@ const AdministrationServerModal = () => {
                 />)} />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="first Name" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name" />
+            <TextField label="first Name" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name" required />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="last Name" register={register} error={errors.lastName} name="lastName" placeholder="Enter Last Name" />
@@ -64,7 +64,7 @@ const AdministrationServerModal = () => {
             <TextField label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" />
+            <TextField label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="fax" register={register} error={errors.fax} name="fax" placeholder="Enter fax" />

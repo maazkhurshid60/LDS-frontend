@@ -19,7 +19,7 @@ const AddRoleModal = () => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(roleSchema) })
     const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-8 flex-wrap mb-8 overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Role Name" register={register} error={errors.name} name="name" placeholder="Enter Role Name" />
+            <TextField label="Role Name" register={register} error={errors.name} name="name" placeholder="Enter Role Name" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="Role description" register={register} error={errors.description} name="description" placeholder="Enter Device Name" />
