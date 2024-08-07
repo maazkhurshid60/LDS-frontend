@@ -21,7 +21,7 @@ interface InitialStateType {
     userId: number;
     allUser: {
         totalDocs: number;
-        tableData: User[];
+        tableData: User[] ;
     };
     singleUser: User[] | null;
     status: "idle" | "loading" | "success" | "error"; // Add status field

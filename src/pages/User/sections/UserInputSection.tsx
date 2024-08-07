@@ -16,7 +16,7 @@ const UserInputSection = () => {
     const userId = useSelector((state: RootState) => state.userId.userId)
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
     const alluserData = useSelector((state: RootState) => state.userId.allUser.tableData)
-    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user?.roles[0]?.name);
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
   
     const oneUser = useSelector((state: RootState) => state.userId.singleUser)
     const dispatch = useDispatch();
@@ -55,17 +55,17 @@ console.log(userInfo)
 
     return (
         <form onSubmit={handleSubmit(userUpdateFunction)} className="w-full lg:w-[40%] flex flex-col gap-4">
-            {userInfo === "Admin"? <>
+            {userInfo?.roles[0]?.name === "Admin"? <>
                 <TextField label="User Name" name="userName" register={register} error={errors?.userName} required/>
             <TextField label="first Name" name="firstName" register={register} error={errors?.firstName} />
             <TextField label="last Name" name="lastName" register={register} error={errors?.lastName} />
             <TextField label="email" name="email" register={register} error={errors?.email} required/>
             <Button text={isSubmitting ? "saving" : "save"} disabled={isSubmitting} />
             </>:<>
-        <label className=" font-normal sm:font-medium text-sm capitalize">User Name : <span className="font-normal">{oneUser[0].userName}</span></label>
-        <label className=" font-normal sm:font-medium text-sm capitalize">first Name :<span className="font-normal">{oneUser[0].firstName}</span></label>
-        <label className=" font-normal sm:font-medium text-sm capitalize">last Name :<span className="font-normal">{oneUser[0].lastName}</span></label>
-        <label className=" font-normal sm:font-medium text-sm capitalize">email Name :<span className="font-normal">{oneUser[0].email}</span></label>
+        <label className=" font-normal sm:font-medium text-sm capitalize">User Name : <span className="font-normal">{oneUser&&oneUser[0]?.userName }</span></label>
+        <label className=" font-normal sm:font-medium text-sm capitalize">first Name :<span className="font-normal">{oneUser&&oneUser[0]?.firstName}</span></label>
+        <label className=" font-normal sm:font-medium text-sm capitalize">last Name :<span className="font-normal">{oneUser&&oneUser[0]?.lastName}</span></label>
+        <label className=" font-normal sm:font-medium text-sm capitalize">email Name :<span className="font-normal">{oneUser&&oneUser[0]?.email}</span></label>
 
             
             </>}
