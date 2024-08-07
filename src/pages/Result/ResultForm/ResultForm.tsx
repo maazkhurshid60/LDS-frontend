@@ -213,7 +213,7 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField register={register} label="Input Date" error={errors.inputDate} name="inputDate" onKeyDown={handleEnterKeyPress}
-                        />
+                        type="date"/>
                     </div>
                 </div>
             </div>
@@ -256,7 +256,7 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start mt-4">
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Result Input Date" error={errors.resultInputDate} name="resultInputDate" />
+                            register={register} label="Result Input Date" error={errors.resultInputDate} name="resultInputDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         {/* <Controller name="svcType" control={control} render={({ field }) => (
@@ -315,31 +315,31 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Time of service" error={errors.timeService} name="timeService" />
+                            register={register} label="Time of service" error={errors.timeService} name="timeService" type="time"/>
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st date Attempt" error={errors.firstAttemptDate} name="firstAttemptDate" />
+                            register={register} label="1st date Attempt" error={errors.firstAttemptDate} name="firstAttemptDate" type="date"/>
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st time Attempt" error={errors.firstTimeOfService} name="firstTimeOfService" />
+                            register={register} label="1st time Attempt" error={errors.firstTimeOfService} name="firstTimeOfService" type="time"/>
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="2nd date Attempt" error={errors.secondAttemptDate} name="secondAttemptDate" />
+                            register={register} label="2nd date Attempt" error={errors.secondAttemptDate} name="secondAttemptDate"  type="date"/>
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="2nd time Attempt" error={errors.secondTimeOfService} name="secondTimeOfService" />
+                            register={register} label="2nd time Attempt" error={errors.secondTimeOfService} name="secondTimeOfService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd date Attempt" error={errors.thirdAttemptDate} name="thirdAttemptDate" />
+                            register={register} label="3rd date Attempt" error={errors.thirdAttemptDate} name="thirdAttemptDate" type="date"/>
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd time Attempt" error={errors.thirdTimeOfService} name="thirdTimeOfService" />
+                            register={register} label="3rd time Attempt" error={errors.thirdTimeOfService} name="thirdTimeOfService" type="time"/>
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}

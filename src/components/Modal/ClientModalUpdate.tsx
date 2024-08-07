@@ -13,6 +13,7 @@ import { clientType } from "../../type/clientType/clientType"
 import { clientSchema } from "../../schemas/clientSchema"
 import { z } from "zod"
 import { updateClientApi } from "../../apiservices/clientApi/clientApi"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 type Props = {
     singledata: clientType | undefined; // Define props type here
 };
@@ -66,6 +67,8 @@ const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
     const updateServiceResultFunction = async (data) => {
            const updateData={...data,clientId:singledata?._id}
 // console.log("<<<<<<<<<<<<<<<<<<<<<",updateData,singledata?._id)
+    disptach(showSpinnerReducer(true))
+
         try {
             const res=await updateClientApi(updateData)
             toast.success(`${res?.data?.message}`)
@@ -75,7 +78,10 @@ const {isLoading,error,data,refetch}=useGetAllData("/client/all-clients")
             toast.error(`something went wrong`)
         disptach(showUpdateModalReducer(false))
 
-        }   
+        }   finally{
+            disptach(showSpinnerReducer(false))
+
+        }
     }
 
 useEffect(()=>{

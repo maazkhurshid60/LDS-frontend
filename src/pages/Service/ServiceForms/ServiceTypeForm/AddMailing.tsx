@@ -115,7 +115,7 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
                 <div className={`w-full md:w-[25%] lg:w-[20%] xl:w-[15%] mt-4 flex items-center gap-x-4 ${isAddMail ? "inline-block" : "hidden"}`}>
 
                     <div className="w-[50%]">
-                        <BorderButton buttonText={`${isAddMail && "cancel"}`} borderColor="redColor"
+                        <BorderButton buttonText={`${isAddMail && "cancel"}`}
                             onClick={() => {
                                 if (isAddMail) {
                                     dispatch(isAddingMailAddressReducer(false));

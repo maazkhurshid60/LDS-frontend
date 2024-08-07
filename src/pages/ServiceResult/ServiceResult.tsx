@@ -18,6 +18,7 @@ import { deleteServiceResultApi } from "../../apiservices/serviceResult/serviceR
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 import ServiceResultModalUpdate from "../../components/Modal/ServiceResultModalUpdate";
 import { serviceResultType } from "../../type/serviceResultType/serviceResultType";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 
 const ServiceResult = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
@@ -34,6 +35,7 @@ const ServiceResult = () => {
 
     // DELETE DATA FUNCTION
     const deleteData = async (id: string) => {
+        dispatch(showSpinnerReducer(true))
         try {
             const response = await deleteServiceResultApi(id)
             console.log(response)
@@ -41,9 +43,10 @@ const ServiceResult = () => {
             refetch()
             checkLastRecord()
         } catch (error) {
-            console.log(error)
-
+            // console.log(error)
             toast.error("something went wrong")
+        }finally{
+        dispatch(showSpinnerReducer(false))
         }
     }
 

@@ -11,6 +11,7 @@ import { serviceResultSchema } from "../../schemas/serviceResultSchema"
 import { toast } from "react-toastify"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 import { serviceResultType } from "../../type/serviceResultType/serviceResultType"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 
 type Props = {
     singledata: serviceResultType | undefined; // Define props type here
@@ -24,7 +25,7 @@ const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
         <TextField label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode" />
         <div className="mt-4" >
 
-            <TextArea label="Service Results Discription" register={register} error={errors.serviceResultDescription} name="serviceResultDescription" />
+            <TextArea label="Service Results Description" register={register} error={errors.serviceResultDescription} name="serviceResultDescription" />
         </div>
     </form>
     const updateServiceResultFunction = async (data) => {
@@ -32,7 +33,8 @@ const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
         // disptach(showModalReducer(false))
 
         const updateData = { ...data, serviceResultId: singledata?._id }
-        console.log(updateData)
+        disptach(showSpinnerReducer(true))
+
         try {
             const res = await updateServiceResultApi(updateData)
             toast.success(`${res?.data?.message}`)
@@ -41,6 +43,9 @@ const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
         } catch (error) {
             disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
+        }finally{
+            disptach(showSpinnerReducer(false))
+
         }
     }
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
 import { resultFormType } from "../../type/resultFormType/resultFormType";
 import { toast } from "react-toastify";
+import { showSpinnerReducer } from "./spinner";
 const accessToken = localStorage.getItem("accessToken");
 
 // STATES OF RESULT FORM
@@ -138,6 +139,7 @@ export const updateResultFormThunk = createAsyncThunk("updateResultForm", async 
 // UPDATE RESULT FORM ENDS
 // DELETE RESULT FORM STARTS
 export const deleteResultFormThunk = createAsyncThunk("deleteResultForm", async (id: string, { dispatch }) => {
+    dispatch(showSpinnerReducer(true))
     try {
         const response = await axios.delete(`${baseUrl}/result-form/delete`, {
             headers: {
@@ -147,16 +149,19 @@ export const deleteResultFormThunk = createAsyncThunk("deleteResultForm", async 
                 resultFormId: id
             }
         })
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
         dispatch(getAllResultFormThunk())
         dispatch(getPreviousResultFormReducer())
         return response?.data?.data
 
     } catch (error) {
-        alert(`${error?.response?.data?.message}`)
+        toast.error(`${error?.response?.data?.message}`)
+    }finally{
+    dispatch(showSpinnerReducer(false))
+        
     }
 })
 // DELETE RESULT FORM ENDS
 
-// ASYNC ENDS
+// ASYNC THUNKS ENDS
 

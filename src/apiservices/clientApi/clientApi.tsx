@@ -11,6 +11,7 @@ export const addClientApi=async(data:any)=>{
         } })
         return response
     } catch (error) {
+        console.log(error)
         throw Error (error)
     }
     }

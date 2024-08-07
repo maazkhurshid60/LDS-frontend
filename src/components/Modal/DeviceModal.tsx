@@ -11,6 +11,7 @@ import { z } from "zod";
 import { toast } from "react-toastify";
 import { addDeviceApi } from "../../apiservices/deviceApi/deviceApi";
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 export type FormFields = z.infer<typeof deviceSchema>
 
 const DeviceModal = () => {
@@ -37,6 +38,7 @@ const DeviceModal = () => {
 
     // ADD CLIENT FUNCTION
     const addDeviceFunction = async (data) => {
+        dispatch(showSpinnerReducer(true))
 
         try {
             const response = await addDeviceApi(data)
@@ -46,6 +48,8 @@ const DeviceModal = () => {
         } catch (error) {
             toast.error("Something went wrong. Try later")
             dispatch(showModalReducer(false))
+        }finally{
+            dispatch(showSpinnerReducer(false))
         }
         // dispatch(showModalReducer(false))
     }

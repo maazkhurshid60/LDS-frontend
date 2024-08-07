@@ -29,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ modalHeading, modalBody, borderButtonText
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    return <div className="w-full h-[100vh] bg-[#000]/40 fixed top-0 left-0 z-50 flex items-center justify-center	backdrop-blur-[2px] z-[99999999999]" >
+    return <div className="w-full h-[100vh] bg-[#000]/40 fixed top-0 left-0 z-50 flex items-center justify-center	backdrop-blur-[2px] z-[999999999]" >
         <div className=" w-[90%] md:w-[60%] p-8 bg-whiteColor rounded-lg   " ref={modalRef}>
 
             {/* MODAL HEADING */}

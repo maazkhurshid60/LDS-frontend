@@ -15,8 +15,8 @@ const Result = () => {
     return <div className=" h-[72vh] overflow-y-scroll bg-whiteColor p-2 sm:p-8 w-[95%] m-auto border-[1px] border-borderColor border-solid rounded-xl shadow-smShadow h-[80vh]">
         <OutletLayoutHeader heading="Result Form">
             <BorderButton buttonText="add" icon={<MdAdd />} isIcon onClick={() => dispatch(addNewResultFormAddReducer(true))} />
-            <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />
-            <BorderButton buttonText="submit" icon={<MdOutlineDone />} isIcon />
+            {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />
+            <BorderButton buttonText="submit" icon={<MdOutlineDone />} isIcon /> */}
             <BorderButton buttonText="delete" icon={<MdDeleteOutline />} isIcon onClick={()=>dispatch(deleteResultFormThunk(allResultForm[resultFormIndex]?._id))}/>
             <BorderButton buttonText="previous" icon={<MdArrowBackIos />} isIcon onClick={() => dispatch(getPreviousResultFormReducer())} />
             <BorderButton buttonText="next" icon={<MdArrowForwardIos />} isRightIcon onClick={() => dispatch(getNextResultFormReducer())} />

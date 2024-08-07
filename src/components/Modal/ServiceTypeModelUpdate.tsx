@@ -12,6 +12,7 @@ import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 import {  serviceTypeType } from "../../type/serviceResultType/serviceResultType"
 import { serviceTypeSchema } from "../../schemas/serviceTypeSchema"
 import { updateServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTypeApi"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 
 type Props = {
     singledata: serviceTypeType | undefined; // Define props type here
@@ -25,12 +26,13 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-ty
         <TextField label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode"/>
 <div className="mt-4" >
 
-        <TextArea label="Service Type Discription" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
+        <TextArea label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
 </div>
     </form>
     const updateServiceResultFunction = async (data) => {
         // console.log(data)
         // disptach(showModalReducer(false))
+        disptach(showSpinnerReducer(true))
 
         const updateData={...data,serviceTypeId:singledata?._id}
 console.log(updateData)
@@ -42,7 +44,10 @@ console.log(updateData)
         } catch (error) {
         disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
-        }   
+        } finally{
+            disptach(showSpinnerReducer(false))
+
+        }
     }
 
 useEffect(()=>{

@@ -10,6 +10,7 @@ import { serviceTypeSchema } from "../../schemas/serviceTypeSchema"
 import { addServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTypeApi"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 import { toast } from "react-toastify"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 const ServiceTypeModal = () => {
     const disptach = useDispatch()
     const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm({resolver:zodResolver(serviceTypeSchema)})
@@ -19,10 +20,12 @@ const ServiceTypeModal = () => {
         <TextField label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode"/>
 <div className="mt-4" >
 
-        <TextArea label="Service Type Discription" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
+        <TextArea label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
 </div>
     </form>
     const addServiceResultFunction = async(data) => {
+        disptach(showSpinnerReducer(true))
+
         try {
             const res=await addServiceTypeApi(data)
             toast.success(`${res?.data?.message}`)
@@ -32,6 +35,9 @@ const ServiceTypeModal = () => {
         } catch (error) {
         toast.error(`something went wrong`)
         disptach(showModalReducer(false))
+
+        }finally{
+            disptach(showSpinnerReducer(false))
 
         }
     }

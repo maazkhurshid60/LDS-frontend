@@ -49,10 +49,7 @@ const Service = () => {
         setActiveAction(activeSectionString);
         // }
     }
-    useEffect(() => {
-        dispatch(getAllServiceFormThunk())
-        // setValue("jobNo",allServiceFormData[0]?.jobNo)
-    }, [])
+    
     
 
 
@@ -68,8 +65,8 @@ const Service = () => {
                 :
                 <>
                     <BorderButton buttonText="add" icon={<MdAdd />} isIcon onClick={addNewFormFunction} />
-                    <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />
-                    <BorderButton buttonText="submit" icon={<MdOutlineDone />} isIcon />
+                    {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />
+                    <BorderButton buttonText="submit" icon={<MdOutlineDone />} isIcon /> */}
                     <BorderButton buttonText="delete" icon={<MdDeleteOutline />} isIcon onClick={deleteServiceForm} />
                     <BorderButton buttonText="previous" icon={<MdArrowBackIos />} isIcon onClick={() => dispatch(getPreviousServiceForm())} />
                     <BorderButton buttonText="next" icon={<MdArrowForwardIos />} isRightIcon onClick={() => dispatch(getNextServiceForm())} />

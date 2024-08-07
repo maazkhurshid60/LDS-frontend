@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getAllUserApi, updateUserApi } from "../../apiservices/user/userApi";
 import { addRoleApi, deleteRoleApi, getAllRoleApi, updateRoleApi } from "../../apiservices/rolesApi/rolesApi";
 import { toast } from "react-toastify";
+import { showSpinnerReducer } from "./spinner";
 
 
 
@@ -109,7 +110,7 @@ const userId = createSlice({
 
 });
 
-export const { getOneRole,emptyOneRole } = userId.actions;
+export const { getOneRole, emptyOneRole } = userId.actions;
 export default userId.reducer;
 
 
@@ -131,13 +132,18 @@ export const getAllRoles = createAsyncThunk<User[]>(
 // ADD ROLE API
 export const addRole = createAsyncThunk<any>(
     "userId/addRole",
-    async (data) => {
+    async (data,{dispatch}) => {
+        dispatch(showSpinnerReducer(true))
+        
         try {
             const res = await addRoleApi(data);
             toast.success(`${res?.data?.message}`)
             return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
             throw new Error("Failed to fetch all users");
+        }finally{
+        dispatch(showSpinnerReducer(false))
+
         }
     }
 );
@@ -145,7 +151,8 @@ export const addRole = createAsyncThunk<any>(
 // DELETE ROLE API
 export const deleteRole = createAsyncThunk<any>(
     "userId/deleteRole",
-    async (data) => {
+    async (data, { dispatch }) => {
+        dispatch(showSpinnerReducer(true))
 
         try {
             const res = await deleteRoleApi(data);
@@ -153,6 +160,9 @@ export const deleteRole = createAsyncThunk<any>(
             return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
             throw new Error("Failed to fetch all users");
+        } finally {
+            dispatch(showSpinnerReducer(false))
+
         }
     }
 );
@@ -162,13 +172,17 @@ export const deleteRole = createAsyncThunk<any>(
 // // GET ALL USERS API
 export const updateRole = createAsyncThunk<any>(
     "userId/updateRole",
-    async (data) => {
+    async (data,{dispatch}) => {
+        dispatch(showSpinnerReducer(true))
         try {
             const res = await updateRoleApi(data);
             toast.success(`${res?.data?.message}`)
             return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
             throw new Error("Failed to fetch all users");
+        }finally{
+        dispatch(showSpinnerReducer(false))
+
         }
     }
 );

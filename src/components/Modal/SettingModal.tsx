@@ -16,6 +16,7 @@ import CheckBox from "../CheckBox/CustomCheckBox"
 
 import { z } from "zod"
 import { addSettingApi } from "../../apiservices/settingApi/settingApi"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 export type FormFields = z.infer<typeof settingSchema>
 
 const SettingModal = () => {
@@ -32,6 +33,7 @@ const SettingModal = () => {
         
     </form>
     const addSettingFunction =async (data) => {
+        disptach(showSpinnerReducer(true))
         
         try {
             const response=await addSettingApi(data)
@@ -40,6 +42,9 @@ const SettingModal = () => {
         } catch (error) {
             disptach(showModalReducer(false))
             toast.error("something went wrong. Try Later")
+        }finally{
+            disptach(showSpinnerReducer(false))
+
         }
     }
     return <Modal

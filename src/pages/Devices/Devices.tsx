@@ -19,7 +19,9 @@ import { DataLoader } from "../../components/Loader/DataLoader";
 import { deviceType } from "../../type/deviceType/deviceType";
 import DeviceModalUpdate from "../../components/Modal/DeviceModalUpdate";
 import { deleteHolidayApi } from "../../apiservices/holidayApi/holidayApi";
+import { InfinitySpin, RotatingLines } from "react-loader-spinner";
 import { toast } from "react-toastify";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 const Devices = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
@@ -32,10 +34,12 @@ const Devices = () => {
     const headers = ["Device Id", "Device Code", "device name", "product type", ...(isAdmin ? ["Action"] : [])];
     const [searchValue, setSearchValue] = useState("")
     const [searchedData, setSearchedData] = useState()
+   
     const dispatch = useDispatch()
 
     const deleteData = async (id: string) => {
-        console.log("<id>", id)
+        dispatch(showSpinnerReducer(true))
+        // console.log("<id>", id)
         try {
             const response = await deleteDeviceApi(id)
             refetch()
@@ -46,41 +50,46 @@ const Devices = () => {
 
             toast.error("something went wrong")
         }
+        finally{
+            dispatch(showSpinnerReducer(false))
+        }
     }
     // UPDATE DATA FUNCTION
     const clientUpdateFunction = (id: string) => {
         setGetSingleData(data?.find((data, index) => data?._id === id))
-        console.log(id)
+        // console.log(id)
         dispatch(showUpdateModalReducer(true))
     }
-     // USE EFFECT TO SEARCH DATA
-     useEffect(()=>{
-        setSearchedData(data?.filter(data=>   Object.entries(data)
-        .filter(([key]) => !['_id', 'createdAt', 'updatedAt',"__v"].includes(key)) // Exclude the _id field
-        .some(([_, value]) => 
-          value?.toString().toLowerCase().includes(searchValue.toLowerCase())
-        )
+    // USE EFFECT TO SEARCH DATA
+    useEffect(() => {
+        setSearchedData(data?.filter(data => Object.entries(data)
+            .filter(([key]) => !['_id', 'createdAt', 'updatedAt', "__v"].includes(key)) // Exclude the _id field
+            .some(([_, value]) =>
+                value?.toString().toLowerCase().includes(searchValue.toLowerCase())
+            )
         ))
-    },[searchValue])
-console.log(searchValue)
+    }, [searchValue])
+    // console.log(searchValue)
 
     if (isLoading) return <DataLoader text="device" />
 
     if (error) return <div>An error has occurred: {error.message}</div>;
-    return <>
+    return <div className="relative ">
+
         {showModal ? <DeviceModal /> : showUpdateModal ? <DeviceModalUpdate singledata={getSingleData} /> : <OutletLayout>
-            <div className="">
+            <div className="relative">
+                
                 <OutletLayoutHeader heading="Devices">
                     {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
                     <BorderButton buttonText="filter" disabled />
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
-                    <Searchbar value={searchValue} onChange={(e)=>{setSearchValue(e.target.value)}}/>
+                    <Searchbar value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} />
                     <Filter />
                 </div>
                 <Table headers={headers} tableData={searchValue?.length > 0 ? searchedData : currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction} />
-                {searchValue?.length===0 && <Pagination
+                {searchValue?.length === 0 && <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}
                     dataLimit={dataLimit}
@@ -91,7 +100,7 @@ console.log(searchValue)
         </OutletLayout>}
 
 
-    </>
+    </div>
 }
 
 export default Devices

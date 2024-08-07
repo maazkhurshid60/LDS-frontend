@@ -20,6 +20,7 @@ import { deleteServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTy
 import ServiceTypeModalUpdate from "../../components/Modal/ServiceTypeModelUpdate";
 import { serviceTypeType } from "../../type/serviceResultType/serviceResultType";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 
 const ServiceType = () => {
     const showUpdateModal = useSelector((state: RootState) => state?.showModal.isUpdateShowModal);
@@ -47,19 +48,17 @@ const ServiceType = () => {
     // const currentTableData = data?.slice(firstIndexItem, lastIndexItem);
 
     const deleteData = async (id: string) => {
+        dispatch(showSpinnerReducer(true))
         try {
             const response = await deleteServiceTypeApi(id);
             toast.success(`${response?.data?.message}`);
             await refetch();
-
-            // If the current page has no data after deletion, move to the previous page
-            // if (currentTableData?.length === 1 && currentPage > 1) {
-            //     setCurrentPage(currentPage - 1);
-            // }
             checkLastRecord()
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong");
+        } finally {
+            dispatch(showSpinnerReducer(false))
         }
     };
 
@@ -103,16 +102,16 @@ const ServiceType = () => {
                             <BorderButton buttonText="Filter" disabled />
                         </OutletLayoutHeader>
                         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                        <Searchbar value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
-                        <Filter />
+                            <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                            <Filter />
                         </div>
                         <Table
                             headers={headers}
-                            tableData={ searchValue.length > 0 ? searchedData :currentTableData}
+                            tableData={searchValue.length > 0 ? searchedData : currentTableData}
                             onClick={deleteData}
                             onUpdateClick={resultUpdateFunction}
                         />
-                       {searchValue?.length===0 && <Pagination
+                        {searchValue?.length === 0 && <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}

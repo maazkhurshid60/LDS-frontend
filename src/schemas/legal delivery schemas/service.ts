@@ -16,7 +16,7 @@ export const serviceSchema = z.object({
       address:z.string().min(1, "Address is required"),
       bussiness:z.string().min(1, "Bussiness is required"),
       city:z.string().min(1, "City is required"),
-      apt:z.string().min(1, "Apt is required"),
+      apt:z.string().optional(),
       zip:z.string().min(1, "Zip is required"),
       commercialDescription:z.string().min(1, "Commercial Description is required"),
       otherDescription:z.string().min(1, "Other L&T Description is required"),

@@ -74,9 +74,8 @@ const ShowAllAddMailingAddress: React.FC<AddMailingProps> = ({ data, id }) => {
         console.log(data)
         dispatch(deleteMailingAddressThunk(data?._id))
         dispatch(getMailAddressAfterDeletion(id))
-
     }
-    console.log(isAddMail)
+    
     return <div>
         <h1 className="font-semibold text-md mb-4 capitalize">All Mailing Addresss {id && id}</h1>
         <form className="flex flex-col items-end">

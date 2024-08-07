@@ -27,7 +27,7 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({ options,
     const handleOptionClick = (optionValue: string) => {
         onChange(optionValue)
             getMailFunction(optionValue);
-        // setIsOpen(false)
+        setIsOpen(false)
     }
     const handleClickOutside = (event: MouseEvent) => {
         console.log("Click detected");
@@ -38,10 +38,10 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({ options,
     };
 
     useEffect(() => {
-        console.log("Adding event listener");
+       console.log("Adding event listener");
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            console.log("Removing event listener");
+           console.log("Removing event listener");
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);

@@ -12,6 +12,8 @@ import { userInputSectionSchema } from "../../schemas/addAdministrationServerSch
 import { updateServerApi } from "../../apiservices/serverApi/serverApi"
 import Dropdown from "../dropdown/Dropdown"
 import { serverType } from "../../type/serverType/serverType"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
+import { toast } from "react-toastify"
 type Props = {
     singledata: serverType | undefined; // Define props type here
 };
@@ -91,14 +93,24 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
 
     // UPDATE SERVER FUNCTION
     const updateServerFunction = async (data) => {
-        console.log(typeof parseInt(data?.zip))
-        const zip = parseInt(data?.zip)
-        const licenseNo = parseInt(data?.licenseNo)
-        const postData = { ...data, zip, licenseNo, serverId: singledata?._id }
-        console.log("postdata", postData)
-        await updateServerApi(postData)
-        dispatch(showUpdateModalReducer(false))
-        refetch()
+        dispatch(showSpinnerReducer(true))
+try {
+    
+    console.log(typeof parseInt(data?.zip))
+    const zip = parseInt(data?.zip)
+    const licenseNo = parseInt(data?.licenseNo)
+    const postData = { ...data, zip, licenseNo, serverId: singledata?._id }
+    console.log("postdata", postData)
+    await updateServerApi(postData)
+    dispatch(showUpdateModalReducer(false))
+    refetch()
+    toast.success("Server has updated successfully")
+} catch (error) {
+    toast.error("Something Went Wrong");
+}finally{
+    dispatch(showSpinnerReducer(false))
+
+}
     }
     useEffect(() => {
         if (singledata) {

@@ -11,6 +11,7 @@ import { z } from "zod";
 import { addClientApi } from "../../apiservices/clientApi/clientApi";
 import { toast } from "react-toastify";
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 export type FormFields = z.infer<typeof clientSchema>
 const ClientModal = () => {
     const dispatch = useDispatch()
@@ -62,18 +63,17 @@ const ClientModal = () => {
     const addClientFunction = async (data) => {
         const zip = parseInt(data?.zip)
         const allData = { ...data, zip }
+        dispatch(showSpinnerReducer(true))
         try {
-
             const res = await addClientApi(allData)
             refetch()
             toast.success(`${res?.data?.message}`)
             dispatch(showModalReducer(false))
-
         } catch (error) {
             toast.error("Something went wrong or Network Error")
             dispatch(showModalReducer(false))
-
-
+        }finally{
+            dispatch(showSpinnerReducer(false))
         }
 
     }

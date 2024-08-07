@@ -3,15 +3,16 @@ import axios from "axios";
 import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
 import { toast } from "react-toastify";
 import { showModalReducer } from "./showModal";
+import { showSpinnerReducer } from "./spinner";
 const accessToken = localStorage.getItem("accessToken");
 
 const initialState = {
-    allServiceFormData:[],
+    allServiceFormData: [],
     isNewFormAdd: false,
     isDataSaved: false,
     savedLTFormData: null,
     serviceFormIndex: 0,
-    singleServiceForm:null,
+    singleServiceForm: null,
     status: "idle"
 }
 const serviceForm = createSlice({
@@ -43,19 +44,19 @@ const serviceForm = createSlice({
             // state.singleUser = [state.allUser.tableData[state.userId]]; // Wrap in array if accessing a single user
         },
         getLastServiceForm: (state) => {
-            state.serviceFormIndex = state.allServiceFormData.length-1;
+            state.serviceFormIndex = state.allServiceFormData.length - 1;
             // state.singleUser = [state.allUser.tableData[state.userId]]; // Wrap in array if accessing a single user
         },
-       
+
     },
     extraReducers: builder => {
         // BUILDERS FOR FETCHING ALL SERVICE FORMS
         builder.addCase(getAllServiceFormThunk.pending, (state) => {
             state.status = "loading"
         })
-        builder.addCase(getAllServiceFormThunk.fulfilled, (state,action) => {
+        builder.addCase(getAllServiceFormThunk.fulfilled, (state, action) => {
             state.status = "success"
-            state.allServiceFormData=action.payload
+            state.allServiceFormData = action.payload
         })
         builder.addCase(getAllServiceFormThunk.rejected, (state) => {
             state.status = "failed"
@@ -64,9 +65,9 @@ const serviceForm = createSlice({
         builder.addCase(deleteServiceFormThunk.pending, (state) => {
             state.status = "loading"
         })
-        builder.addCase(deleteServiceFormThunk.fulfilled, (state,action) => {
+        builder.addCase(deleteServiceFormThunk.fulfilled, (state, action) => {
             state.status = "success"
-            state.allServiceFormData=action.payload
+            state.allServiceFormData = action.payload
         })
         builder.addCase(deleteServiceFormThunk.rejected, (state) => {
             state.status = "failed"
@@ -84,8 +85,8 @@ const serviceForm = createSlice({
     }
 })
 
-export const { addNewFormAddReducer, isDataSaveReducer, savedLTFormDataReducer,getNextServiceForm ,getPreviousServiceForm,getFirstServiceForm
-    ,getLastServiceForm} = serviceForm.actions
+export const { addNewFormAddReducer, isDataSaveReducer, savedLTFormDataReducer, getNextServiceForm, getPreviousServiceForm, getFirstServiceForm
+    , getLastServiceForm } = serviceForm.actions
 export default serviceForm.reducer
 
 // ASYNC THUNK STARTS
@@ -105,7 +106,9 @@ export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", asyn
     }
 })
 // DELETE SERVICE FORM
-export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", async (id:string,{dispatch}) => {
+export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", async (id: string, { dispatch }) => {
+    dispatch(showSpinnerReducer(true))
+
     try {
         // console.log(data)
         const response = await axios.delete(`${baseUrl}/service-form/delete`, {
@@ -121,42 +124,46 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
         dispatch(showModalReducer(false))
         return response?.data?.data
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         throw new Error(error)
+    }
+    finally {
+        dispatch(showSpinnerReducer(false))
+
     }
 })
 // UPDATE SERVICE FORM
-export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", async (data:any,{dispatch}) => {
-    console.log("sending data to update api",data)
+export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", async (data: any, { dispatch }) => {
+    console.log("sending data to update api", data)
 
     try {
         // console.log(data)
-        const response = await axios.patch(`${baseUrl}/service-form/update`, data,{
+        const response = await axios.patch(`${baseUrl}/service-form/update`, data, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             },
-           
+
         })
         dispatch(getAllServiceFormThunk())
         toast.success(`${response?.data?.message}`)
         dispatch(showModalReducer(false))
         console.log(response)
     } catch (error) {
-        console.log(">>>>>",error)
+        console.log(">>>>>", error)
         toast.error("Something went wrong. Try Later")
     }
 })
 // ADD SERVICE FORM
-export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (data:any,{dispatch}) => {
+export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (data: any, { dispatch }) => {
     console.log(data)
 
     try {
         // console.log(data)
-        const response = await axios.post(`${baseUrl}/service-form/create`, data,{
+        const response = await axios.post(`${baseUrl}/service-form/create`, data, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             },
-           
+
         })
         dispatch(getAllServiceFormThunk())
         toast.success(`${response?.data?.message}`)

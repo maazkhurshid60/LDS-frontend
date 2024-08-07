@@ -17,7 +17,7 @@ const LegalDelivery = () => {
     const [showDropDown, setShowDropDown] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     // const agencyLicRef = useRef<HTMLButtonElement | null>(null);
     // const LiNonReportsRef = useRef<HTMLButtonElement | null>(null);
     // const ltExtraNameReportRef = useRef<HTMLButtonElement | null>(null);
@@ -34,47 +34,47 @@ const LegalDelivery = () => {
     // const transPerSlipPrintRef = useRef<HTMLButtonElement | null>(null);
 
     const handlePrint = () => {
-      
+
         setShowDropDown(false);
-    //     if (reportName === "agencyLicense") {
-    //         agencyLicRef?.current?.click();
-    //          setShowDropDown(false);
-    //     }
-    //     else if (reportName === "liNonReports") {
-    //         LiNonReportsRef?.current.click()
-    //         setShowDropDown(false);
-    //     }
-    //     else if (reportName === "lTExtraNameReports") {
-    //         ltExtraNameReportRef?.current.click()
-    //         setShowDropDown(false);
-    //     }
-    //     else if (reportName === "marshalReports") {
-    //         MarshalReportRef?.current.click()
-    //         setShowDropDown(false);
-    //     }
-    //     else if (reportName === "nonMilReports") {
-    //         nonMilRef?.current.click()
-    //         setShowDropDown(false);
-    //     }
-    //     else if (reportName === "standardReports") {
-    //         standardRef?.current.click()
-    //         setShowDropDown(false);
-    //     }
-    //     else if (reportName === "transPerSlipReports") {
-    //         transPerSlipRef?.current.click()
-    //         setShowDropDown(false);
-    //     }
-}
+        //     if (reportName === "agencyLicense") {
+        //         agencyLicRef?.current?.click();
+        //          setShowDropDown(false);
+        //     }
+        //     else if (reportName === "liNonReports") {
+        //         LiNonReportsRef?.current.click()
+        //         setShowDropDown(false);
+        //     }
+        //     else if (reportName === "lTExtraNameReports") {
+        //         ltExtraNameReportRef?.current.click()
+        //         setShowDropDown(false);
+        //     }
+        //     else if (reportName === "marshalReports") {
+        //         MarshalReportRef?.current.click()
+        //         setShowDropDown(false);
+        //     }
+        //     else if (reportName === "nonMilReports") {
+        //         nonMilRef?.current.click()
+        //         setShowDropDown(false);
+        //     }
+        //     else if (reportName === "standardReports") {
+        //         standardRef?.current.click()
+        //         setShowDropDown(false);
+        //     }
+        //     else if (reportName === "transPerSlipReports") {
+        //         transPerSlipRef?.current.click()
+        //         setShowDropDown(false);
+        //     }
+    }
 
     const handleClickOutside = (event: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setShowDropDown(false);
         }
     };
-    const getUserIdFunction=(userId: string)=>{
-        const selectedData=tableData?.tableData?.find((data,id)=>data?._id===userId)
+    const getUserIdFunction = (userId: string) => {
+        const selectedData = tableData?.tableData?.find((data, id) => data?._id === userId)
         console.log(selectedData)
-        dispatch(getSingleLegalDeliveryReducer(selectedData))    
+        dispatch(getSingleLegalDeliveryReducer(selectedData))
     }
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -83,10 +83,10 @@ const LegalDelivery = () => {
         };
     }, [])
 
-    useEffect(()=>{
-        dispatch(getSingleLegalDeliveryReducer(tableData?.tableData[0]))    
-        
-    },[])
+    useEffect(() => {
+        dispatch(getSingleLegalDeliveryReducer(tableData?.tableData[0]))
+
+    }, [])
 
     const dataLimit = 3; // Define your data limit here
     const totalPages = Math.ceil(tableData?.tableData?.length / dataLimit);
@@ -102,10 +102,10 @@ const LegalDelivery = () => {
         {/* <GPSReport/> */}
         <div className="relative bg-whiteColor ">
             {/* <div className={`absolute -top-4 sm:-top-6 md:-top-24  flex items-start transition-all duration-500 z-50  ${showFilterMenu ? "-right-5 xl:-right-[52px]" : "-right-5 xl:-right-[52px]"}`} > */}
-            <div className={`fixed top-[65px] md:top-[20px]  flex items-start transition-all duration-500 z-50 rounded-tl-full rounded-bl-full shadow-smShadow ${showFilterMenu ? "-right-2 lg:-right-0" : "-right-0 lg:right-[0px]"}`} >
+            <div className={`fixed top-[65px] md:top-[20px]   flex items-start transition-all duration-500 z-50 rounded-tl-full rounded-bl-full  ${showFilterMenu ? "-right-2 lg:-right-0" : "-right-0 lg:right-[0px]"}`} >
                 {/* SUB FILTER SHOW BUTTON STARTS*/}
-                <div className="rounded-tl-full rounded-bl-full p-1  border-[1px] border-borderColor border-solid bg-whiteColor
-                                shadow-lgShadow w-[40px]  cursor-pointer">
+                <div className="rounded-tl-full rounded-bl-full border-r-whiteColor absolute -left-[39px] p-1  border-[1px] border-borderColor border-solid bg-whiteColor
+                                 w-[40px]  cursor-pointer">
                     <IoIosArrowDropleftCircle className={`text-primaryColor transition-all duration-500 ${showFilterMenu ? "rotate-[180deg]" : "rotate-[0deg]"}`} size={30} onClick={() => setShowFilterMenu(!showFilterMenu)} />
                 </div>
                 {/* SUB FILTER SHOW BUTTON ENDS*/}
@@ -138,7 +138,7 @@ const LegalDelivery = () => {
                             <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
                             <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
                             <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
-                            <Link to="/operations/legal-delivery/non-mil-reports" target="_blank"  className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
+                            <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
                             <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
                             <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
                         </div>
@@ -151,14 +151,14 @@ const LegalDelivery = () => {
                 <p className="cursor-pointer">Generate Geo Code</p>
                 <p className="cursor-pointer">Sort Records</p>
             </div>
-            <Table headers={headers} tableData={currentTableData} getRowData={getUserIdFunction}/>
+            <Table headers={headers} tableData={currentTableData} getRowData={getUserIdFunction} />
             <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
                 dataLimit={dataLimit}
                 tableData={tableData?.tableData}
                 onchange={onPageChange} // Pass onPageChange as onchange prop
-                
+
             />
             {/* <StandardReport/> */}
 

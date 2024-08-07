@@ -20,6 +20,7 @@ import { deleteClientApi } from "../../apiservices/clientApi/clientApi";
 import { toast } from "react-toastify";
 import { clientType } from "../../type/clientType/clientType";
 import ClientModalUpdate from "../../components/Modal/ClientModalUpdate";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 const Client = () => {
     const userInfo= useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
@@ -48,7 +49,8 @@ const Client = () => {
 // PAGE CALCULATION ENDS
 
 const deleteData=async(id:string)=>{
-    console.log("<id>",id)
+    // console.log("<id>",id)
+    dispatch(showSpinnerReducer(true))
     try {
         const response=await deleteClientApi(id)
         checkLastRecord()
@@ -58,6 +60,10 @@ const deleteData=async(id:string)=>{
         console.log(error)
     
        toast.error("something went wrong") 
+    }
+    finally{
+    dispatch(showSpinnerReducer(false))
+
     }
     }
 // UPDATE DATA FUNCTION

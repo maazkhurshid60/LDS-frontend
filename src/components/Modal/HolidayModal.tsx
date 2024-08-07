@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 import { addServerApi } from "../../apiservices/serverApi/serverApi"
 import { addHolidayApi } from "../../apiservices/holidayApi/holidayApi"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 
 const HolidayModal = () => {
     const disptach = useDispatch()
@@ -35,6 +36,7 @@ const HolidayModal = () => {
         const postHolidayData={...data,holidayYear}
         console.log(postHolidayData)
         // disptach(showModalReducer(false))
+        disptach(showSpinnerReducer(true))
         try {
             const response=await addHolidayApi(postHolidayData)
             refetch()
@@ -43,7 +45,8 @@ const HolidayModal = () => {
         } catch (error) {
             toast.error("something went wrong. Try Later")
             disptach(showModalReducer(false))
-
+        }finally{
+            disptach(showSpinnerReducer(false))
         }
     }
     return <Modal

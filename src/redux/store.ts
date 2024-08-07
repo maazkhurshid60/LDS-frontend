@@ -13,7 +13,7 @@ import rolesReducer from "./slice/roles";
 import serviceFormReducer from "./slice/serviceForm";
 import resultFormReducer from "./slice/resultForm";
 import legalDeliveryReducer from "./slice/legalDelivery";
-
+import showSpinnerReducer  from "./slice/spinner";
 // Combine all reducers
 const rootReducer = combineReducers({
     navbarTracking: navbarTrackingReducer,
@@ -27,28 +27,21 @@ const rootReducer = combineReducers({
     serviceForm:serviceFormReducer,
     resultForm:resultFormReducer,
     legalDelivery:legalDeliveryReducer,
-
-
+    showSpinner:showSpinnerReducer,
 });
-
 // Define RootState to encompass all slices
 export type RootState = ReturnType<typeof rootReducer>;
-
 // Configuration for redux-persist
 const persistConfig = {
     key: "root",
     storage,
     whitelist: ["userDetail","navbarTracking","legalDelivery"] // reducers you want to persist
 };
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 // Configure store with persisted reducer
 const store = configureStore({
     reducer: persistedReducer
 });
-
 // Create persistor object
 const persistor = persistStore(store);
-
 export { store, persistor };

@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { serviceResultSchema } from "../../schemas/serviceResultSchema"
 import { toast } from "react-toastify"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 
 const ServiceResultModal = () => {
     const disptach = useDispatch()
@@ -27,6 +28,7 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-
     const addServiceResultFunction = async (data) => {
         // console.log(data)
         // disptach(showModalReducer(false))
+        disptach(showSpinnerReducer(true))
 
         try {
             const res=await addServiceResultApi(data)
@@ -37,6 +39,9 @@ const {isLoading,error,data,refetch}=useGetAllData("/service-result/all-service-
         } catch (error) {
             toast.error(`something went wrong`)
             disptach(showModalReducer(false))
+        }finally{
+            disptach(showSpinnerReducer(false))
+
         }
         
     }

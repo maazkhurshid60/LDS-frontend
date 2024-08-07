@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { serverType } from "../../type/serverType/serverType";
 import { DataLoader } from "../../components/Loader/DataLoader";
 import AdministrationServerUpdateModal from "../../components/Modal/AdministrationServerUpdateModal";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 const Server = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
     const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
@@ -37,15 +38,17 @@ const [searchValue,setSearchValue]=useState("")
     const dispatch = useDispatch()
     const deleteData = async (id: string) => {
         // const response =deleteServerApi(id)
+        dispatch(showSpinnerReducer(true))
         try {
             const response = await deleteServerApi(id)
             toast.success(`${response?.data?.message}`)
             refetch()
             checkLastRecord()
         } catch (error) {
-            console.log(error)
-
+            // console.log(error)
             toast.error("something went wrong")
+        }finally{
+        dispatch(showSpinnerReducer(false))
         }
     }
 

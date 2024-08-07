@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { addServerApi } from "../../apiservices/serverApi/serverApi";
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 export type FormFields = z.infer<typeof userInputSectionSchema>
 
 const AdministrationServerModal = () => {
@@ -86,6 +87,7 @@ const AdministrationServerModal = () => {
         const licenseNo = parseInt(data?.licenseNo)
         const postData = { ...data, zip, licenseNo }
         // console.log(postData)
+        dispatch(showSpinnerReducer(true))
         try {
             const response = await addServerApi(postData)
             toast.success(`server added successfully`)
@@ -96,6 +98,8 @@ const AdministrationServerModal = () => {
             console.log(error)
             dispatch(showModalReducer(false))
             toast.error("Some thing went wrong or already server code exist")
+        } finally {
+            dispatch(showSpinnerReducer(false))
         }
     }
     return <>

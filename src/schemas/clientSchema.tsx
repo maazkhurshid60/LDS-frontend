@@ -29,7 +29,7 @@ export const clientSchema = z.object({
     phone: z.string().min(7, { message: "Phone is required and must greater than 7 digits" }),
     zip:z.string().min(1,{message:"Zip is required"}).regex(/^\d+$/,{message:"zip must be number"}) ,
     fax:z.string().min(1,{message:"Fax is required"}).regex(/^\d+$/,{message:"License must be Number"}),
-    apt:z.string().min(1,{message:"Apt is required"}).regex(/^\d+$/,{message:"License must be Number"}),
+    apt:z.string().optional(),
     isActive: z.boolean().optional()
 
 })

@@ -37,7 +37,7 @@ const Result = () => {
      <TextField register={register} label="Date of 1st Attempt" error={errors.date1Attepmt} name="date1Attepmt" type="date" />
      <TextField register={register} label="Date of 2nd Attempt" error={errors.date2Attepmt} name="date2Attepmt" type="date" />
      <TextField register={register} label="Date of 3rd Attempt" error={errors.date3Attepmt} name="date3Attepmt" type="date" />
-     <TextField register={register} label="Date of Amiling" error={errors.dateMailing} name="dateMailing" type="date" />
+     <TextField register={register} label="Date of Mailing" error={errors.dateMailing} name="dateMailing" type="date" />
      <TextField register={register} label="Corp Recipient" error={errors.corpRecipient} name="corpRecipient" />
      <TextField register={register} label="Corp Recipient Title" error={errors.corpRecipientTitle} name="corpRecipientTitle" />
      <TextField register={register} label="substitute Delivered To" error={errors.substituteDeliveredTo} name="substituteDeliveredTo" />

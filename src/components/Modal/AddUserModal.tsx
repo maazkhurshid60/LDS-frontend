@@ -13,36 +13,35 @@ import { DeleteIcon } from "../Icons/DeleteIcon";
 import { z } from "zod";
 import { registerUserApi } from "../../apiservices/user/userApi";
 import { toast } from "react-toastify";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 export type FormFields = z.infer<typeof userInputSectionSchema>
 
-
 const AddUserModal = () => {
-    const { register, handleSubmit, formState: { errors ,isSubmitting}, control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
+    const { register, handleSubmit, formState: { errors, isSubmitting }, control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
     const { isLoading, error, data } = useGetAllData("/role/all-roles")
-
     const options = data?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
-    const filteredRoles= allSelectedRoles.filter((obj1, i, arr) => 
+    const filteredRoles = allSelectedRoles.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
-      )
+    )
     console.log(allSelectedRoles)
     const dispatch = useDispatch()
     // ADD USER
-    const addUserFunction = async(data: any) => {
-
-        const onlyName=filteredRoles?.map(data=>data?.name)
-        const allData={...data,roles:onlyName}
+    const addUserFunction = async (data: any) => {
+        dispatch(showSpinnerReducer(true))
+        const onlyName = filteredRoles?.map(data => data?.name)
+        const allData = { ...data, roles: onlyName }
         // console.log(">>>>>>>>>>>>",allData)
         // dispatch(showModalReducer(false))
         try {
-            const res= await registerUserApi(allData)
+            const res = await registerUserApi(allData)
             toast.success(`${res?.data?.message}`)
             dispatch(showModalReducer(false))
-            
         } catch (error) {
             toast.error("Something went wrong or Network later.")
             dispatch(showModalReducer(false))
-
+        } finally {
+            dispatch(showSpinnerReducer(false))
         }
     }
     // CLOSE MODAL
@@ -104,12 +103,12 @@ const AddUserModal = () => {
         </div>
     </form>
     // MODALFOOTER ENDS
-    return <Modal modalHeading="Add user" borderButtonText="cancel" 
-    // filledButtonText={isSubmitting?"adding":"add"}
-    filledButtonText="add"
-     modalBody={body} 
-     onFilledButtonClick={handleSubmit(addUserFunction)}
-     disabled={isSubmitting}
+    return <Modal modalHeading="Add user" borderButtonText="cancel"
+        // filledButtonText={isSubmitting?"adding":"add"}
+        filledButtonText="add"
+        modalBody={body}
+        onFilledButtonClick={handleSubmit(addUserFunction)}
+        disabled={isSubmitting}
         onBorderButtonClick={closeModal} />
 }
 

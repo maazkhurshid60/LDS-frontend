@@ -5,6 +5,7 @@ import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
+import { showSpinnerReducer } from "./spinner";
 const accessToken = localStorage.getItem("accessToken");
 // const dispatch=useDispatch()
 export type User = {
@@ -124,14 +125,14 @@ const userId = createSlice({
             state.status = "error"; // Set status to "error" on fetch failure
         });
         /////////////////DELETE USER ROLE API EXRTA REDUCERS
-        builder.addCase(deleteUserApi.pending,(state)=>{
-            state.status="loading"
+        builder.addCase(deleteUserApi.pending, (state) => {
+            state.status = "loading"
         })
-        builder.addCase(deleteUserApi.fulfilled,(state)=>{
-            state.status="success"
+        builder.addCase(deleteUserApi.fulfilled, (state) => {
+            state.status = "success"
         })
-        builder.addCase(deleteUserApi.rejected,(state)=>{
-            state.status="error"
+        builder.addCase(deleteUserApi.rejected, (state) => {
+            state.status = "error"
         })
     },
 
@@ -159,7 +160,7 @@ export const getAllUsers = createAsyncThunk<User[]>(
 export const updateUser = createAsyncThunk<any>(
     "userId/updateUser",
     async (data, { dispatch }) => {
-
+        dispatch(showSpinnerReducer(true))
         try {
             const res = await updateUserApi(data);
             toast.success(`${res?.data.message}`)
@@ -169,6 +170,10 @@ export const updateUser = createAsyncThunk<any>(
         } catch (error) {
             toast.error("notupdated yet")
         }
+        finally {
+            dispatch(showSpinnerReducer(false))
+
+        }
     }
 );
 
@@ -176,6 +181,8 @@ export const updateUser = createAsyncThunk<any>(
 export const deleteUserApi = createAsyncThunk<any>(
     "deleteUser",
     async (data, { dispatch }) => {
+dispatch(showSpinnerReducer(true))
+
         try {
             const response = await axios.delete(`${baseUrl}/user/delete-user`, {
                 headers: {
@@ -190,6 +197,9 @@ export const deleteUserApi = createAsyncThunk<any>(
         } catch (error) {
             console.log(error)
             toast.error("notupdated yet")
+        }finally{
+dispatch(showSpinnerReducer(false))
+
         }
     }
 );
@@ -212,13 +222,18 @@ export const deleteUserApi = createAsyncThunk<any>(
 export const updateUserRole = createAsyncThunk<any>(
     "userId/updateUserRole",
     async (data, { dispatch }) => {
+dispatch(showSpinnerReducer(true))
+        
         try {
             const res = await updateUserRoleApi(data);
-            toast.success(`User Role Updated Successfully`)
             // TO GET UPDATED DATA
             dispatch(getAllUsers());
+            toast.success(`User Role Updated Successfully`)
         } catch (error) {
             toast.error("notupdated yet")
+        }finally{
+dispatch(showSpinnerReducer(false))
+
         }
     }
 );

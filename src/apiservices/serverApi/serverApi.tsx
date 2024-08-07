@@ -44,12 +44,12 @@ return data
             const response= await axios.patch(`${baseUrl}/server/update`,data, { headers: {
                 "Authorization": `Bearer ${accessToken}`
             } })
-            toast.success(`${response?.data?.message}`)
+            // toast.success(`${response?.data?.message}`)
             return response
 
         } catch (error) {
             console.log(error)
-            alert(`${error?.response?.data?.message}`)
+            // alert(`${error?.response?.data?.message}`)
      
         }
         }

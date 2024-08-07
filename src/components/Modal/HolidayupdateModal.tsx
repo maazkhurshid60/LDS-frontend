@@ -20,6 +20,7 @@ import { holidaySchema } from "../../schemas/holidaySchema"
 import TextArea from "../InputFields/TextArea/TextArea"
 import { holidayType } from "../../type/holidayType/holidayType"
 import { updateHolidayApi } from "../../apiservices/holidayApi/holidayApi"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 type Props = {
     singledata: holidayType | undefined; // Define props type here
 };
@@ -44,6 +45,8 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     </form>
     const updateDeviceFunction = async (data) => {
         const updateData = { ...data, holidayId: singledata?._id }
+        disptach(showSpinnerReducer(true))
+
         try {
             const res = await updateHolidayApi(updateData)
             toast.success(`${res?.data?.message}`)
@@ -52,6 +55,9 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
         } catch (error) {
             disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
+        }finally{
+            disptach(showSpinnerReducer(false))
+
         }
     }
     useEffect(() => {

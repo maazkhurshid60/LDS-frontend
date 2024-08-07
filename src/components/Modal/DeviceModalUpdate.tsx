@@ -16,6 +16,7 @@ import { updateClientApi } from "../../apiservices/clientApi/clientApi"
 import { deviceSchema } from "../../schemas/DeviceSchema"
 import { deviceType } from "../../type/deviceType/deviceType"
 import { updateDeviceApi } from "../../apiservices/deviceApi/deviceApi"
+import { showSpinnerReducer } from "../../redux/slice/spinner"
 type Props = {
     singledata: deviceType | undefined; // Define props type here
 };
@@ -40,6 +41,8 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
     </form>
     const updateDeviceFunction = async (data) => {
         const updateData = { ...data, id: singledata?._id }
+        disptach(showSpinnerReducer(true))
+
         try {
             const res = await updateDeviceApi(updateData)
             toast.success(`${res?.data?.message}`)
@@ -48,6 +51,8 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
         } catch (error) {
             toast.error(`something went wrong`)
             disptach(showUpdateModalReducer(false))
+        }finally{
+            disptach(showSpinnerReducer(false))
 
         }
     }

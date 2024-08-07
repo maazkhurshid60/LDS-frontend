@@ -14,6 +14,7 @@ import SettingModal from "../../components/Modal/SettingModal";
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData";
 import { toast } from "react-toastify";
 import { updateSettingApi } from "../../apiservices/settingApi/settingApi";
+import { showSpinnerReducer } from "../../redux/slice/spinner";
 
 const Setting = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
@@ -22,7 +23,7 @@ const Setting = () => {
     const [mergedData, setMergedData] = useState([]);
     const dispatch = useDispatch();
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
-    const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
     // Merge function to update data with checkedValues
     const mergeData = () => {
@@ -35,15 +36,19 @@ const Setting = () => {
         setMergedData(updatedData);
     };
 
-    const settingFunction = async() => {
+    const settingFunction = async () => {
+        dispatch(showSpinnerReducer(true))
         // const updatedData=mergeData
         // You can now process the mergedData for further actions like saving them
         try {
-            const response=await updateSettingApi(mergedData)
+            const response = await updateSettingApi(mergedData)
+            refetch()
             toast.success(`${response?.data?.message}`)
-            
         } catch (error) {
             toast.error("Cannot updated. Try Later")
+        } finally {
+            dispatch(showSpinnerReducer(false))
+
         }
     };
 
@@ -65,7 +70,7 @@ const Setting = () => {
                     <div className=" ">
                         <OutletLayoutHeader heading="Settings">
                             {userInfo?.roles[0]?.name === "Admin" && (
-                                <BorderButton buttonText="Apply Changes" onClick={handleSubmit(settingFunction)} disabled={isSubmitting}/>
+                                <BorderButton buttonText="Apply Changes" onClick={handleSubmit(settingFunction)} disabled={isSubmitting} />
                             )}
                         </OutletLayoutHeader>
                         <form className="flex flex-col gap-2 mt-6">
