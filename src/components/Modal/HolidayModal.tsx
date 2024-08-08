@@ -13,6 +13,7 @@ import { addServerApi } from "../../apiservices/serverApi/serverApi"
 import { addHolidayApi } from "../../apiservices/holidayApi/holidayApi"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 import { showSpinnerReducer } from "../../redux/slice/spinner"
+import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter"
 
 const HolidayModal = () => {
     const disptach = useDispatch()
@@ -21,10 +22,10 @@ const HolidayModal = () => {
     console.log(isSubmitting)
     const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear" required/>
+            <TextField onKeyDown={handleEnterKeyPress}  label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear" required/>
         </div>
           <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date"  required/>
+            <TextField onKeyDown={handleEnterKeyPress}  label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date"  required/>
         </div>
         <div className="w-full ">
             <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription" required/>

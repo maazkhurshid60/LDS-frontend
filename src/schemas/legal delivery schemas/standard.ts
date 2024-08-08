@@ -16,7 +16,7 @@
 import { z } from "zod";
 export const standardSchema = z.object({
     otherStdDescription: z.string().optional(),
-    indexNumber: z.string().regex(/^\d+$/,{message:"index no must be number"}) ,
+    indexNumber: z.string().optional() ,
     court: z.string().optional(),
     country: z.string().optional(),
     plaintiff: z.string().optional(),

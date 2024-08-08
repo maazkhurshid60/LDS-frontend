@@ -92,12 +92,12 @@ if (error) return <div>An error has occurred: {error.message}</div>;
             <div className="">
                 <OutletLayoutHeader heading="Clients">
                     {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={()=>dispatch(showModalReducer(true))}/>}
-                    <BorderButton buttonText="filter" disabled />
+                    {/* <BorderButton buttonText="filter" disabled /> */}
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
                     <Searchbar value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
-                    <Filter />
+                    {/* <Filter /> */}
                 </div>
                 <Table headers={header} tableData={ searchValue.length > 0 ? searchedData :currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction}/>
                

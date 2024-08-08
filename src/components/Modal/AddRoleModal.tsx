@@ -10,6 +10,7 @@ import { roleSchema } from "../../schemas/roleSchema";
 import { z } from "zod";
 import { addRole, emptyOneRole, updateRole } from "../../redux/slice/roles";
 import { RootState } from "../../redux/store";
+import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter";
 export type FormFields = z.infer<typeof roleSchema>
 
 const AddRoleModal = () => {
@@ -19,13 +20,13 @@ const AddRoleModal = () => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(roleSchema) })
     const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-8 flex-wrap mb-8 overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Role Name" register={register} error={errors.name} name="name" placeholder="Enter Role Name" required/>
+            <TextField onKeyDown={handleEnterKeyPress}  label="Role Name" register={register} error={errors.name} name="name" placeholder="Enter Role Name" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="Role description" register={register} error={errors.description} name="description" placeholder="Enter Device Name" />
+            <TextField onKeyDown={handleEnterKeyPress}  label="Role description" register={register} error={errors.description} name="description" placeholder="Enter Device Name" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <CheckBox label="Active" register={register} error={errors.isActive?.message} name="isActive" />
+            <CheckBox  onKeyDown={handleEnterKeyPress} label="Active" register={register} error={errors.isActive?.message} name="isActive" />
         </div>
 
     </form>

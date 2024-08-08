@@ -21,6 +21,7 @@ import { getAllServiceFormThunk, isDataSaveReducer, savedLTFormDataReducer, upda
 import Hints from "../../../Result/Hints/Hints";
 import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
 import { toast } from "react-toastify";
+import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
 export type FormFields = z.infer<typeof LTFormSchema>
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress.mailingAddressData)
@@ -264,10 +265,10 @@ const StandardTypeForm = () => {
                 </div>} */}
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-between">
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="Job no" error={errors.jobNo} name="jobNo" />
+                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="Job no" error={errors.jobNo} name="jobNo" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" />
+                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <Controller name="clientId" control={control} render={({ field }) => (
@@ -293,10 +294,10 @@ const StandardTypeForm = () => {
                         )} />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="case No" error={errors.caseNo} name="caseNo" />
+                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="case No" error={errors.caseNo} name="caseNo" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="caption" error={errors.caption} name="caption" />
+                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="caption" error={errors.caption} name="caption" />
                     </div>
                 </div>
                 {/* L&T SERVICE TYPE STARTS */}
@@ -308,6 +309,7 @@ const StandardTypeForm = () => {
                         {LTServiceData?.map((data, index) => {
                             return <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <CheckBox
+                                onKeyDown={handleEnterKeyPress} 
                                     register={register}
                                     name={data.name}
                                     label={data.name}
@@ -326,25 +328,25 @@ const StandardTypeForm = () => {
                 lg:text-xl">L&T Service Detail</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="full Name" error={errors.fullName} name="fullName" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="full Name" error={errors.fullName} name="fullName" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="bussiness Name" error={errors.businessName} name="businessName" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="bussiness Name" error={errors.businessName} name="businessName" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="address" error={errors.address} name="address" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="address" error={errors.address} name="address" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="apt" error={errors.apt} name="apt" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="apt" error={errors.apt} name="apt" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="city" error={errors.city} name="city" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="city" error={errors.city} name="city" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="state" error={errors.state} name="state" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="state" error={errors.state} name="state" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="zip" error={errors.zip} name="zip" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="zip" error={errors.zip} name="zip" />
                         </div>
                         <div className="w-[100%]">
                             <TextArea register={register} label="description" error={errors.description} name="description" />

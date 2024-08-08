@@ -3,7 +3,7 @@ import TextField from "../../../components/InputFields/TextField/TextField";
 import Hints from "../Hints/Hints";
 import Dropdown from "../../../components/dropdown/Dropdown";
 import CheckBox from "../../../components/CheckBox/CustomCheckBox";
-import { addResultFormThunk, getAllResultFormThunk, updateResultFormThunk } from "../../../redux/slice/resultForm";
+import { addResultFormThunk, getAllResultFormThunk, searchResultFormAddReducer, updateResultFormThunk } from "../../../redux/slice/resultForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetAllData } from "../../../hooks/getAllDataHook/useGetAllData";
 import { RootState } from "../../../redux/store";
@@ -14,6 +14,8 @@ import { z } from "zod";
 import { Recepient, clientId, delivery, result, serverId, svcData } from "../../../constdata/ResultForm";
 export type FormFields = z.infer<typeof resultFormSchema>
 import { format } from 'date-fns';
+import { toast } from "react-toastify";
+import { handleEnterKeyPress } from "../../../utils/moveToNextFieldOnEnter";
 
 const ResultForm = () => {
     const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch } = useForm<FormFields>({ resolver: zodResolver(resultFormSchema) })
@@ -26,12 +28,14 @@ const ResultForm = () => {
     const allResultForm = useSelector((state: RootState) => state.resultForm.allResultFormData)
     const resultFormIndex = useSelector((state: RootState) => state.resultForm.resultFormIndex)
     const isNewResultFormAdd = useSelector((state: RootState) => state.resultForm.isNewResultFormAdd)
+    const isSearchResultForm = useSelector((state: RootState) => state.resultForm.isSearchResultForm)
+console.log("isSearchResultForm",isSearchResultForm)
     const [isConspicuous, setIsConspicuous] = useState()
     // console.log("add new form set true",isNewResultFormAdd)   
     console.log(allResultForm[resultFormIndex], resultFormIndex)
     // submitResultFormFunction
     const submitResultFormFunction = (data) => {
-        console.log("data>>>>",data)
+        console.log("data>>>>", data)
         const queryInformationLT = {
             fullName: data?.fullName,
             indexNo: data?.indexNo,
@@ -84,12 +88,25 @@ const ResultForm = () => {
         if (isNewResultFormAdd === true) {
             console.log("<><><><>")
             dispatch(addResultFormThunk(addingData))
-        } else {
+        } else if (isSearchResultForm === true) {
+dispatch(searchResultFormAddReducer(false))
+            toast.success("Search Result Form will be applied")
+        }else {
 
             const updatingData = { queryInformationLT, queryInformationStandard, serviceResults, resultFormId: allResultForm[resultFormIndex]?._id }
-            
+
             dispatch(updateResultFormThunk(updatingData))
         }
+    }
+    // SEARCH RESULT FORM
+    const searchResultFormFunction = () => {
+        setValue("fullName", "")
+        setValue("indexNo", "")
+        setValue("address", "")
+        setValue("businessName", "")
+        setValue("inputDate", "")
+        dispatch(searchResultFormAddReducer(true))
+
     }
     // USE EFFECT WILL GET ALL RESULT FORM
     useEffect(() => {
@@ -108,6 +125,19 @@ const ResultForm = () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [handleSubmit, submitResultFormFunction])
+    // USE EFFECT WILL BE CALLED ON PRESSING F7 KEY
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'F7') {
+                event.preventDefault();
+                handleSubmit(searchResultFormFunction)();
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleSubmit, searchResultFormFunction])
     // USE EFFECT TO STORE DATA ON FIRST INDEX OF RESULT FORM
     useEffect(() => {
         if (isNewResultFormAdd === true) {
@@ -160,7 +190,7 @@ const ResultForm = () => {
             setIsConspicuous(allResultForm[resultFormIndex]?.serviceResults?.results)
         }
     }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm])
-console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResultForm[resultFormIndex]?.serviceResults?.results)
+    console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor", allResultForm[resultFormIndex]?.serviceResults?.results)
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC STARTS 
     const dateOfService = watch("dateOfService");
     useEffect(() => {
@@ -176,14 +206,14 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
         }
     }, [dateOfService, setValue]);
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC ENDS 
-    const handleEnterKeyPress = (event) => {
-        if (event.key === 'Enter' ) {
-            event.preventDefault(); // Prevent the form from submitting
-            const formElements = Array.from(event.target.form.elements);
-            const index = formElements.indexOf(event.target);
-            formElements[index + 1]?.focus(); // Focus the next input
-        }
-    };
+    // const handleEnterKeyPress = (event) => {
+    //     if (event.key === 'Enter') {
+    //         event.preventDefault(); // Prevent the form from submitting
+    //         const formElements = Array.from(event.target.form.elements);
+    //         const index = formElements.indexOf(event.target);
+    //         formElements[index + 1]?.focus(); // Focus the next input
+    //     }
+    // };
 
     return <>
 
@@ -213,7 +243,7 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField register={register} label="Input Date" error={errors.inputDate} name="inputDate" onKeyDown={handleEnterKeyPress}
-                        type="date"/>
+                            type="date" />
                     </div>
                 </div>
             </div>
@@ -315,19 +345,19 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Time of service" error={errors.timeService} name="timeService" type="time"/>
+                            register={register} label="Time of service" error={errors.timeService} name="timeService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st date Attempt" error={errors.firstAttemptDate} name="firstAttemptDate" type="date"/>
+                            register={register} label="1st date Attempt" error={errors.firstAttemptDate} name="firstAttemptDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st time Attempt" error={errors.firstTimeOfService} name="firstTimeOfService" type="time"/>
+                            register={register} label="1st time Attempt" error={errors.firstTimeOfService} name="firstTimeOfService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="2nd date Attempt" error={errors.secondAttemptDate} name="secondAttemptDate"  type="date"/>
+                            register={register} label="2nd date Attempt" error={errors.secondAttemptDate} name="secondAttemptDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
@@ -335,11 +365,11 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd date Attempt" error={errors.thirdAttemptDate} name="thirdAttemptDate" type="date"/>
+                            register={register} label="3rd date Attempt" error={errors.thirdAttemptDate} name="thirdAttemptDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd time Attempt" error={errors.thirdTimeOfService} name="thirdTimeOfService" type="time"/>
+                            register={register} label="3rd time Attempt" error={errors.thirdTimeOfService} name="thirdTimeOfService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
@@ -374,7 +404,7 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                         <TextField onKeyDown={handleEnterKeyPress}
                             register={register} label="recipient Title" error={errors.recipientTitle} name="recipientTitle" />
                     </div>
-                    {isConspicuous === "substitute" && allResultForm[resultFormIndex]?.serviceResults?.results === "substitute"&&
+                    {isConspicuous === "substitute" && allResultForm[resultFormIndex]?.serviceResults?.results === "substitute" &&
                         <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
@@ -434,7 +464,7 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
                             register={register} label="lock" error={errors.lock} name="lock" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <CheckBox register={register} label="otherDescription" error={errors.otherDescription?.message} name="otherDescription" />
+                        <CheckBox onKeyDown={handleEnterKeyPress}  register={register} label="otherDescription" error={errors.otherDescription?.message} name="otherDescription" />
                     </div>
                 </div>
             </div>}

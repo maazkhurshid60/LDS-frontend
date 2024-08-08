@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { loginApi } from "../../apiservices/user/userApi";
 import Button from "../../components/Buttons/Button/Button";
 import PasswordField from "../../components/InputFields/PasswordField/PasswordField"
+import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter";
 const Login = () => {
     const { register, formState: { errors ,isSubmitting}, handleSubmit } = useForm({ resolver: zodResolver(loginSchema) },)
     const dispatch=useDispatch();
@@ -57,7 +58,7 @@ const Login = () => {
             {/* FORM STARTS */}
             <form onSubmit={handleSubmit(loginFunction)} className="flex flex-col gap-4 mt-8">
          
-                    <TextField label="User Name" register={register} error={errors?.userName} name="userName"/>
+                    <TextField onKeyDown={handleEnterKeyPress} label="User Name" register={register} error={errors?.userName} name="userName"/>
              
          
                     <PasswordField label="Password" register={register} error={errors?.password} name="password"/>

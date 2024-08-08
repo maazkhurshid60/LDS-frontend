@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addServiceFormThunk, getAllServiceFormThunk, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
 import Hints from "../../../Result/Hints/Hints";
 import Button from "../../../../components/Buttons/Button/Button";
+import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
 export type FormFields = z.infer<typeof standardFormSchema>
 const StandardForm = () => {
     const userOptions = [{ value: "ZainCalzoni", label: "Zain Calzoni" }, { value: "cooperCulhane", label: "Cooper Culhane" }]
@@ -124,6 +125,7 @@ const StandardForm = () => {
                         {standardServiceTypesData?.map((data, index) => {
                             return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
                                 <CheckBox
+                                onKeyDown={handleEnterKeyPress} 
                                     register={register}
                                     name={data?.name}
                                     label={data.name}
@@ -139,16 +141,16 @@ const StandardForm = () => {
                 <div className="mt-6"><h1 className="font-semibold text-xl mb-4 ">Standard Service Detail</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.court} name="court" label="court" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.court} name="court" label="court" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.defendants} name="defendants" label="defendants" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.defendants} name="defendants" label="defendants" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.plaintiff} name="plaintiff" label="plaintiff" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.plaintiff} name="plaintiff" label="plaintiff" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.country} name="country" label="country" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.country} name="country" label="country" />
                         </div>
                     </div>
                 </div>
@@ -157,22 +159,22 @@ const StandardForm = () => {
                 <div className="mt-6"><h1 className="font-semibold text-xl mb-4 ">Serve To</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.firstName} name="firstName" label="first name" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.firstName} name="firstName" label="first name" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.address} name="address" label="address" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.address} name="address" label="address" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.city} name="city" label="city" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.city} name="city" label="city" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.state} name="state" label="state" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.state} name="state" label="state" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.apt} name="apt" label="Apt#/Desc" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.apt} name="apt" label="Apt#/Desc" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField register={register} error={errors.zip} name="zip" label="zip" />
+                            <TextField onKeyDown={handleEnterKeyPress}  register={register} error={errors.zip} name="zip" label="zip" />
                         </div>
                     </div>
                 </div>

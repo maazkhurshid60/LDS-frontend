@@ -8,6 +8,7 @@ import Button from "../../../../components/Buttons/Button/Button"
 
 import { z } from "zod";
 import CustomCheckBox from "../../../../components/CheckBox/CustomCheckBox";
+import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
 export type FormFields = z.infer<typeof serviceSchema>
 const Service = () => {
     const { register, formState: { errors }, handleSubmit, control } = useForm<FormFields>({ resolver: zodResolver(serviceSchema) })
@@ -19,8 +20,8 @@ const Service = () => {
         console.log(data)
     }
     return <form className="flex flex-col items-start gap-y-3 overflow-y-auto h-[76vh]">
-        <TextField register={register} label="Date entered" error={errors.dateEntered} name="dateEntered" type="date" />
-        <TextField register={register} label="Index No" error={errors.indexNo} name="indexNo" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Date entered" error={errors.dateEntered} name="dateEntered" type="date" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index No" error={errors.indexNo} name="indexNo" />
         <Controller name="clientOptions" control={control} render={({ field }) => (
             <Dropdown
                 options={clientOptions}
@@ -37,66 +38,66 @@ const Service = () => {
                 label="Service Type" error={errors.serviceTypeOptions?.message as string}
             />
         )} />
-        <TextField register={register} label="Case" error={errors.case} name="case" />
-        <TextField register={register} label="full Name" error={errors.fullName} name="fullName" />
-        <TextField register={register} label="bussiness " error={errors.bussiness} name="bussiness" />
-        <TextField register={register} label="address " error={errors.address} name="address" />
-        <TextField register={register} label="apt " error={errors.apt} name="apt" />
-        <TextField register={register} label="city " error={errors.city} name="city" />
-        <TextField register={register} label="zip " error={errors.zip} name="zip" />
-        <TextField register={register} label="commercial Description " error={errors.commercialDescription} name="commercialDescription" />
-        <TextField register={register} label="Other L&T Description " error={errors.otherDescription} name="otherDescription" />
-        <CustomCheckBox
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Case" error={errors.case} name="case" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.fullName} name="fullName" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="bussiness " error={errors.bussiness} name="bussiness" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="address " error={errors.address} name="address" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt " error={errors.apt} name="apt" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="city " error={errors.city} name="city" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip " error={errors.zip} name="zip" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="commercial Description " error={errors.commercialDescription} name="commercialDescription" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other L&T Description " error={errors.otherDescription} name="otherDescription" />
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress} 
           name="addressNotEntered"
           register={register}
           label="address Not Entered"
           error={errors.addressNotEntered?.message}
         />
-             <CustomCheckBox name="gpsCodeNotGenerated"
+             <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="gpsCodeNotGenerated"
             register={register}
             label="gps Code Not Generated"
             error={errors.gpsCodeNotGenerated?.message} />
-       <CustomCheckBox name="gpsCodeGenerated"
+       <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="gpsCodeGenerated"
             register={register}
             label="gps Code Generated"
             error={errors.gpsCodeGenerated?.message} />
-        <CustomCheckBox name="serviceTypeLT"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="serviceTypeLT"
             register={register}
             label="Select/Clear L&T Service Types"
             error={errors.serviceTypeLT?.message} />
-        <CustomCheckBox name="day3Notice"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="day3Notice"
             register={register}
             label="3 Day Notice"
             error={errors.day3Notice?.message} />
-        <CustomCheckBox name="day5Notice"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="day5Notice"
             register={register}
             label="5 Day Notice"
             error={errors.day5Notice?.message} />
-        <CustomCheckBox name="day10Notice"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="day10Notice"
             register={register}
             label="10 Day Notice"
             error={errors.day10Notice?.message} />
-        <CustomCheckBox name="day15Notice"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="day15Notice"
             register={register}
             label="15 Day Notice"
             error={errors.day15Notice?.message} />
-        <CustomCheckBox name="day3Notice30DayDeptor"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="day3Notice30DayDeptor"
             register={register}
             label="3 Day Notice & 30 Day Deptor"
             error={errors.day3Notice30DayDeptor?.message} />
-        <CustomCheckBox name="day30Termination"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="day30Termination"
             register={register}
             label="30 Day Notice of Termination"
             error={errors.day30Termination?.message} />
-        <CustomCheckBox name="noticePetition"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="noticePetition"
             register={register}
             label="Notice of Petition & Petition"
             error={errors.noticePetition?.message} />
-        <CustomCheckBox name="noticePetitionHoldOver"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="noticePetitionHoldOver"
             register={register}
             label="Notice of Petition & Petition Holdover"
             error={errors.noticePetitionHoldOver?.message} />
-        <CustomCheckBox name="otherLT"
+        <CustomCheckBox   onKeyDown={handleEnterKeyPress}  name="otherLT"
             register={register}
             label="Other L&T"
             error={errors.otherLT?.message} /> 

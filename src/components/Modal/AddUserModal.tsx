@@ -14,6 +14,7 @@ import { z } from "zod";
 import { registerUserApi } from "../../apiservices/user/userApi";
 import { toast } from "react-toastify";
 import { showSpinnerReducer } from "../../redux/slice/spinner";
+import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter";
 export type FormFields = z.infer<typeof userInputSectionSchema>
 
 const AddUserModal = () => {
@@ -66,13 +67,13 @@ const AddUserModal = () => {
     // MODALFOOTER STARTS
     const body = <form className="flex  gap-4 mb-4  items-center justify-start gap-x-8 gap-y-4 flex-wrap">
         <div className="w-full md:w-[38%] xl:w-[30%] ">
-            <TextField label="email" register={register} name="email" error={errors?.email} required/></div>
+            <TextField onKeyDown={handleEnterKeyPress}  label="email" register={register} name="email" error={errors?.email} required/></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="user name" register={register} name="userName" error={errors?.userName} required/></div>
+            <TextField onKeyDown={handleEnterKeyPress}  label="user name" register={register} name="userName" error={errors?.userName} required/></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="first name" register={register} name="firstName" error={errors?.firstName} /></div>
+            <TextField onKeyDown={handleEnterKeyPress}  label="first name" register={register} name="firstName" error={errors?.firstName} /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="last name" register={register} name="lastName" error={errors?.lastName} /></div>
+            <TextField onKeyDown={handleEnterKeyPress}  label="last name" register={register} name="lastName" error={errors?.lastName} /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <PasswordField label="password" register={register} name="password" error={errors?.password} required
             /></div>

@@ -35,6 +35,7 @@ interface CheckBoxProps<TFieldValues extends FieldValues> {
   checked: boolean;
   onChange: () => void;
   error?: string;
+  onKeyDown?:any
 }
 
 const CustomCheckBox = <TFieldValues extends FieldValues>({
@@ -44,6 +45,7 @@ const CustomCheckBox = <TFieldValues extends FieldValues>({
   checked,
   onChange,
   error,
+  onKeyDown
 }: CheckBoxProps<TFieldValues>) => {
   return (
     <div>
@@ -53,6 +55,7 @@ const CustomCheckBox = <TFieldValues extends FieldValues>({
         {...register(name)}
         checked={checked}
         onChange={onChange}
+        onKeyDown={onKeyDown} 
       />
       <label
         htmlFor={name}

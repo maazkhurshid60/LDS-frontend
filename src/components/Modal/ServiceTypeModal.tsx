@@ -11,16 +11,17 @@ import { addServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTypeA
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
 import { toast } from "react-toastify"
 import { showSpinnerReducer } from "../../redux/slice/spinner"
+import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter"
 const ServiceTypeModal = () => {
     const disptach = useDispatch()
     const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm({resolver:zodResolver(serviceTypeSchema)})
     const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-types")
 
     const modalBody = <form className="mb-6">
-        <TextField label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required/>
+        <TextField onKeyDown={handleEnterKeyPress}  label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required/>
 <div className="mt-4" >
 
-        <TextArea label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
+        <TextArea required label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
 </div>
     </form>
     const addServiceResultFunction = async(data) => {

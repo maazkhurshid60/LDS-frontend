@@ -81,12 +81,12 @@ useEffect(()=>{
                 <div className="">
                     <OutletLayoutHeader heading="Servers">
                         {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
-                        <BorderButton buttonText="filter" disabled />
+                        {/* <BorderButton buttonText="filter" disabled /> */}
                     </OutletLayoutHeader>
                     <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
                 <Searchbar value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
-                <Filter />
+                {/* <Filter /> */}
                     </div>
                     {/* <div className={`${widthSmall ? "w-[1310px]" : "w-[1150px]"}`} > */}
                         <Table headers={headers} tableData={ searchValue?.length > 0 ? searchedData :currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction} />

@@ -99,11 +99,11 @@ const ServiceType = () => {
                                     onClick={() => dispatch(showModalReducer(true))}
                                 />
                             )}
-                            <BorderButton buttonText="Filter" disabled />
+                            {/* <BorderButton buttonText="Filter" disabled /> */}
                         </OutletLayoutHeader>
                         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
                             <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                            <Filter />
+                            {/* <Filter /> */}
                         </div>
                         <Table
                             headers={headers}

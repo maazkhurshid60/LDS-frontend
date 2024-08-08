@@ -11,6 +11,7 @@ import { addMailAddress, createMailingAddressThunk, deleteMailingAddressThunk, g
 import { RootState } from "../../../../redux/store";
 import { toast } from "react-toastify";
 import BorderButton from "../../../../components/Buttons/BorderButton/BorderButton";
+import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
 
 export interface AddMailingProps {
     data?: any
@@ -82,31 +83,31 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
         <form className="flex flex-col items-end">
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
+                    <TextField onKeyDown={handleEnterKeyPress} 
                         register={register} label="full Name" error={errors.firstName} name="firstName" />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
+                    <TextField onKeyDown={handleEnterKeyPress} 
                         register={register} label="address" error={errors.address} name="address" />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
+                    <TextField onKeyDown={handleEnterKeyPress} 
                         register={register} label="city" error={errors.city} name="city" />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
+                    <TextField onKeyDown={handleEnterKeyPress} 
                         register={register} label="state" error={errors.state} name="state" />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
+                    <TextField onKeyDown={handleEnterKeyPress} 
                         register={register} label="apt" error={errors.apt} name="apt" />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField
+                    <TextField onKeyDown={handleEnterKeyPress} 
                         register={register} label="zip" error={errors.zip} name="zip" />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <CheckBox
+                    <CheckBox onKeyDown={handleEnterKeyPress} 
                         register={register} label="RRR" error={errors.rRR?.message} name="rRR" />
                 </div>
             </div>

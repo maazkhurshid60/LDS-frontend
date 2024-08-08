@@ -81,12 +81,12 @@ const Devices = () => {
                 
                 <OutletLayoutHeader heading="Devices">
                     {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
-                    <BorderButton buttonText="filter" disabled />
+                    {/* <BorderButton buttonText="filter" disabled /> */}
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
                     <Searchbar value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} />
-                    <Filter />
+                    {/* <Filter /> */}
                 </div>
                 <Table headers={headers} tableData={searchValue?.length > 0 ? searchedData : currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction} />
                 {searchValue?.length === 0 && <Pagination

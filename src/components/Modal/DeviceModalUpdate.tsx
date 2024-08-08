@@ -17,6 +17,7 @@ import { deviceSchema } from "../../schemas/DeviceSchema"
 import { deviceType } from "../../type/deviceType/deviceType"
 import { updateDeviceApi } from "../../apiservices/deviceApi/deviceApi"
 import { showSpinnerReducer } from "../../redux/slice/spinner"
+import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter"
 type Props = {
     singledata: deviceType | undefined; // Define props type here
 };
@@ -27,16 +28,16 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(deviceSchema) })
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-8 flex-wrap mb-8 overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="device code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Device Code" required/>
+            <TextField onKeyDown={handleEnterKeyPress}  label="device code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Device Code" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="device Name" register={register} error={errors.deviceName} name="deviceName" placeholder="Enter Device Name" required/>
+            <TextField onKeyDown={handleEnterKeyPress}  label="device Name" register={register} error={errors.deviceName} name="deviceName" placeholder="Enter Device Name" required/>
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField label="product Type" register={register} error={errors.productType} name="productType" placeholder="Enter Product Type" />
+            <TextField onKeyDown={handleEnterKeyPress}  label="product Type" register={register} error={errors.productType} name="productType" placeholder="Enter Product Type" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <CheckBox label="Active" register={register} error={errors.isActive?.message} name="isActive" />
+            <CheckBox  onKeyDown={handleEnterKeyPress} label="Active" register={register} error={errors.isActive?.message} name="isActive" />
         </div>
     </form>
     const updateDeviceFunction = async (data) => {

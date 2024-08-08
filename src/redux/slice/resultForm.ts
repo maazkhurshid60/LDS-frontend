@@ -13,6 +13,8 @@ const initialState = {
     status: "idle",
     resultFormIndex: 0,
     isNewResultFormAdd: false,
+    isSearchResultForm: false,
+
 }
 
 const resultForm = createSlice({
@@ -21,6 +23,9 @@ const resultForm = createSlice({
     reducers: {
         addNewResultFormAddReducer: ((state, action) => {
             state.isNewResultFormAdd = action.payload
+        }),
+        searchResultFormAddReducer: ((state, action) => {
+            state.isSearchResultForm = action.payload
         }),
         getNextResultFormReducer: ((state) => {
             console.log(state.resultFormIndex)
@@ -88,7 +93,7 @@ const resultForm = createSlice({
             })
     }
 })
-export const { addNewResultFormAddReducer, getNextResultFormReducer, getPreviousResultFormReducer, getFirstResultFormReducer, getLastResultFormReducer } = resultForm.actions
+export const { addNewResultFormAddReducer, getNextResultFormReducer, getPreviousResultFormReducer, getFirstResultFormReducer, getLastResultFormReducer,searchResultFormAddReducer } = resultForm.actions
 export default resultForm.reducer
 
 // ASYNC STARTS
