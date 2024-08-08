@@ -63,8 +63,8 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative 	`}>
-        <div className="mr-4 h-[65vh] md:h-[80vh] flex flex-col justify-between">
+    return <div className={`mt-8 w-[100%]  m-auto  font-semibold relative 	`}>
+        <div className="mr-4 flex flex-col justify-between">
             <div  ref={dropdownRef}>
                 {linkData.map((data, id) => (
                     <div key={id} className="text-sm mb-2 relative" >
@@ -115,7 +115,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         </div>
                     </div>
                 ))}</div>
-            <div className={`flex items-center text-sm mt-4 ml-2 mr-2 cursor-pointer  ${widthSmall&&"justify-center"}`} onClick={logoutFunction}>
+            <div className={`flex items-center text-sm mt-4 ml-2 mr-2 cursor-pointer bg-whiteColor ${widthSmall&&"justify-center"}`} onClick={logoutFunction}>
                 <RiLogoutBoxRLine className="text-redColor mr-1" size={22} />
                 <p className={`text-sm ml-1 capitalize   ${widthSmall ? "hidden" : "inline-block"}`}>Logout</p>
             </div>

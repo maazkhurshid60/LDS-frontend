@@ -19,9 +19,9 @@ const Sidebar = () => {
     return <>
 
 <div
-      className={`w-full sticky top-0 
+      className={`w-full sticky top-0  
         md:inline-block transition-all duration-300 
-        py-4 border-r-[1px] border-r-borderColor h-auto    
+        py-4 border-r-[1px] border-r-borderColor     
         ${widthSmall ? "pl-[14px]" : "pl-6"}`}
     >
             {/* BACK ICON USED TO REDUCE WIDTH OF SIDEBAR STARTS */}

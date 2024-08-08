@@ -136,7 +136,7 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
 // UPDATE SERVICE FORM
 export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", async (data: any, { dispatch }) => {
     console.log("sending data to update api", data)
-
+    dispatch(showSpinnerReducer(true))
     try {
         // console.log(data)
         const response = await axios.patch(`${baseUrl}/service-form/update`, data, {
@@ -152,11 +152,15 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
     } catch (error) {
         console.log(">>>>>", error)
         toast.error("Something went wrong. Try Later")
+    } finally {
+        dispatch(showSpinnerReducer(false))
+
     }
 })
 // ADD SERVICE FORM
 export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (data: any, { dispatch }) => {
     console.log(data)
+    dispatch(showSpinnerReducer(true))
 
     try {
         // console.log(data)
@@ -173,6 +177,10 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
     } catch (error) {
         console.log(error)
         toast.error(`${error?.response?.data?.message}`)
+    } finally {
+        dispatch(showSpinnerReducer(false))
+
+
     }
 })
 

@@ -34,12 +34,12 @@ const resultForm = createSlice({
             }
         }),
         getFirstResultFormReducer: ((state) => {
-            
-                state.resultFormIndex=0
-            
+
+            state.resultFormIndex = 0
+
         }),
-        getLastResultFormReducer:(state=>{
-            state.resultFormIndex=state.allResultFormData?.length-1
+        getLastResultFormReducer: (state => {
+            state.resultFormIndex = state.allResultFormData?.length - 1
         })
     },
     extraReducers: (builder) => {
@@ -79,16 +79,16 @@ const resultForm = createSlice({
             addCase(deleteResultFormThunk.pending, state => {
                 state.status = "loading"
             }).
-            addCase(deleteResultFormThunk.fulfilled, (state,action) => {
+            addCase(deleteResultFormThunk.fulfilled, (state, action) => {
                 state.status = "success"
-                state.allResultFormData=action.payload
+                state.allResultFormData = action.payload
             }).
             addCase(deleteResultFormThunk.rejected, state => {
                 state.status = "failed"
             })
     }
 })
-export const { addNewResultFormAddReducer ,getNextResultFormReducer,getPreviousResultFormReducer,getFirstResultFormReducer,getLastResultFormReducer} = resultForm.actions
+export const { addNewResultFormAddReducer, getNextResultFormReducer, getPreviousResultFormReducer, getFirstResultFormReducer, getLastResultFormReducer } = resultForm.actions
 export default resultForm.reducer
 
 // ASYNC STARTS
@@ -109,6 +109,8 @@ export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async 
 // GET ALL RESULT FORM ENDS
 // ADD RESULT FORM STARTS
 export const addResultFormThunk = createAsyncThunk("addResultForm", async (data: resultFormType, { dispatch }) => {
+dispatch(showSpinnerReducer(true))
+
     try {
         const response = await axios.post(`${baseUrl}/result-form/create`, data, {
             headers: {
@@ -119,11 +121,16 @@ export const addResultFormThunk = createAsyncThunk("addResultForm", async (data:
         dispatch(getAllResultFormThunk())
     } catch (error) {
         alert(`${error?.response?.data?.message}`)
+    }finally{
+dispatch(showSpinnerReducer(false))
+
     }
 })
 // ADD RESULT FORM ENDS
 // UPDATE RESULT FORM STARTS
 export const updateResultFormThunk = createAsyncThunk("updateResultForm", async (data: resultFormType, { dispatch }) => {
+    dispatch(showSpinnerReducer(true))
+
     try {
         const response = await axios.patch(`${baseUrl}/result-form/update`, data, {
             headers: {
@@ -134,7 +141,9 @@ export const updateResultFormThunk = createAsyncThunk("updateResultForm", async 
         dispatch(getAllResultFormThunk())
     } catch (error) {
         toast.error(`${error?.response?.data?.message}`)
-    }
+    } finally { }
+    dispatch(showSpinnerReducer(false))
+
 })
 // UPDATE RESULT FORM ENDS
 // DELETE RESULT FORM STARTS
@@ -156,9 +165,9 @@ export const deleteResultFormThunk = createAsyncThunk("deleteResultForm", async 
 
     } catch (error) {
         toast.error(`${error?.response?.data?.message}`)
-    }finally{
-    dispatch(showSpinnerReducer(false))
-        
+    } finally {
+        dispatch(showSpinnerReducer(false))
+
     }
 })
 // DELETE RESULT FORM ENDS
