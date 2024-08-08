@@ -63,7 +63,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative`}>
+    return <div className={`mt-8 w-[100%] h-full m-auto  font-semibold relative 	`}>
         <div className="mr-4 h-[65vh] md:h-[80vh] flex flex-col justify-between">
             <div  ref={dropdownRef}>
                 {linkData.map((data, id) => (
@@ -73,7 +73,6 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                             onClick={() => { toggleOpenFunction(data.name), setSubMenuShow(true),navigate(`${data?.to}`) }}
                             className={`cursor-pointer flex gap-2 items-center     px-2 py-2  transition-all duration-300 
                                 ${widthSmall?"justify-center":"justify-between"}
-                                
                                 ${data.name === activeLink ? "bg-grayColorLight rounded-lg" : ""
                                 } ${(data?.name === "users" || data?.name === "roles")  && userData !=="Admin" ? "hidden" : "inline-block"}`}
                         >

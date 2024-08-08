@@ -50,7 +50,7 @@ const User = () => {
  
   return <>
   {showModal? <AddUserModal/>:<OutletLayout>
-      <div className="h-[76vh] overflow-y-scroll">
+      <div className="">
         <OutletLayoutHeader heading="User">
           <div className="w-full flex flex-wrap items-center gap-2">
             {isAdmin && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />}

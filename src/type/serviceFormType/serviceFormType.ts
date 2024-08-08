@@ -1,6 +1,7 @@
 import { maillingType } from "../maillingAddressType/maillingAddressType"
 
 export interface serviceFormType{
+    _id?:string
     jobNo?:number
     name?:string
     isActive?:boolean

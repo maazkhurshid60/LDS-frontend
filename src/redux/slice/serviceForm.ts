@@ -4,10 +4,11 @@ import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
 import { toast } from "react-toastify";
 import { showModalReducer } from "./showModal";
 import { showSpinnerReducer } from "./spinner";
+import { serviceFormType } from "../../type/serviceFormType/serviceFormType";
 const accessToken = localStorage.getItem("accessToken");
 
 const initialState = {
-    allServiceFormData: [],
+    allServiceFormData: [] as serviceFormType[],
     isNewFormAdd: false,
     isDataSaved: false,
     savedLTFormData: null,

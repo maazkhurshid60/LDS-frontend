@@ -48,7 +48,7 @@ interface Table2ColProps {
     headers: string[];
     tableData: Record<string, any>[]; // Assuming all rows have similar structure
     onClick?: (rowIndex: string) => void;
-    getRowData?: (rowIndex: number) => void;
+    getRowData?: any;
     onUpdateClick?: (rowIndex: string) => void;
 }
 

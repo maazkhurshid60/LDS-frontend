@@ -8,7 +8,7 @@ import { deleteServiceFormThunk } from "../../redux/slice/serviceForm";
 export type FormFields = z.infer<typeof userInputSectionSchema>
 
 export interface DeleteServiceFormModalProps {
-    id: string
+    id: any
 }
 const DeleteServiceFormModal: React.FC<DeleteServiceFormModalProps> = ({ id }) => {
     const dispatch = useDispatch()

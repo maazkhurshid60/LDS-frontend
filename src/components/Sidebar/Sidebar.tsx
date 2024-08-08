@@ -18,11 +18,12 @@ const Sidebar = () => {
 
     return <>
 
-        <div className={`w-full 
-        md:inline-block 
-     transition-all duration-300 bg-whiteColor py-4 border-r-[1px] border-r-borderColor h-auto relative 
-    ${widthSmall? "pl-[14px]":" pl-6"}
-     `}>
+<div
+      className={`w-full sticky top-0 
+        md:inline-block transition-all duration-300 
+        py-4 border-r-[1px] border-r-borderColor h-auto    
+        ${widthSmall ? "pl-[14px]" : "pl-6"}`}
+    >
             {/* BACK ICON USED TO REDUCE WIDTH OF SIDEBAR STARTS */}
             <div className={`hidden 
         md:flex md:items-center md:justify-center
@@ -32,7 +33,7 @@ const Sidebar = () => {
             </div>
             {/* BACK ICON USED TO REDUCE WIDTH OF SIDEBAR ENDS */}
             {/* USER DETAILS STARTS */}
-            <div className="flex items-center w-full">
+            <div className="flex items-center w-full ">
                 <img src="/images/pic.jpg" alt="user img" className="rounded-full 
                 w-[60px]
             md:w-[30px]
@@ -41,7 +42,7 @@ const Sidebar = () => {
                 {!widthSmall && <div className="ml-2
            xl:ml-4">
                     <h1 className="uppercase  text-grayColor font-medium tracking-wide 
-                    text-xs
+                    text-xs 
                                 md:text-[8px]
                                 lg:text-[10px]
                                 xl:text-xs">{userData?.userDetails?.user?.roles[0]?.name}</h1>  {/* ADMIN is user role will come from api currently its hardcoded */}

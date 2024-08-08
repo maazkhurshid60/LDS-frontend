@@ -98,7 +98,7 @@ const LegalDelivery = () => {
     const lastIndexItem = dataLimit * currentPage;
     const firstIndexItem = lastIndexItem - dataLimit;
     const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
-    return <div className="h-[72vh] w-[95%] m-auto">
+    return <div className="w-[95%] m-auto">
         {/* <GPSReport/> */}
         <div className="relative bg-whiteColor ">
             {/* <div className={`absolute -top-4 sm:-top-6 md:-top-24  flex items-start transition-all duration-500 z-50  ${showFilterMenu ? "-right-5 xl:-right-[52px]" : "-right-5 xl:-right-[52px]"}`} > */}

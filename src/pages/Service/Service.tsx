@@ -45,7 +45,7 @@ const Service = () => {
         const activeSectionString = localStorage.getItem("serviceFormActiveSection")
         // if (activeSectionNo !== null && typeof activeSectionNo === 'number') {
         //     console.log("active section<><><><><>",activeSectionNo)
-        const activeSectionNumber = parseInt(activeSectionString)
+        const activeSectionNumber =activeSectionString && parseInt(activeSectionString)
         setActiveAction(activeSectionString);
         // }
     }
@@ -55,7 +55,7 @@ const Service = () => {
 
 
 
-    return <> {showModal ? <DeleteServiceFormModal id={allServiceFormData[serviceFormIndex]?._id} /> : <div className=" h-[80vh] overflow-y-scroll bg-whiteColor p-4  overflow-hidden sm:p-8 w-[95%] m-auto border-[1px] border-borderColor border-solid rounded-xl shadow-smShadow ">
+    return <> {showModal ? <DeleteServiceFormModal id={allServiceFormData[serviceFormIndex]?._id} /> : <div className="bg-whiteColor p-4  overflow-hidden sm:p-8 w-[95%] m-auto border-[1px] border-borderColor border-solid rounded-xl shadow-smShadow ">
         <OutletLayoutHeader heading="Service Form">
             {isNewFormAdding ?
                 <>
