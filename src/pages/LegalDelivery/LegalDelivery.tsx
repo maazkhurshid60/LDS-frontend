@@ -12,6 +12,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getSingleLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
+import TableWithoutAction from "../../components/Tables/TableWithoutAction";
 const LegalDelivery = () => {
     const [showFilterMenu, setShowFilterMenu] = useState(false)
     const [showDropDown, setShowDropDown] = useState(false)
@@ -118,9 +119,9 @@ const LegalDelivery = () => {
             <div className="mt-4 flex flex-col  gap-4
             sm:flex-row sm:items-center">
                 <Searchbar />
-                <Filter />
+                <Filter onClick={() => setShowFilterMenu(!showFilterMenu)} />
             </div>
-            <div className="flex flex-wrap items-center gap-x-8 justify-between font-medium text-sm mt-4 capitalize">
+            <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                 <div ref={dropdownRef}>
                     <div className="flex flex-row items-center gap-x-1">
 
@@ -144,14 +145,15 @@ const LegalDelivery = () => {
                         </div>
                     }
                 </div>
-                <p className="cursor-pointer">clear filter</p>
                 <p className="cursor-pointer">GPS Report</p>
-                <p className="cursor-pointer">Column Layout</p>
+                <p className="cursor-pointer">clear filter</p>
+                {/* <p className="cursor-pointer">Column Layout</p>
                 <p className="cursor-pointer">Enable Actions</p>
                 <p className="cursor-pointer">Generate Geo Code</p>
-                <p className="cursor-pointer">Sort Records</p>
+                <p className="cursor-pointer">Sort Records</p> */}
             </div>
-            <Table headers={headers} tableData={currentTableData} getRowData={getUserIdFunction} />
+            {/* <Table headers={headers} tableData={currentTableData} getRowData={getUserIdFunction} /> */}
+            <TableWithoutAction headers={headers} tableData={currentTableData} getRowData={getUserIdFunction}/>
             <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}

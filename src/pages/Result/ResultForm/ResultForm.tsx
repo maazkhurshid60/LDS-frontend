@@ -98,7 +98,7 @@ const ResultForm = () => {
     // USE EFFECT WILL BE CALLED ON PRESSING F10 KEY
     useEffect(() => {
         const handleKeyDown = (event) => {
-            if (event.key === 'F10') {
+            if (event.key === 'F10' || event.key === 'Escape') {
                 event.preventDefault();
                 handleSubmit(submitResultFormFunction)();
             }
@@ -177,7 +177,7 @@ console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor",allResul
     }, [dateOfService, setValue]);
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC ENDS 
     const handleEnterKeyPress = (event) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' ) {
             event.preventDefault(); // Prevent the form from submitting
             const formElements = Array.from(event.target.form.elements);
             const index = formElements.indexOf(event.target);

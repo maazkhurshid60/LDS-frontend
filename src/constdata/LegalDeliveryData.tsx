@@ -7,4 +7,4 @@ export const tableData = {   totalDocs: 5, tableData: [
 
 
 ]}
-export const headers = [ "Job No", "Client", "Input Date", "Server", "Full Name","City","Action"];
+export const headers = [ "Job No", "Client", "Input Date", "Server", "Full Name","City"];
