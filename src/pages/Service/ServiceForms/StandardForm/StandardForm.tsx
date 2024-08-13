@@ -155,7 +155,7 @@ const StandardForm = () => {
                         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other Standard Description" error={errors.oSSTDescription} name="oSSTDescription" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" />
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" required/>
                     </div>
                 </div>
                 {/* OTHER STANDARD SERVICE TYPE ENDS */}
