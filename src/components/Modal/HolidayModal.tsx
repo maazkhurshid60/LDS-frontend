@@ -35,9 +35,15 @@ const HolidayModal = () => {
     const addHolidayFunction =async (data) => {
         const holidayYear=parseInt(data?.holidayYear)
         const postHolidayData={...data,holidayYear}
-        console.log(JSON.stringify(postHolidayData?.holidayYear)===postHolidayData?.holidayDate.slice(0,4))
-        if(JSON.stringify(postHolidayData?.holidayYear)>postHolidayData?.holidayDate.slice(0,4)){return alert(" Holiday Date's Year should be Smaller than Holiday Year ")}
-        // disptach(showModalReducer(false))
+        console.log(JSON.stringify(postHolidayData?.holidayYear),postHolidayData?.holidayDate.slice(0,4))
+        console.log("JSON.stringify(postHolidayData?.holidayYear)>postHolidayData?.holidayDate.slice(0,4)",JSON.stringify(postHolidayData?.holidayYear)>postHolidayData?.holidayDate.slice(0,4))
+        console.log("JSON.stringify(postHolidayData?.holidayYear)<postHolidayData?.holidayDate.slice(0,4)",JSON.stringify(postHolidayData?.holidayYear)<postHolidayData?.holidayDate.slice(0,4))
+
+
+        if (JSON.stringify(postHolidayData?.holidayYear)<postHolidayData?.holidayDate.slice(0,4)) {
+            return alert("Holiday Date's Year should be smaller than Holiday Year");
+          }
+        //           // disptach(showModalReducer(false))
 
         disptach(showSpinnerReducer(true))
         try {

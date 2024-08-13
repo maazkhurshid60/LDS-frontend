@@ -32,7 +32,7 @@ export const standardFormSchema = z.object({
     // otherStandardDescription: z.string().min(1, { message: "Standard Description is required" }),
     // STANDARD SERVICE TYPE VALIDATION ENDS
     // STANDARD SERVICE DETAIL VALIDATION STARTS
-    oSSTIndexNo:z.string().optional(),
+    oSSTIndexNo:z.string().regex(/^\d+$/, { message: "case no must be number" }),
     oSSTDescription:z.string().optional(),
     sSDCourt:z.string().optional(),
         sSDDefendants:z.string().optional(),

@@ -57,7 +57,7 @@ export const LTFormSchema = z.object({
     clientId: z.string().min(1, "Please select client."),
     serviceType: z.string().min(1, "Please select service type."),
     caption: z.string().optional(),
-    lTServiceType: z.boolean().optional(),
+    lTServiceType: z.string().optional(),
     lTSFirstName: z.string().optional(),
     lTSBusinessName: z.string().optional(),
     lTSAddress: z.string().optional(),

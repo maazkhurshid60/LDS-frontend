@@ -55,7 +55,7 @@ const StandardTypeForm = () => {
     const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === savedLTData?.clientId && { value: data?._id, label: data?.fullName })
     const getExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
 
-    // console.log("clientIdOptions", getExistingSelectedClientoption?.label)
+    console.log("clientIdOptions", checkedName)
     const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === savedLTData?.serviceType && { value: data?._id, label: data?.fullName })
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
@@ -71,13 +71,16 @@ const [serviceType,setServiceType]=useState()
     const handleMoveToStandardForm=(value)=>{
         // console.log("servicetype<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", serviceTypeOptions?.find(data=>data?.value===value)?.label)
        const  {clientId,inputDate,caseNo}= getValues(); 
-       if (!inputDate || !caseNo ||!clientId) {
+    
+       if (!inputDate || !caseNo ||!clientId ||!checkedName) {
         // Show error message if either field is empty
         setValue("serviceType", "");
-        toast.error("Input Date and Case No are required!");
+        toast.error("Input Date,case No ,clientI d and  lTServiceType are required!");
         return;
     }
-    if(value==="Standard"){ const data=serviceTypeOptions?.find(data=>data?.value===value)?.label
+    const data=serviceTypeOptions?.find(data=>data?.value===value)?.label
+    if(data === "Standard"){ 
+        toast.success("sd")
         handleSubmit(StandardTypeFormSubmitFunciton)();
         dispatch(moveToStandardFormReducer(data))}
        
@@ -185,6 +188,8 @@ const [serviceType,setServiceType]=useState()
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
             setValue("inputDate", savedLTData?.inputDate);
+            setValue("oLTIndexNo", JSON.stringify(savedLTData?.oLTIndexNo));
+
             setValue("caseNo", savedLTData?.caseNo);
             setValue("caption", savedLTData?.caption);
             setValue("lTSFirstName", savedLTData?.lTSFirstName);
@@ -246,6 +251,7 @@ const [serviceType,setServiceType]=useState()
     };
 
     const StandardTypeFormSubmitFunciton = (data) => {
+        if(checkedName===null)setCheckedName("empty")
         console.log(">>>>>>>>>>>>>>saving StandardTypeFormSubmitFunciton>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",data)        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
@@ -395,6 +401,7 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                             </div>
                         })}
                     </div>
+                    {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
                 </div>
                 {/* L&T SERVICE TYPE ENDS */}
                 {/* OTHER L&T SERVICE TYPE STARTS */}

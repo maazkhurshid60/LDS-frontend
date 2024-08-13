@@ -51,6 +51,8 @@ console.log("mv to standard form",moveToStandardForm)
             const userConfirmed = window.confirm("You have unsaved changes. If you leave now, your data will be lost. Are you sure you want to continue?");
             if (userConfirmed) {
                 setActiveAction(id);
+        dispatch(moveToStandardFormReducer(""))
+
                 localStorage.setItem("serviceFormActiveSection", id.toString());
             }
         } else {

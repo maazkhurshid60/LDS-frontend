@@ -35,6 +35,7 @@ const StandardForm = () => {
     };
     const StandardServiceTypeFunction = (data) => {
         console.log("standardServiceType:checkedName", checkedName)
+        if(checkedName===null)return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: parseInt(data?.oSSTIndexNo), oSSTDescription: data?.oSSTDescription,
@@ -124,7 +125,12 @@ const StandardForm = () => {
             <form className="w-full">
                 {/* STANDARD SERVICE TYPE STARTS */}
                 <div className="w-full">
-                    <h1 className="font-semibold text-xl mb-4">Standard Service Type</h1>
+                    <div className="flex items-center gap-x-2  mb-4">
+                    <h1 className="font-semibold text-xl">Standard Service Type</h1>
+                    {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
+                    </div>
+
+
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                         {standardServiceTypesData?.map((data, index) => {
                             return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
@@ -138,7 +144,9 @@ const StandardForm = () => {
                                 />
                             </div>
                         })}
+
                     </div>
+
                 </div>
                 {/* STANDARD SERVICE TYPE ENDS */}
                 {/* OTHER STANDARD SERVICE TYPE STARTS */}
