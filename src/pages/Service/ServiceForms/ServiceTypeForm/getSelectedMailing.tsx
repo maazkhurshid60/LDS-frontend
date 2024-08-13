@@ -54,7 +54,7 @@ const GetSelectedMailing: React.FC<GetSelectedMailingProp> = ({ options,
                 </span></div>
             {/* LIST OF OPTIONS STARTS */}
             {isOpen && (
-                <div className=" bg-grayColorLight w-full  h-[100px] overflow-y-autosetting bg-whiteColor border-[1px] border-borderColor rounded-md ">
+                <div className=" bg-grayColorLight w-full  h-[100px] overflow-y-auto  bg-whiteColor border-[1px] border-borderColor rounded-md ">
                     {options.map((option) => (
                         <div
                             key={option._id}

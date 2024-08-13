@@ -425,13 +425,13 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
 
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField required onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" />
+                            <TextField  onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField required onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />
+                            <TextField  onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField required onKeyDown={handleEnterKeyPress} register={register} label="address" error={errors.lTSAddress} name="lTSAddress" />
+                            <TextField  onKeyDown={handleEnterKeyPress} register={register} label="address" error={errors.lTSAddress} name="lTSAddress" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt" error={errors.lTSApt} name="lTSApt" />
@@ -454,8 +454,8 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                 {/* L&T SERVICE TYPE ENDS */}
                 {/* ADDING MAILING STARTS */}
                 <div className="mt-6  relative">
-                    <div className="flex items-start gap-x-4 ">
-                        {mailingAddressData?.length > 0 && <div className="w-[100%] md:w-[46%] mb-4 lg:w-[30%]">
+                    <div className="flex items-start gap-x-4  ">
+                        {mailingAddressData?.length > 0 && <div className="w-[100%] md:w-[46%] mb-4 lg:w-[30%] 	">
                             <Controller name="mailingAddress" control={control} render={({ field }) => (
                                 <GetSelectedMailing
                                     options={mailingAddressData}

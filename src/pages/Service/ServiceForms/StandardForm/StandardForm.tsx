@@ -92,7 +92,7 @@ const StandardForm = () => {
     // USE EFFECT TO SET VALUES OF INDEX 0 SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
         if (!isNewFormAdding) {
-            setValue("oSSTIndexNo", allServiceFormData[serviceFormIndex]?.oSSTIndexNo),
+            setValue("oSSTIndexNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.oSSTIndexNo)),
                 setValue("oSSTDescription", allServiceFormData[serviceFormIndex]?.oSSTDescription),
                 setValue("zipServe", allServiceFormData[serviceFormIndex]?.zipServe)
             setValue("aptServe", allServiceFormData[serviceFormIndex]?.aptServe)
@@ -181,10 +181,10 @@ const StandardForm = () => {
                 <div className="mt-6"><h1 className="font-semibold text-xl mb-4 ">Serve To</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.firstNameServe} name="firstNameServe" label="first name" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.firstNameServe} name="firstNameServe" label="first name"  required/>
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.addressServe} name="addressServe" label="address" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.addressServe} name="addressServe" label="address" required />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.cityServe} name="cityServe" label="city" />
