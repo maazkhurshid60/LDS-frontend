@@ -46,7 +46,7 @@ console.log("mv to standard form",moveToStandardForm)
     };
 
     const sotringActiveSectionFunction = (id: number) => {
-        if (id === 0  && !isDataSaved || moveToStandardForm !=="Standard") {
+        if (id === 0  && !isDataSaved ) {
             
             const userConfirmed = window.confirm("You have unsaved changes. If you leave now, your data will be lost. Are you sure you want to continue?");
             if (userConfirmed) {
