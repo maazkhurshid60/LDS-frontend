@@ -72,9 +72,9 @@ const LegalDelivery = () => {
             setShowDropDown(false);
         }
     };
-    const getUserIdFunction = (userId: string) => {
+    const getUserIdFunction = (userId: string,index) => {
         const selectedData = tableData?.tableData?.find((data, id) => data?._id === userId)
-        console.log(selectedData)
+        console.log(userId)
         dispatch(getSingleLegalDeliveryReducer(selectedData))
     }
     useEffect(() => {
@@ -145,7 +145,8 @@ const LegalDelivery = () => {
                         </div>
                     }
                 </div>
-                <p className="cursor-pointer">GPS Report</p>
+                <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
+
                 <p className="cursor-pointer">clear filter</p>
                 {/* <p className="cursor-pointer">Column Layout</p>
                 <p className="cursor-pointer">Enable Actions</p>

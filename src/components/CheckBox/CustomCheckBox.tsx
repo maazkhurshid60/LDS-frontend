@@ -51,6 +51,7 @@ const CustomCheckBox = <TFieldValues extends FieldValues>({
     <div>
       <input
         type="checkbox"
+      
         id={name}
         {...register(name)}
         checked={checked}

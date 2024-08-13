@@ -15,6 +15,7 @@ const initialState = {
     isNewResultFormAdd: false,
     isSearchResultForm: false,
 
+
 }
 
 const resultForm = createSlice({
@@ -125,6 +126,7 @@ dispatch(showSpinnerReducer(true))
         alert(`${response?.data?.message}`)
         dispatch(getAllResultFormThunk())
     } catch (error) {
+        console.log(error)
         alert(`${error?.response?.data?.message}`)
     }finally{
 dispatch(showSpinnerReducer(false))
@@ -135,7 +137,7 @@ dispatch(showSpinnerReducer(false))
 // UPDATE RESULT FORM STARTS
 export const updateResultFormThunk = createAsyncThunk("updateResultForm", async (data: resultFormType, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
-
+console.log("sending updating data",data)
     try {
         const response = await axios.patch(`${baseUrl}/result-form/update`, data, {
             headers: {

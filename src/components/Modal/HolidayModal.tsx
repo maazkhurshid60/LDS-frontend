@@ -36,7 +36,7 @@ const HolidayModal = () => {
         const holidayYear=parseInt(data?.holidayYear)
         const postHolidayData={...data,holidayYear}
         console.log(JSON.stringify(postHolidayData?.holidayYear)===postHolidayData?.holidayDate.slice(0,4))
-        if(JSON.stringify(postHolidayData?.holidayYear)!==postHolidayData?.holidayDate.slice(0,4)){return alert("Holiday Year and Holiday Date's Year should be Same")}
+        if(JSON.stringify(postHolidayData?.holidayYear)>postHolidayData?.holidayDate.slice(0,4)){return alert(" Holiday Date's Year should be Smaller than Holiday Year ")}
         // disptach(showModalReducer(false))
 
         disptach(showSpinnerReducer(true))

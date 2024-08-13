@@ -23,7 +23,7 @@ const ShowAllAddMailingAddress: React.FC<AddMailingProps> = ({ data, id }) => {
     const dispatch = useDispatch()
     const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
 
-    // console.log(">>>>>data in mailing address<<<<<<<<<<", data)
+    console.log(">>>>>data in mailing address<<<<<<<<<<", data)
     // ADD MAILING DATA FUNCTION STARTS
     const AddMailingFunction = async (data) => {
         const zip = parseInt(data?.zip)

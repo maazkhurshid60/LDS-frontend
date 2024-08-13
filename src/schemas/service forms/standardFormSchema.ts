@@ -32,17 +32,20 @@ export const standardFormSchema = z.object({
     // otherStandardDescription: z.string().min(1, { message: "Standard Description is required" }),
     // STANDARD SERVICE TYPE VALIDATION ENDS
     // STANDARD SERVICE DETAIL VALIDATION STARTS
-    court: z.string().optional(),
-    defendants: z.string().optional(),
-    plaintiff: z.string().optional(),
-    country: z.string().optional(),
-    // SERVE TO VALIDATION ENDS
-    firstName: z.string().min(1, { message: "First name is required" }),
-    address: z.string().min(1, { message: "address is required" }),
-    city: z.string().optional(),
-    zip: z.string().optional(),
-    state: z.string().optional(),
-    apt: z.string().optional(),
+    oSSTIndexNo:z.string().optional(),
+    oSSTDescription:z.string().optional(),
+    sSDCourt:z.string().optional(),
+        sSDDefendants:z.string().optional(),
+        sSDPlaintiff:z.string().optional(),
+        sSDCountry:z.string().optional(),
+        // SERVE TO VALIDATION ENDS
+        firstNameServe:z.string().min(1, { message: "First name is required" }),
+        addressServe:z.string().min(1, { message: "address is required" }),
+        cityServe:z.string().optional(),
+        stateServe:z.string().optional(),
+        aptServe:z.string().optional(),
+        zipServe:z.string().optional(),
+    
     // SERVE TO VALIDATION ENDS
 
 

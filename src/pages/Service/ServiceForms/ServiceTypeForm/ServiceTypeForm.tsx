@@ -12,65 +12,130 @@ import AddMailing from "./AddMailing";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import GetSelectedMailing from "./getSelectedMailing";
-import { addMailAddressIntoFormL, getAllMailingAddressThunk,isAddingMailAddressReducer, getFormMailAddress, getFormMailAddressAfterDeletion, getMailAddress, getMailAddressAfterDeletion, isUpdaitngMailAddressReducer } from "../../../../redux/slice/mailingAdresses";
+import { addMailAddressIntoFormL, getAllMailingAddressThunk, isAddingMailAddressReducer, getFormMailAddress, getFormMailAddressAfterDeletion, getMailAddress, getMailAddressAfterDeletion, isUpdaitngMailAddressReducer } from "../../../../redux/slice/mailingAdresses";
 import { IoMdClose } from "react-icons/io";
 import { LTFormSchema } from "../../../../schemas/service forms/L&TFormSchema";
 import { useGetAllData } from "../../../../hooks/getAllDataHook/useGetAllData";
 import Button from "../../../../components/Buttons/Button/Button";
-import { getAllServiceFormThunk, isDataSaveReducer, savedLTFormDataReducer, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
+import { getAllServiceFormThunk, isDataSaveReducer, moveToStandardFormReducer, savedLTFormDataReducer, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
 import Hints from "../../../Result/Hints/Hints";
 import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
 import { toast } from "react-toastify";
 import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
+import axios from "axios";
 export type FormFields = z.infer<typeof LTFormSchema>
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress.mailingAddressData)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
     const getMailingAddressDataOnFormAdding = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
-    const filterMailingAddressDataOnFormAdding=getMailingAddressDataOnFormAdding?.filter((obj1, i, arr) => 
+    const filterMailingAddressDataOnFormAdding = getMailingAddressDataOnFormAdding?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
-      )
-    const savedLTData= useSelector((state: RootState) => state.serviceForm.savedLTFormData)
+    )
+    const savedLTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
     // const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
-    // console.log("saved lt data",savedLTData)
+    console.log("saved lt data", savedLTData)
     // GET ALL MAILING ADDRESSES THAT COMMING INSIDE THE FORMS 
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress.serviceFormMailingAdress?.mailingAdresses)
-    const filterExistingFormMailingAdress= getFormMailingAdress?.filter((obj1, i, arr) => 
+    const filterExistingFormMailingAdress = getFormMailingAdress?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
-      )
-    const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
-    const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
-    const { data: clientData } = useGetAllData("/client/all-clients");
-    const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
-    const { data: LTServiceData } = useGetAllData("/ltservice-type/all-lt-service-types");
-    // console.log(LTServiceData)
-    const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
-    const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.fullName } })
-    console.log("clientIdOptions",clientIdOptions)
-    const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
-    const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
-    const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
-  
-    const dispatch = useDispatch()
-    const { register, formState: { errors }, control, handleSubmit, setValue, reset } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
-    const isAddMail=useSelector((state:RootState)=>state.mailingAdress.isAddingMailAddress)
-    const isUpdateMail = useSelector((state: RootState) => state.mailingAdress.isUpdatingMailAddress)
-
-    // const [isAddMail, dispatch(isAddingMailAddressReducer] = us)eState(false)
-    console.log("allServiceFormData[serviceFormIndex]?.standardServiceDetail?.firstName",allServiceFormData[serviceFormIndex]?.standardServiceType?._id)
+    )
     const [checkedName, setCheckedName] = useState<string | null>(
         // LTServiceData?.find((data) => data?.isActive)?._id || null
     );
+
+    const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
+    const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
+    const lastServiceFormIndex = allServiceFormData?.length - 1
+    const { data: clientData } = useGetAllData("/client/all-clients");
+    const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
+    const { data: LTServiceData } = useGetAllData("/ltservice-type/all-lt-service-types");
+    
+    const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
+    const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
+    const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === savedLTData?.clientId && { value: data?._id, label: data?.fullName })
+    const getExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
+
+    // console.log("clientIdOptions", getExistingSelectedClientoption?.label)
+    const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
+    const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === savedLTData?.serviceType && { value: data?._id, label: data?.fullName })
+    const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
+const [serviceType,setServiceType]=useState()
+    const dispatch = useDispatch()
+    const { register, formState: { errors }, control, handleSubmit, setValue, reset,getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
+    const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
+    const isUpdateMail = useSelector((state: RootState) => state.mailingAdress.isUpdatingMailAddress)
+    const [jobNo, setJobNo] = useState<any>()
+
+
+    // handleMoveToStandardForm
+    const handleMoveToStandardForm=(value)=>{
+        // console.log("servicetype<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", serviceTypeOptions?.find(data=>data?.value===value)?.label)
+       const  {clientId,inputDate,caseNo}= getValues(); 
+       if (!inputDate || !caseNo ||!clientId) {
+        // Show error message if either field is empty
+        setValue("serviceType", "");
+        toast.error("Input Date and Case No are required!");
+        return;
+    }
+        const data=serviceTypeOptions?.find(data=>data?.value===value)?.label
+        handleSubmit(StandardTypeFormSubmitFunciton)();
+        dispatch(moveToStandardFormReducer(data))
+    }
+    // GET LONGITUDE AND LATITUDE ON THE BASIS OF CITY STARTS
+    const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
+    const [city, setCity] = useState("Kohat");
+
+    const getCoordinates = async () => {
+        try {
+            const response = await axios.get(
+                `https://maps.googleapis.com/maps/api/geocode/json`,
+                {
+                    params: {
+                        address: city,
+                        key: "AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo", // Replace with your Google Maps API Key
+                    },
+                }
+            );
+
+            // console.log("Full API Response:", response.data); // Log the entire API response
+
+            if (response?.data?.results && response.data.results.length > 0) {
+                const location = response.data.results[0].geometry.location;
+                setCoordinates({
+                    lat: location.lat,
+                    lng: location.lng,
+                });
+            } else {
+                console.warn("No results found for the given city name.");
+            }
+        } catch (error) {
+            console.error("Error fetching the coordinates:", error);
+        }
+    };
+
+    useEffect(() => {
+        getCoordinates();
+    }, [city]);
+
+    useEffect(() => {
+        console.log("Longitude:", coordinates.lng);
+        console.log("Latitude:", coordinates.lat);
+    }, [coordinates]);
+
+    // GET LONGITUDE AND LATITUDE ON THE BASIS OF CITY ENDS
+
+    // const [isAddMail, dispatch(isAddingMailAddressReducer] = us)eState(false)
+    // console.log("allServiceFormData[serviceFormIndex]?.standardServiceDetail?.firstName", allServiceFormData[serviceFormIndex]?.standardServiceType?._id)
+
 
     const handleCheckboxChange = (id: string) => {
         setCheckedName(id);
     };
 
-    
-
     // GET SELECTED VALUES FROM ADD MAILING DROPSOWN
-    const GetSelectedMailingFunction = (optionValue:string) => {
-        isNewFormAdding ? dispatch(getMailAddress(optionValue))  : dispatch(addMailAddressIntoFormL(optionValue))
+    const GetSelectedMailingFunction = (optionValue: string) => {
+
+        isNewFormAdding ? dispatch(getMailAddress(optionValue)) : dispatch(addMailAddressIntoFormL(optionValue))
     }
     // USE EFFECT TO GET ALL SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
@@ -87,72 +152,58 @@ const StandardTypeForm = () => {
     // USE EFFECT TO SET VALUES OF INDEX 0 SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
         if (!isNewFormAdding) {
-            console.log("new form is not adding")
-            setValue("clientId", getSelectedClientoption?.value);
-            setValue("serviceType", getSelectedServiceTypeOption?.value);
-            setValue("jobNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.jobNo));
-            // setValue("inputDate", convertDateFormat(allServiceFormData[serviceFormIndex]?.inputDate));
-            setValue("inputDate", allServiceFormData[serviceFormIndex]?.inputDate);
-            setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));
-            setValue("caption", allServiceFormData[serviceFormIndex]?.caption);
-            setValue("fullName", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.fullName);
-            setValue("businessName", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.businessName);
-            setValue("address", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.address);
-            setValue("apt", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.apt);
-            setValue("city", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.city);
-            setValue("state", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.state);
-            setValue("zip", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.zip);
-            setValue("description", allServiceFormData[serviceFormIndex]?.lTServiceDetail?.description);
-            setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
-        }
-        else{
-            console.log("new form is adding")
+            // console.log("new form is not adding");
+            const currentData = allServiceFormData[serviceFormIndex];
 
+            if (currentData) {
+                // Set form values
+                setValue("clientId", getExistingSelectedClientoption?.value);
+                setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
+                setJobNo(JSON.stringify(currentData?.jobNo));
+                setValue("inputDate", currentData?.inputDate);
+                setValue("caseNo",JSON.stringify(currentData?.caseNo));
+                setValue("oLTIndexNo", JSON.stringify(currentData?.oLTIndexNo));
+                setValue("oLTDescription", currentData?.oLTDescription);
+                setValue("caption", currentData?.caption);
+                setValue("lTSFirstName", currentData?.lTSFirstName);
+                setValue("lTSBusinessName", currentData?.lTSBusinessName);
+                setValue("lTSAddress", currentData?.lTSAddress);
+                setValue("lTSApt", currentData?.lTSApt);
+                setValue("lTSCity", currentData?.lTSCity);
+                setValue("lTSState", currentData?.lTSState);
+                setValue("lTSZip", currentData?.lTSZip);
+                setValue("lTSDescription", currentData?.lTSDescription);
+
+                setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
+            } else {
+                console.log("No current data found for the form index.");
+            }
+        } 
+        else {
+            console.log("new form is adding");
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
-            setValue("jobNo", JSON.stringify(savedLTData?.jobNo));
             setValue("inputDate", savedLTData?.inputDate);
-            setValue("caseNo", JSON.stringify(savedLTData?.caseNo));
+            setValue("caseNo", savedLTData?.caseNo);
             setValue("caption", savedLTData?.caption);
-            setValue("fullName", savedLTData?.lTServiceDetail?.fullName);
-            setValue("businessName", savedLTData?.lTServiceDetail?.businessName);
-            setValue("address", savedLTData?.lTServiceDetail?.address);
-            setValue("apt", savedLTData?.lTServiceDetail?.apt);
-            setValue("city", savedLTData?.lTServiceDetail?.city);
-            setValue("state", savedLTData?.lTServiceDetail?.state);
-            setValue("zip", savedLTData?.lTServiceDetail?.zip);
-            setValue("description", savedLTData?.lTServiceDetail?.description);
-            setCheckedName(savedLTData?.lTServiceType?._id); 
+            setValue("lTSFirstName", savedLTData?.lTSFirstName);
+            setValue("lTSBusinessName", savedLTData?.lTSBusinessName);
+            setValue("lTSAddress", savedLTData?.address);
+            setValue("lTSApt", savedLTData?.lTSApt);
+            setValue("lTSCity", savedLTData?.lTSCity);
+            setValue("lTSState", savedLTData?.lTSState);
+            setValue("lTSZip", savedLTData?.lTSZip);
+            setValue("lTSDescription", savedLTData?.lTSDescription);
+            // alert(savedLTData?.lTServiceType?._id)
+            setCheckedName(savedLTData?.lTServiceType?._id);   
         }
-//   const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
-//         const id = allServiceFormData[serviceFormIndex]?._id
-//         console.log(data, id)
-//         dispatch(getFormMailAddress({ data, id }))
-//         const lTServiceDetail = {
-//             fullName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.fullName,
-//             businessName: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.businessName,
-//             address:allServiceFormData[serviceFormIndex]?.lTServiceDetail?.address,
-//             apt: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.apt,
-//             city: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.city,
-//             state: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.state,
-//             zip: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.zip,
-//             description: allServiceFormData[serviceFormIndex]?.lTServiceDetail?.description
-//         }
-//         const LTData = {
-//             jobNo: allServiceFormData[serviceFormIndex]?.jobNo,
-//             inputDate: allServiceFormData[serviceFormIndex]?.inputDate,
-//             clientId: allServiceFormData[serviceFormIndex]?.clientId?._id,
-//             serviceType: allServiceFormData[serviceFormIndex]?.serviceType?._id,
-//             caseNo: allServiceFormData[serviceFormIndex]?.caseNo,
-//             caption: allServiceFormData[serviceFormIndex]?.caption,
-//             lTServiceType: checkedName,
-//             noOfAddLMailings:isNewFormAdding? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
-//             mailingAddresses:isNewFormAdding? getMailingAddressDataOnFormAdding : getFormMailingAdress,
-//             lTServiceDetail
-//         }
-//         dispatch(savedLTFormDataReducer(LTData))
-    }, [allServiceFormData, serviceFormIndex, setValue,isNewFormAdding])
-    
+    }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding]);
+
+    // }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding,  savedLTData]);
+
+    // }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding, getExistingSelectedClientoption, getExistingSelectedServiceTypeoption, savedLTData]);
+
+
     // USE EFFECT TO GET ALL MAILING ADDRESS FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
         dispatch(getAllMailingAddressThunk())
@@ -161,12 +212,23 @@ const StandardTypeForm = () => {
     useEffect(() => {
         reset()
         setCheckedName(null)
+        if (allServiceFormData[lastServiceFormIndex]?.jobNo && parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) >= 1 && isNewFormAdding) {
+            setJobNo(parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) + 1);
+
+        } else if (savedLTData?.jobNo !== undefined) {
+            setJobNo(savedLTData.jobNo);
+
+
+        } else {
+            setJobNo(1);
+
+        }
     }, [isNewFormAdding])
     // THIS WILL SEND DATA OF MAILING ADDRESS INSIDE EXISTING FORM TO getFormMailAddress
     useEffect(() => {
         const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
         const id = allServiceFormData[serviceFormIndex]?._id
-        console.log(data, id)
+        // console.log(data, id)
         dispatch(getFormMailAddress({ data, id }))
     }, [serviceFormIndex])
     // FUNCTION TO SAVE DATA
@@ -183,64 +245,72 @@ const StandardTypeForm = () => {
     };
 
     const StandardTypeFormSubmitFunciton = (data) => {
-    //    DATA FOR STANDARD FORM STARTS
-    const serviceFormData:any = allServiceFormData[0];
-        const standardServiceDetail={court:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.court,
-                                    defendants:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.defendants,
-                                    plaintiff:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.plaintiff,
-                                    country:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.country,
-                                    serveTo:{firstName:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.firstName,
-                                        address:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.address,
-                                        city:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.city,
-                                        state:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.state,
-                                        apt:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.apt,
-                                        zip:allServiceFormData[serviceFormIndex]?.standardServiceDetail?.serveTo?.zip}
-                                    }
-        console.log(">>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>.",standardServiceDetail)
-
-    //    DATA FOR STANDARD FORM ENDS
-
-//    DATA FOR L&T FORM STARTS
-   
-           const serviceFormId= allServiceFormData[serviceFormIndex]?._id
-        const lTServiceDetail = {
-            fullName: data?.fullName,
-            businessName: data?.businessName,
-            address: data?.address,
-            apt: data?.apt,
-            city: data?.city,
-            state: data?.state,
-            zip: data?.zip,
-            description: data?.description
+        console.log(">>>>>>>>>>>>>>saving StandardTypeFormSubmitFunciton>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",data)        //    DATA FOR STANDARD FORM STARTS
+        const serviceFormData: any = allServiceFormData[0];
+        const standardServiceDetail = {
+            sSDCourt: allServiceFormData[serviceFormIndex]?.sSDCourt,
+            sSDDefendants: allServiceFormData[serviceFormIndex]?.sSDDefendants,
+            sSDPlaintiff: allServiceFormData[serviceFormIndex]?.sSDPlaintiff,
+            sSDCountry: allServiceFormData[serviceFormIndex]?.sSDCountry,
+            firstNameServe: allServiceFormData[serviceFormIndex]?.firstNameServe,
+            addressServe: allServiceFormData[serviceFormIndex]?.addressServe,
+            cityServe: allServiceFormData[serviceFormIndex]?.cityServe,
+            stateServe: allServiceFormData[serviceFormIndex]?.stateServe,
+            aptServe: allServiceFormData[serviceFormIndex]?.aptServe,
+            zipServe: allServiceFormData[serviceFormIndex]?.zipServe
         }
+        // console.log(">>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>.", standardServiceDetail)
+
+        //    DATA FOR STANDARD FORM ENDS
+
+        //    DATA FOR L&T FORM STARTS
+
+        const serviceFormId = allServiceFormData[serviceFormIndex]?._id
         const LTData = {
-            serviceFormId,
-            jobNo: data?.jobNo,
+            // serviceFormId,
+            jobNo:parseInt(jobNo),
             inputDate: data?.inputDate,
             clientId: data?.clientId,
             serviceType: data?.serviceType,
             caseNo: data?.caseNo,
             caption: data?.caption,
             lTServiceType: checkedName,
-            noOfAddLMailings:isNewFormAdding? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
-            mailingAddresses:isNewFormAdding? getMailingAddressDataOnFormAdding : getFormMailingAdress,
-            lTServiceDetail
+            noOfAddLMailings: isNewFormAdding ? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
+            mailingAddresses: isNewFormAdding ? getMailingAddressDataOnFormAdding : getFormMailingAdress,
+            lTSFirstName: data?.lTSFirstName,
+            lTSBusinessName: data?.lTSBusinessName,
+            lTSAddress: data?.lTSAddress,
+            lTSApt: data?.lTSApt,
+            lTSCity: data?.lTSCity,
+            lTSState: data?.lTSState,
+            lTSZip: data?.lTSZip,
+            lTSDescription: data?.lTSDescription,
+            oLTIndexNo: parseInt(data?.oLTIndexNo),
+            oLTDescription: data?.oLTDescription,
+            lTSCityLongitude: "",
+            lTSCityLatitude: ""
         }
-         //    DATA FOR L&T FORM ENDS
+        //    DATA FOR L&T FORM ENDS
         // const selectedLTDataService=LTServiceData?.find((data,id)=>data?._id === checkedName)
         // console.log("LT DATA SUBMIT",LTData)
-        const updatedData={...LTData,standardServiceDetail,serviceFormId,standardServiceType:allServiceFormData[serviceFormIndex]?.standardServiceType?._id}
-     
-        if(!isNewFormAdding){  dispatch(updateServiceFormThunk(updatedData))
-        }else{
-    dispatch(savedLTFormDataReducer(LTData))
-    toast.success("data saved successfully temporary. Permeneant save go to standard form and save it")
-}
+        const updatedData = { ...LTData, standardServiceDetail, serviceFormId, standardServiceType: allServiceFormData[serviceFormIndex]?.standardServiceType?._id }
+        // console.log("LTS UPDATED DATA", updatedData)
+        // console.log("LT DATA", LTData)
+
+        // alert("k")
+        if (!isNewFormAdding) {
+
+            dispatch(updateServiceFormThunk(updatedData))
+        } else {
+        
+            dispatch(savedLTFormDataReducer(LTData))
+            toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
+        }
     }
     // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
     useEffect(() => {
         const handleKeyDown = (event) => {
-            if (event.ctrlKey && event.key === 's') {
+            if (event.ctrlKey && event.key === 's' || event.key === 'Escape' || event.key === 'F10') {
                 event.preventDefault();
                 handleSubmit(StandardTypeFormSubmitFunciton)();
             }
@@ -250,25 +320,27 @@ const StandardTypeForm = () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [handleSubmit, StandardTypeFormSubmitFunciton]);
-    
-    console.log("input date",convertDateFormat(allServiceFormData[0]?.inputDate))
-
+console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFormIndex]?.lTServiceType?._id
+)
 
     return <div className="w-[100%]">
         <div className="w-full">
             <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
-                <Hints label="To Save L&T Data" keyName="Ctrl + S" />
-                {/* {isNewFormAdding && <div className="w-full flex justify-end flex-row mt-2">
-                    <div className="w-[21%] " >
-                        <Button text="Save Data" onClick={dataSavedFunction} />
-                    </div>
-                </div>} */}
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-between">
+                <div className="flex items-center justify-between flex-row-reverse	">
+                    <Hints label="To Save L&T Data" keyName="Ctrl + S" />
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="Job no" error={errors.jobNo} name="jobNo" />
+                        {jobNo &&
+                            <div className="flex flex-col w-full items-start gap-1">
+                                <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
+                            </div>
+                        }
                     </div>
+                </div>
+
+                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
+
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" />
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" required/>
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <Controller name="clientId" control={control} render={({ field }) => (
@@ -282,6 +354,9 @@ const StandardTypeForm = () => {
                         )} />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required/>
+                    </div>
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <Controller name="serviceType" control={control} render={({ field }) => (
                             <Dropdown
                                 options={serviceTypeOptions}
@@ -290,14 +365,14 @@ const StandardTypeForm = () => {
                                 onChange={field.onChange}
                                 label="service type"
                                 error={errors.serviceType?.message as string}
+                                onValueChange={(value)=>handleMoveToStandardForm(value)} // Update state
+
                             />
                         )} />
                     </div>
+                    
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="case No" error={errors.caseNo} name="caseNo" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}  register={register} label="caption" error={errors.caption} name="caption" />
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="caption" error={errors.caption} name="caption" />
                     </div>
                 </div>
                 {/* L&T SERVICE TYPE STARTS */}
@@ -306,7 +381,7 @@ const StandardTypeForm = () => {
                 md:text-md
                 lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span></h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                        {LTServiceData?.map((data, index) => {
+                    {LTServiceData?.map((data, index) => {
                             return <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <CheckBox
                                 onKeyDown={handleEnterKeyPress} 
@@ -321,43 +396,55 @@ const StandardTypeForm = () => {
                     </div>
                 </div>
                 {/* L&T SERVICE TYPE ENDS */}
+                {/* OTHER L&T SERVICE TYPE STARTS */}
+                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-6" >
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other L&T Description" error={errors.oLTDescription} name="oLTDescription" />
+                    </div>
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" />
+                    </div>
+                </div>
+                {/* OTHER L&T SERVICE TYPE ENDS */}
+
                 {/* L&T SERVICE TYPE STARTS */}
                 <div className="mt-6">
                     <h1 className="font-semibold  mb-4 text-base
                 md:text-md
                 lg:text-xl">L&T Service Detail</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
+
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="full Name" error={errors.fullName} name="fullName" />
+                            <TextField required onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="bussiness Name" error={errors.businessName} name="businessName" />
+                            <TextField required onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="address" error={errors.address} name="address" />
+                            <TextField required onKeyDown={handleEnterKeyPress} register={register} label="address" error={errors.lTSAddress} name="lTSAddress" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="apt" error={errors.apt} name="apt" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt" error={errors.lTSApt} name="lTSApt" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="city" error={errors.city} name="city" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="city" error={errors.lTSCity} name="lTSCity" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="state" error={errors.state} name="state" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}  register={register} label="zip" error={errors.zip} name="zip" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
                         </div>
                         <div className="w-[100%]">
-                            <TextArea register={register} label="description" error={errors.description} name="description" />
+                            <TextArea register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
                         </div>
                     </div>
 
                 </div>
                 {/* L&T SERVICE TYPE ENDS */}
                 {/* ADDING MAILING STARTS */}
-                <div className="mt-6  ">
-                    <div className="flex items-center gap-x-4 ">
+                <div className="mt-6  relative">
+                    <div className="flex items-start gap-x-4 ">
                         {mailingAddressData?.length > 0 && <div className="w-[100%] md:w-[46%] mb-4 lg:w-[30%]">
                             <Controller name="mailingAddress" control={control} render={({ field }) => (
                                 <GetSelectedMailing
@@ -370,7 +457,7 @@ const StandardTypeForm = () => {
                                 />
                             )} />
                         </div>}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4">
                             <BorderButton
                                 isIcon
                                 buttonText="add new mailing address"

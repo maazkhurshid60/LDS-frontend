@@ -4,6 +4,18 @@ import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
 import { maillingType } from "../../type/maillingAddressType/maillingAddressType";
 import { toast } from "react-toastify";
 const accessToken = localStorage.getItem("accessToken");
+export interface MailingAddress{ 
+address:String
+apt:String
+city:String
+createdAt:String
+firstName:String
+rRR:Boolean
+state:String
+updatedAt:String
+zip:Number
+__v:Number
+_id:String}
 
 const initialState = {
     mailingAddressData: [],
@@ -53,7 +65,8 @@ const mailingAdresses = createSlice({
             const allMailingData = JSON.stringify(state.mailingAddressData)
             const allMailDataArray = JSON.parse(allMailingData)
             const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
-            state.serviceFormMailingAdress.mailingAdresses.push(onemail)
+            console.log(onemail)
+            state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
         },
          // THIS WILL UPDATE DATA OF EXISTING MAIL ADDRESS ARRAY ON THE BASIS OF INDEX
         //  updateMailAddressIntoForm: (state, action) => {

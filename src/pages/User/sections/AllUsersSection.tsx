@@ -10,8 +10,8 @@ import TableWithoutAction from "../../../components/Tables/TableWithoutAction";
 const AllUserSection = () => {
     const dispatch = useDispatch()
     const alluserData = useSelector((state: RootState) => state.userId.allUser)
-    const getUserIdFunction = (userId: number) => {
-             dispatch(getUserId(userId))
+    const getUserIdFunction = (userId:string,index: string) => {
+             dispatch(getUserId(index))
         dispatch(getOneUser())
 
     };

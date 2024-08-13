@@ -5,6 +5,6 @@ export const addingMailingSchema = z.object({
     city: z.string().optional(),
     state: z.string().optional(),
     apt: z.string().optional(),
-    zip: z.string().optional(),
+    zip: z.string().regex(/^\d+$/, { message: "zip no must be number" }),
     rRR:z.boolean().optional(),
 })

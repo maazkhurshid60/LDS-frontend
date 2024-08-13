@@ -84,11 +84,11 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="full Name" error={errors.firstName} name="firstName" />
+                        register={register} label="full Name" error={errors.firstName} name="firstName" required />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="address" error={errors.address} name="address" />
+                        register={register} label="address" error={errors.address} name="address" required/>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
@@ -104,7 +104,7 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="zip" error={errors.zip} name="zip" />
+                        register={register} label="zip" error={errors.zip} name="zip" required/>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <CheckBox onKeyDown={handleEnterKeyPress} 

@@ -21,6 +21,7 @@ import MarshalReport from "../components/Result Templates/Affidavits Reports/Mar
 import NonMilReport from "../components/Result Templates/Affidavits Reports/NonMilReports/MainTemplate";
 import StandardReport from "../components/Result Templates/Affidavits Reports/StandardReport/MainTemplate";
 import TransPerSlipReport from "../components/Result Templates/Affidavits Reports/TransPerSlipReport/MainTemplate";
+import GPSReport from "../components/Result Templates/GPSReport/MainTemplate";
 
 
 const Routing = () => {
@@ -50,7 +51,9 @@ const Routing = () => {
                     <Route path="/operations/legal-delivery/non-mil-reports" element={<NonMilReport />} />
                     <Route path="/operations/legal-delivery/standard-reports" element={<StandardReport />} />
                     <Route path="/operations/legal-delivery/trans-per-slip-reports" element={<TransPerSlipReport />} />
-                   
+                    <Route path="/operations/legal-delivery/gps-report" element={<GPSReport />} />
+
+                    
                     
                     
                     

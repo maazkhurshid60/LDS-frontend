@@ -94,7 +94,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         {/*SUBMENU STARTS and Render submenus only if the current link is active */}
                         { data.name === activeLink && data.submenu && (
                             <ul   className={`
-                    ${widthSmall ? `absolute top-0 left-16 border-[1px] border-borderColor border-solid rounded-xl w-[180px] shadow-lgShadow py-6 px-8
+                    ${widthSmall ? `absolute top-0 left-16 border-[1px] border-borderColor border-solid rounded-xl w-[180px] shadow-lgShadow 
                     ${subMenuShow ? "inline-block" : "hidden"}` : "relative"} bg-whiteColor overflow-hidden`}>
                                 {data.subMenu &&
                                     data.subMenu.map((subLink, subLinkId) => (
@@ -103,9 +103,10 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                                             className={`${subLink.linkName === activeSubLink
                                                 ? "text-primaryColorLight"
                                                 : "text-grayColor"
-                                                } p-2`}
+                                                }  cursor-pointer hover:bg-primaryColorLight hover:text-whiteColor py-1 mt-1  px-8`}
+                                               
                                         >
-                                            <Link to={subLink.to} onClick={() => subMenuFunction(subLink.linkName)}>{subLink.linkName}</Link>
+                                            <Link to={subLink.to}  onClick={() => subMenuFunction(subLink.linkName)}>{subLink.linkName}</Link>
                                         </li>
                                     ))}
 

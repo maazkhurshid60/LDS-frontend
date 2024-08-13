@@ -68,7 +68,7 @@ const Devices = () => {
                 value?.toString().toLowerCase().includes(searchValue.toLowerCase())
             )
         ))
-    }, [searchValue])
+    }, [searchValue,data])
     // console.log(searchValue)
 
     if (isLoading) return <DataLoader text="device" />

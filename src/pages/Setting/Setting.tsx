@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { updateSettingApi } from "../../apiservices/settingApi/settingApi";
 import { showSpinnerReducer } from "../../redux/slice/spinner";
 import { DataLoader } from "../../components/Loader/DataLoader";
+import GPSReport from "../../components/Result Templates/GPSReport/MainTemplate";
 
 const Setting = () => {
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
@@ -102,6 +103,7 @@ const Setting = () => {
                             })}
                         </form>
                     </div>
+                        {/* <GPSReport/> */}
                 </OutletLayout>}
         </>
     );

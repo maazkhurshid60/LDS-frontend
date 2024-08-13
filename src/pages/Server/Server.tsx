@@ -68,7 +68,7 @@ useEffect(()=>{
       value?.toString().toLowerCase().includes(searchValue.toLowerCase())
     )
     ))
-},[searchValue])
+},[searchValue,data])
 
     if (isLoading) return <DataLoader text="Server" />
 

@@ -42,7 +42,7 @@ const GetSelectedMailing: React.FC<GetSelectedMailingProp> = ({ options,
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    return <div className="w-full" ref={dropdownRef}>
+    return <div className="w-full z-[99999999999]" ref={dropdownRef}>
         <label className="font-medium text-sm capitalize">{label}</label>
         <div className="w-full relative">
             <div onClick={handleSelectClick}
@@ -54,7 +54,7 @@ const GetSelectedMailing: React.FC<GetSelectedMailingProp> = ({ options,
                 </span></div>
             {/* LIST OF OPTIONS STARTS */}
             {isOpen && (
-                <div className="absolute z-10 bg-grayColorLight w-full  bg-whiteColor border-[1px] border-borderColor rounded-md ">
+                <div className=" bg-grayColorLight w-full  h-[100px] overflow-y-autosetting bg-whiteColor border-[1px] border-borderColor rounded-md ">
                     {options.map((option) => (
                         <div
                             key={option._id}

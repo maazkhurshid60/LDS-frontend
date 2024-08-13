@@ -1,58 +1,44 @@
 export interface resultFormType {
-    queryInformationLT?: queryInformationLTData,
-    queryInformationStandard?:queryInformationStandardData,
-    serviceResults?:serviceResultsData
-}
+    // queryInformationLT: any,
+    queryInformationLTFullName: string,
+    queryInformationLTIndexNo: number,
+    queryInformationLTAddress: string,
+    queryInformationLTBusinessName: string,
+    queryInformationLTInputDate: string,
+    // queryInformationStandard: any,
+    queryInformationStandardServeTo: string,
+    queryInformationStandardDefendants: string,
+    // serviceResults: any
+    serviceResultInputDate: string,
+    serviceResultScvType: string,
+    serviceResultClientId: string,
+    serviceResultJobNo: number,
+    serviceResultServerId: string,
+    serviceResultResults: string,
+    serviceResultDateOfService: string,
+    serviceResultFirstTimeOfService: string,
+    serviceResultFirstAttemptDate: string,
+    serviceResultSecondTimeOfService: string,
+    serviceResultSecondAttemptDate: string,
+    serviceResultThirdTimeOfService: string,
+    serviceResultThirdAttemptDate: string,
+    serviceResultlTServed: string,
+    serviceResultlTNotServed: string,
+    serviceResultRecipientTitle: string,
+    serviceResultDoor: number,
+    serviceResultDoorLocks: number,
+    serviceResultEntry: number,
+    serviceResultWall: number,
+    serviceResultFloor: number,
+    serviceResultLock: number,
+    serviceResultOtherDescription: boolean,
+    serviceResultSex: string,
+    serviceResultSkinColor: string,
+    serviceResultHair: string,
+    serviceResultAge: number,
+    serviceResultHeight: number,
+    serviceResultWeight: number,
+    serviceResultOtherFeatures: string,
+    serviceResultDateOfMailing: string,
+    serviceResultDateOfNotary: string,}
 
-export interface queryInformationLTData {
-    fullName?: string,
-    indexNo?: any,
-    address?: string,
-    businessName?: string,
-    inputDate?: string
-}
-
-export interface queryInformationStandardData{
-    serveTo?: string,
-    plaintiff?: string,
-    defendants?: string
-}
-
-export interface serviceResultsData{
-    resultInputDate?: string,
-    scvType?: string,
-    clientId?:string,
-    jobNo?: any,
-    serverId?: string,
-    results?:string,
-    dateOfService?: string,
-    firstTimeOfService?:string,
-    firstAttemptDate?: string,
-    secondTimeOfService?: string,
-    secondAttemptDate?: string,
-    thirdAttemptDate?: string,
-    lTServed?: string,
-    lTNotServed?: string,
-    substituteDeliveredTo?: string,
-    corporateRecipient?: string,
-    recipientTitle?: string,
-    description?:descriptionData
-}
-
-export interface descriptionData{
-    door: any,
-    doorLocks:any,
-    entry:any,
-    wall: any,
-    floor: any,
-    lock:any,
-    otherDescription:string,
-    age:string,
-    hair:string,
-    weight:string,
-    skinColor:string,
-    height:string,
-    sex:string,
-
-
-}

@@ -29,82 +29,80 @@ const ResultForm = () => {
     const resultFormIndex = useSelector((state: RootState) => state.resultForm.resultFormIndex)
     const isNewResultFormAdd = useSelector((state: RootState) => state.resultForm.isNewResultFormAdd)
     const isSearchResultForm = useSelector((state: RootState) => state.resultForm.isSearchResultForm)
-console.log("isSearchResultForm",isSearchResultForm)
+    console.log("isSearchResultForm", isSearchResultForm)
     const [isConspicuous, setIsConspicuous] = useState()
-    // console.log("add new form set true",isNewResultFormAdd)   
-    console.log(allResultForm[resultFormIndex], resultFormIndex)
+    console.log("add new form set true", isConspicuous)
+    // console.log(allResultForm[resultFormIndex], resultFormIndex)
     // submitResultFormFunction
     const submitResultFormFunction = (data) => {
         console.log("data>>>>", data)
-        const queryInformationLT = {
-            fullName: data?.fullName,
-            indexNo: data?.indexNo,
-            address: data?.address,
-            businessName: data?.businessName,
-            inputDate: data?.inputDate
+        const addingData = {
+            queryInformationLTFullName: data?.queryInformationLTFullName,
+            queryInformationLTIndexNo: parseInt(data?.queryInformationLTIndexNo),
+            queryInformationLTAddress: data?.queryInformationLTAddress,
+            queryInformationLTBusinessName: data?.queryInformationLTBusinessName,
+            queryInformationLTInputDate: data?.queryInformationLTInputDate,
+            queryInformationStandardServeTo: data?.queryInformationStandardServeTo,
+            queryInformationStandardDefendants: data?.queryInformationStandardDefendants,
+            queryInformationStandardPlaintiff: data?.queryInformationStandardPlaintiff,
+            serviceResultInputDate: data?.serviceResultInputDate,
+            serviceResultScvType: data?.serviceResultScvType,
+            serviceResultClientId: data?.serviceResultClientId,
+            serviceResultJobNo: parseInt(data?.serviceResultJobNo),
+            serviceResultServerId: data?.serviceResultServerId,
+            serviceResultResults: data?.serviceResultResults,
+            serviceResultserviceResultDateOfService: data?.serviceResultserviceResultDateOfService,
+            serviceResultTimeService: data?.serviceResultTimeService,
+            serviceResultFirstTimeOfService: data?.serviceResultFirstTimeOfService,
+            serviceResultFirstAttemptDate: data?.serviceResultFirstAttemptDate,
+            serviceResultSecondTimeOfService: data?.serviceResultSecondTimeOfService,
+            serviceResultSecondAttemptDate: data?.serviceResultSecondAttemptDate,
+            serviceResultThirdTimeOfService: data?.serviceResultThirdTimeOfService,
+            serviceResultThirdAttemptDate: data?.serviceResultThirdAttemptDate,
+            serviceResultlTServed: data?.serviceResultlTServed,
+            serviceResultlTNotServed: data?.serviceResultlTNotServed,
+            serviceResultRecipientTitle: data?.serviceResultRecipientTitle,
+            serviceResultDoor: (data?.serviceResultDoor === undefined || data?.serviceResultDoor === "" || isNaN(data?.serviceResultDoor)) ? null : parseInt(data?.serviceResultDoor),
+            serviceResultDoorLocks: (data?.serviceResultDoorLocks === undefined || data?.serviceResultDoorLocks === "" || isNaN(data?.serviceResultDoorLocks)) ? null : parseInt(data?.serviceResultDoorLocks),
+            serviceResultEntry: (data?.serviceResultEntry === undefined || data?.serviceResultEntry === "" || isNaN(data?.serviceResultEntry)) ? null : parseInt(data?.serviceResultEntry),
+            serviceResultWall: (data?.serviceResultWall === undefined || data?.serviceResultWall === "" || isNaN(data?.serviceResultWall)) ? null : parseInt(data?.serviceResultWall),
+            serviceResultFloor: (data?.serviceResultFloor === undefined || data?.serviceResultFloor === "" || isNaN(data?.serviceResultFloor)) ? null : parseInt(data?.serviceResultFloor),
+            serviceResultLock: (data?.serviceResultLock === undefined || data?.serviceResultLock === "" || isNaN(data?.serviceResultLock))
+                ? null
+                : parseInt(data?.serviceResultLock),
+            serviceResultOtherDescription: data?.serviceResultOtherDescription,
+            serviceResultSex: data?.serviceResultSex,
+            serviceResultSkinColor: data?.serviceResultSkinColor,
+            serviceResultHair: data?.serviceResultHair,
+            serviceResultAge: (data?.serviceResultAge === undefined || data?.serviceResultAge === "" || isNaN(data?.serviceResultAge)) ? null : parseInt(data?.serviceResultAge),
+            serviceResultHeight: (data?.serviceResultHeight === undefined || data?.serviceResultHeight === "" || isNaN(data?.serviceResultHeight)) ? null : parseInt(data?.serviceResultHeight),
+            serviceResultWeight: (data?.serviceResultWeight === undefined || data?.serviceResultWeight === "" || isNaN(data?.serviceResultWeight)) ? null : parseInt(data?.serviceResultWeight),
+            serviceResultOtherFeatures: data?.serviceResultOtherFeatures,
+            serviceResultDateOfMailing: data?.serviceResultDateOfMailing,
+            serviceResultDateOfNotary: data?.serviceResultDateOfNotary,
         }
-        const queryInformationStandard = {
-            serveTo: data?.serveTo,
-            plaintiff: data?.plaintiff,
-            defendants: data?.defendants
-        }
-        const serviceResults = {
-            resultInputDate: data?.resultInputDate,
-            scvType: data?.scvType,
-            clientId: data?.clientId,
-            jobNo: data?.jobNo,
-            serverId: data?.serverId,
-            results: data?.results,
-            dateOfService: data?.dateOfService,
-            firstTimeOfService: data?.firstTimeOfService,
-            firstAttemptDate: data?.firstAttemptDate,
-            secondTimeOfService: data?.secondTimeOfService,
-            secondAttemptDate: data?.secondAttemptDate,
-            thirdAttemptDate: data?.thirdAttemptDate,
-            lTServed: data?.lTServed,
-            lTNotServed: data?.lTNotServed,
-            substituteDeliveredTo: data?.substituteDeliveredTo,
-            corporateRecipient: data?.corporateRecipient,
-            recipientTitle: data?.recipientTitle,
-            notaryDate: data?.notaryDate,
-            dateOfMailing: data?.dateOfMailing,
-            description: {
-                door: data?.door,
-                doorLocks: data?.doorLocks,
-                entry: data?.entry,
-                wall: data?.wall,
-                floor: data?.floor,
-                lock: data?.lock,
-                otherDescription: data?.otherDescription,
-                age: data?.age,
-                height: data?.height,
-                weight: data?.weight,
-                hair: data?.hair,
-                sex: data?.sex,
-                skinColor: data?.skinColor,
-            }
-        }
-        const addingData = { queryInformationLT, queryInformationStandard, serviceResults }
+        console.log("adding data", addingData)
+        // const addingData = { queryInformationLT, queryInformationStandard, serviceResults }
         if (isNewResultFormAdd === true) {
             console.log("<><><><>")
             dispatch(addResultFormThunk(addingData))
         } else if (isSearchResultForm === true) {
-dispatch(searchResultFormAddReducer(false))
+            dispatch(searchResultFormAddReducer(false))
             toast.success("Search Result Form will be applied")
-        }else {
+        } else {
 
-            const updatingData = { queryInformationLT, queryInformationStandard, serviceResults, resultFormId: allResultForm[resultFormIndex]?._id }
+            const updatingData = { ...addingData, resultFormId: allResultForm[resultFormIndex]?._id }
 
             dispatch(updateResultFormThunk(updatingData))
         }
     }
     // SEARCH RESULT FORM
     const searchResultFormFunction = () => {
-        setValue("fullName", "")
-        setValue("indexNo", "")
-        setValue("address", "")
-        setValue("businessName", "")
-        setValue("inputDate", "")
+        setValue("queryInformationLTFullName", "")
+        setValue("queryInformationLTIndexNo", "")
+        setValue("queryInformationLTAddress", "")
+        setValue("queryInformationLTBusinessName", "")
+        setValue("queryInformationLTInputDate", "")
         dispatch(searchResultFormAddReducer(true))
 
     }
@@ -146,65 +144,66 @@ dispatch(searchResultFormAddReducer(false))
         }
         else {
 
-            setValue("fullName", allResultForm[resultFormIndex]?.queryInformationLT?.fullName),
-                setValue("indexNo", allResultForm[resultFormIndex]?.queryInformationLT?.indexNo),
-                setValue("address", allResultForm[resultFormIndex]?.queryInformationLT?.address),
-                setValue("businessName", allResultForm[resultFormIndex]?.queryInformationLT?.businessName),
-                setValue("inputDate", allResultForm[resultFormIndex]?.queryInformationLT?.inputDate)
-            setValue("serveTo", allResultForm[resultFormIndex]?.queryInformationStandard?.serveTo),
-                setValue("plaintiff", allResultForm[resultFormIndex]?.queryInformationStandard?.plaintiff),
-                setValue("defendants", allResultForm[resultFormIndex]?.queryInformationStandard?.defendants)
-            setValue("resultInputDate", allResultForm[resultFormIndex]?.serviceResults?.resultInputDate ?? "")
-            setValue("scvType", allResultForm[resultFormIndex]?.serviceResults?.scvType ?? "")
-            setValue("clientId", allResultForm[resultFormIndex]?.serviceResults?.clientId ?? "")
-            setValue("jobNo", allResultForm[resultFormIndex]?.serviceResults?.jobNo ?? "")
-            setValue("serverId", allResultForm[resultFormIndex]?.serviceResults?.serverId ?? "")
-            setValue("results", allResultForm[resultFormIndex]?.serviceResults?.results ?? "")
-            setValue("dateOfService", allResultForm[resultFormIndex]?.serviceResults?.dateOfService)
-            setValue("firstTimeOfService", allResultForm[resultFormIndex]?.serviceResults?.firstTimeOfService)
-            setValue("firstAttemptDate", allResultForm[resultFormIndex]?.serviceResults?.firstAttemptDate)
-            setValue("secondTimeOfService", allResultForm[resultFormIndex]?.serviceResults?.secondTimeOfService)
-            setValue("secondAttemptDate", allResultForm[resultFormIndex]?.serviceResults?.secondAttemptDate)
-            setValue("thirdAttemptDate", allResultForm[resultFormIndex]?.serviceResults?.thirdAttemptDate)
-            setValue("lTServed", allResultForm[resultFormIndex]?.serviceResults?.lTServed)
-            setValue("lTNotServed", allResultForm[resultFormIndex]?.serviceResults?.lTNotServed)
-            setValue("substituteDeliveredTo", allResultForm[resultFormIndex]?.serviceResults?.substituteDeliveredTo)
-            setValue("corporateRecipient", allResultForm[resultFormIndex]?.serviceResults?.corporateRecipient)
-            setValue("recipientTitle", allResultForm[resultFormIndex]?.serviceResults?.recipientTitle)
-            setValue("door", allResultForm[resultFormIndex]?.serviceResults?.description?.door)
-            setValue("doorLocks", allResultForm[resultFormIndex]?.serviceResults?.description?.doorLocks)
-            setValue("entry", allResultForm[resultFormIndex]?.serviceResults?.description?.entry)
-            setValue("wall", allResultForm[resultFormIndex]?.serviceResults?.description?.wall)
-            setValue("floor", allResultForm[resultFormIndex]?.serviceResults?.description?.floor)
-            setValue("lock", allResultForm[resultFormIndex]?.serviceResults?.description?.lock)
-            setValue("otherDescription", allResultForm[resultFormIndex]?.serviceResults?.description?.otherDescription)
-            setValue("otherIdentifyingFeatures", allResultForm[resultFormIndex]?.serviceResults?.otherIdentifyingFeatures)
-            setValue("dateOfMailing", allResultForm[resultFormIndex]?.serviceResults?.dateOfMailing)
-            setValue("notaryDate", allResultForm[resultFormIndex]?.serviceResults?.notaryDate)
-            setValue("weight", allResultForm[resultFormIndex]?.serviceResults?.description?.weight)
-            setValue("hair", allResultForm[resultFormIndex]?.serviceResults?.description?.hair)
-            setValue("sex", allResultForm[resultFormIndex]?.serviceResults?.description?.sex)
-            setValue("skinColor", allResultForm[resultFormIndex]?.serviceResults?.description?.skinColor)
-            setValue("age", allResultForm[resultFormIndex]?.serviceResults?.description?.age)
-            setValue("height", allResultForm[resultFormIndex]?.serviceResults?.description?.height)
-            setIsConspicuous(allResultForm[resultFormIndex]?.serviceResults?.results)
+            setValue("queryInformationLTFullName", allResultForm[resultFormIndex]?.queryInformationLTFullName),
+                setValue("queryInformationLTIndexNo", JSON.stringify(allResultForm[resultFormIndex]?.queryInformationLTIndexNo, 10));
+
+            setValue("queryInformationLTAddress", allResultForm[resultFormIndex]?.queryInformationLTAddress),
+                setValue("queryInformationLTBusinessName", allResultForm[resultFormIndex]?.queryInformationLTBusinessName),
+                setValue("queryInformationLTInputDate", allResultForm[resultFormIndex]?.queryInformationLTInputDate)
+            setValue("queryInformationStandardServeTo", allResultForm[resultFormIndex]?.queryInformationStandardServeTo),
+                setValue("queryInformationStandardDefendants", allResultForm[resultFormIndex]?.queryInformationStandardDefendants),
+                setValue("queryInformationStandardPlaintiff", allResultForm[resultFormIndex]?.queryInformationStandardPlaintiff)
+            setValue("serviceResultInputDate", allResultForm[resultFormIndex]?.serviceResultInputDate ?? "")
+            setValue("serviceResultScvType", allResultForm[resultFormIndex]?.serviceResultScvType ?? "")
+            setValue("serviceResultClientId", allResultForm[resultFormIndex]?.serviceResultClientId ?? "")
+            setValue("serviceResultJobNo", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultJobNo ?? ""))
+            setValue("serviceResultServerId", allResultForm[resultFormIndex]?.serviceResultServerId ?? "")
+            setValue("serviceResultResults", allResultForm[resultFormIndex]?.serviceResultResults ?? "")
+            setValue("serviceResultserviceResultDateOfService", allResultForm[resultFormIndex]?.serviceResultserviceResultDateOfService)
+            setValue("serviceResultTimeService", allResultForm[resultFormIndex]?.serviceResultTimeService)
+            setValue("serviceResultFirstTimeOfService", allResultForm[resultFormIndex]?.serviceResultFirstTimeOfService)
+            setValue("serviceResultFirstAttemptDate", allResultForm[resultFormIndex]?.serviceResultFirstAttemptDate)
+            setValue("serviceResultSecondTimeOfService", allResultForm[resultFormIndex]?.serviceResultSecondTimeOfService)
+            setValue("serviceResultSecondAttemptDate", allResultForm[resultFormIndex]?.serviceResultSecondAttemptDate)
+            setValue("serviceResultThirdTimeOfService", allResultForm[resultFormIndex]?.serviceResultThirdTimeOfService)
+            setValue("serviceResultThirdAttemptDate", allResultForm[resultFormIndex]?.serviceResultThirdAttemptDate)
+            setValue("serviceResultlTServed", allResultForm[resultFormIndex]?.serviceResultlTServed)
+            setValue("serviceResultlTNotServed", allResultForm[resultFormIndex]?.serviceResultlTNotServed)
+            setValue("serviceResultRecipientTitle", allResultForm[resultFormIndex]?.serviceResultRecipientTitle)
+            setValue("serviceResultDoor", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultDoor))
+            setValue("serviceResultDoorLocks", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultDoorLocks))
+            setValue("serviceResultEntry", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultEntry))
+            setValue("serviceResultWall", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultWall))
+            setValue("serviceResultFloor", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultFloor))
+            setValue("serviceResultLock", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultLock))
+            setValue("serviceResultOtherDescription", allResultForm[resultFormIndex]?.serviceResultOtherDescription)
+            setValue("serviceResultSex", allResultForm[resultFormIndex]?.otherIdentifyingFeatures)
+            setValue("serviceResultHair", allResultForm[resultFormIndex]?.serviceResultHair)
+            setValue("serviceResultAge", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultAge))
+            setValue("serviceResultHeight", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultHeight))
+            setValue("serviceResultWeight", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultWeight))
+            setValue("serviceResultOtherFeatures", allResultForm[resultFormIndex]?.serviceResultOtherFeatures)
+            setValue("serviceResultDateOfMailing", allResultForm[resultFormIndex]?.serviceResultDateOfMailing)
+            setValue("serviceResultDateOfNotary", allResultForm[resultFormIndex]?.serviceResultDateOfNotary)
+            // setValue("height", allResultForm[resultFormIndex]?.serviceResults?.description?.height)
+            // setIsConspicuous(allResultForm[resultFormIndex]?.serviceResults?.results)
         }
+      
     }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm])
-    console.log("allResultForm[resultFormIndex]?.serviceResults?.skinColor", allResultForm[resultFormIndex]?.serviceResults?.results)
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC STARTS 
-    const dateOfService = watch("dateOfService");
+    const serviceResultInputDate = watch("serviceResultInputDate");
     useEffect(() => {
-        if (dateOfService) {
-            const serviceDate = new Date(dateOfService);
+        if (serviceResultInputDate) {
+            const serviceDate = new Date(serviceResultInputDate);
             const nextDay = new Date(serviceDate);
             nextDay.setDate(serviceDate.getDate() + 1);
 
             const formattedNextDay = format(nextDay, 'yyyy-MM-dd');
 
-            setValue("dateOfMailing", formattedNextDay);
-            setValue("notaryDate", formattedNextDay);
+            setValue("serviceResultDateOfMailing", formattedNextDay);
+            setValue("serviceResultDateOfNotary", formattedNextDay);
         }
-    }, [dateOfService, setValue]);
+    }, [serviceResultInputDate, setValue]);
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC ENDS 
     // const handleEnterKeyPress = (event) => {
     //     if (event.key === 'Enter') {
@@ -226,23 +225,23 @@ dispatch(searchResultFormAddReducer(false))
 
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="full Name" error={errors.fullName} name="fullName" onKeyDown={handleEnterKeyPress}
+                        <TextField register={register} label="full Name" error={errors.queryInformationLTFullName} name="queryInformationLTFullName" onKeyDown={handleEnterKeyPress}
                         />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="index no" error={errors.indexNo} name="indexNo" onKeyDown={handleEnterKeyPress}
+                        <TextField register={register} label="index no" error={errors.queryInformationLTIndexNo} name="queryInformationLTIndexNo" onKeyDown={handleEnterKeyPress}
                         />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="address" error={errors.address} name="address" onKeyDown={handleEnterKeyPress}
+                        <TextField register={register} label="address" error={errors.queryInformationLTAddress} name="queryInformationLTAddress" onKeyDown={handleEnterKeyPress}
                         />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="Business Name" error={errors.businessName} name="businessName" onKeyDown={handleEnterKeyPress}
+                        <TextField register={register} label="Business Name" error={errors.queryInformationLTBusinessName} name="queryInformationLTBusinessName" onKeyDown={handleEnterKeyPress}
                         />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="Input Date" error={errors.inputDate} name="inputDate" onKeyDown={handleEnterKeyPress}
+                        <TextField register={register} label="Input Date" error={errors.queryInformationLTInputDate} name="queryInformationLTInputDate" onKeyDown={handleEnterKeyPress}
                             type="date" />
                     </div>
                 </div>
@@ -257,15 +256,15 @@ dispatch(searchResultFormAddReducer(false))
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="serve To" error={errors.serveTo} name="serveTo" />
+                            register={register} label="serve To" error={errors.queryInformationStandardServeTo} name="queryInformationStandardServeTo" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="plaintiff" error={errors.plaintiff} name="plainTiff" />
+                            register={register} label="plaintiff" error={errors.queryInformationStandardPlaintiff} name="queryInformationStandardPlaintiff" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="defendants" error={errors.defendants} name="defendants" />
+                            register={register} label="defendants" error={errors.queryInformationStandardDefendants} name="queryInformationStandardDefendants" />
                     </div>
                 </div>
             </div>
@@ -286,7 +285,7 @@ dispatch(searchResultFormAddReducer(false))
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start mt-4">
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Result Input Date" error={errors.resultInputDate} name="resultInputDate" type="date" />
+                            register={register} label="Result Input Date" error={errors.serviceResultInputDate} name="serviceResultInputDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         {/* <Controller name="svcType" control={control} render={({ field }) => (
@@ -298,86 +297,86 @@ dispatch(searchResultFormAddReducer(false))
                                 />
                             )} /> */}
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="svc Type" error={errors.scvType} name="scvType" defaultValue="L&T Residential"
+                            register={register} label="svc Type" error={errors.serviceResultScvType} name="serviceResultScvType" defaultValue="L&T Residential"
                         />
 
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="clientId" control={control} render={({ field }) => (
+                        <Controller name="serviceResultClientId" control={control} render={({ field }) => (
                             <Dropdown
                                 options={clientIdOptions}
                                 // singleOption={getSelectedClientoption}
                                 value={field.value}
                                 onChange={field.onChange}
-                                label="Client id" error={errors.clientId?.message as string}
+                                label="Client id" error={errors.serviceResultClientId?.message as string}
                             />
                         )} />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Job" error={errors.jobNo} name="jobNo" />
+                            register={register} label="Job" error={errors.serviceResultJobNo} name="serviceResultJobNo" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="serverId" control={control} render={({ field }) => (
+                        <Controller name="serviceResultServerId" control={control} render={({ field }) => (
                             <Dropdown
                                 options={serverIdOptions}
                                 value={field.value}
                                 onChange={field.onChange}
-                                label="server Id" error={errors.serverId?.message as string}
+                                label="server Id" error={errors.serviceResultServerId?.message as string}
                             />
                         )} />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="results" control={control} render={({ field }) => (
+                        <Controller name="serviceResultResults" control={control} render={({ field }) => (
                             <Dropdown
                                 options={resultOptions}
                                 value={field.value}
                                 onChange={field.onChange}
                                 onValueChange={(value) => setIsConspicuous(value)} // Update state
 
-                                label="result" error={errors.results?.message as string}
+                                label="result" error={errors.serviceResultResults?.message as string}
                             />
                         )} />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Date of service" error={errors.dateOfService} name="dateOfService" type="date" />
+                            register={register} label="Date of service" error={errors.serviceResultserviceResultDateOfService} name="serviceResultserviceResultDateOfService" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Time of service" error={errors.timeService} name="timeService" type="time" />
+                            register={register} label="Time of service" error={errors.serviceResultTimeService} name="serviceResultTimeService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st date Attempt" error={errors.firstAttemptDate} name="firstAttemptDate" type="date" />
+                            register={register} label="1st date Attempt" error={errors.serviceResultFirstAttemptDate} name="serviceResultFirstAttemptDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st time Attempt" error={errors.firstTimeOfService} name="firstTimeOfService" type="time" />
+                            register={register} label="1st time Attempt" error={errors.serviceResultFirstTimeOfService} name="serviceResultFirstTimeOfService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="2nd date Attempt" error={errors.secondAttemptDate} name="secondAttemptDate" type="date" />
+                            register={register} label="2nd date Attempt" error={errors.serviceResultSecondAttemptDate} name="serviceResultSecondAttemptDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="2nd time Attempt" error={errors.secondTimeOfService} name="secondTimeOfService" type="time" />
+                            register={register} label="2nd time Attempt" error={errors.serviceResultSecondTimeOfService} name="serviceResultSecondTimeOfService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd date Attempt" error={errors.thirdAttemptDate} name="thirdAttemptDate" type="date" />
+                            register={register} label="3rd date Attempt" error={errors.serviceResultThirdAttemptDate} name="serviceResultThirdAttemptDate" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd time Attempt" error={errors.thirdTimeOfService} name="thirdTimeOfService" type="time" />
+                            register={register} label="3rd time Attempt" error={errors.serviceResultThirdTimeOfService} name="serviceResultThirdTimeOfService" type="time" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="L&T Served" error={errors.lTServed} name="lTServed" />
+                            register={register} label="L&T Served" error={errors.serviceResultlTServed} name="serviceResultlTServed" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="L&T Not Served" error={errors.lTNotServed} name="lTNotServed" />
+                            register={register} label="L&T Not Served" error={errors.serviceResultlTNotServed} name="serviceResultlTNotServed" />
                     </div>
 
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
@@ -402,33 +401,36 @@ dispatch(searchResultFormAddReducer(false))
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="recipient Title" error={errors.recipientTitle} name="recipientTitle" />
+                            register={register} label="recipient Title" error={errors.serviceResultRecipientTitle} name="serviceResultRecipientTitle" />
                     </div>
-                    {isConspicuous === "substitute" && allResultForm[resultFormIndex]?.serviceResults?.results === "substitute" &&
+                    {/* {isConspicuous === "substitute" && allResultForm[resultFormIndex]?.serviceResults?.results === "substitute" &&
+                     */}
+                    {isConspicuous === "substitute" &&
+
                         <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="sex" error={errors.sex} name="sex" />
+                                    register={register} label="sex" error={errors.serviceResultSex} name="serviceResultSex" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="skin Color" error={errors.skinColor} name="skinColor" />
+                                    register={register} label="skin Color" error={errors.serviceResultSkinColor} name="serviceResultSkinColor" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="hair" error={errors.hair} name="hair" />
+                                    register={register} label="hair" error={errors.serviceResultHair} name="serviceResultHair" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="age" error={errors.age} name="age" />
+                                    register={register} label="age" error={errors.serviceResultAge} name="serviceResultAge" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="height" error={errors.height} name="height" />
+                                    register={register} label="height" error={errors.serviceResultHeight} name="serviceResultHeight" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="weight" error={errors.weight} name="weight" />
+                                    register={register} label="weight" error={errors.serviceResultWeight} name="serviceResultWeight" />
                             </div>
                         </div>
                     }
@@ -441,30 +443,30 @@ dispatch(searchResultFormAddReducer(false))
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start px-8 py-4">
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="door" error={errors.door} name="door" />
+                            register={register} label="door" error={errors.serviceResultDoor} name="serviceResultDoor" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="door Locks" error={errors.doorLocks} name="doorLocks" />
+                            register={register} label="door Locks" error={errors.serviceResultDoorLocks} name="serviceResultDoorLocks" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="entry" error={errors.entry} name="entry" />
+                            register={register} label="entry" error={errors.serviceResultEntry} name="serviceResultEntry" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="wall" error={errors.wall} name="wall" />
+                            register={register} label="wall" error={errors.serviceResultWall} name="serviceResultWall" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="floor" error={errors.floor} name="floor" />
+                            register={register} label="floor" error={errors.serviceResultFloor} name="serviceResultFloor" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="lock" error={errors.lock} name="lock" />
+                            register={register} label="lock" error={errors.serviceResultLock} name="serviceResultLock" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <CheckBox onKeyDown={handleEnterKeyPress}  register={register} label="otherDescription" error={errors.otherDescription?.message} name="otherDescription" />
+                        <CheckBox onKeyDown={handleEnterKeyPress} register={register} label="Other Description" error={errors.serviceResultOtherDescription?.message} name="serviceResultOtherDescription" />
                     </div>
                 </div>
             </div>}
@@ -476,15 +478,15 @@ dispatch(searchResultFormAddReducer(false))
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Other Identifying Features" error={errors.otherIdentifyingFeatures} name="otherIdentifyingFeatures" />
+                            register={register} label="Other Identifying Features" error={errors.serviceResultOtherFeatures} name="serviceResultOtherFeatures" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Date of Mailing" error={errors.dateOfMailing} name="dateOfMailing" type="date" />
+                            register={register} label="Date of Mailing" error={errors.serviceResultDateOfMailing} name="serviceResultDateOfMailing" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Notary Date" error={errors.notaryDate} name="notaryDate" type="date" />
+                            register={register} label="Notary Date" error={errors.serviceResultDateOfNotary} name="serviceResultDateOfNotary" type="date" />
                     </div>
                 </div>
 

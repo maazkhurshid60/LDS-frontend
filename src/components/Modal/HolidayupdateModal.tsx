@@ -48,8 +48,8 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
         const updateData = { ...data, holidayId: singledata?._id }
         // const holidayYear=parseInt(data?.holidayYear)
        
-        console.log(JSON.stringify(updateData?.holidayYear)===updateData?.holidayDate.slice(0,4))
-        if(JSON.stringify(updateData?.holidayYear)!==updateData?.holidayDate.slice(0,4)){return alert("Holiday Year and Holiday Date's Year should be Same")}
+        console.log(JSON.stringify(updateData?.holidayYear),updateData?.holidayDate.slice(0,4))
+        if(updateData?.holidayYear!==updateData?.holidayDate.slice(0,4)){return alert("Holiday Year and Holiday Date's Year should be Same")}
         disptach(showSpinnerReducer(true))
 
         try {
@@ -66,7 +66,7 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
         }
     }
     useEffect(() => {
-        setValue("holidayYear", singledata?.holidayYear ?? "")
+        setValue("holidayYear", JSON.stringify(singledata?.holidayYear ?? ""))
         setValue("holidayDate", singledata?.holidayDate ?? "")
         setValue("holidayDescription", singledata?.holidayDescription ?? "")
     }, [])

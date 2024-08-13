@@ -14,6 +14,7 @@ const initialState = {
     savedLTFormData: null,
     serviceFormIndex: 0,
     singleServiceForm: null,
+    isMoveToStandardForm:"",
     status: "idle"
 }
 const serviceForm = createSlice({
@@ -27,6 +28,7 @@ const serviceForm = createSlice({
             state.isDataSaved = action.payload
         }),
         savedLTFormDataReducer: ((state, action) => {
+            console.log("action.payload",action.payload)
             state.savedLTFormData = action.payload
         }),
         getNextServiceForm: (state) => {
@@ -39,6 +41,9 @@ const serviceForm = createSlice({
                 state.serviceFormIndex--;
                 // state.singleUser = [state.allUser.tableData[state.serviceFormIndex]]; // Wrap in array if accessing a single user
             }
+        },
+        moveToStandardFormReducer:(state,action)=>{
+            state.isMoveToStandardForm=action.payload
         },
         getFirstServiceForm: (state) => {
             state.serviceFormIndex = 0;
@@ -87,7 +92,7 @@ const serviceForm = createSlice({
 })
 
 export const { addNewFormAddReducer, isDataSaveReducer, savedLTFormDataReducer, getNextServiceForm, getPreviousServiceForm, getFirstServiceForm
-    , getLastServiceForm } = serviceForm.actions
+    , getLastServiceForm ,moveToStandardFormReducer} = serviceForm.actions
 export default serviceForm.reducer
 
 // ASYNC THUNK STARTS
