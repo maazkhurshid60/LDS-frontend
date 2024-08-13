@@ -388,7 +388,7 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                 <div className="mt-6">
                     <h1 className="font-semibold   mb-4 text-base
                 md:text-md
-                lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span></h1>
+                lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                     {LTServiceData?.map((data, index) => {
                             return <div className="w-[100%] md:w-[46%] lg:w-[30%]">

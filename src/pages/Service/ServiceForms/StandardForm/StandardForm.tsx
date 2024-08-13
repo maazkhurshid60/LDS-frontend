@@ -126,8 +126,9 @@ const StandardForm = () => {
                 {/* STANDARD SERVICE TYPE STARTS */}
                 <div className="w-full">
                     <div className="flex items-center gap-x-2  mb-4">
-                    <h1 className="font-semibold text-xl">Standard Service Type</h1>
-                    {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
+                    <h1 className="font-semibold   mb-4 text-base
+                md:text-md
+                lg:text-xl">Standard Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>                    {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
                     </div>
 
 
