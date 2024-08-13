@@ -77,9 +77,10 @@ const [serviceType,setServiceType]=useState()
         toast.error("Input Date and Case No are required!");
         return;
     }
-        const data=serviceTypeOptions?.find(data=>data?.value===value)?.label
+    if(value==="Standard"){ const data=serviceTypeOptions?.find(data=>data?.value===value)?.label
         handleSubmit(StandardTypeFormSubmitFunciton)();
-        dispatch(moveToStandardFormReducer(data))
+        dispatch(moveToStandardFormReducer(data))}
+       
     }
     // GET LONGITUDE AND LATITUDE ON THE BASIS OF CITY STARTS
     const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
