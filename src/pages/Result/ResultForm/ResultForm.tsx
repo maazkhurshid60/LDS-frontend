@@ -20,7 +20,9 @@ import { handleEnterKeyPress } from "../../../utils/moveToNextFieldOnEnter";
 const ResultForm = () => {
     const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch } = useForm<FormFields>({ resolver: zodResolver(resultFormSchema) })
     const { data: clientData } = useGetAllData("/client/all-clients");
-    const clientIdOptions = clientData?.map((data, id) => { return { value: data?._id, label: data?.fullName } })
+    const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
+    const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
+console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
     const { data: serverIdData } = useGetAllData("/server/all-servers");
     const serverIdOptions = serverIdData?.map((data, id) => { return { value: data?._id, label: data?.serverCode } })
     const resultOptions = [{ value: "personal", label: "Personal" }, { value: "substitute", label: "Substitute" }, { value: "conspicuous", label: "Conspicuous" }]
@@ -51,7 +53,7 @@ const ResultForm = () => {
             serviceResultJobNo: parseInt(data?.serviceResultJobNo),
             serviceResultServerId: data?.serviceResultServerId,
             serviceResultResults: data?.serviceResultResults,
-            serviceResultserviceResultDateOfService: data?.serviceResultserviceResultDateOfService,
+            serviceResultDateOfService: data?.serviceResultDateOfService,
             serviceResultTimeService: data?.serviceResultTimeService,
             serviceResultFirstTimeOfService: data?.serviceResultFirstTimeOfService,
             serviceResultFirstAttemptDate: data?.serviceResultFirstAttemptDate,
@@ -159,7 +161,7 @@ const ResultForm = () => {
             setValue("serviceResultJobNo", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultJobNo ?? ""))
             setValue("serviceResultServerId", allResultForm[resultFormIndex]?.serviceResultServerId ?? "")
             setValue("serviceResultResults", allResultForm[resultFormIndex]?.serviceResultResults ?? "")
-            setValue("serviceResultserviceResultDateOfService", allResultForm[resultFormIndex]?.serviceResultserviceResultDateOfService)
+            setValue("serviceResultDateOfService", allResultForm[resultFormIndex]?.serviceResultDateOfService)
             setValue("serviceResultTimeService", allResultForm[resultFormIndex]?.serviceResultTimeService)
             setValue("serviceResultFirstTimeOfService", allResultForm[resultFormIndex]?.serviceResultFirstTimeOfService)
             setValue("serviceResultFirstAttemptDate", allResultForm[resultFormIndex]?.serviceResultFirstAttemptDate)
@@ -191,10 +193,10 @@ const ResultForm = () => {
       
     }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm])
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC STARTS 
-    const serviceResultInputDate = watch("serviceResultInputDate");
+    const serviceResultDateOfService = watch("serviceResultDateOfService");
     useEffect(() => {
-        if (serviceResultInputDate) {
-            const serviceDate = new Date(serviceResultInputDate);
+        if (serviceResultDateOfService) {
+            const serviceDate = new Date(serviceResultDateOfService);
             const nextDay = new Date(serviceDate);
             nextDay.setDate(serviceDate.getDate() + 1);
 
@@ -203,7 +205,7 @@ const ResultForm = () => {
             setValue("serviceResultDateOfMailing", formattedNextDay);
             setValue("serviceResultDateOfNotary", formattedNextDay);
         }
-    }, [serviceResultInputDate, setValue]);
+    }, [serviceResultDateOfService, setValue]);
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC ENDS 
     // const handleEnterKeyPress = (event) => {
     //     if (event.key === 'Enter') {
@@ -340,7 +342,7 @@ const ResultForm = () => {
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Date of service" error={errors.serviceResultserviceResultDateOfService} name="serviceResultserviceResultDateOfService" type="date" />
+                            register={register} label="Date of service" error={errors.serviceResultDateOfService} name="serviceResultDateOfService" type="date" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress}

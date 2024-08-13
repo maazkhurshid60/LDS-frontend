@@ -93,21 +93,25 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                         <div>
                         {/*SUBMENU STARTS and Render submenus only if the current link is active */}
                         { data.name === activeLink && data.submenu && (
-                            <ul   className={`
+                            <ul   className={` flex flex-col
                     ${widthSmall ? `absolute top-0 left-16 border-[1px] border-borderColor border-solid rounded-xl w-[180px] shadow-lgShadow 
                     ${subMenuShow ? "inline-block" : "hidden"}` : "relative"} bg-whiteColor overflow-hidden`}>
                                 {data.subMenu &&
                                     data.subMenu.map((subLink, subLinkId) => (
-                                        <li
-                                            key={subLinkId}
+                                        // <li
+                                        //     key={subLinkId}
+                                        //     className={`${subLink.linkName === activeSubLink
+                                        //         ? "text-primaryColorLight"
+                                        //         : "text-grayColor"
+                                        //         }  cursor-pointer hover:bg-primaryColorLight hover:text-whiteColor py-1 mt-1  px-8`}
+                                               
+                                        // >
+                                            <Link to={subLink.to}  onClick={() => subMenuFunction(subLink.linkName)}
                                             className={`${subLink.linkName === activeSubLink
                                                 ? "text-primaryColorLight"
                                                 : "text-grayColor"
-                                                }  cursor-pointer hover:bg-primaryColorLight hover:text-whiteColor py-1 mt-1  px-8`}
-                                               
-                                        >
-                                            <Link to={subLink.to}  onClick={() => subMenuFunction(subLink.linkName)}>{subLink.linkName}</Link>
-                                        </li>
+                                                }  cursor-pointer hover:bg-primaryColorLight hover:text-whiteColor py-1 mt-1  px-8`}>{subLink.linkName}</Link>
+                                        // </li>
                                     ))}
 
                             </ul>
