@@ -80,7 +80,7 @@ const [serviceType,setServiceType]=useState()
     }
     const data=serviceTypeOptions?.find(data=>data?.value===value)?.label
     if(data === "Standard"){ 
-        toast.success("sd")
+   
         handleSubmit(StandardTypeFormSubmitFunciton)();
         dispatch(moveToStandardFormReducer(data))}
        
