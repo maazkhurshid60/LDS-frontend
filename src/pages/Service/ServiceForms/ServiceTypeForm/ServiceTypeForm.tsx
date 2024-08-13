@@ -166,7 +166,9 @@ const [serviceType,setServiceType]=useState()
                 setJobNo(JSON.stringify(currentData?.jobNo));
                 setValue("inputDate", currentData?.inputDate);
                 setValue("caseNo",JSON.stringify(currentData?.caseNo));
-                setValue("oLTIndexNo", JSON.stringify(currentData?.oLTIndexNo));
+                if(currentData?.oLTIndexNo=== null) setValue("oLTIndexNo", "");
+                else setValue("oLTIndexNo", JSON.stringify(currentData?.oLTIndexNo));
+               
                 setValue("oLTDescription", currentData?.oLTDescription);
                 setValue("caption", currentData?.caption);
                 setValue("lTSFirstName", currentData?.lTSFirstName);
