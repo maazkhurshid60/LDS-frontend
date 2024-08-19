@@ -1,12 +1,24 @@
 import React from "react"
-const Body = () => {
+export interface bodyProps {
+    sex?: string;
+    skinColor?: string;
+    age?: string | number;
+    height?: string | number
+    weight?: string | number
+    hair?: string
+    dateOfService?:string
+}
+const Body: React.FC<bodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4">
         <p>
             I SOME_TEXT_WILL_BE_THERE_FROM_BACKEND_API being duly swom, deposes and says: I am  Petitioner/Landlord's agent and I reside in
             or have offices in the country of Kings I have been requested by the attomey for the Petitioner Landlord to make an investigation
             to as certain if the above name Tenant(s) and Undertenant(s) are the present time in the military service.
         </p>
-        <p>ON SOME_DATE_WILL_BE_THERE_FROM_BACKEND_API AT SOME_TIME_WILL_BE_THERE_FROM_BACKEND_API</p>
+        <p>ON {item?.dateOfService}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            {/* AT SOME_TIME_WILL_BE_THERE_FROM_BACKEND_API */} , I went to
+            </p>
+       
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;And had a conservation with SOME_TEXT_WILL_BE_THERE_FROM_BACKEND_API (relative/resides at premises) at the subject premises, I asked
             the person(s) spoken to whether said tenant(s) and/or Undertenant(s)sued here in as SOME_TEXT_WILL_BE_THERE_FROM_BACKEND_API and
             SOME_TEXT_WILL_BE_THERE_FROM_BACKEND_API was in the military service of United Service or the State of New York in any capacity
@@ -56,9 +68,17 @@ const Body = () => {
             and have never seen them in military uniform
         </p>
         <p>
-        From the facts above set forth, I am convinced that the said tenant(s) is not in or financially dependant upon someone in the military service of the military service of
-        the United State or of New York State at the present time.  
-    </p>
+            From the facts above set forth, I am convinced that the said tenant(s) is not in or financially dependant upon someone in the military service of the military service of
+            the United State or of New York State at the present time.
+        </p>
+        <div className="flex items-center justify-between">
+        <p className="font-semibold">
+           Sworn to before me on
+        </p>
+        <p className="">
+            Lic: licFromBackend
+        </p>
+        </div>
     </div>
 }
 export default Body

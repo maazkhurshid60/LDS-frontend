@@ -114,11 +114,11 @@ const LegalDelivery = () => {
         <OutletLayout>
             <OutletLayoutHeader heading="Legal Delivery">
             </OutletLayoutHeader>
-            <div className="mt-4 flex flex-col  gap-4
+            {/* <div className="mt-4 flex flex-col  gap-4
             sm:flex-row sm:items-center">
                 <Searchbar />
                 <Filter onClick={() => setShowFilterMenu(!showFilterMenu)} />
-            </div>
+            </div> */}
             {filteredData?.length > 0 &&
             <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                 <div ref={dropdownRef}>

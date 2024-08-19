@@ -3,8 +3,8 @@ import { FieldError } from "react-hook-form";
 
 export interface TextFieldProps{
 label:string
-register:any
-error:any
+register?:any
+error?:any
 name:string
 placeholder?:string
 type?:string

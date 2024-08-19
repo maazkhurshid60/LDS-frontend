@@ -1,10 +1,12 @@
-import React, { forwardRef, useRef } from "react"
+import React, { forwardRef, useEffect, useRef, useState } from "react"
 import TemplateOutlet from "../../TemplateOutlet"
 import Header from "./Sections/Header"
 import Footer from "./Sections/Footer"
 import Body from "./Sections/Body"
 import ReactToPrint from "react-to-print"
 import Button from "../../../Buttons/Button/Button"
+import { useSelector } from "react-redux"
+import { RootState } from "../../../../redux/store"
 // export interface LiNonReportsProps {
 //     props?: any;
 // }
@@ -25,15 +27,70 @@ import Button from "../../../Buttons/Button/Button"
 
 const LiNonReports = () => {
     const LiNonReportsPrintRef = useRef<HTMLButtonElement | null>(null);
+    const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData)
+    console.log("legalDeliveryDataa", legalDeliveryDataa)
+    const [header, setHeader] = useState({
+        index: "",
+        petitioner: "",
+        against: "",
+
+    })
+    const [bodyData, setBodyData] = useState({
+        dateOfService: "",
+        sex: "",
+        skinColor: "",
+        age: "",
+        height: "",
+        weight: "",
+        hair: "",
+
+    })
+    useEffect(() => {
+        if (legalDeliveryDataa?.searchResult === "service") {
+            setHeader(prev => ({
+                ...prev,
+                index: legalDeliveryDataa?.data?.oLTIndexNo,
+                affidavitName: "",
+                serviceName: "",
+                licNo: "",
+
+            }))
+        } else if (legalDeliveryDataa?.searchResult === "result") {
+            setHeader(prev => ({
+                ...prev,
+                index: legalDeliveryDataa?.queryInformationLTIndexNo,
+
+            }))
+            setBodyData(prev => ({
+                ...prev,
+                dateOfService:legalDeliveryDataa?.data?.serviceResultDateOfService,
+                sex: legalDeliveryDataa?.data?.serviceResultSex,
+                skinColor: legalDeliveryDataa?.data?.serviceResultSkinColor,
+                age: legalDeliveryDataa?.data?.serviceResultAge,
+                height: legalDeliveryDataa?.data?.serviceResultHeight,
+                weight: legalDeliveryDataa?.data?.serviceResultWeight,
+                hair: legalDeliveryDataa?.data?.serviceResultHair,
+
+            }))
+        }
+    }, [])
     return (
         <>
-        <div className="absolute h-[83.5vh] overflow-y-scroll relative">
-            <TemplateOutlet>
-                <Header />
-                <Body />
-                <Footer />
-            </TemplateOutlet>
-            <div className="flex justify-end mt-5 mb-5 mr-5">
+            <div className="absolute h-[83.5vh] overflow-y-scroll relative">
+                <TemplateOutlet>
+                    <Header index={header?.index} />
+                    <Body 
+                     sex= {bodyData?.sex}
+                     skinColor= {bodyData?.skinColor}
+                     age= {bodyData?.age}
+                     height= {bodyData?.height}
+                     weight= {bodyData?.weight}
+                     hair= {bodyData?.hair}
+             
+                    />
+                    <Footer />
+                </TemplateOutlet>
+                <div className="flex justify-end mt-5 mb-5 mr-5">
                     <ReactToPrint
                         trigger={() => (
                             <div className="w-[10%]">
@@ -41,11 +98,11 @@ const LiNonReports = () => {
                             </div>
                         )}
                         content={() => LiNonReportsPrintRef.current}
-                        />
+                    />
                 </div>
-        </div>    
-        <div style={{ display: "none" }}>
-              {/* The content to print */}
+            </div>
+            <div style={{ display: "none" }}>
+                {/* The content to print */}
                 <div ref={LiNonReportsPrintRef}>
                     <TemplateOutlet>
                         <Header />
@@ -54,7 +111,7 @@ const LiNonReports = () => {
                     </TemplateOutlet>
                 </div>
             </div>
-            </>
+        </>
     );
 };
 

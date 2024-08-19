@@ -23,7 +23,10 @@ import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
 import { toast } from "react-toastify";
 import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
 import axios from "axios";
+import { DeleteIcon } from "../../../../components/Icons/DeleteIcon";
 export type FormFields = z.infer<typeof LTFormSchema>
+import { RxCross2 } from "react-icons/rx";
+
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress.mailingAddressData)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
@@ -39,7 +42,7 @@ const StandardTypeForm = () => {
     const filterExistingFormMailingAdress = getFormMailingAdress?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
-    console.log("filterExistingFormMailingAdress",filterExistingFormMailingAdress)
+    console.log("filterExistingFormMailingAdress", filterExistingFormMailingAdress)
     const [checkedName, setCheckedName] = useState<string | null>(
         // LTServiceData?.find((data) => data?.isActive)?._id || null
     );
@@ -50,7 +53,7 @@ const StandardTypeForm = () => {
     const { data: clientData } = useGetAllData("/client/all-clients");
     const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
     const { data: LTServiceData } = useGetAllData("/ltservice-type/all-lt-service-types");
-    
+
     const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
     const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === savedLTData?.clientId && { value: data?._id, label: data?.fullName })
@@ -60,31 +63,35 @@ const StandardTypeForm = () => {
     const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === savedLTData?.serviceType && { value: data?._id, label: data?.fullName })
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
-const [serviceType,setServiceType]=useState()
+    const [serviceType, setServiceType] = useState()
     const dispatch = useDispatch()
-    const { register, formState: { errors }, control, handleSubmit, setValue, reset,getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
+    const { register, formState: { errors }, control, handleSubmit, setValue, reset, getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
     const isUpdateMail = useSelector((state: RootState) => state.mailingAdress.isUpdatingMailAddress)
     const [jobNo, setJobNo] = useState<any>()
+    const [inputFullname, setInputFullname] = useState("");
+    const [multipleFullname, setMultipleFullname] = useState<string[]>([]);
+    const [joinedFullname, setJoinedFullname] = useState("");
 
 
     // handleMoveToStandardForm
-    const handleMoveToStandardForm=(value)=>{
+    const handleMoveToStandardForm = (value) => {
         // console.log("servicetype<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", serviceTypeOptions?.find(data=>data?.value===value)?.label)
-       const  {clientId,inputDate,caseNo}= getValues(); 
-    
-       if (!inputDate || !caseNo ||!clientId ||!checkedName) {
-        // Show error message if either field is empty
-        setValue("serviceType", "");
-        toast.error("Input Date,case No ,clientI d and  lTServiceType are required!");
-        return;
-    }
-    const data=serviceTypeOptions?.find(data=>data?.value===value)?.label
-    if(data === "Standard"){ 
-   
-        handleSubmit(StandardTypeFormSubmitFunciton)();
-        dispatch(moveToStandardFormReducer(data))}
-       
+        const { clientId, inputDate, caseNo } = getValues();
+
+        if (!inputDate || !caseNo || !clientId || !checkedName) {
+            // Show error message if either field is empty
+            setValue("serviceType", "");
+            toast.error("Input Date,case No ,clientI d and  lTServiceType are required!");
+            return;
+        }
+        const data = serviceTypeOptions?.find(data => data?.value === value)?.label
+        if (data === "Standard") {
+
+            handleSubmit(StandardTypeFormSubmitFunciton)();
+            dispatch(moveToStandardFormReducer(data))
+        }
+
     }
     // GET LONGITUDE AND LATITUDE ON THE BASIS OF CITY STARTS
     const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
@@ -148,6 +155,7 @@ const [serviceType,setServiceType]=useState()
             reset();
             setCheckedName(null);
             dispatch(emptyMailingAddressOnNewFormAddReducer())
+            setMultipleFullname([])
         }
     }, [isNewFormAdding, reset]);
 
@@ -167,13 +175,12 @@ const [serviceType,setServiceType]=useState()
                 setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
                 setJobNo(JSON.stringify(currentData?.jobNo));
                 setValue("inputDate", currentData?.inputDate);
-                setValue("caseNo",JSON.stringify(currentData?.caseNo));
-                if(currentData?.oLTIndexNo=== null) setValue("oLTIndexNo", "");
+                setValue("caseNo", JSON.stringify(currentData?.caseNo));
+                if (currentData?.oLTIndexNo === null) setValue("oLTIndexNo", "");
                 else setValue("oLTIndexNo", JSON.stringify(currentData?.oLTIndexNo));
-               
+
                 setValue("oLTDescription", currentData?.oLTDescription);
                 setValue("caption", currentData?.caption);
-                setValue("lTSFirstName", currentData?.lTSFirstName);
                 setValue("lTSBusinessName", currentData?.lTSBusinessName);
                 setValue("lTSAddress", currentData?.lTSAddress);
                 setValue("lTSApt", currentData?.lTSApt);
@@ -181,14 +188,15 @@ const [serviceType,setServiceType]=useState()
                 setValue("lTSState", currentData?.lTSState);
                 setValue("lTSZip", currentData?.lTSZip);
                 setValue("lTSDescription", currentData?.lTSDescription);
-
+                setMultipleFullname(currentData?.lTSFirstName.split(','));
                 setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
             } else {
                 console.log("No current data found for the form index.");
             }
-        } 
+        }
         else {
             console.log("new form is adding");
+
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
             setValue("inputDate", savedLTData?.inputDate);
@@ -196,7 +204,7 @@ const [serviceType,setServiceType]=useState()
 
             setValue("caseNo", savedLTData?.caseNo);
             setValue("caption", savedLTData?.caption);
-            setValue("lTSFirstName", savedLTData?.lTSFirstName);
+            // setValue("lTSFirstName", savedLTData?.lTSFirstName);
             setValue("lTSBusinessName", savedLTData?.lTSBusinessName);
             setValue("lTSAddress", savedLTData?.address);
             setValue("lTSApt", savedLTData?.lTSApt);
@@ -205,7 +213,8 @@ const [serviceType,setServiceType]=useState()
             setValue("lTSZip", savedLTData?.lTSZip);
             setValue("lTSDescription", savedLTData?.lTSDescription);
             // alert(savedLTData?.lTServiceType?._id)
-            setCheckedName(savedLTData?.lTServiceType?._id);   
+            {savedLTData?.lTSFirstName && setMultipleFullname(savedLTData?.lTSFirstName.split(',')); }
+            setCheckedName(savedLTData?.lTServiceType?._id);
         }
     }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding]);
 
@@ -253,10 +262,12 @@ const [serviceType,setServiceType]=useState()
         const [day, month, year] = parts;
         return `${year}-${month}-${day}`;
     };
+  
 
     const StandardTypeFormSubmitFunciton = (data) => {
-        if(checkedName===null)setCheckedName("empty")
-        console.log(">>>>>>>>>>>>>>saving StandardTypeFormSubmitFunciton>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",data)        //    DATA FOR STANDARD FORM STARTS
+        console.log(joinedFullname)
+        if (checkedName === null) setCheckedName("empty")
+        console.log(">>>>>>>>>>>>>>saving StandardTypeFormSubmitFunciton>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data)        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: allServiceFormData[serviceFormIndex]?.sSDCourt,
@@ -277,9 +288,10 @@ const [serviceType,setServiceType]=useState()
         //    DATA FOR L&T FORM STARTS
 
         const serviceFormId = allServiceFormData[serviceFormIndex]?._id
+       
         const LTData = {
             // serviceFormId,
-            jobNo:parseInt(jobNo),
+            jobNo: parseInt(jobNo),
             inputDate: data?.inputDate,
             clientId: data?.clientId,
             serviceType: data?.serviceType,
@@ -288,7 +300,7 @@ const [serviceType,setServiceType]=useState()
             lTServiceType: checkedName,
             noOfAddLMailings: isNewFormAdding ? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
             mailingAddresses: isNewFormAdding ? getMailingAddressDataOnFormAdding : getFormMailingAdress,
-            lTSFirstName: data?.lTSFirstName,
+            lTSFirstName: joinedFullname,
             lTSBusinessName: data?.lTSBusinessName,
             lTSAddress: data?.lTSAddress,
             lTSApt: data?.lTSApt,
@@ -315,7 +327,7 @@ const [serviceType,setServiceType]=useState()
             dispatch(savedLTFormDataReducer(LTData))
 
         } else {
-        
+
             dispatch(savedLTFormDataReducer(LTData))
             toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
         }
@@ -333,9 +345,36 @@ const [serviceType,setServiceType]=useState()
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [handleSubmit, StandardTypeFormSubmitFunciton]);
-console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFormIndex]?.lTServiceType?._id
-)
+    // console.log("allServiceFormData[serviceFormIndex]", allServiceFormData[serviceFormIndex]?.lTServiceType?._id)
+    const onKeyPressForAnotherName = (e) => {
+        if (e.key === 'Enter') {
 
+            if (multipleFullname.includes(e.target.value)) {
+            toast.error("Duplicate data can't be entered");
+        } else {
+            const updatedFullname = [...multipleFullname, e.target.value];
+            setMultipleFullname(updatedFullname);
+            
+            const joinedNames = updatedFullname.join(',');
+            console.log(">>>>>>>>", joinedNames);
+            setJoinedFullname(joinedNames);
+        }
+            
+            setInputFullname("");
+        }
+        // else if (e.key === 'Escape') {
+        //     setInputFullname(""); // Clear input on 'Escape' key press
+        //     const joinedNames = multipleFullname.join(',');
+        //     setJoinedFullname(joinedNames); // Or do something else with the joined string
+        // }
+
+    }
+    const deleteName = (data) => {
+        const freshData = multipleFullname?.filter(multipleFullname => multipleFullname !== data)
+        setMultipleFullname(freshData)
+        setJoinedFullname(freshData.join(','));
+    }
+    
     return <div className="w-[100%]">
         <div className="w-full">
             <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
@@ -353,7 +392,7 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
 
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" required/>
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" required />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <Controller name="clientId" control={control} render={({ field }) => (
@@ -368,7 +407,7 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                         )} />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required/>
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <Controller name="serviceType" control={control} render={({ field }) => (
@@ -379,13 +418,13 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                                 onChange={field.onChange}
                                 label="service type"
                                 error={errors.serviceType?.message as string}
-                                onValueChange={(value)=>handleMoveToStandardForm(value)} // Update state
+                                onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
                                 required
 
                             />
                         )} />
                     </div>
-                    
+
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         <TextField onKeyDown={handleEnterKeyPress} register={register} label="caption" error={errors.caption} name="caption" />
                     </div>
@@ -396,10 +435,10 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                 md:text-md
                 lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                    {LTServiceData?.map((data, index) => {
+                        {LTServiceData?.map((data, index) => {
                             return <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <CheckBox
-                                onKeyDown={handleEnterKeyPress} 
+                                    onKeyDown={handleEnterKeyPress}
                                     register={register}
                                     name={data.name}
                                     label={data.name}
@@ -431,13 +470,34 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
 
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField  onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" />
+                            {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" /> */}
+                            <div className="flex flex-col w-full items-start gap-1 flex-wrap">
+                                <label className=" font-normal sm:font-medium text-sm capitalize">Full Name</label>
+                                <div className="flex items-center flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1 text-wrap">
+                                    <div className="flex items-center gap-x-3 flex-wrap">
+                                        {multipleFullname?.length > 0 && multipleFullname?.map(data =>
+                                            <div className="flex items-center gap-x-1">
+                                                <p>{data}</p>
+                                                <RxCross2 className="text-redColor cursor-pointer" size={14} onClick={() => deleteName(data)} />
+                                            </div>
+                                        )}
+
+                                    </div>
+
+                                    <input
+                                        className="w-[100px] focus:border-none focus:outline-none bg-grayColorLight/50"
+                                        value={inputFullname} // Bind the input field to inputFullname state
+                                        onChange={(e) => setInputFullname(e.target.value)} // Update state on change
+                                        onKeyDown={(e) => onKeyPressForAnotherName(e)}
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField  onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField  onKeyDown={handleEnterKeyPress} register={register} label="address" error={errors.lTSAddress} name="lTSAddress" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="address" error={errors.lTSAddress} name="lTSAddress" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt" error={errors.lTSApt} name="lTSApt" />
