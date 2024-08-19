@@ -7,7 +7,7 @@ export interface DropdownProp {
     value: string;
     onChange: (value: string) => void;
     onValueChange?: (value: string) => void; // New prop for external value change
-
+required?:boolean;
     error: string;
     label: string;
 }
@@ -23,7 +23,8 @@ const Dropdown: React.FC<DropdownProp> = ({
     value,
     label,
     onChange,
-    onValueChange
+    onValueChange,
+    required=false
     // singleOption
 }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +55,7 @@ const Dropdown: React.FC<DropdownProp> = ({
     return (
         <div className="w-full" ref={dropdownRef}>
             <label className="sm:font-medium text-sm capitalize">{label} 
-                {/* <span className="text-redColor">*</span> */}
+                {required && <span className="text-redColor">*</span> }
                 </label>
             <div className="w-full relative">
                 <div

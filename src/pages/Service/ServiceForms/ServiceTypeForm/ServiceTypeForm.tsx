@@ -363,6 +363,7 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                                 value={field.value}
                                 onChange={field.onChange}
                                 label="Client id" error={errors.clientId?.message as string}
+                                required
                             />
                         )} />
                     </div>
@@ -379,6 +380,7 @@ console.log("allServiceFormData[serviceFormIndex]",allServiceFormData[serviceFor
                                 label="service type"
                                 error={errors.serviceType?.message as string}
                                 onValueChange={(value)=>handleMoveToStandardForm(value)} // Update state
+                                required
 
                             />
                         )} />
