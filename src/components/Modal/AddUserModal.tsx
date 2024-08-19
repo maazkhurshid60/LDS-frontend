@@ -36,10 +36,10 @@ const AddUserModal = () => {
         // dispatch(showModalReducer(false))
         try {
             const res = await registerUserApi(allData)
-            toast.success(`${res?.data?.message}`)
+            // toast.success(`${res?.data?.message}`)
             dispatch(showModalReducer(false))
         } catch (error) {
-            toast.error("Something went wrong or Network later.")
+          
             dispatch(showModalReducer(false))
         } finally {
             dispatch(showSpinnerReducer(false))

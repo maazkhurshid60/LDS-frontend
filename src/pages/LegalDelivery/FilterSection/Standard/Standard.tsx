@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "../../../../components/InputFields/TextField/TextField";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,11 +7,44 @@ import Dropdown from "../../../../components/dropdown/Dropdown";
 import Button from "../../../../components/Buttons/Button/Button"
 import { standardSchema } from "../../../../schemas/legal delivery schemas/standard";
 import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
+import { getAllFilteredDataThunk, getSearchNameReducer } from "../../../../redux/slice/legalDelivery";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { baseUrl } from "../../../../apiservices/baseUrl/baseUrl";
 const Standard = () => {
+    const accessToken = localStorage.getItem("accessToken");
     const { register, formState: { errors }, handleSubmit, control } = useForm({ resolver: zodResolver(standardSchema) })
+    const dispatch = useDispatch()
+
       // function to get data for service filter
-    const serviceFilterFunction = (data) => {
-        console.log(data)
+    //   const serviceFilterFunction=async(searchData)=>{           
+    //         try {
+    //             const response = await axios.get(`${baseUrl}/legal-delivery/search`, {
+    //                 headers: { "Authorization": `Bearer ${accessToken}` },
+    //                 params: {
+    //                     searchIn: searchData?.searchIn,
+    //                     data: searchData?.data,
+    //                 },
+                  
+    //             })
+    //             console.log(response)
+    //             return response?.data?.data
+    //         } catch (error) {
+    //             console.log(error)
+    //             throw new Error(error)
+    //         }}
+      
+    const serviceFilterFunction = (searchData) => {
+       
+            const indexNumber = isNaN(parseInt(searchData?.indexNumber)) ? "" : parseInt(searchData?.indexNumber);
+            const data = {
+                ...searchData, indexNumber 
+            }
+            const sendingData = { searchIn: "standard", data }
+            dispatch(getAllFilteredDataThunk(sendingData))
+            dispatch(getSearchNameReducer("standard"))
+
+        
     }
     useEffect(() => {
         const handleKeyPress = (event) => {
@@ -29,6 +62,9 @@ const Standard = () => {
             document.removeEventListener("keydown", handleKeyPress);
         };
     }, [handleSubmit, serviceFilterFunction]);
+
+
+
     return <form className="flex flex-col items-start gap-y-3 overflow-y-auto h-[70vh]" onSubmit={handleSubmit(serviceFilterFunction)}>
         <TextField onKeyDown={handleEnterKeyPress}  register={register} label="Other Std Description" error={errors.otherStdDescription} name="otherStdDescription"   />
         <TextField onKeyDown={handleEnterKeyPress}  register={register} label="Index Number" error={errors.indexNumber} name="indexNumber"   />

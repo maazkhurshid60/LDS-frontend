@@ -168,6 +168,7 @@ export const updateUser = createAsyncThunk<any>(
             dispatch(getAllUsers());
 
         } catch (error) {
+            
             toast.error("notupdated yet")
         }
         finally {

@@ -12,7 +12,7 @@ import AddMailing from "./AddMailing";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import GetSelectedMailing from "./getSelectedMailing";
-import { addMailAddressIntoFormL, getAllMailingAddressThunk, isAddingMailAddressReducer, getFormMailAddress, getFormMailAddressAfterDeletion, getMailAddress, getMailAddressAfterDeletion, isUpdaitngMailAddressReducer } from "../../../../redux/slice/mailingAdresses";
+import { addMailAddressIntoFormL, getAllMailingAddressThunk, isAddingMailAddressReducer, getFormMailAddress, getFormMailAddressAfterDeletion, getMailAddress, getMailAddressAfterDeletion, isUpdaitngMailAddressReducer, emptyMailingAddressOnNewFormAddReducer } from "../../../../redux/slice/mailingAdresses";
 import { IoMdClose } from "react-icons/io";
 import { LTFormSchema } from "../../../../schemas/service forms/L&TFormSchema";
 import { useGetAllData } from "../../../../hooks/getAllDataHook/useGetAllData";
@@ -39,6 +39,7 @@ const StandardTypeForm = () => {
     const filterExistingFormMailingAdress = getFormMailingAdress?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
+    console.log("filterExistingFormMailingAdress",filterExistingFormMailingAdress)
     const [checkedName, setCheckedName] = useState<string | null>(
         // LTServiceData?.find((data) => data?.isActive)?._id || null
     );
@@ -146,6 +147,7 @@ const [serviceType,setServiceType]=useState()
         if (isNewFormAdding) {
             reset();
             setCheckedName(null);
+            dispatch(emptyMailingAddressOnNewFormAddReducer())
         }
     }, [isNewFormAdding, reset]);
 
@@ -310,6 +312,8 @@ const [serviceType,setServiceType]=useState()
         if (!isNewFormAdding) {
 
             dispatch(updateServiceFormThunk(updatedData))
+            dispatch(savedLTFormDataReducer(LTData))
+
         } else {
         
             dispatch(savedLTFormDataReducer(LTData))

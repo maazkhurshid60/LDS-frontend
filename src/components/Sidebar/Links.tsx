@@ -9,6 +9,7 @@ import { logoutUser } from "../../redux/slice/userDetail";
 import { openMenuFunction } from "../../redux/slice/menuOpen";
 import { RootState } from "../../redux/store";
 import Tooltip from "../Tooltip/Tooltip";
+import { emptyLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
 export interface widthProp {
     widthSmall: boolean
     userData: string
@@ -41,6 +42,9 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
         localStorage.setItem("serviceFormActiveSection", "0")
         dispatch(logoutUser())
         dispatch(emptyNavbarData())
+        
+        dispatch(emptyLegalDeliveryReducer())
+
         navigate("/login")
     }
     // SUBMENU FUNCTION

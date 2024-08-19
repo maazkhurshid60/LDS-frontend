@@ -40,6 +40,10 @@ const mailingAdresses = createSlice({
         isAddingMailAddressReducer:(state,action)=>{
             state.isAddingMailAddress=action.payload
         },
+        emptyMailingAddressOnNewFormAddReducer:(state)=>{
+            state.serviceFormMailingAdress.mailingAdresses=[]
+
+        },
         isUpdaitngMailAddressReducer:(state,action)=>{
             state.isUpdatingMailAddress=action.payload
         },
@@ -139,7 +143,7 @@ const mailingAdresses = createSlice({
     }
 })
 
-export const { addMailAddress, getMailAddress, getMailAddressAfterDeletion, getFormMailAddress,
+export const { addMailAddress, getMailAddress, getMailAddressAfterDeletion, getFormMailAddress,emptyMailingAddressOnNewFormAddReducer,
     addMailAddressIntoFormL, getFormMailAddressAfterDeletion ,isAddingMailAddressReducer,isUpdaitngMailAddressReducer} = mailingAdresses.actions
 export default mailingAdresses.reducer
 

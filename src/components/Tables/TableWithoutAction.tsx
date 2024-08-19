@@ -10,15 +10,56 @@ const TableWithoutAction: React.FC<TableWithoutActionProps> = ({ headers, tableD
     const [clickedRowIndex, setClickedRowIndex] = useState<number | null>(null);
 
     // Function to filter out unnecessary keys from rowData
+    // const filterOutIdKeys = (rowData: Record<string, any>): Record<string, any> => {
+    //     const filteredData: Record<string, any> = {};
+    //     Object.keys(rowData).forEach((key) => {
+    //         if (key !== "_id" && key !== "createdAt" && key !== "updatedAt" && key !== "__v" && key !== "roles" && key !== "isActive" && key !== "mailingAddresses" && key !== "noOfAddLMailings" ) {
+    //             filteredData[key] = rowData[key];
+    //         }
+    //     });
+    //     return filteredData;
+    // };
+
     const filterOutIdKeys = (rowData: Record<string, any>): Record<string, any> => {
         const filteredData: Record<string, any> = {};
         Object.keys(rowData).forEach((key) => {
-            if (key !== "_id" && key !== "createdAt" && key !== "updatedAt" && key !== "__v" && key !== "roles" && key !== "isActive") {
-                filteredData[key] = rowData[key];
+            if (
+                key !== "_id" &&
+                key !== "createdAt" &&
+                key !== "updatedAt" &&
+                key !== "__v" &&
+                key !== "roles" &&
+                key !== "isActive" &&
+                key !== "mailingAddresses" &&
+                key !== "noOfAddLMailings"
+            ) {
+                const value = rowData[key];
+                if (typeof value === 'object' && value !== null) {
+                    // Check for specific nested objects and extract the required fields
+                    if (key === 'clientId' && value.code) {
+                        filteredData[key] = value.code;
+                    } else if (key === 'lTServiceType' && value.name) {
+                        filteredData[key] = value.name;
+                    } else if (key === 'lastUpdatedBy' && value.userName) {
+                        filteredData[key] = value.userName;
+                    }else if (key === 'serviceFormCreatedBy' && value.userName) {
+                        filteredData[key] = value.userName;
+                    } else if (key === 'serviceType' && value.serviceTypeCode) {
+                        filteredData[key] = value.serviceTypeCode;
+                    }  else if (key === 'standardServiceType' && value.name) {
+                        filteredData[key] = value.name;
+                    } else {
+                        // Handle other nested objects if necessary
+                        filteredData[key] = JSON.stringify(value); // or another appropriate value
+                    }
+                } else {
+                    filteredData[key] = value;
+                }
             }
         });
         return filteredData;
     };
+    
 
     const handleRowClick = (rowData:string,rowIndex: number) => {
         setClickedRowIndex(rowIndex);
@@ -26,6 +67,7 @@ const TableWithoutAction: React.FC<TableWithoutActionProps> = ({ headers, tableD
             getRowData(rowData,rowIndex);
         }
     };
+    console.log(tableData)
 
     return (
         <div className="relative w-full overflow-x-auto rounded-lg mt-4 border-[1px] border-borderColor border-solid rounded-xl capitalize text-sm sm:text-base">

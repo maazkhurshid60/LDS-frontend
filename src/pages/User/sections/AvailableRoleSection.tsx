@@ -8,6 +8,7 @@ import { RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { showModalReducer, showRoleModalReducer } from "../../../redux/slice/showModal";
 import { deleteRole, getAllRoles, getOneRole } from "../../../redux/slice/roles";
+import TableWithoutAction from "../../../components/Tables/TableWithoutAction";
 const AvailableRoleSection = () => {
     const showModal = useSelector((state: RootState) => state?.showModal.isShowRoleModal)
     const allRolesData = useSelector((state: RootState) => state?.roles?.allRoles?.tableData)
@@ -20,7 +21,7 @@ const AvailableRoleSection = () => {
     const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
     const headers = [
         "name", "description",
-        ...(isAdmin ? ["Action"] : [])  // Add "Action" if isAdmin is true
+        // ...(isAdmin ? ["Action"] : [])  // Add "Action" if isAdmin is true
     ];
     const onPageChange = (page: number) => {
         setCurrentPage(page); // Update current page state
@@ -46,9 +47,9 @@ const AvailableRoleSection = () => {
         dispatch(showRoleModalReducer(true))
     }
 
-    useEffect(() => {
-        dispatch(getAllRoles())
-    }, [dispatch, deleteRoleFunction])
+    // useEffect(() => {
+    //     dispatch(getAllRoles())
+    // }, [ deleteRoleFunction])
 
 
     return <>
@@ -57,12 +58,14 @@ const AvailableRoleSection = () => {
 
             <h1 className="font-semibold md:text-md
     lg:text-xl">Available Roles</h1>
-            <div className="w-[13%]">
+            {/* <div className="w-[13%]">
 
                 {isAdmin && <Button text="Add New Role" onClick={showModalFunction} />}
-            </div>
+            </div> */}
         </div>
-            <Table headers={headers} tableData={allRolesData} onClick={deleteRoleFunction} onUpdateClick={updateRoleFunction} />
+            {/* <Table headers={headers} tableData={allRolesData} onClick={deleteRoleFunction} onUpdateClick={updateRoleFunction} /> */}
+            <TableWithoutAction headers={headers} tableData={allRolesData}   />
+
             {/* <Pagination
 totalPages={totalPages}
 currentPage={currentPage}

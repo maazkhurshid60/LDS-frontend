@@ -4,21 +4,28 @@ import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import Table from "../../components/Tables/Table";
-import { headers, tableData } from "../../constdata/LegalDeliveryData";
+import { headers, headersResult, headersService, headersStandard, tableData } from "../../constdata/LegalDeliveryData";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import Pagination from "../../components/Pagination/Pagination";
 import FilterMenu from "./FilterSection/FilterMenu/FilterMenu";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getSingleLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
+import { useDispatch, useSelector } from "react-redux";
+import { emptyLegalDeliveryReducer, getSingleLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
 import TableWithoutAction from "../../components/Tables/TableWithoutAction";
+import { RootState } from "../../redux/store";
+import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 const LegalDelivery = () => {
     const [showFilterMenu, setShowFilterMenu] = useState(false)
     const [showDropDown, setShowDropDown] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const [currentPage, setCurrentPage] = useState(1); // State to manage current page
     const dispatch = useDispatch()
+    const filteredData = useSelector((state: RootState) => state?.legalDelivery?.legalDeliveryData)
+    const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData.searchResult)
+
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: filteredData?.length > 0 && filteredData || [] })
+
+    console.log("filteredData", filteredData)
     // const agencyLicRef = useRef<HTMLButtonElement | null>(null);
     // const LiNonReportsRef = useRef<HTMLButtonElement | null>(null);
     // const ltExtraNameReportRef = useRef<HTMLButtonElement | null>(null);
@@ -72,9 +79,9 @@ const LegalDelivery = () => {
             setShowDropDown(false);
         }
     };
-    const getUserIdFunction = (userId: string,index) => {
-        const selectedData = tableData?.tableData?.find((data, id) => data?._id === userId)
-        console.log(userId)
+    const getUserIdFunction = (userId: string, index) => {
+        const selectedData = filteredData?.find((data, id) => data?._id === userId)
+        console.log(selectedData)
         dispatch(getSingleLegalDeliveryReducer(selectedData))
     }
     useEffect(() => {
@@ -84,21 +91,12 @@ const LegalDelivery = () => {
         };
     }, [])
 
-    useEffect(() => {
-        dispatch(getSingleLegalDeliveryReducer(tableData?.tableData[0]))
+    // useEffect(() => {
+    //     dispatch(getSingleLegalDeliveryReducer(tableData?.tableData[0]))
 
-    }, [])
+    // }, [])
 
-    const dataLimit = 3; // Define your data limit here
-    const totalPages = Math.ceil(tableData?.tableData?.length / dataLimit);
-    const onPageChange = (page: number) => {
-        setCurrentPage(page); // Update current page state
-        // You can perform any additional actions here, such as fetching data for the new page
-    };
-    // Calculate the indices for the current page's data slice
-    const lastIndexItem = dataLimit * currentPage;
-    const firstIndexItem = lastIndexItem - dataLimit;
-    const currentTableData = tableData?.tableData.slice(firstIndexItem, lastIndexItem);
+
     return <div className="w-[95%] m-auto">
         {/* <GPSReport/> */}
         <div className="relative bg-whiteColor ">
@@ -121,6 +119,7 @@ const LegalDelivery = () => {
                 <Searchbar />
                 <Filter onClick={() => setShowFilterMenu(!showFilterMenu)} />
             </div>
+            {filteredData?.length > 0 &&
             <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                 <div ref={dropdownRef}>
                     <div className="flex flex-row items-center gap-x-1">
@@ -147,22 +146,42 @@ const LegalDelivery = () => {
                 </div>
                 <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
-                <p className="cursor-pointer">clear filter</p>
+                <p className="cursor-pointer" onClick={()=>dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
                 {/* <p className="cursor-pointer">Column Layout</p>
                 <p className="cursor-pointer">Enable Actions</p>
                 <p className="cursor-pointer">Generate Geo Code</p>
                 <p className="cursor-pointer">Sort Records</p> */}
-            </div>
+            </div>}
             {/* <Table headers={headers} tableData={currentTableData} getRowData={getUserIdFunction} /> */}
-            <TableWithoutAction headers={headers} tableData={currentTableData} getRowData={getUserIdFunction}/>
-            <Pagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                dataLimit={dataLimit}
-                tableData={tableData?.tableData}
-                onchange={onPageChange} // Pass onPageChange as onchange prop
+            {filteredData?.length > 0 ?
+                <>
+                    <TableWithoutAction
+                        headers={
+                            searchDataName === "result"
+                                ? headersResult
+                                : searchDataName === "standard"
+                                    ? headersStandard
+                                    : headersService
+                        }
+                        tableData={filteredData}
+                        getRowData={getUserIdFunction}
+                    />                    
+                    
+                    <Pagination
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        dataLimit={dataLimit}
+                        tableData={tableData?.tableData}
+                        onchange={onPageChange} // Pass onPageChange as onchange prop
 
-            />
+                    />
+                </> : <div className="h-[57vh] w-[100%] flex items-center justify-center ">
+                    <div className="">
+                        <p className="text-sm capitalize">No data to show. <span className=" cursor-pointer underline text-primaryColor font-semibold" onClick={() => setShowFilterMenu(!showFilterMenu)}> FILTER DATA</span></p>
+                    </div>
+                </div>
+            }
+
             {/* <StandardReport/> */}
 
 

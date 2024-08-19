@@ -6,24 +6,34 @@ import Dropdown from "../../../../components/dropdown/Dropdown";
 import Button from "../../../../components/Buttons/Button/Button"
 import { resultSchema } from "../../../../schemas/legal delivery schemas/result";
 import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
+import { getAllFilteredDataThunk, getSearchNameReducer } from "../../../../redux/slice/legalDelivery";
+import { useDispatch } from "react-redux";
+import { useGetAllData } from "../../../../hooks/getAllDataHook/useGetAllData";
 const Result = () => {
     const { register, formState: { errors }, handleSubmit, control } = useForm({ resolver: zodResolver(resultSchema) })
     const result = [{ value: "result1", label: "result 1" }, { value: "result2", label: "result 2" }, { value: "result3", label: "result 3" }]
-    const serviceTypeOptions = [{ value: "service1", label: "service 1" }, { value: "service2", label: "service 2" }, { value: "service3", label: "service 3" }]
-
+    const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
+    const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
+    const dispatch=useDispatch()
     // function to get data for service filter
     const serviceFilterFunction = (data) => {
-        console.log(data)
+        const sendingData = { searchIn: "result", data }
+        console.log(sendingData)
+            dispatch(getAllFilteredDataThunk(sendingData))
+            dispatch(getSearchNameReducer("result"))
+
+
+        
     }
     return <form className="flex flex-col items-start gap-y-3 overflow-y-auto h-[70vh]" onSubmit={handleSubmit(serviceFilterFunction)}>
-        <Controller name="resultOptions" control={control} render={({ field }) => (
+        {/* <Controller name="resultOptions" control={control} render={({ field }) => (
             <Dropdown
                 options={result}
                 value={field.value}
                 onChange={field.onChange}
                 label="Service result" error={errors.resultOptions?.message as string}
             />
-        )} />
+        )} /> */}
         <Controller name="serviceTypeOptions" control={control} render={({ field }) => (
             <Dropdown
                 options={serviceTypeOptions}

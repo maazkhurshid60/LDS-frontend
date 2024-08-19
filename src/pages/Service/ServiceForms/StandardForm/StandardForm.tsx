@@ -74,12 +74,12 @@ const StandardForm = () => {
         } else {
             if (LTData === null) {
 
-                const updatedData = { ...LTDataa, standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
+                const updatedData = { ...LTDataa, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
                 dispatch(updateServiceFormThunk(updatedData))
             } else {
                 const UpdatedLTData: any = LTData
-                const updatedData = { ...UpdatedLTData, standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
-                console.log("updating data to update api", updatedData);
+                const updatedData = { ...UpdatedLTData, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
+                console.log("updating data to update api",LTData, updatedData);
 
                 dispatch(updateServiceFormThunk(updatedData))
 
@@ -172,9 +172,9 @@ const StandardForm = () => {
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.sSDPlaintiff} name="sSDPlaintiff" label="Plaintiff" />
                         </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
+                        {/* <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.sSDCountry} name="ssDCountry" label="Country" />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 {/* STANDARD SERVICE DETAIL ENDS */}

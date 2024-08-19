@@ -1,5 +1,6 @@
 import axios from "axios"
 import { baseUrl } from "../baseUrl/baseUrl"
+import { toast } from "react-toastify";
 const accessToken = localStorage.getItem("accessToken");
 
 // LOGIN API
@@ -16,9 +17,10 @@ try {
 export const registerUserApi=async(data)=>{
     try {
         const response= await axios.post (`${baseUrl}/user/register`,data)
+        toast.success(`${response?.data?.message}`)
         return response
     } catch (error) {
-        throw Error (error)
+        toast.error(`${error?.response?.data?.message}`)
     }
     }
 
@@ -42,7 +44,8 @@ export const updateUserApi=async(data)=>{
         } })
         return response
     } catch (error) {
-        throw Error (error)
+        console.log(error)
+        toast.error(`${error?.response?.data?.message}`)
     }
     }
     // export const deleteUserApi=async(id)=>{
