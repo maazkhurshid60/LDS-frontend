@@ -53,7 +53,9 @@ const Dropdown: React.FC<DropdownProp> = ({
     }, []);
     return (
         <div className="w-full" ref={dropdownRef}>
-            <label className="sm:font-medium text-sm capitalize">{label} <span className="text-redColor">*</span></label>
+            <label className="sm:font-medium text-sm capitalize">{label} 
+                {/* <span className="text-redColor">*</span> */}
+                </label>
             <div className="w-full relative">
                 <div
                     onClick={handleSelectClick}
