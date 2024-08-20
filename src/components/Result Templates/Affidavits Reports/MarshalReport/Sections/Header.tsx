@@ -1,9 +1,14 @@
 import React from "react";
-const Header=()=>{
+export interface HeaderProps{
+    index?:string | number
+    lic?:string | number
+
+}
+const Header:React.FC<HeaderProps>=(item)=>{
     return <div className="w-full flex items-center justify-between flex-wrap text-sm">
         <div className="capitalize flex items-center gap-x-2">
             <p>index #</p>
-            <p>7984325</p>
+            <p className="font-semibold">{item?.index ? item?.index : "--N/A--"}</p>
         </div>
         <div className=" font-bold flex items-center gap-x-2 text-xl uppercase">
             <p>Affidavit of</p>
@@ -15,7 +20,7 @@ const Header=()=>{
         </div>
         <div className=" font-medium flex items-center gap-x-2 text-base">
             <p>lic#</p>
-            <p>54325</p>
+            <p className="font-semibold">{item?.lic ? item?.lic : "--N/A--"}</p>
         </div>
     </div>
 }

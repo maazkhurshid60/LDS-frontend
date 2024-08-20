@@ -19,6 +19,7 @@ const AgencyLic = () => {
         
     })
     const [bodyData,setBodyData]=useState({
+        //RESULTS
         apt: "",
         reciepientTitle: "",
         firstTimeAttempt: "",
@@ -32,18 +33,38 @@ const AgencyLic = () => {
         weight: "",
         hair: "",
         otherFeatures: "",
-    })
+        dateOfMailing:"",
+        dateOfService:"",
 
+        //SERVICES
+        address:"",
+        firstNames:""
+    })
+console.log("legalDeliveryDataa?.data?.inputDate",legalDeliveryDataa?.data?.inputDate)
     useEffect(() => {
-        if (legalDeliveryDataa?.searchResult === "service") {
+        if (legalDeliveryDataa?.searchResult === "service" || legalDeliveryDataa?.searchResult === "standard") {
+            // SERVICES STARTS
             setHeader(prev => ({
                 ...prev,
                 index: legalDeliveryDataa?.data?.oLTIndexNo,
-                affidavitName: "",
+                affidavitName: legalDeliveryDataa?.data?.serviceType?.serviceTypeCode,
                 serviceName: "",
                 licNo: "",
                
             }))
+            setBodyData(prev => ({
+                ...prev,
+                inputDate:legalDeliveryDataa?.data?.inputDate,
+                time:legalDeliveryDataa?.data?.updatedAt,
+                address:legalDeliveryDataa?.data?.lTSAddress,
+                firstNames:legalDeliveryDataa?.data?.lTSFirstName,
+                dateOfService:legalDeliveryDataa?.data?.serviceResultDateOfService,
+                dateOfMailing:legalDeliveryDataa?.data?.serviceResultDateOfMailing,
+
+               
+            }))
+        // SERVICES ENDS
+
         }else if (legalDeliveryDataa?.searchResult === "result") {
         setBodyData(prev=>({...prev,
             apt: "",
@@ -72,6 +93,7 @@ const AgencyLic = () => {
                         licNo={header?.licNo}
                         serviceName={header?.serviceName} />
                     <Body 
+                    //RESULTS
                     apt={bodyData?.apt}
                     reciepientTitle={bodyData?.reciepientTitle}
                     firstTimeAttempt={bodyData?.firstDateAttempt}
@@ -85,6 +107,15 @@ const AgencyLic = () => {
                     weight={bodyData?.weight}
                     hair={bodyData?.hair}
                     otherFeatures={bodyData?.otherFeatures}
+                    dateOfMailing={bodyData?.dateOfMailing}
+                    dateOfService={bodyData?.dateOfService}
+
+                    //SERVICES
+                    inputDate={bodyData?.inputDate}
+                    time={bodyData?.time}
+                    address={bodyData?.address}
+                    firstNames={bodyData?.firstNames}
+
                     />
                     <Footer />
                 </TemplateOutlet>

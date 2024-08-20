@@ -1,5 +1,20 @@
 import React from "react";
-const DataTable = () => {
+export interface DataTableProps{
+    sex?: string;
+    skinColor?: string;
+    age?: string | number;
+    height?: string | number
+    weight?: string | number
+    hair?: string
+    entry?: string | boolean | number
+    wall?: string | number
+    floor?: string | number
+    door?: string | number
+    locks?: string | number
+    noOfLocks?: string | number
+    commentOtherFeature?:string | number | boolean
+}
+const DataTable:React.FC<DataTableProps> = (item) => {
     return <div>
 
 
@@ -18,20 +33,20 @@ const DataTable = () => {
                 <tbody>
                     <tr className="bg-grayColorLight text-start">
                         <th scope="row" className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                           <p>Sex: FROM_BACKEND_API</p>
-                           <p>Skin: FROM_BACKEND_API</p>
-                           <p>Hair: FROM_BACKEND_API</p>
-                           <p>Age: FROM_BACKEND_API</p>
-                           <p>Height: FROM_BACKEND_API</p>
-                           <p>Weight: FROM_BACKEND_API</p>
+                           <p>Sex: <span className="font-semibold">{item?.sex ? item?.sex:"--N/A--"}</span></p>
+                           <p>Skin: <span className="font-semibold">{item?.skinColor ? item?.skinColor:"--N/A--"}</span></p>
+                           <p>Hair: <span className="font-semibold">{item?.hair ? item?.hair:"--N/A--"}</span></p>
+                           <p>Age: <span className="font-semibold">{item?.age ? item?.age:"--N/A--"}</span></p>
+                           <p>Height: <span className="font-semibold">{item?.height ? item?.height:"--N/A--"}</span></p>
+                           <p>Weight: <span className="font-semibold">{item?.weight ? item?.weight:"--N/A--"}</span></p>
                         </th>
                         <th scope="row" className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                           <p>Entry: FROM_BACKEND_API</p>
-                           <p>Wall: FROM_BACKEND_API</p>
-                           <p>Floor: FROM_BACKEND_API</p>
-                           <p>Door: FROM_BACKEND_API</p>
-                           <p>Locks: FROM_BACKEND_API</p>
-                           <p>No of Locks: FROM_BACKEND_API</p>
+                           <p>Entry: <span className="font-semibold">{item?.entry ? item?.entry:"--N/A--"}</span></p>
+                           <p>Wall: <span className="font-semibold">{item?.wall ? item?.wall:"--N/A--"}</span></p>
+                           <p>Floor: <span className="font-semibold">{item?.floor ? item?.floor:"--N/A--"}</span></p>
+                           <p>Door: <span className="font-semibold">{item?.door ? item?.door:"--N/A--"}</span></p>
+                           <p>Locks: <span className="font-semibold">{item?.locks ? item?.locks:"--N/A--"}</span></p>
+                           <p>No of Locks: <span className="font-semibold">{item?.noOfLocks ? item?.noOfLocks:"--N/A--"}</span></p>
                         </th>
                        
                     </tr>

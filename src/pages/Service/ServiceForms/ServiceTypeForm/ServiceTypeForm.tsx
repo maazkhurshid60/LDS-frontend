@@ -53,19 +53,20 @@ const StandardTypeForm = () => {
     const { data: clientData } = useGetAllData("/client/all-clients");
     const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
     const { data: LTServiceData } = useGetAllData("/ltservice-type/all-lt-service-types");
+    const { data:holidayData } = useGetAllData("/holiday/all-holidays")
 
     const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
     const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === savedLTData?.clientId && { value: data?._id, label: data?.fullName })
     const getExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
 
-    console.log("clientIdOptions", checkedName)
+    console.log("clientIdOptions", holidayData)
     const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === savedLTData?.serviceType && { value: data?._id, label: data?.fullName })
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
     const [serviceType, setServiceType] = useState()
     const dispatch = useDispatch()
-    const { register, formState: { errors }, control, handleSubmit, setValue, reset, getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
+    const { register, formState: { errors }, control, handleSubmit, setValue, reset, getValues,watch } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
     const isUpdateMail = useSelector((state: RootState) => state.mailingAdress.isUpdatingMailAddress)
     const [jobNo, setJobNo] = useState<any>()
@@ -374,7 +375,19 @@ const StandardTypeForm = () => {
         setMultipleFullname(freshData)
         setJoinedFullname(freshData.join(','));
     }
-    
+
+    const inputeDate = watch("inputDate");
+    useEffect(() => {
+        const isHoliday=holidayData?.find(data=>data?.holidayDate === inputeDate)
+        
+        if (!isNewFormAdding && isHoliday) {
+            alert("Input date you have selected there is holiday")
+            setValue("inputDate",allServiceFormData[serviceFormIndex]?.inputDate)
+        }else if(isHoliday){
+            alert("Input date you have selected there is holiday")
+            setValue("inputDate","")
+        }
+    }, [inputeDate]);
     return <div className="w-[100%]">
         <div className="w-full">
             <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>

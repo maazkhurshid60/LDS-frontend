@@ -1,7 +1,10 @@
 import React from "react";
-const Header=()=>{
+export interface HeaderProps{
+index?:string | number
+}
+const Header:React.FC<HeaderProps>=(item)=>{
     return <div className="flex flex-col items-end w-full">
-        <p>Index: FROM_BACKEND</p>
+        <p>Index: <span className="font-semibold">{item?.index}</span></p>
         <div className="w-full border-dashed border-[2px] border-grayColor px-4 p-2 flex justify-between flex-wrap items-center mt-4">
             <p className="w-[48%] text-center">Against</p>
             <div className="w-[48%] flex flex-col gap-y-5">
