@@ -33,6 +33,9 @@ const LiNonReports = () => {
         index: "",
         petitioner: "",
         against: "",
+        firstNameServe:"",
+        licNo:"",
+        address:"",
 
     })
     const [bodyData, setBodyData] = useState({
@@ -43,19 +46,31 @@ const LiNonReports = () => {
         height: "",
         weight: "",
         hair: "",
-
+        dateOfMailing:"",
     })
     useEffect(() => {
         if (legalDeliveryDataa?.searchResult === "service") {
             setHeader(prev => ({
                 ...prev,
                 index: legalDeliveryDataa?.data?.oLTIndexNo,
+                firstNameServe: legalDeliveryDataa?.data?.firstNameServe,
+                address: legalDeliveryDataa?.data?.lTSAddress,
                 affidavitName: "",
                 serviceName: "",
                 licNo: "",
-
             }))
-        } else if (legalDeliveryDataa?.searchResult === "result") {
+        } else if (legalDeliveryDataa?.searchResult === "standard") {
+            setHeader(prev => ({
+                ...prev,
+                index: legalDeliveryDataa?.data?.oSSTIndexNo,
+                firstNameServe: legalDeliveryDataa?.data?.firstNameServe,
+                address: legalDeliveryDataa?.data?.addressServe,
+                affidavitName: "",
+                serviceName: "",
+                licNo: "",
+            }))
+        }
+            else if (legalDeliveryDataa?.searchResult === "result") {
             setHeader(prev => ({
                 ...prev,
                 index: legalDeliveryDataa?.queryInformationLTIndexNo,
@@ -70,6 +85,8 @@ const LiNonReports = () => {
                 height: legalDeliveryDataa?.data?.serviceResultHeight,
                 weight: legalDeliveryDataa?.data?.serviceResultWeight,
                 hair: legalDeliveryDataa?.data?.serviceResultHair,
+                dateOfMailing:legalDeliveryDataa?.data?.serviceResultDateOfMailing,
+
 
             }))
         }
@@ -78,7 +95,7 @@ const LiNonReports = () => {
         <>
             <div className="absolute h-[83.5vh] overflow-y-scroll relative">
                 <TemplateOutlet>
-                    <Header index={header?.index} />
+                    <Header index={header?.index} firstNameServe={header?.firstNameServe} address={header?.address}/>
                     <Body 
                      sex= {bodyData?.sex}
                      skinColor= {bodyData?.skinColor}
@@ -86,6 +103,7 @@ const LiNonReports = () => {
                      height= {bodyData?.height}
                      weight= {bodyData?.weight}
                      hair= {bodyData?.hair}
+                     dateOfMailing={bodyData?.dateOfMailing}
              
                     />
                     <Footer />
@@ -104,11 +122,20 @@ const LiNonReports = () => {
             <div style={{ display: "none" }}>
                 {/* The content to print */}
                 <div ref={LiNonReportsPrintRef}>
-                    <TemplateOutlet>
-                        <Header />
-                        <Body />
-                        <Footer />
-                    </TemplateOutlet>
+                <TemplateOutlet>
+                    <Header index={header?.index} firstNameServe={header?.firstNameServe} address={header?.address}/>
+                    <Body 
+                     sex= {bodyData?.sex}
+                     skinColor= {bodyData?.skinColor}
+                     age= {bodyData?.age}
+                     height= {bodyData?.height}
+                     weight= {bodyData?.weight}
+                     hair= {bodyData?.hair}
+                     dateOfMailing={bodyData?.dateOfMailing}
+             
+                    />
+                    <Footer />
+                </TemplateOutlet>
                 </div>
             </div>
         </>

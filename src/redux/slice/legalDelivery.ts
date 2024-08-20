@@ -61,15 +61,15 @@ export const getAllFilteredDataThunk = createAsyncThunk("getAllFilterData", asyn
         searchIn: searchdata?.searchIn,
         data: searchdata?.data,
     }
-    console.log("sending data", se)
-
-
+    
+    
     // dispatch(showSpinnerReducer(true))
-
+    
     try {
         const response = await axios.post(`${baseUrl}/legal-delivery/search`, se, {
             headers: { "Authorization": `Bearer ${accessToken}`, },
         })
+        console.log("sending data", se)
         return response?.data?.data
     } catch (error) {
         toast.error(`${error?.response?.data?.message}`)

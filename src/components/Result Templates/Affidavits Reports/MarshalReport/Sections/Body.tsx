@@ -24,7 +24,7 @@ const Body:React.FC<BodyProps> =(item)=>{
         <p>At the property sought to be recovered at SOMETEXTWILLBETHEREFROMBACKENDAPI Apt# {item?.apt ? item?.apt :"--N/A--"}</p>
         <p>The SOMETEXTWILLBETHEREFROMBACKENDAPI(OPTIONAL) was served on</p>
         <p className="flex justify-start gap-x-4"><GrCheckbox size={18} /> Personal service on individual: individually served the within-named person with true copy(ies)of the paper(s) afore mentioned.</p>
-        <div className="flex justify-start gap-x-4"><GrCheckboxSelected size={18} />
+        <div className="flex justify-start gap-x-4"><GrCheckbox size={18} />
             <div>
                 <p>Deponent was unable to serve:</p>
                 <p>Additional respodents by personal delivery but by gaining admittance to said property and delivery and leaving a true copy there of each</p>

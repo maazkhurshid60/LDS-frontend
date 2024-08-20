@@ -1,5 +1,6 @@
 import React from "react"
 export interface bodyProps {
+    //RESULTS
     sex?: string;
     skinColor?: string;
     age?: string | number;
@@ -7,6 +8,8 @@ export interface bodyProps {
     weight?: string | number
     hair?: string
     dateOfService?:string
+    dateOfMailing?: string;
+    
 }
 const Body: React.FC<bodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4">
@@ -71,13 +74,18 @@ const Body: React.FC<bodyProps> = (item) => {
             From the facts above set forth, I am convinced that the said tenant(s) is not in or financially dependant upon someone in the military service of the military service of
             the United State or of New York State at the present time.
         </p>
-        <div className="flex items-center justify-between">
-        <p className="font-semibold">
-           Sworn to before me on
-        </p>
-        <p className="">
-            Lic: licFromBackend
-        </p>
+        <div className="font-semibold flex items-center justify-between w-full">
+            <div>
+            <p>Sworn to before me on</p>
+            <p>{item?.dateOfMailing? item?.dateOfMailing:"--N/A--"}</p>
+            </div>
+            <div>
+            <p>SomeName from banckend</p>
+            <p>Lic#{item?.lic? item?.lic:"--N/A--"}</p>
+            <p>Queens</p>
+
+            </div>
+
         </div>
     </div>
 }

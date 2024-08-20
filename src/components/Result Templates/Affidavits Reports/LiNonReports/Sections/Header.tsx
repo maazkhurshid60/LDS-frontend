@@ -1,8 +1,13 @@
 import React from "react"
 export interface HeaderProps {
+    //RESULTS
     index?: string | number
     petitioner?: string,
     against?: string,
+    //SERVICES
+    firstNameServe?:string
+    address?:string
+
 
 }
 const Header: React.FC<HeaderProps> = (item) => {
@@ -12,7 +17,7 @@ const Header: React.FC<HeaderProps> = (item) => {
                 district court of the state of new york
             </h1>
             <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase underline">
-                L&T Index: {item?.index}
+                L&T Index: <span className="font-semibold">{item?.index ? item?.index :"--N/A--" }</span>
             </h1>
         </div>
         <div className="w-full flex items-center justify-between flex-wrap ">
@@ -23,10 +28,15 @@ const Header: React.FC<HeaderProps> = (item) => {
             <h1 className="font-bold flex items-center gap-x-2 text-xl ">
                 Affidavit of Investigation</h1>
         </div>
+<div className="font-bold ">
 
-        <h1 className="font-bold flex items-center gap-x-2 text-xl underline">
-            Petitioner-landord-Against
+        <h1 className="flex items-center gap-x-2 text-lg underline">
+            Petitioner-landord-Against 
         </h1>
+        <p className=" text-xl">{item?.firstNameServe? item?.firstNameServe:"--N/A--"}</p>
+        <p className=" text-xl">{item?.address? item?.address:"--N/A--"}</p>
+
+</div>
         
     </div>
 }
