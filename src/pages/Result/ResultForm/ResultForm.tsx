@@ -280,7 +280,7 @@ console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
                     <div className="flex flex-row gap-x-4 mt-2 flex-wrap gap-y-4">
                         <Hints keyName="Esc" label="finish" />
                         <Hints keyName="f7 + f10" label="find" />
-                        <Hints keyName="f4" label="ditto field" />
+                        {/* <Hints keyName="f4" label="ditto field" /> */}
                     </div>
 
                 </div>
