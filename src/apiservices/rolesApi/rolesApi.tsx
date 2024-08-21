@@ -1,5 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "../baseUrl/baseUrl";
+import { toast } from "react-toastify";
 
 const accessToken = localStorage.getItem("accessToken");
 
@@ -11,8 +12,13 @@ console.log(accessToken)
         const response= await axios.get (`${baseUrl}/role/all-roles`,{ headers: {
             "Authorization": `Bearer ${accessToken}`
         } })
+        // toast.success("role called")
+        // console.log('Result: ',response);
+        
         return response
     } catch (error) {
+        // toast.error("role doesnot called")
+
         throw Error (error)
     }
     }

@@ -11,7 +11,7 @@ import { deleteRole, getAllRoles, getOneRole } from "../../../redux/slice/roles"
 import TableWithoutAction from "../../../components/Tables/TableWithoutAction";
 const AvailableRoleSection = () => {
     const showModal = useSelector((state: RootState) => state?.showModal.isShowRoleModal)
-    const allRolesData = useSelector((state: RootState) => state?.roles?.allRoles?.tableData)
+    const allRolesData = useSelector((state: RootState) => state?.roles.allRoles?.tableData)
 
     const dispatch = useDispatch()
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
@@ -47,11 +47,11 @@ const AvailableRoleSection = () => {
         dispatch(showRoleModalReducer(true))
     }
 
-    // useEffect(() => {
-    //     dispatch(getAllRoles())
-    // }, [ deleteRoleFunction])
+    useEffect(() => {
+        dispatch(getAllRoles())
+    }, [ ])
 
-
+console.log("allRolesData",allRolesData)
     return <>
 
         {showModal ? <AddRoleModal /> : <><div className="flex items-center flex-row justify-between  flex-wrap w-[99%]">

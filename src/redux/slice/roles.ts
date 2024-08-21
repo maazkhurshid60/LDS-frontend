@@ -120,8 +120,10 @@ export const getAllRoles = createAsyncThunk<User[]>(
     async () => {
         try {
             const res = await getAllRoleApi();
-            return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
+            // toast.success("role called")
+            return res?.data?.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
+            // toast.error("role doesnot called")
             throw new Error("Failed to fetch all roles");
         }
     }
