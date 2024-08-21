@@ -74,7 +74,6 @@ const StandardTypeForm = () => {
     const [multipleFullname, setMultipleFullname] = useState<string[]>([]);
     const [joinedFullname, setJoinedFullname] = useState("");
 
-
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
         // console.log("servicetype<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", serviceTypeOptions?.find(data=>data?.value===value)?.label)
@@ -189,7 +188,11 @@ const StandardTypeForm = () => {
                 setValue("lTSState", currentData?.lTSState);
                 setValue("lTSZip", currentData?.lTSZip);
                 setValue("lTSDescription", currentData?.lTSDescription);
-                setMultipleFullname(currentData?.lTSFirstName.split(','));
+                if (currentData?.lTSFirstName) {
+                    setMultipleFullname(currentData.lTSFirstName.split(','));
+                } else {
+                    setMultipleFullname([]);
+                }
                 setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
             } else {
                 console.log("No current data found for the form index.");
@@ -283,13 +286,10 @@ const StandardTypeForm = () => {
             zipServe: allServiceFormData[serviceFormIndex]?.zipServe
         }
         // console.log(">>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>.", standardServiceDetail)
-
         //    DATA FOR STANDARD FORM ENDS
 
         //    DATA FOR L&T FORM STARTS
-
         const serviceFormId = allServiceFormData[serviceFormIndex]?._id
-       
         const LTData = {
             // serviceFormId,
             jobNo: parseInt(jobNo),

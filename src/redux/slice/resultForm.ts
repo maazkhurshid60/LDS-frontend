@@ -14,6 +14,8 @@ const initialState = {
     resultFormIndex: 0,
     isNewResultFormAdd: false,
     isSearchResultForm: false,
+    searchResultFormData:[],
+    selectedSearchResultData:[],
 
 
 }
@@ -25,8 +27,17 @@ const resultForm = createSlice({
         addNewResultFormAddReducer: ((state, action) => {
             state.isNewResultFormAdd = action.payload
         }),
+        selectedSearchResultDataReducer: ((state, action) => {
+            state.selectedSearchResultData = action.payload
+        }),
         searchResultFormAddReducer: ((state, action) => {
             state.isSearchResultForm = action.payload
+        }),
+        emptySelectedSearchResultFormAddReducer: ((state) => {
+            state.selectedSearchResultData = []
+        }),
+        emptySearchResultFormDataAddReducer: ((state) => {
+            state.searchResultFormData = []
         }),
         getNextResultFormReducer: ((state) => {
             console.log(state.resultFormIndex)
@@ -91,10 +102,24 @@ const resultForm = createSlice({
             }).
             addCase(deleteResultFormThunk.rejected, state => {
                 state.status = "failed"
+            }).
+              // BUILDER FOR SEARCH RESULT FORM
+            addCase(searchResultFormThunk.pending,(state)=>{
+                state.status="loading"
+            }).
+            addCase(searchResultFormThunk.fulfilled,(state,action)=>{
+                state.status="success"
+                state.searchResultFormData=action.payload
+            }).
+            addCase(searchResultFormThunk.rejected,(state)=>{
+                state.status="failed"
             })
+            
     }
 })
-export const { addNewResultFormAddReducer, getNextResultFormReducer, getPreviousResultFormReducer, getFirstResultFormReducer, getLastResultFormReducer,searchResultFormAddReducer } = resultForm.actions
+export const { addNewResultFormAddReducer, getNextResultFormReducer, getPreviousResultFormReducer, 
+                getFirstResultFormReducer, getLastResultFormReducer, searchResultFormAddReducer , 
+                emptySelectedSearchResultFormAddReducer,selectedSearchResultDataReducer,emptySearchResultFormDataAddReducer} = resultForm.actions
 export default resultForm.reducer
 
 // ASYNC STARTS
@@ -115,7 +140,7 @@ export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async 
 // GET ALL RESULT FORM ENDS
 // ADD RESULT FORM STARTS
 export const addResultFormThunk = createAsyncThunk("addResultForm", async (data: resultFormType, { dispatch }) => {
-dispatch(showSpinnerReducer(true))
+    dispatch(showSpinnerReducer(true))
 
     try {
         const response = await axios.post(`${baseUrl}/result-form/create`, data, {
@@ -128,8 +153,8 @@ dispatch(showSpinnerReducer(true))
     } catch (error) {
         console.log(error)
         alert(`${error?.response?.data?.message}`)
-    }finally{
-dispatch(showSpinnerReducer(false))
+    } finally {
+        dispatch(showSpinnerReducer(false))
 
     }
 })
@@ -137,7 +162,7 @@ dispatch(showSpinnerReducer(false))
 // UPDATE RESULT FORM STARTS
 export const updateResultFormThunk = createAsyncThunk("updateResultForm", async (data: resultFormType, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
-console.log("sending updating data",data)
+    console.log("sending updating data", data)
     try {
         const response = await axios.patch(`${baseUrl}/result-form/update`, data, {
             headers: {
@@ -178,6 +203,26 @@ export const deleteResultFormThunk = createAsyncThunk("deleteResultForm", async 
     }
 })
 // DELETE RESULT FORM ENDS
+
+// SEARCH RESULT FORM STARTS
+export const searchResultFormThunk = createAsyncThunk("searchResultForm", async (data: any) => {
+    console.log(data)
+    try {
+        const response = await axios.post(`${baseUrl}/result-form/search-result-forms`,data, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            },
+        })
+    
+        return response?.data
+    } catch (error) {
+        // alert(`${error?.response?.data?.message}`)
+        toast.error(`${error?.response?.data?.message}`)
+        
+
+    }
+})
+// SEARCH RESULT FORM ENDS
 
 // ASYNC THUNKS ENDS
 

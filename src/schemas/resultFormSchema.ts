@@ -1,9 +1,9 @@
 import {  z } from "zod";
 
 export const resultFormSchema = z.object({
-    queryInformationLTFullName:z.string().min(1, "Full Name is required."),
-    queryInformationLTIndexNo:z.string().regex(/^\d+$/, { message: "Index No  must be number" }),
-    queryInformationLTAddress:z.string().min(1, "Address required."),
+    queryInformationLTFullName:z.string().optional(),
+    queryInformationLTIndexNo:z.string().optional(),
+    queryInformationLTAddress:z.string().optional(),
     queryInformationLTBusinessName: z.string().optional(),
     queryInformationLTInputDate: z.string().optional(),
     queryInformationStandardServeTo: z.string().optional(),

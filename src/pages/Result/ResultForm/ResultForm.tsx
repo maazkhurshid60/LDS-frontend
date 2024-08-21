@@ -3,7 +3,7 @@ import TextField from "../../../components/InputFields/TextField/TextField";
 import Hints from "../Hints/Hints";
 import Dropdown from "../../../components/dropdown/Dropdown";
 import CheckBox from "../../../components/CheckBox/CustomCheckBox";
-import { addResultFormThunk, getAllResultFormThunk, searchResultFormAddReducer, updateResultFormThunk } from "../../../redux/slice/resultForm";
+import { addResultFormThunk, getAllResultFormThunk, searchResultFormAddReducer, searchResultFormThunk, updateResultFormThunk } from "../../../redux/slice/resultForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetAllData } from "../../../hooks/getAllDataHook/useGetAllData";
 import { RootState } from "../../../redux/store";
@@ -16,13 +16,14 @@ export type FormFields = z.infer<typeof resultFormSchema>
 import { format } from 'date-fns';
 import { toast } from "react-toastify";
 import { handleEnterKeyPress } from "../../../utils/moveToNextFieldOnEnter";
+import SearchResultData from "./SearchResultData";
 
 const ResultForm = () => {
     const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch } = useForm<FormFields>({ resolver: zodResolver(resultFormSchema) })
     const { data: clientData } = useGetAllData("/client/all-clients");
     const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
-console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
+    console.log("clientIdOptionsclientIdOptionsclientIdOptions", clientIdOptions)
     const { data: serverIdData } = useGetAllData("/server/all-servers");
     const serverIdOptions = serverIdData?.map((data, id) => { return { value: data?._id, label: data?.serverCode } })
     const resultOptions = [{ value: "personal", label: "Personal" }, { value: "substitute", label: "Substitute" }, { value: "conspicuous", label: "Conspicuous" }]
@@ -31,13 +32,17 @@ console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
     const resultFormIndex = useSelector((state: RootState) => state.resultForm.resultFormIndex)
     const isNewResultFormAdd = useSelector((state: RootState) => state.resultForm.isNewResultFormAdd)
     const isSearchResultForm = useSelector((state: RootState) => state.resultForm.isSearchResultForm)
-    console.log("isSearchResultForm", isSearchResultForm)
     const [isConspicuous, setIsConspicuous] = useState()
-    console.log("add new form set true", isConspicuous)
+    const selectedSearchResultData = useSelector((state: RootState) => state.resultForm.selectedSearchResultData)
+    const searchResultFormData = useSelector((state: RootState) => state.resultForm.searchResultFormData)
+
+    console.log("searchResultFormData", selectedSearchResultData, isNewResultFormAdd, selectedSearchResultData?.length > 0)
+
+    // console.log("add new form set true", isConspicuous)
     // console.log(allResultForm[resultFormIndex], resultFormIndex)
     // submitResultFormFunction
     const submitResultFormFunction = (data) => {
-        console.log("data>>>>", data)
+        // console.log("data>>>>", data)
         const addingData = {
             queryInformationLTFullName: data?.queryInformationLTFullName,
             queryInformationLTIndexNo: parseInt(data?.queryInformationLTIndexNo),
@@ -86,11 +91,20 @@ console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
         console.log("adding data", addingData)
         // const addingData = { queryInformationLT, queryInformationStandard, serviceResults }
         if (isNewResultFormAdd === true) {
-            console.log("<><><><>")
+            // console.log("<><><><>")
             dispatch(addResultFormThunk(addingData))
         } else if (isSearchResultForm === true) {
-            dispatch(searchResultFormAddReducer(false))
-            toast.success("Search Result Form will be applied")
+            const searchData = {
+                queryInformationLTAddress: data?.queryInformationLTAddress,
+                queryInformationLTBusinessName: data?.queryInformationLTBusinessName,
+                queryInformationLTFullName: data?.queryInformationLTFullName,
+                queryInformationLTIndexNo: parseInt(data?.queryInformationLTIndexNo),
+                queryInformationLTInputDate: data?.queryInformationLTInputDate,
+            }
+            // console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<search>>>>>>>>>>>>>>>>>>>>>>>>>>>", searchData)
+            dispatch(searchResultFormThunk(searchData))
+            // dispatch(searchResultFormAddReducer(false))
+            // toast.success("Search Result Form will be applied")
         } else {
 
             const updatingData = { ...addingData, resultFormId: allResultForm[resultFormIndex]?._id }
@@ -105,6 +119,9 @@ console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
         setValue("queryInformationLTAddress", "")
         setValue("queryInformationLTBusinessName", "")
         setValue("queryInformationLTInputDate", "")
+
+        // dispatch(searchResultFormThunk(true))
+
         dispatch(searchResultFormAddReducer(true))
 
     }
@@ -143,6 +160,51 @@ console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
         if (isNewResultFormAdd === true) {
 
             reset()
+        }
+        else if (selectedSearchResultData?.length > 0) {
+            toast.success("sucess")
+            console.log("selectedSearchResultData?.queryInformationLTFullName", selectedSearchResultData[0]?.queryInformationLTFullName)
+            setValue("queryInformationLTFullName", selectedSearchResultData[0]?.queryInformationLTFullName),
+                setValue("queryInformationLTIndexNo", JSON.stringify(selectedSearchResultData[0]?.queryInformationLTIndexNo, 10));
+
+            setValue("queryInformationLTAddress", selectedSearchResultData[0]?.queryInformationLTAddress),
+                setValue("queryInformationLTBusinessName", selectedSearchResultData[0]?.queryInformationLTBusinessName),
+                setValue("queryInformationLTInputDate", selectedSearchResultData[0]?.queryInformationLTInputDate)
+            setValue("queryInformationStandardServeTo", selectedSearchResultData[0]?.queryInformationStandardServeTo),
+                setValue("queryInformationStandardDefendants", selectedSearchResultData[0]?.queryInformationStandardDefendants),
+                setValue("queryInformationStandardPlaintiff", selectedSearchResultData[0]?.queryInformationStandardPlaintiff)
+            setValue("serviceResultInputDate", selectedSearchResultData[0]?.serviceResultInputDate ?? "")
+            setValue("serviceResultScvType", selectedSearchResultData[0]?.serviceResultScvType ?? "")
+            setValue("serviceResultClientId", selectedSearchResultData[0]?.serviceResultClientId ?? "")
+            setValue("serviceResultJobNo", JSON.stringify(selectedSearchResultData[0]?.serviceResultJobNo ?? ""))
+            setValue("serviceResultServerId", selectedSearchResultData[0]?.serviceResultServerId ?? "")
+            setValue("serviceResultResults", selectedSearchResultData[0]?.serviceResultResults ?? "")
+            setValue("serviceResultDateOfService", selectedSearchResultData[0]?.serviceResultDateOfService)
+            setValue("serviceResultTimeService", selectedSearchResultData[0]?.serviceResultTimeService)
+            setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
+            setValue("serviceResultFirstAttemptDate", selectedSearchResultData[0]?.serviceResultFirstAttemptDate)
+            setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
+            setValue("serviceResultSecondAttemptDate", selectedSearchResultData[0]?.serviceResultSecondAttemptDate)
+            setValue("serviceResultThirdTimeOfService", selectedSearchResultData[0]?.serviceResultThirdTimeOfService)
+            setValue("serviceResultThirdAttemptDate", selectedSearchResultData[0]?.serviceResultThirdAttemptDate)
+            setValue("serviceResultlTServed", selectedSearchResultData[0]?.serviceResultlTServed)
+            setValue("serviceResultlTNotServed", selectedSearchResultData[0]?.serviceResultlTNotServed)
+            setValue("serviceResultRecipientTitle", selectedSearchResultData[0]?.serviceResultRecipientTitle)
+            setValue("serviceResultDoor", JSON.stringify(selectedSearchResultData[0]?.serviceResultDoor))
+            setValue("serviceResultDoorLocks", JSON.stringify(selectedSearchResultData[0]?.serviceResultDoorLocks))
+            setValue("serviceResultEntry", JSON.stringify(selectedSearchResultData[0]?.serviceResultEntry))
+            setValue("serviceResultWall", JSON.stringify(selectedSearchResultData[0]?.serviceResultWall))
+            setValue("serviceResultFloor", JSON.stringify(selectedSearchResultData[0]?.serviceResultFloor))
+            setValue("serviceResultLock", JSON.stringify(selectedSearchResultData[0]?.serviceResultLock))
+            setValue("serviceResultOtherDescription", selectedSearchResultData[0]?.serviceResultOtherDescription)
+            setValue("serviceResultSex", selectedSearchResultData[0]?.otherIdentifyingFeatures)
+            setValue("serviceResultHair", selectedSearchResultData[0]?.serviceResultHair)
+            setValue("serviceResultAge", JSON.stringify(selectedSearchResultData[0]?.serviceResultAge))
+            setValue("serviceResultHeight", JSON.stringify(selectedSearchResultData[0]?.serviceResultHeight))
+            setValue("serviceResultWeight", JSON.stringify(selectedSearchResultData[0]?.serviceResultWeight))
+            setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.serviceResultOtherFeatures)
+            setValue("serviceResultDateOfMailing", selectedSearchResultData[0]?.serviceResultDateOfMailing)
+            setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
         }
         else {
 
@@ -190,8 +252,8 @@ console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
             // setValue("height", allResultForm[resultFormIndex]?.serviceResults?.description?.height)
             // setIsConspicuous(allResultForm[resultFormIndex]?.serviceResults?.results)
         }
-      
-    }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm])
+
+    }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm,selectedSearchResultData])
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC STARTS 
     const serviceResultDateOfService = watch("serviceResultDateOfService");
     useEffect(() => {
@@ -217,288 +279,291 @@ console.log("clientIdOptionsclientIdOptionsclientIdOptions",clientIdOptions)
     // };
 
     return <>
+        {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> :
 
-        <form onSubmit={handleSubmit(submitResultFormFunction)}>
-            {/* QUERY INFORMATION (L&T) FORM STARTS */}
-            <div className="mt-6">
-                <h1 className="font-semibold  mb-4 text-base
-                md:text-md
-                lg:text-xl">Query Information (L&T)</h1>
+            <form onSubmit={handleSubmit(submitResultFormFunction)}>
+                {/* QUERY INFORMATION (L&T) FORM STARTS */}
+                <div className="mt-6">
+                    <h1 className="font-semibold  mb-4 text-base
+                                    md:text-md 
+                                    lg:text-xl">Query Information (L&T)</h1>
 
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="full Name" error={errors.queryInformationLTFullName} name="queryInformationLTFullName" onKeyDown={handleEnterKeyPress}
-                        />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="index no" error={errors.queryInformationLTIndexNo} name="queryInformationLTIndexNo" onKeyDown={handleEnterKeyPress}
-                        />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="address" error={errors.queryInformationLTAddress} name="queryInformationLTAddress" onKeyDown={handleEnterKeyPress}
-                        />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="Business Name" error={errors.queryInformationLTBusinessName} name="queryInformationLTBusinessName" onKeyDown={handleEnterKeyPress}
-                        />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField register={register} label="Input Date" error={errors.queryInformationLTInputDate} name="queryInformationLTInputDate" onKeyDown={handleEnterKeyPress}
-                            type="date" />
+                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField register={register} label="full Name" error={errors.queryInformationLTFullName} name="queryInformationLTFullName" onKeyDown={handleEnterKeyPress}
+                            />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField register={register} label="index no" error={errors.queryInformationLTIndexNo} name="queryInformationLTIndexNo" onKeyDown={handleEnterKeyPress}
+                            />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField register={register} label="address" error={errors.queryInformationLTAddress} name="queryInformationLTAddress" onKeyDown={handleEnterKeyPress}
+                            />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField register={register} label="Business Name" error={errors.queryInformationLTBusinessName} name="queryInformationLTBusinessName" onKeyDown={handleEnterKeyPress}
+                            />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField register={register} label="Input Date" error={errors.queryInformationLTInputDate} name="queryInformationLTInputDate" onKeyDown={handleEnterKeyPress}
+                                type="date" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            {/* QUERY INFORMATION (L&T) FORM ENDS */}
-            {/* QUERY INFORMATION (STANDARD) FORM STARTS */}
-            <div className="mt-6">
-                <h1 className="font-semibold  mb-4 text-base
-                md:text-md
-                lg:text-xl">Query Information (Standard)</h1>
+                {/* QUERY INFORMATION (L&T) FORM ENDS */}
+                {/* QUERY INFORMATION (STANDARD) FORM STARTS */}
+                <div className="mt-6">
+                    <h1 className="font-semibold  mb-4 text-base
+    md:text-md
+    lg:text-xl">Query Information (Standard)</h1>
 
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="serve To" error={errors.queryInformationStandardServeTo} name="queryInformationStandardServeTo" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="plaintiff" error={errors.queryInformationStandardPlaintiff} name="queryInformationStandardPlaintiff" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="defendants" error={errors.queryInformationStandardDefendants} name="queryInformationStandardDefendants" />
+                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="serve To" error={errors.queryInformationStandardServeTo} name="queryInformationStandardServeTo" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="plaintiff" error={errors.queryInformationStandardPlaintiff} name="queryInformationStandardPlaintiff" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="defendants" error={errors.queryInformationStandardDefendants} name="queryInformationStandardDefendants" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            {/* QUERY INFORMATION (STANDARD) FORM ENDS */}
-            {/* SHOW RESULT  FORM STARTS */}
-            <div className="mt-6">
-                <div>
-                    <h1 className="  font-semibold text-base
-                md:text-md
-                lg:text-xl ">Hints</h1>
-                    <div className="flex flex-row gap-x-4 mt-2 flex-wrap gap-y-4">
-                        <Hints keyName="Esc" label="finish" />
-                        <Hints keyName="f7 + f10" label="find" />
-                        {/* <Hints keyName="f4" label="ditto field" /> */}
-                    </div>
+                {/* QUERY INFORMATION (STANDARD) FORM ENDS */}
+                {/* SHOW RESULT  FORM STARTS */}
+                <div className="mt-6">
+                    <div>
+                        <h1 className="  font-semibold text-base
+    md:text-md
+    lg:text-xl ">Hints</h1>
+                        <div className="flex flex-row gap-x-4 mt-2 flex-wrap gap-y-4">
+                            <Hints keyName="Esc" label="finish" />
+                            <Hints keyName="f7 + f10" label="find" />
+                            {/* <Hints keyName="f4" label="ditto field" /> */}
+                        </div>
 
-                </div>
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start mt-4">
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Result Input Date" error={errors.serviceResultInputDate} name="serviceResultInputDate" type="date" />
                     </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        {/* <Controller name="svcType" control={control} render={({ field }) => (
+                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start mt-4">
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="Result Input Date" error={errors.serviceResultInputDate} name="serviceResultInputDate" type="date" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            {/* <Controller name="svcType" control={control} render={({ field }) => (
+                    <Dropdown
+                        options={svcData}
+                        value={field.value}
+                        onChange={field.onChange}
+                        label="Svc Type" error={errors.svcType?.message as string}
+                    />
+                )} /> */}
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="svc Type" error={errors.serviceResultScvType} name="serviceResultScvType" defaultValue="L&T Residential"
+                            />
+
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <Controller name="serviceResultClientId" control={control} render={({ field }) => (
                                 <Dropdown
-                                    options={svcData}
+                                    options={clientIdOptions}
+                                    // singleOption={getSelectedClientoption}
                                     value={field.value}
                                     onChange={field.onChange}
-                                    label="Svc Type" error={errors.svcType?.message as string}
+                                    label="Client id" error={errors.serviceResultClientId?.message as string}
                                 />
-                            )} /> */}
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="svc Type" error={errors.serviceResultScvType} name="serviceResultScvType" defaultValue="L&T Residential"
-                        />
-
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="serviceResultClientId" control={control} render={({ field }) => (
-                            <Dropdown
-                                options={clientIdOptions}
-                                // singleOption={getSelectedClientoption}
-                                value={field.value}
-                                onChange={field.onChange}
-                                label="Client id" error={errors.serviceResultClientId?.message as string}
-                            />
-                        )} />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Job" error={errors.serviceResultJobNo} name="serviceResultJobNo" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="serviceResultServerId" control={control} render={({ field }) => (
-                            <Dropdown
-                                options={serverIdOptions}
-                                value={field.value}
-                                onChange={field.onChange}
-                                label="server Id" error={errors.serviceResultServerId?.message as string}
-                            />
-                        )} />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="serviceResultResults" control={control} render={({ field }) => (
-                            <Dropdown
-                                options={resultOptions}
-                                value={field.value}
-                                onChange={field.onChange}
-                                onValueChange={(value) => setIsConspicuous(value)} // Update state
-
-                                label="result" error={errors.serviceResultResults?.message as string}
-                            />
-                        )} />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Date of service" error={errors.serviceResultDateOfService} name="serviceResultDateOfService" type="date" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Time of service" error={errors.serviceResultTimeService} name="serviceResultTimeService" type="time" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st date Attempt" error={errors.serviceResultFirstAttemptDate} name="serviceResultFirstAttemptDate" type="date" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="1st time Attempt" error={errors.serviceResultFirstTimeOfService} name="serviceResultFirstTimeOfService" type="time" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="2nd date Attempt" error={errors.serviceResultSecondAttemptDate} name="serviceResultSecondAttemptDate" type="date" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="2nd time Attempt" error={errors.serviceResultSecondTimeOfService} name="serviceResultSecondTimeOfService" type="time" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd date Attempt" error={errors.serviceResultThirdAttemptDate} name="serviceResultThirdAttemptDate" type="date" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="3rd time Attempt" error={errors.serviceResultThirdTimeOfService} name="serviceResultThirdTimeOfService" type="time" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="L&T Served" error={errors.serviceResultlTServed} name="serviceResultlTServed" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="L&T Not Served" error={errors.serviceResultlTNotServed} name="serviceResultlTNotServed" />
-                    </div>
-
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="substituteDeliveredTo" control={control} render={({ field }) => (
-                            <Dropdown
-                                options={delivery}
-                                value={field.value}
-                                onChange={field.onChange}
-                                label="substitute delivered To" error={errors.substituteDeliveredTo?.message as string}
-                            />
-                        )} />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <Controller name="corporateRecipient" control={control} render={({ field }) => (
-                            <Dropdown
-                                options={Recepient}
-                                value={field.value}
-                                onChange={field.onChange}
-                                label="Corporate Recipient" error={errors.corporateRecipient?.message as string}
-                            />
-                        )} />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="recipient Title" error={errors.serviceResultRecipientTitle} name="serviceResultRecipientTitle" />
-                    </div>
-                    {/* {isConspicuous === "substitute" && allResultForm[resultFormIndex]?.serviceResults?.results === "substitute" &&
-                     */}
-                    {isConspicuous === "substitute" &&
-
-                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="sex" error={errors.serviceResultSex} name="serviceResultSex" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="skin Color" error={errors.serviceResultSkinColor} name="serviceResultSkinColor" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="hair" error={errors.serviceResultHair} name="serviceResultHair" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="age" error={errors.serviceResultAge} name="serviceResultAge" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="height" error={errors.serviceResultHeight} name="serviceResultHeight" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="weight" error={errors.serviceResultWeight} name="serviceResultWeight" />
-                            </div>
+                            )} />
                         </div>
-                    }
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="Job" error={errors.serviceResultJobNo} name="serviceResultJobNo" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <Controller name="serviceResultServerId" control={control} render={({ field }) => (
+                                <Dropdown
+                                    options={serverIdOptions}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    label="server Id" error={errors.serviceResultServerId?.message as string}
+                                />
+                            )} />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <Controller name="serviceResultResults" control={control} render={({ field }) => (
+                                <Dropdown
+                                    options={resultOptions}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    onValueChange={(value) => setIsConspicuous(value)} // Update state
+
+                                    label="result" error={errors.serviceResultResults?.message as string}
+                                />
+                            )} />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="Date of service" error={errors.serviceResultDateOfService} name="serviceResultDateOfService" type="date" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="Time of service" error={errors.serviceResultTimeService} name="serviceResultTimeService" type="time" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="1st date Attempt" error={errors.serviceResultFirstAttemptDate} name="serviceResultFirstAttemptDate" type="date" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="1st time Attempt" error={errors.serviceResultFirstTimeOfService} name="serviceResultFirstTimeOfService" type="time" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="2nd date Attempt" error={errors.serviceResultSecondAttemptDate} name="serviceResultSecondAttemptDate" type="date" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="2nd time Attempt" error={errors.serviceResultSecondTimeOfService} name="serviceResultSecondTimeOfService" type="time" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="3rd date Attempt" error={errors.serviceResultThirdAttemptDate} name="serviceResultThirdAttemptDate" type="date" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="3rd time Attempt" error={errors.serviceResultThirdTimeOfService} name="serviceResultThirdTimeOfService" type="time" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="L&T Served" error={errors.serviceResultlTServed} name="serviceResultlTServed" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="L&T Not Served" error={errors.serviceResultlTNotServed} name="serviceResultlTNotServed" />
+                        </div>
+
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <Controller name="substituteDeliveredTo" control={control} render={({ field }) => (
+                                <Dropdown
+                                    options={delivery}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    label="substitute delivered To" error={errors.substituteDeliveredTo?.message as string}
+                                />
+                            )} />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <Controller name="corporateRecipient" control={control} render={({ field }) => (
+                                <Dropdown
+                                    options={Recepient}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    label="Corporate Recipient" error={errors.corporateRecipient?.message as string}
+                                />
+                            )} />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="recipient Title" error={errors.serviceResultRecipientTitle} name="serviceResultRecipientTitle" />
+                        </div>
+                        {/* {isConspicuous === "substitute" && allResultForm[resultFormIndex]?.serviceResults?.results === "substitute" &&
+         */}
+                        {isConspicuous === "substitute" &&
+
+                            <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="sex" error={errors.serviceResultSex} name="serviceResultSex" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="skin Color" error={errors.serviceResultSkinColor} name="serviceResultSkinColor" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="hair" error={errors.serviceResultHair} name="serviceResultHair" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="age" error={errors.serviceResultAge} name="serviceResultAge" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="height" error={errors.serviceResultHeight} name="serviceResultHeight" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="weight" error={errors.serviceResultWeight} name="serviceResultWeight" />
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
-            {/* SHOW RESULT  FORM ENDS */}
+                {/* SHOW RESULT  FORM ENDS */}
 
-            {isConspicuous !== "substitute" && <div className="w-full mt-6 border-[1px] border-solid border-borderColor rounded-lg">
-                <h1 className="px-6 py-2 bg-cyanColor rounded-t-lg text-whiteColor font-semibold text-lg">Description</h1>
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start px-8 py-4">
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="door" error={errors.serviceResultDoor} name="serviceResultDoor" />
+                {isConspicuous !== "substitute" && <div className="w-full mt-6 border-[1px] border-solid border-borderColor rounded-lg">
+                    <h1 className="px-6 py-2 bg-cyanColor rounded-t-lg text-whiteColor font-semibold text-lg">Description</h1>
+                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start px-8 py-4">
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="door" error={errors.serviceResultDoor} name="serviceResultDoor" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="door Locks" error={errors.serviceResultDoorLocks} name="serviceResultDoorLocks" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="entry" error={errors.serviceResultEntry} name="serviceResultEntry" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="wall" error={errors.serviceResultWall} name="serviceResultWall" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="floor" error={errors.serviceResultFloor} name="serviceResultFloor" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="lock" error={errors.serviceResultLock} name="serviceResultLock" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <CheckBox onKeyDown={handleEnterKeyPress} register={register} label="Other Description" error={errors.serviceResultOtherDescription?.message} name="serviceResultOtherDescription" />
+                        </div>
                     </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="door Locks" error={errors.serviceResultDoorLocks} name="serviceResultDoorLocks" />
+                </div>}
+                {/* DESCRIPTION FORM STARTS */}
+
+                {/* DESCRIPTION FORM ENDS */}
+                {/* OTHER  FORM STARTS */}
+                <div className="mt-6">
+                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="Other Identifying Features" error={errors.serviceResultOtherFeatures} name="serviceResultOtherFeatures" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="Date of Mailing" error={errors.serviceResultDateOfMailing} name="serviceResultDateOfMailing" type="date" />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress}
+                                register={register} label="Notary Date" error={errors.serviceResultDateOfNotary} name="serviceResultDateOfNotary" type="date" />
+                        </div>
                     </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="entry" error={errors.serviceResultEntry} name="serviceResultEntry" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="wall" error={errors.serviceResultWall} name="serviceResultWall" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="floor" error={errors.serviceResultFloor} name="serviceResultFloor" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="lock" error={errors.serviceResultLock} name="serviceResultLock" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <CheckBox onKeyDown={handleEnterKeyPress} register={register} label="Other Description" error={errors.serviceResultOtherDescription?.message} name="serviceResultOtherDescription" />
-                    </div>
+
+                    <h1 className="font-semibold text-lg mt-4">
+                        Do not Proceed Past This Line
+                    </h1>
                 </div>
-            </div>}
-            {/* DESCRIPTION FORM STARTS */}
+                {/* OTHER  FORM ENDS */}
 
-            {/* DESCRIPTION FORM ENDS */}
-            {/* OTHER  FORM STARTS */}
-            <div className="mt-6">
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Other Identifying Features" error={errors.serviceResultOtherFeatures} name="serviceResultOtherFeatures" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Date of Mailing" error={errors.serviceResultDateOfMailing} name="serviceResultDateOfMailing" type="date" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress}
-                            register={register} label="Notary Date" error={errors.serviceResultDateOfNotary} name="serviceResultDateOfNotary" type="date" />
-                    </div>
-                </div>
+            </form>
+        }
 
-                <h1 className="font-semibold text-lg mt-4">
-                    Do not Proceed Past This Line
-                </h1>
-            </div>
-            {/* OTHER  FORM ENDS */}
-
-        </form>
     </>
 }
 

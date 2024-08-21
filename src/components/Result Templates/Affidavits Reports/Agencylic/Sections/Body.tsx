@@ -23,6 +23,7 @@ inputDate?:string
 time?:string
 address?:string
 firstNames?:string
+serverName?:string
 }
 const Body: React.FC<BodyProps> = (item) => {
     const timeString=item?.time
@@ -30,8 +31,8 @@ const Body: React.FC<BodyProps> = (item) => {
     const time = date.toLocaleTimeString('en-US', { hour12: false });
     console.log(":inputDAta",time)
     return <div className="flex flex-col items-start gap-y-2 text-sm">
-        <p>state of new york, country of queens ss:</p>
-        <p>i, SOMETEXTWILLBETHEREFROMBACKENDAPI being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
+        <p>State of New York, country of Queens ss:</p>
+        <p>I, SOMETEXTWILLBETHEREFROMBACKENDAPI being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
             queens, New York  that on <span className="font-semibold">{item?.dateOfService ? item?.dateOfService : "--N/A--"}</span>.</p>
         <p>At the property sought to be recovered at <span className="font-semibold">{item?.address ? item?.address : "--N/A--"}</span> Apt# <span className="font-semibold">{item?.apt ? item?.apt : "--N/A--"}</span></p>
         <p>The <span className="font-semibold">{item?.firstNames ? item?.firstNames : "--N/A--"}</span> was served on</p>

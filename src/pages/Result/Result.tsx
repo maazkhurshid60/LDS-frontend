@@ -5,7 +5,7 @@ import { MdDeleteOutline, MdOutlineEdit, MdOutlineDone, MdArrowBackIos, MdArrowF
 import Hints from "./Hints/Hints";
 import ResultForm from "./ResultForm/ResultForm";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewResultFormAddReducer, deleteResultFormThunk, getFirstResultFormReducer, getLastResultFormReducer, getNextResultFormReducer, getPreviousResultFormReducer } from "../../redux/slice/resultForm";
+import { addNewResultFormAddReducer, deleteResultFormThunk, emptySearchResultFormAddReducer, emptySearchResultFormDataAddReducer, emptySelectedSearchResultFormAddReducer, getFirstResultFormReducer, getLastResultFormReducer, getNextResultFormReducer, getPreviousResultFormReducer } from "../../redux/slice/resultForm";
 import { setMainMenuName, setSubMenuName } from "../../redux/slice/navbarTracking";
 import { RootState } from "../../redux/store";
 const Result = () => {
@@ -27,11 +27,11 @@ const Result = () => {
             {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />
             <BorderButton buttonText="submit" icon={<MdOutlineDone />} isIcon /> */}
             <BorderButton buttonText="delete" icon={<MdDeleteOutline />} isIcon onClick={()=>dispatch(deleteResultFormThunk(allResultForm[resultFormIndex]?._id))}/>
-            <BorderButton buttonText="previous" icon={<MdArrowBackIos />} isIcon onClick={() => dispatch(getPreviousResultFormReducer())} />
-            <BorderButton buttonText="next" icon={<MdArrowForwardIos />} isRightIcon onClick={() => dispatch(getNextResultFormReducer())} />
-            <BorderButton buttonText="main screen" icon={<MdMonitor />} isIcon to="/" onClick={() => { dispatch(setMainMenuName("Operations")), dispatch(setSubMenuName("Service")) }} />
-            <BorderButton buttonText="first" icon={<MdFirstPage />} isIcon onClick={() => dispatch(getFirstResultFormReducer())} />
-            <BorderButton buttonText="last" icon={<MdLastPage />} isRightIcon onClick={() => dispatch(getLastResultFormReducer())} />
+            <BorderButton buttonText="previous" icon={<MdArrowBackIos />} isIcon onClick={() => {dispatch(getPreviousResultFormReducer()),dispatch(emptySelectedSearchResultFormAddReducer()),dispatch(emptySearchResultFormDataAddReducer())}} />
+            <BorderButton buttonText="next" icon={<MdArrowForwardIos />} isRightIcon onClick={() => {dispatch(getNextResultFormReducer()),dispatch(emptySelectedSearchResultFormAddReducer()),dispatch(emptySearchResultFormDataAddReducer())}} />
+            <BorderButton buttonText="main screen" icon={<MdMonitor />} isIcon to="/" onClick={() => { dispatch(setMainMenuName("Operations")), dispatch(setSubMenuName("Service")),dispatch(emptySelectedSearchResultFormAddReducer()),dispatch(emptySearchResultFormDataAddReducer()) }} />
+            <BorderButton buttonText="first" icon={<MdFirstPage />} isIcon onClick={() => {dispatch(getFirstResultFormReducer()),dispatch(emptySelectedSearchResultFormAddReducer()),dispatch(emptySearchResultFormDataAddReducer())}} />
+            <BorderButton buttonText="last" icon={<MdLastPage />} isRightIcon onClick={() => {dispatch(getLastResultFormReducer()),dispatch(emptySelectedSearchResultFormAddReducer()),dispatch(emptySearchResultFormDataAddReducer())}} />
             </>
             }
             

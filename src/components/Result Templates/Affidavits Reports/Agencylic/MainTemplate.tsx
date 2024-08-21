@@ -11,6 +11,8 @@ import { useSelector } from "react-redux";
 const AgencyLic = () => {
     const agencyLicPrintRef = useRef<HTMLDivElement | null>(null);
     const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData)
+    console.log("legalDeliveryDataa?.data?.inputDate",legalDeliveryDataa?.data)
+
     const [header, setHeader] = useState({
         index: "",
         affidavitName: "",
@@ -38,9 +40,9 @@ const AgencyLic = () => {
 
         //SERVICES
         address:"",
-        firstNames:""
+        firstNames:"",
+        serverName:""
     })
-console.log("legalDeliveryDataa?.data?.inputDate",legalDeliveryDataa?.data?.inputDate)
     useEffect(() => {
         if (legalDeliveryDataa?.searchResult === "service" || legalDeliveryDataa?.searchResult === "standard") {
             // SERVICES STARTS

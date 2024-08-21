@@ -4,7 +4,7 @@ import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import Table from "../../components/Tables/Table";
-import { headers, headersResult, headersService, headersStandard, tableData } from "../../constdata/LegalDeliveryData";
+import {  headersResult, headersService, headersStandard, tableData } from "../../constdata/LegalDeliveryData";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import Pagination from "../../components/Pagination/Pagination";
 import FilterMenu from "./FilterSection/FilterMenu/FilterMenu";
@@ -95,7 +95,25 @@ const LegalDelivery = () => {
     //     dispatch(getSingleLegalDeliveryReducer(tableData?.tableData[0]))
 
     // }, [])
-
+console.log("filteredData",filteredData)
+const serviceTableHeader=["Job","Client Code","Input Date","Server Code","Full Name","Case Paper Type","Bussiness Name","Address","Caption","City","Zip","Serv City","Case No"]
+const serviceDataTable = filteredData.map(item => ({
+    _id:item?._id,
+    jobNo: item?.jobNo,
+    clientCode: item?.clientId?.code,
+    inputDate: item?.inputDate,
+    serverCode: item?.resultFormId?.serviceResultServerId,
+    fullName: item?.lTSFirstName,
+    casePaperType: "",  // Static value
+    bussinessName: item?.lTSBusinessName,
+    address: item?.lTSAddress,
+    caption: item?.caption,
+    city: item?.lTSCity,
+    zip: item?.lTSZip,
+    servCity: item?.cityServe,
+    caseNo: item?.caseNo
+  }));
+  
 
     return <div className="w-[95%] m-auto">
         {/* <GPSReport/> */}
@@ -160,10 +178,15 @@ const LegalDelivery = () => {
                             searchDataName === "result"
                                 ? headersResult
                                 : searchDataName === "standard"
-                                    ? headersStandard
-                                    : headersService
+                                    ? serviceTableHeader
+                                    : serviceTableHeader
                         }
-                        tableData={filteredData}
+                        // tableData={serviceDataTable}
+                        tableData={  searchDataName === "result"
+                            ? headersResult
+                            : searchDataName === "standard"
+                                ? serviceDataTable
+                                : serviceDataTable}
                         getRowData={getUserIdFunction}
                     />                    
                     
