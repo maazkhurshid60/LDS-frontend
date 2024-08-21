@@ -24,8 +24,6 @@ const LegalDelivery = () => {
     const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData.searchResult)
 
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: filteredData?.length > 0 && filteredData || [] })
-
-    console.log("filteredData", filteredData)
     // const agencyLicRef = useRef<HTMLButtonElement | null>(null);
     // const LiNonReportsRef = useRef<HTMLButtonElement | null>(null);
     // const ltExtraNameReportRef = useRef<HTMLButtonElement | null>(null);
@@ -113,6 +111,22 @@ const serviceDataTable = filteredData.map(item => ({
     servCity: item?.cityServe,
     caseNo: item?.caseNo
   }));
+  const resultDataTable=filteredData.map(item => ({
+    _id:item?._id,
+    jobNo:item?.serviceFormId?.jobNo,
+    clientCode: item?.serviceResultClientId?.code,
+    inputDate: item?.queryInformationLTInputDate,
+    serverCode: item?.serviceResultServerId?.serverCode,
+    fullName: item?.serviceFormId?.lTSFirstName,
+    casePaperType: "",  // Static value
+    bussinessName: item?.queryInformationLTBusinessName ,
+    address: item?.queryInformationLTAddress,
+    caption: item?.serviceFormId?.caption,
+    city: item?.serviceFormId?.lTSCity,
+    zip: item?.serviceFormId?.lTSZip,
+    servCity: item?.serviceFormId?.cityServe,
+    caseNo: item?.serviceFormId?.caseNo
+  }));
   
 
     return <div className="w-[95%] m-auto">
@@ -176,14 +190,14 @@ const serviceDataTable = filteredData.map(item => ({
                     <TableWithoutAction
                         headers={
                             searchDataName === "result"
-                                ? headersResult
+                                ? serviceTableHeader
                                 : searchDataName === "standard"
                                     ? serviceTableHeader
                                     : serviceTableHeader
                         }
                         // tableData={serviceDataTable}
                         tableData={  searchDataName === "result"
-                            ? headersResult
+                            ? resultDataTable
                             : searchDataName === "standard"
                                 ? serviceDataTable
                                 : serviceDataTable}

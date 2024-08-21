@@ -20,9 +20,9 @@ const Header:React.FC<HeaderProps>=(item)=>{
             <p>service</p>
             <p>{item?.serviceName}</p>
         </div> */}
-        <div className=" font-medium flex items-center gap-x-2 text-base">
-            <p>lic#</p>
-            <p>{item?.licNo ? item?.licNo:"--N/A--"}</p>
+        <div className=" flex items-center gap-x-2 text-base">
+            <p>Lic#</p>
+            <p className="font-medium ">{item?.licNo ? item?.licNo:"--N/A--"}</p>
         </div>
     </div>
 }

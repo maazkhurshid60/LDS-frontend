@@ -381,7 +381,7 @@ const StandardTypeForm = () => {
         const isHoliday=holidayData?.find(data=>data?.holidayDate === inputeDate)
         
         if (!isNewFormAdding && isHoliday) {
-            alert("Input date you have selected there is holiday")
+            alert("Note: The date you selected is a holiday. Please choose another date.")
             setValue("inputDate",allServiceFormData[serviceFormIndex]?.inputDate)
         }else if(isHoliday){
             alert("Input date you have selected there is holiday")

@@ -68,6 +68,12 @@ const AgencyLic = () => {
         // SERVICES ENDS
 
         }else if (legalDeliveryDataa?.searchResult === "result") {
+            setHeader(prev=>({...prev,
+                index: legalDeliveryDataa?.data?.queryInformationLTIndexNo,
+                affidavitName: legalDeliveryDataa?.data?.serviceResultScvType?.serviceTypeCode,
+                serviceName: "",
+                licNo: "",  
+            }))
         setBodyData(prev=>({...prev,
             apt: "",
             reciepientTitle: legalDeliveryDataa?.data?.serviceResultRecipientTitle,
@@ -84,7 +90,6 @@ const AgencyLic = () => {
             otherFeatures: legalDeliveryDataa?.data?.serviceResultOtherFeatures,
         }))}
     }, [])
-    console.log("legal delivery data", legalDeliveryDataa)
     return (
         <>
             <div className="absolute h-[83.5vh] overflow-y-scroll relative">
