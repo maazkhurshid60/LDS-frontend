@@ -4,7 +4,7 @@ export interface DataTableProps{
         index: string |number,
         address: string,
         apt: string | number,
-        ltnames: string[],
+        ltnames: string,
         extraname: string[]
 }
 const DataTable:React.FC<DataTableProps> = (item) => {
@@ -64,7 +64,7 @@ const DataTable:React.FC<DataTableProps> = (item) => {
                         {item?.apt?item?.apt:"--N/A--"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.ltnames?.length>0 ?item?.ltnames:"--N/A--"}
+                        {item?.ltnames ? item?.ltnames:"--N/A--"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
                         {item?.extraname?.length>0 ?item?.extraname?.map(data=>data+","):"--N/A--"}

@@ -16,14 +16,15 @@ const LTExtraNameReport = () => {
         index: "",
         address: "",
         apt: "",
-        ltnames: [],
+        ltnames: "",
         extraname: []
 
     })
-    console.log("legalDeliveryDataa", legalDeliveryDataa)
+    console.log("legalDeliveryDataa", legalDeliveryDataa?.data?.lTSFirstName)
     useEffect(() => {
         const ltName = legalDeliveryDataa?.data?.lTSFirstName.split(',')
         const extraltName = ltName?.splice(1)
+  
       
         if (legalDeliveryDataa?.searchResult === "service") {
             setDataTable(prev => ({
@@ -32,7 +33,7 @@ const LTExtraNameReport = () => {
                 index: legalDeliveryDataa?.data?.oSSTIndexNo,
                 address: legalDeliveryDataa?.data?.lTSAddress,
                 apt: legalDeliveryDataa?.data?.lTSApt,
-                ltnames: ltName[0],
+                ltnames:legalDeliveryDataa?.data?.lTSFirstName,
                 extraname: extraltName
             }))
         }

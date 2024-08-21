@@ -31,7 +31,7 @@ const GPSReport = () => {
         dateOfService: ""
     })
 
-    console.log("geo map", legalDeliveryDataa?.searchResult);
+    console.log("geo map????????????", legalDeliveryDataa?.data?.queryInformationLTAddress);
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Ensure this key is valid
         libraries: ["places"]
@@ -43,11 +43,12 @@ const GPSReport = () => {
 
             setResultData(prevState => ({
                 ...prevState,
-                index: legalDeliveryDataa?.data?.queryInformationLTIndexNo,
-                serveTo: legalDeliveryDataa?.data?.queryInformationStandardServeTo,
+                index: legalDeliveryDataa?.data?.serviceFormId?.queryInformationLTIndexNo,
+                serveTo: legalDeliveryDataa?.data?.serviceFormId?.queryInformationStandardServeTo,
                 address: legalDeliveryDataa?.data?.queryInformationLTAddress,
-                personServed: legalDeliveryDataa?.data?.serviceResultServerId,
-                dateOfService: legalDeliveryDataa?.data?.serviceResultDateOfService,
+                personServed: legalDeliveryDataa?.data?.serviceFormId?.serviceResultServerId,
+                dateOfService: legalDeliveryDataa?.data?.serviceFormId?.serviceResultDateOfService,
+                jobNo:legalDeliveryDataa?.data?.serviceFormId?.jobNo
             }));
         } else if (legalDeliveryDataa?.searchResult === "standard") {
 

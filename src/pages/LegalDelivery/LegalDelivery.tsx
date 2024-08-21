@@ -100,7 +100,7 @@ const serviceDataTable = filteredData.map(item => ({
     jobNo: item?.jobNo,
     clientCode: item?.clientId?.code,
     inputDate: item?.inputDate,
-    serverCode: item?.resultFormId?.serviceResultServerId,
+    serverCode: item?.resultFormId?.serviceResultServerId?.serverCode,
     fullName: item?.lTSFirstName,
     casePaperType: "",  // Static value
     bussinessName: item?.lTSBusinessName,
