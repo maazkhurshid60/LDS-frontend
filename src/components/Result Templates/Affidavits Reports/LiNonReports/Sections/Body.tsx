@@ -9,12 +9,14 @@ export interface bodyProps {
     hair?: string
     dateOfService?:string
     dateOfMailing?: string;
-    
+    serverName?:string
+    lic?:string |number
+    address?:string 
 }
 const Body: React.FC<bodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4">
         <p>
-            I SOME_TEXT_WILL_BE_THERE_FROM_BACKEND_API being duly swom, deposes and says: I am  Petitioner/Landlord's agent and I reside in
+            I  <span className="font-semibold">{item?.serverName ? item?.serverName :"--N/A--" }</span> being duly swom, deposes and says: I am  Petitioner/Landlord's agent and I reside in
             or have offices in the country of Kings I have been requested by the attomey for the Petitioner Landlord to make an investigation
             to as certain if the above name Tenant(s) and Undertenant(s) are the present time in the military service.
         </p>
@@ -80,9 +82,9 @@ const Body: React.FC<bodyProps> = (item) => {
             <p>{item?.dateOfMailing? item?.dateOfMailing:"--N/A--"}</p>
             </div>
             <div>
-            <p>SomeName from banckend</p>
+            <p>{item?.serverName? item?.serverName:"--N/A--"}</p>
             <p>Lic#{item?.lic? item?.lic:"--N/A--"}</p>
-            <p>Queens</p>
+            <p>{item?.address? item?.address:"--N/A--"}</p>
 
             </div>
 

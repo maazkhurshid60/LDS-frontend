@@ -47,6 +47,9 @@ const LiNonReports = () => {
         weight: "",
         hair: "",
         dateOfMailing:"",
+        serverName:"",
+        lic:"",
+        address:""
     })
     useEffect(() => {
         if (legalDeliveryDataa?.searchResult === "service") {
@@ -55,9 +58,23 @@ const LiNonReports = () => {
                 index: legalDeliveryDataa?.data?.oLTIndexNo,
                 firstNameServe: legalDeliveryDataa?.data?.firstNameServe,
                 address: legalDeliveryDataa?.data?.lTSAddress,
-                affidavitName: "",
-                serviceName: "",
-                licNo: "",
+                
+            }))
+            setBodyData(prev => ({
+                ...prev,
+                dateOfService:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfService,
+                sex: legalDeliveryDataa?.data?.resultFormId?.serviceResultSex,
+                skinColor: legalDeliveryDataa?.data?.resultFormId?.serviceResultSkinColor,
+                age: legalDeliveryDataa?.data?.resultFormId?.serviceResultAge,
+                height: legalDeliveryDataa?.data?.resultFormId?.serviceResultHeight,
+                weight: legalDeliveryDataa?.data?.resultFormId?.serviceResultWeight,
+                hair: legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
+                dateOfMailing:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
+                serverName:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.firstName,
+                lic:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
+                address:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1
+
+
             }))
         } else if (legalDeliveryDataa?.searchResult === "standard") {
             setHeader(prev => ({
@@ -65,16 +82,31 @@ const LiNonReports = () => {
                 index: legalDeliveryDataa?.data?.oSSTIndexNo,
                 firstNameServe: legalDeliveryDataa?.data?.firstNameServe,
                 address: legalDeliveryDataa?.data?.addressServe,
-                affidavitName: "",
-                serviceName: "",
-                licNo: "",
+                
+            }))
+            setBodyData(prev => ({
+                ...prev,
+                dateOfService:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfService,
+                sex: legalDeliveryDataa?.data?.resultFormId?.serviceResultSex,
+                skinColor: legalDeliveryDataa?.data?.resultFormId?.serviceResultSkinColor,
+                age: legalDeliveryDataa?.data?.resultFormId?.serviceResultAge,
+                height: legalDeliveryDataa?.data?.resultFormId?.serviceResultHeight,
+                weight: legalDeliveryDataa?.data?.resultFormId?.serviceResultWeight,
+                hair: legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
+                dateOfMailing:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
+                serverName:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.firstName,
+                lic:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
+                address:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1
+
+
             }))
         }
             else if (legalDeliveryDataa?.searchResult === "result") {
             setHeader(prev => ({
                 ...prev,
-                index: legalDeliveryDataa?.queryInformationLTIndexNo,
-
+                index: legalDeliveryDataa?.data?.serviceFormId?.oLTIndexNo,
+                firstNameServe: legalDeliveryDataa?.data?.serviceFormId?.firstNameServe,
+                address: legalDeliveryDataa?.data?.serviceFormId?.lTSAddress,
             }))
             setBodyData(prev => ({
                 ...prev,
@@ -86,6 +118,9 @@ const LiNonReports = () => {
                 weight: legalDeliveryDataa?.data?.serviceResultWeight,
                 hair: legalDeliveryDataa?.data?.serviceResultHair,
                 dateOfMailing:legalDeliveryDataa?.data?.serviceResultDateOfMailing,
+                serverName:legalDeliveryDataa?.data?.serviceResultServerId?.firstName,
+                lic:legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
+                address:legalDeliveryDataa?.data?.serviceResultServerId?.address1
 
 
             }))
@@ -104,6 +139,8 @@ const LiNonReports = () => {
                      weight= {bodyData?.weight}
                      hair= {bodyData?.hair}
                      dateOfMailing={bodyData?.dateOfMailing}
+                     serverName={bodyData?.serverName}
+                     lic={bodyData?.lic}
              
                     />
                     <Footer />
@@ -132,7 +169,7 @@ const LiNonReports = () => {
                      weight= {bodyData?.weight}
                      hair= {bodyData?.hair}
                      dateOfMailing={bodyData?.dateOfMailing}
-             
+                     address={bodyData?.address}
                     />
                     <Footer />
                 </TemplateOutlet>
