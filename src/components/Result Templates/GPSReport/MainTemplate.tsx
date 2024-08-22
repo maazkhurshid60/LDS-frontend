@@ -31,7 +31,7 @@ const GPSReport = () => {
         dateOfService: ""
     })
 const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
-    console.log("geo map????????????", legalDeliveryDataa?.data?.queryInformationLTAddress);
+    console.log("geo map????????????",resultData);
     const { isLoaded } = useJsApiLoader({
         // googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Ensure this key is valid
         googleMapsApiKey: mapKey, // Ensure this key is valid
