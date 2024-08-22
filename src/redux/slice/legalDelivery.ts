@@ -19,10 +19,10 @@ const legalDelivery = createSlice({
     initialState: initialState,
     reducers: {
         getSingleLegalDeliveryReducer: (state, action) => {
-            state.selectedLegalDeliveryData.data = action.payload
+            state.selectedLegalDeliveryData.data = action?.payload
         },
         getSearchNameReducer:(state,action)=>{
-            state.selectedLegalDeliveryData.searchResult = action.payload
+            state.selectedLegalDeliveryData.searchResult = action?.payload
 
         },
         emptyLegalDeliveryReducer:(state)=>{
