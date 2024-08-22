@@ -24,10 +24,13 @@ const StandardReport = () => {
         firstAttemptTime:"",
         secondAttemptDate:"",
         secondAttemptTime:"",
+        recipientTitle:"",
+        dateOfMailing:"",
+        lic:""
 
 
     })
-    console.log("legalDeliveryDataa", legalDeliveryDataa)
+    console.log("legalDeliveryDataa", legalDeliveryDataa?.data)
     useEffect(() => {
         if (legalDeliveryDataa?.searchResult === "result") {
             setHeader(prev => ({
@@ -41,6 +44,30 @@ const StandardReport = () => {
                 firstAttemptTime: legalDeliveryDataa?.data?.serviceResultFirstTimeOfService,
                 secondAttemptDate: legalDeliveryDataa?.data?.serviceResultSecondAttemptDate,
                 secondAttemptTime: legalDeliveryDataa?.data?.serviceResultSecondTimeOfService,
+                apt:legalDeliveryDataa?.data?.serviceFormId?.lTSApt,
+                recipientTitle:legalDeliveryDataa?.data?.serviceResultRecipientTitle,
+                dateOfMailing:legalDeliveryDataa?.data?.serviceResultDateOfMailing,
+                lic:legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
+
+
+            }))
+        }
+       else if (legalDeliveryDataa?.searchResult === "service" || legalDeliveryDataa?.searchResult ==="standard") {
+            setHeader(prev => ({
+                ...prev,
+                index: legalDeliveryDataa?.data?.resultFormId?.queryInformationLTIndexNo,
+            }))
+            setBodyData(prev => ({
+                ...prev,
+                dateOfService: legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfService,
+                firstAttemptDate: legalDeliveryDataa?.data?.resultFormId?.serviceResultFirstAttemptDate,
+                firstAttemptTime: legalDeliveryDataa?.data?.resultFormId?.serviceResultFirstTimeOfService,
+                secondAttemptDate: legalDeliveryDataa?.data?.resultFormId?.serviceResultSecondAttemptDate,
+                secondAttemptTime: legalDeliveryDataa?.data?.resultFormId?.serviceResultSecondTimeOfService,
+                apt:legalDeliveryDataa?.data?.lTSApt,
+                recipientTitle:legalDeliveryDataa?.data?.resultFormId?.serviceResultRecipientTitle,
+                dateOfMailing:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
+                lic:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
 
 
             }))
@@ -56,7 +83,9 @@ const StandardReport = () => {
                     firstAttemptTime={bodyData?.firstAttemptTime}
                     secondAttemptDate={bodyData?.secondAttemptDate}
                     secondAttemptTime={bodyData?.secondAttemptTime}
-
+                    recipientTitle={bodyData?.recipientTitle}
+                    dateOfMailing={bodyData?.dateOfMailing}
+                lic={bodyData?.lic}
                     />
                     <Footer />
                 </TemplateOutlet>
@@ -75,8 +104,16 @@ const StandardReport = () => {
                 {/* The content to print */}
                 <div ref={StandardReportPrintRef}>
                     <TemplateOutlet>
-                        <Header />
-                        <Body />
+                    <Header index={header?.index} />
+                    <Body dateOfService={bodyData?.dateOfService}
+                    firstAttemptDate={bodyData?.firstAttemptDate}
+                    firstAttemptTime={bodyData?.firstAttemptTime}
+                    secondAttemptDate={bodyData?.secondAttemptDate}
+                    secondAttemptTime={bodyData?.secondAttemptTime}
+                    recipientTitle={bodyData?.recipientTitle}
+                    dateOfMailing={bodyData?.dateOfMailing}
+                lic={bodyData?.lic}
+                    />
                         <Footer />
                     </TemplateOutlet>
                 </div>

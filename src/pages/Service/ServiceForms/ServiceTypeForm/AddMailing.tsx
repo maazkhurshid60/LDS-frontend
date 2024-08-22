@@ -78,7 +78,7 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
 
     }
     console.log(isAddMail)
-    return <div>
+    return <div className="mt-4">
         <h1 className="font-semibold text-md mb-4 capitalize">Adding Mailing Addresss {id && id}</h1>
         <form className="flex flex-col items-end">
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">

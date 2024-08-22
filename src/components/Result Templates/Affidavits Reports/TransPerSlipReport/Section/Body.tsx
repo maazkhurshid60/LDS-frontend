@@ -43,10 +43,13 @@ const Body:React.FC<BodyProps> = (item) => {
         <h1 className="w-[45%]">Name: <span className="font-semibold">{item?.nameServicesFirstName ? item?.nameServicesFirstName:"--N/A--"}</span></h1>
         <h1 className="w-[45%]">Paper Served: <span className="font-semibold">{item?.paperServed ? item?.paperServed:"--N/A--"}</span></h1>
         <h1 className="w-[45%]">Index no: <span className="font-semibold">{item?.index ? item?.index:"--N/A--"}</span></h1>
-        <h1 className="w-[45%]">Address: <span className="font-semibold">{item?.address ? item?.address:"--N/A--"}</span></h1>
-        <h1 className="w-[45%]">APT: <span className="font-semibold">{item?.apt ? item?.apt:"--N/A--"}</span></h1>
-        <h1 className="w-[45%]">City: <span className="font-semibold">{item?.city ? item?.city:"--N/A--"}</span></h1>
-        <h1 className="w-[45%]">Zip: <span className="font-semibold">{item?.zip ? item?.zip:"--N/A--"}</span></h1>
+        <div className="flex items-center justify-between flex-wrap w-full">
+
+        <h1 className="w-[40%]">Address: <span className="font-semibold">{item?.address ? item?.address:"--N/A--"}</span></h1>
+        <h1 className="w-[20%]">APT: <span className="font-semibold">{item?.apt ? item?.apt:"--N/A--"}</span></h1>
+        <h1 className="w-[20%]">City: <span className="font-semibold">{item?.city ? item?.city:"--N/A--"}</span></h1>
+        <h1 className="w-[20%]">Zip: <span className="font-semibold">{item?.zip ? item?.zip:"--N/A--"}</span></h1>
+        </div>
         <h1 className="w-[45%]">Country: <span className="font-semibold">{item?.country ? item?.country:"--N/A--"}</span></h1>
         <h1 className="w-[45%]">Type of Service: <span className="font-semibold">{item?.typeOfService ? item?.typeOfService:"--N/A--"}</span></h1>
         <h1 className="w-[45%]">Service Completed: <span className="font-semibold">{item?.serviceCompleted ? item?.serviceCompleted:"--N/A--"}</span></h1>

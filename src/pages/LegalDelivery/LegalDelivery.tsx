@@ -93,7 +93,7 @@ const LegalDelivery = () => {
     //     dispatch(getSingleLegalDeliveryReducer(tableData?.tableData[0]))
 
     // }, [])
-console.log("filteredData",filteredData)
+console.log("filteredData",filteredData[0]?.resultFormId)
 const serviceTableHeader=["Job","Client Code","Input Date","Server Code","Full Name","Case Paper Type","Bussiness Name","Address","Caption","City","Zip","Serv City","Case No"]
 const serviceDataTable = filteredData.map(item => ({
     _id:item?._id,

@@ -82,8 +82,8 @@ const ResultForm = () => {
             serviceResultSkinColor: data?.serviceResultSkinColor,
             serviceResultHair: data?.serviceResultHair,
             serviceResultAge: (data?.serviceResultAge === undefined || data?.serviceResultAge === "" || isNaN(data?.serviceResultAge)) ? null : parseInt(data?.serviceResultAge),
-            serviceResultHeight: (data?.serviceResultHeight === undefined || data?.serviceResultHeight === "" || isNaN(data?.serviceResultHeight)) ? null : parseInt(data?.serviceResultHeight),
-            serviceResultWeight: (data?.serviceResultWeight === undefined || data?.serviceResultWeight === "" || isNaN(data?.serviceResultWeight)) ? null : parseInt(data?.serviceResultWeight),
+            serviceResultHeight: (data?.serviceResultHeight === undefined || data?.serviceResultHeight === "" || isNaN(data?.serviceResultHeight)) ? null : parseFloat(data?.serviceResultHeight),
+            serviceResultWeight: (data?.serviceResultWeight === undefined || data?.serviceResultWeight === "" || isNaN(data?.serviceResultWeight)) ? null : parseFloat(data?.serviceResultWeight),
             serviceResultOtherFeatures: data?.serviceResultOtherFeatures,
             serviceResultDateOfMailing: data?.serviceResultDateOfMailing,
             serviceResultDateOfNotary: data?.serviceResultDateOfNotary,
@@ -207,7 +207,6 @@ const ResultForm = () => {
             setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
         }
         else {
-
             setValue("queryInformationLTFullName", allResultForm[resultFormIndex]?.queryInformationLTFullName),
                 setValue("queryInformationLTIndexNo", JSON.stringify(allResultForm[resultFormIndex]?.queryInformationLTIndexNo, 10));
 
@@ -221,7 +220,7 @@ const ResultForm = () => {
             setValue("serviceResultScvType", allResultForm[resultFormIndex]?.serviceResultScvType ?? "")
             setValue("serviceResultClientId", allResultForm[resultFormIndex]?.serviceResultClientId ?? "")
             setValue("serviceResultJobNo", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultJobNo ?? ""))
-            setValue("serviceResultServerId", allResultForm[resultFormIndex]?.serviceResultServerId ?? "")
+            setValue("serviceResultServerId", allResultForm[resultFormIndex]?.serviceResultServerId?._id ?? "")
             setValue("serviceResultResults", allResultForm[resultFormIndex]?.serviceResultResults ?? "")
             setValue("serviceResultDateOfService", allResultForm[resultFormIndex]?.serviceResultDateOfService)
             setValue("serviceResultTimeService", allResultForm[resultFormIndex]?.serviceResultTimeService)
@@ -251,6 +250,7 @@ const ResultForm = () => {
             setValue("serviceResultDateOfNotary", allResultForm[resultFormIndex]?.serviceResultDateOfNotary)
             // setValue("height", allResultForm[resultFormIndex]?.serviceResults?.description?.height)
             // setIsConspicuous(allResultForm[resultFormIndex]?.serviceResults?.results)
+            console.log("allResultForm[resultFormIndex]?.serviceResultHeight",allResultForm[resultFormIndex]?.serviceResultWeight)
         }
 
     }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm,selectedSearchResultData])
@@ -379,7 +379,8 @@ const ResultForm = () => {
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="Job" error={errors.serviceResultJobNo} name="serviceResultJobNo" />
+                                register={register} label="Job" error={errors.serviceResultJobNo} name="serviceResultJobNo" required/>
+                                <p className="text-xs font-semibold">Note: Job no should be same to the Job no of service form</p>
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             <Controller name="serviceResultServerId" control={control} render={({ field }) => (

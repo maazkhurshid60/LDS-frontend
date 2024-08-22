@@ -15,7 +15,7 @@ export interface TransPerSlipReportProps {
 const TransPerSlipReport = () => {
     const TransPerSlipReportPrintRef = useRef<HTMLButtonElement | null>(null);
     const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData)
-    console.log("legalDeliveryDataa", legalDeliveryDataa)
+    console.log("legalDeliveryDataa", legalDeliveryDataa?.data)
     const [bodyData, setBodyData] = useState({
         name: "",
         lic: "",
@@ -72,7 +72,10 @@ const TransPerSlipReport = () => {
                 floor:legalDeliveryDataa?.data?.serviceResultFloor,
                 locks:legalDeliveryDataa?.data?.serviceResultDoorLocks,
                 noOfLocks:legalDeliveryDataa?.data?.serviceResultLock,
-                door:legalDeliveryDataa?.data?.serviceResultDoor,       
+                door:legalDeliveryDataa?.data?.serviceResultDoor, 
+                lic:legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,       
+                name:legalDeliveryDataa?.data?.serviceFormId?.firstNameServe ,
+                nameServicesFirstName:legalDeliveryDataa?.data?.serviceFormId?.lTSFirstName ,
             }))
         }else  if (legalDeliveryDataa?.searchResult === "service"){
             setBodyData(prev => ({
@@ -87,7 +90,23 @@ const TransPerSlipReport = () => {
                 typeOfService: legalDeliveryDataa?.data?.lTServiceType?.name,
                 description: legalDeliveryDataa?.data?.oLTDescription,
                 personServed: legalDeliveryDataa?.data?.firstNameServe,
-                date: legalDeliveryDataa?.data?.inputDate,        
+                date: legalDeliveryDataa?.data?.inputDate,
+                lic:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,   
+                dateOfmailing:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
+                sex:legalDeliveryDataa?.data?.resultFormId?.serviceResultSex,
+                skinColor:legalDeliveryDataa?.data?.resultFormId?.serviceResultSkinColor,
+                age:legalDeliveryDataa?.data?.resultFormId?.serviceResultAge,
+                height:legalDeliveryDataa?.data?.resultFormId?.serviceResultHeight,
+                weight:legalDeliveryDataa?.data?.resultFormId?.serviceResultWeight,
+                hair:legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
+                entry:legalDeliveryDataa?.data?.resultFormId?.serviceResultEntry,
+                wall:legalDeliveryDataa?.data?.resultFormId?.serviceResultWall,
+                floor:legalDeliveryDataa?.data?.resultFormId?.serviceResultFloor,
+                locks:legalDeliveryDataa?.data?.resultFormId?.serviceResultDoorLocks,
+                noOfLocks:legalDeliveryDataa?.data?.resultFormId?.serviceResultLock,
+                door:legalDeliveryDataa?.data?.resultFormId?.serviceResultDoor,
+                
+
             }))
         } else  if (legalDeliveryDataa?.searchResult === "standard"){
             setBodyData(prev => ({
@@ -102,7 +121,21 @@ const TransPerSlipReport = () => {
                 typeOfService: legalDeliveryDataa?.data?.lTServiceType?.name,
                 description: legalDeliveryDataa?.data?.oLTDescription,
                 personServed: legalDeliveryDataa?.data?.firstNameServe,
-                date: legalDeliveryDataa?.data?.inputDate,        
+                date: legalDeliveryDataa?.data?.inputDate,     
+                lic:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,   
+                dateOfmailing:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
+                sex:legalDeliveryDataa?.data?.resultFormId?.serviceResultSex,
+                skinColor:legalDeliveryDataa?.data?.resultFormId?.serviceResultSkinColor,
+                age:legalDeliveryDataa?.data?.resultFormId?.serviceResultAge,
+                height:legalDeliveryDataa?.data?.resultFormId?.serviceResultHeight,
+                weight:legalDeliveryDataa?.data?.resultFormId?.serviceResultWeight,
+                hair:legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
+                entry:legalDeliveryDataa?.data?.resultFormId?.serviceResultEntry,
+                wall:legalDeliveryDataa?.data?.resultFormId?.serviceResultWall,
+                floor:legalDeliveryDataa?.data?.resultFormId?.serviceResultFloor,
+                locks:legalDeliveryDataa?.data?.resultFormId?.serviceResultDoorLocks,
+                noOfLocks:legalDeliveryDataa?.data?.resultFormId?.serviceResultLock,
+                door:legalDeliveryDataa?.data?.resultFormId?.serviceResultDoor,   
             }))
         }
     },[])
