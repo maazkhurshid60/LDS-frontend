@@ -87,6 +87,8 @@ const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
             console.log('RESULT DATA: ', resultData);
             
             geoCoder.geocode({ address: resultData?.address }, (results, status) => {
+                console.log('GEO STATUS ==> ', status);
+                
                 if (status === "OK") {
                     const location = results[0].geometry.location;
                     setAddress({
