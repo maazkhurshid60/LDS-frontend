@@ -95,7 +95,7 @@ const LegalDelivery = () => {
     // }, [])
 console.log("filteredData",filteredData)
 const serviceTableHeader=["Job","Client Code","Input Date","Server Code","Full Name","Case Paper Type","Bussiness Name","Address","Caption","City","Zip","Serv City","Case No"]
-const serviceDataTable =filteredData && filteredData?.map(item => ({
+const serviceDataTable =Array.isArray(filteredData) ? filteredData?.map(item => ({
     _id:item?._id,
     jobNo: item?.jobNo,
     clientCode: item?.clientId?.code,
@@ -110,8 +110,8 @@ const serviceDataTable =filteredData && filteredData?.map(item => ({
     zip: item?.lTSZip,
     servCity: item?.cityServe,
     caseNo: item?.caseNo
-  }));
-  const resultDataTable=filteredData && filteredData?.map(item => ({
+  })):[];
+  const resultDataTable=Array.isArray(filteredData) ? filteredData?.map(item => ({
     _id:item?._id,
     jobNo:item?.serviceFormId?.jobNo,
     clientCode: item?.serviceResultClientId?.code,
@@ -126,7 +126,7 @@ const serviceDataTable =filteredData && filteredData?.map(item => ({
     zip: item?.serviceFormId?.lTSZip,
     servCity: item?.serviceFormId?.cityServe,
     caseNo: item?.serviceFormId?.caseNo
-  }));
+  })):[];
   
 
     return <div className="w-[95%] m-auto">
