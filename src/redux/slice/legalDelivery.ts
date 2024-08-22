@@ -5,9 +5,20 @@ import { showSpinnerReducer } from "./spinner";
 import { toast } from "react-toastify";
 const accessToken = localStorage.getItem("accessToken");
 
-const initialState = {
+interface ISelectedLegalDelivery {
+    searchResult: string,
+    data: any
+}
+
+interface IInitialState {
+    legalDeliveryData: any[],
+    selectedLegalDeliveryData: ISelectedLegalDelivery,
+    status: string   
+}
+
+const initialState: IInitialState = {
     legalDeliveryData: [],
-    selectedLegalDeliveryData:{
+    selectedLegalDeliveryData: {
         searchResult:"",
         data:null
     },
