@@ -90,6 +90,8 @@ const GPSReport = () => {
                         lng: location.lng(),
                     });
                 } else {
+                    console.error(`Geocode error: ${status} - ${resultData?.address}`);
+
                     alert('Geocode was not successful for the given address');
                 }
             });
