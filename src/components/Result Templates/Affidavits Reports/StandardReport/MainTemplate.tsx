@@ -103,7 +103,7 @@ const StandardReport = () => {
             <div style={{ display: "none" }}>
                 {/* The content to print */}
                 <div ref={StandardReportPrintRef}>
-                    <TemplateOutlet>
+                <TemplateOutlet>
                     <Header index={header?.index} />
                     <Body dateOfService={bodyData?.dateOfService}
                     firstAttemptDate={bodyData?.firstAttemptDate}
@@ -114,8 +114,8 @@ const StandardReport = () => {
                     dateOfMailing={bodyData?.dateOfMailing}
                 lic={bodyData?.lic}
                     />
-                        <Footer />
-                    </TemplateOutlet>
+                    <Footer />
+                </TemplateOutlet>
                 </div>
             </div>
         </>

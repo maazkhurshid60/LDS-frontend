@@ -161,8 +161,8 @@ const ResultForm = () => {
 
             reset()
         }
-        else if (selectedSearchResultData?.length > 0) {
-            toast.success("sucess")
+        else if (selectedSearchResultData && selectedSearchResultData?.length > 0) {
+       
             console.log("selectedSearchResultData?.queryInformationLTFullName", selectedSearchResultData[0]?.queryInformationLTFullName)
             setValue("queryInformationLTFullName", selectedSearchResultData[0]?.queryInformationLTFullName),
                 setValue("queryInformationLTIndexNo", JSON.stringify(selectedSearchResultData[0]?.queryInformationLTIndexNo, 10));
@@ -207,6 +207,7 @@ const ResultForm = () => {
             setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
         }
         else {
+            if(allResultForm && Array.isArray(allResultForm) && resultFormIndex >= 0 && resultFormIndex < allResultForm.length){
             setValue("queryInformationLTFullName", allResultForm[resultFormIndex]?.queryInformationLTFullName),
                 setValue("queryInformationLTIndexNo", JSON.stringify(allResultForm[resultFormIndex]?.queryInformationLTIndexNo, 10));
 
@@ -251,6 +252,9 @@ const ResultForm = () => {
             // setValue("height", allResultForm[resultFormIndex]?.serviceResults?.description?.height)
             // setIsConspicuous(allResultForm[resultFormIndex]?.serviceResults?.results)
             console.log("allResultForm[resultFormIndex]?.serviceResultHeight",allResultForm[resultFormIndex]?.serviceResultWeight)
+        }else{
+            toast.warn("Result data has not loaded yet .. will be loaded automatically or refresh the page")
+        }
         }
 
     }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm,selectedSearchResultData])

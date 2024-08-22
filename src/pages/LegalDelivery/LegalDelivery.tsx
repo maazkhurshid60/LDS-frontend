@@ -89,10 +89,10 @@ const LegalDelivery = () => {
         };
     }, [])
 
-    // useEffect(() => {
-    //     dispatch(getSingleLegalDeliveryReducer(tableData?.tableData[0]))
+    useEffect(() => {
+        dispatch(emptyLegalDeliveryReducer())
 
-    // }, [])
+    }, [])
 console.log("filteredData",filteredData)
 const serviceTableHeader=["Job","Client Code","Input Date","Server Code","Full Name","Case Paper Type","Bussiness Name","Address","Caption","City","Zip","Serv City","Case No"]
 const serviceDataTable =Array.isArray(filteredData) ? filteredData?.map(item => ({

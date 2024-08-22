@@ -166,11 +166,40 @@ const MarshalReport = () => {
             <div style={{ display: "none" }}>
                 {/* The content to print */}
                 <div ref={MarshalReportPrintRef}>
-                    <TemplateOutlet>
-                        <Header />
-                        <Body />
-                        <Footer />
-                    </TemplateOutlet>
+                <TemplateOutlet>
+                    <Header
+                        index={header?.index}
+                        affidavitName={header?.affidavitName}
+                        licNo={header?.licNo}
+                        serviceName={header?.serviceName} />
+                    <Body
+                        //RESULTS
+                        apt={bodyData?.apt}
+                        reciepientTitle={bodyData?.reciepientTitle}
+                        firstTimeAttempt={bodyData?.firstDateAttempt}
+                        firstDateAttempt={bodyData?.firstTimeAttempt}
+                        secondTimeAttempt={bodyData?.secondTimeAttempt}
+                        secondDateAttempt={bodyData?.secondDateAttempt}
+                        sex={bodyData?.sex}
+                        skinColor={bodyData?.skinColor}
+                        age={bodyData?.age}
+                        height={bodyData?.height}
+                        weight={bodyData?.weight}
+                        hair={bodyData?.hair}
+                        otherFeatures={bodyData?.otherFeatures}
+                        dateOfMailing={bodyData?.dateOfMailing}
+                        dateOfService={bodyData?.dateOfService}
+                        lic={bodyData?.licNo}
+                        //SERVICES
+                        inputDate={bodyData?.inputDate}
+                        time={bodyData?.time}
+                        address={bodyData?.address}
+                        firstNames={bodyData?.firstNames}
+                        serverName={bodyData?.serverName}
+
+                    />
+                    <Footer />
+                </TemplateOutlet>
                 </div>
             </div>
         </>

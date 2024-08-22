@@ -193,43 +193,43 @@ const TransPerSlipReport = () => {
             <div style={{ display: "none" }}>
                 {/* The content to print */}
                 <div ref={TransPerSlipReportPrintRef}>
-                    <TemplateOutlet>
-                        <Header />
-                        <Body
-                            name={bodyData?.name}
-                            lic={bodyData?.lic}
-                            titleAction={bodyData?.titleAction}
-                            nameServicesFirstName={bodyData?.nameServicesFirstName}
-                            paperServed={bodyData?.paperServed}
-                            index={bodyData?.index}
-                            address={bodyData?.address}
-                            apt={bodyData?.apt}
-                            city={bodyData?.city}
-                            zip={bodyData?.zip}
-                            country={bodyData?.country}
-                            typeOfService={bodyData?.typeOfService}
-                            serviceCompleted={bodyData?.serviceCompleted}
-                            description={bodyData?.description}
-                            personServed={bodyData?.personServed}
-                            date={bodyData?.date}
-                            time={bodyData?.time}
-                            dateOfmailing={bodyData?.dateOfmailing}
-                            sex={bodyData?.dateOfmailing}
-                            skinColor={bodyData?.skinColor}
-                            age={bodyData?.age}
-                            height={bodyData?.height}
-                            weight={bodyData?.weight}
-                            hair={bodyData?.hair}
-                            entry={bodyData?.entry}
-                            wall={bodyData?.wall}
-                            floor={bodyData?.floor}
-                            door={bodyData?.door}
-                            locks={bodyData?.locks}
-                            noOfLocks={bodyData?.noOfLocks}
-                            commentOtherFeature={bodyData?.commentOtherFeature}
-                        />
-                        <Footer />
-                    </TemplateOutlet>
+                <TemplateOutlet>
+                    <Header />
+                    <Body
+                        name={bodyData?.name}
+                        lic={bodyData?.lic}
+                        titleAction={bodyData?.titleAction}
+                        nameServicesFirstName={bodyData?.nameServicesFirstName}
+                        paperServed={bodyData?.paperServed}
+                        index={bodyData?.index}
+                        address={bodyData?.address}
+                        apt={bodyData?.apt}
+                        city={bodyData?.city}
+                        zip={bodyData?.zip}
+                        country={bodyData?.country}
+                        typeOfService={bodyData?.typeOfService}
+                        serviceCompleted={bodyData?.serviceCompleted}
+                        description={bodyData?.description}
+                        personServed={bodyData?.personServed}
+                        date={bodyData?.date}
+                        time={bodyData?.time}
+                        dateOfmailing={bodyData?.dateOfmailing}
+                        sex={bodyData?.dateOfmailing}
+                        skinColor={bodyData?.skinColor}
+                        age={bodyData?.age}
+                        height={bodyData?.height}
+                        weight={bodyData?.weight}
+                        hair={bodyData?.hair}
+                        entry={bodyData?.entry}
+                        wall={bodyData?.wall}
+                        floor={bodyData?.floor}
+                        door={bodyData?.door}
+                        locks={bodyData?.locks}
+                        noOfLocks={bodyData?.noOfLocks}
+                        commentOtherFeature={bodyData?.commentOtherFeature}
+                    />
+                    <Footer />
+                </TemplateOutlet>
                 </div>
             </div>
         </>

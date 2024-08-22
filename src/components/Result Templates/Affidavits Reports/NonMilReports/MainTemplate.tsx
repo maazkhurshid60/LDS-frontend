@@ -87,11 +87,19 @@ const NonMilReport =() => {
         <div style={{ display: "none" }}>
               {/* The content to print */}
                 <div ref={NonMilReportPrintRef}>
-                    <TemplateOutlet>
-                        <Header />
-                        <Body />
-                        <Footer />
-                    </TemplateOutlet>
+                <TemplateOutlet>
+            <Header index={header?.index} />
+                    <Body 
+                     sex= {bodyData?.sex}
+                     skinColor= {bodyData?.skinColor}
+                     age= {bodyData?.age}
+                     height= {bodyData?.height}
+                     weight= {bodyData?.weight}
+                     hair= {bodyData?.hair}
+             
+                    />
+                <Footer />
+            </TemplateOutlet>
                 </div>
             </div>
             </>

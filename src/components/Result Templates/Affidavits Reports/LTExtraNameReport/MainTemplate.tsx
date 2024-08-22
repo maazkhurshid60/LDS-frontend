@@ -67,18 +67,19 @@ const LTExtraNameReport = () => {
         <div style={{ display: "none" }}>
             {/* The content to print */}
             <div ref={ltExtraNameReportPrintRef}>
-                <TemplateOutlet>
-                    <div className="w-full flex justify-center">
-                        <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
-                    </div>
-                    <DataTable
+            <TemplateOutlet>
+                <div className="w-full flex justify-center">
+                    <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
+                </div>
+                <DataTable
                     caseNo={dataTable?.caseNo}
                     index={dataTable?.index}
                     address={dataTable?.address}
                     apt={dataTable?.apt}
                     ltnames={dataTable?.ltnames}
                     extraname={dataTable?.extraname}
-                />                </TemplateOutlet>
+                />
+            </TemplateOutlet>
             </div>
         </div>
     </>
