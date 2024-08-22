@@ -95,7 +95,7 @@ const LegalDelivery = () => {
     // }, [])
 console.log("filteredData",filteredData[0]?.resultFormId)
 const serviceTableHeader=["Job","Client Code","Input Date","Server Code","Full Name","Case Paper Type","Bussiness Name","Address","Caption","City","Zip","Serv City","Case No"]
-const serviceDataTable = filteredData?.map(item => ({
+const serviceDataTable =filteredData && filteredData?.map(item => ({
     _id:item?._id,
     jobNo: item?.jobNo,
     clientCode: item?.clientId?.code,
