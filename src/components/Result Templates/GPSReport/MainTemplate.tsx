@@ -30,8 +30,8 @@ const GPSReport = () => {
         personServed: "",
         dateOfService: ""
     })
-const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
-    console.log("geo map????????????",resultData);
+    const mapKey = "AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
+    console.log("geo map????????????", resultData);
     const { isLoaded } = useJsApiLoader({
         // googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Ensure this key is valid
         googleMapsApiKey: mapKey, // Ensure this key is valid
@@ -50,7 +50,7 @@ const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
                 address: legalDeliveryDataa?.data?.queryInformationLTAddress,
                 personServed: legalDeliveryDataa?.data?.serviceFormId?.serviceResultServerId,
                 dateOfService: legalDeliveryDataa?.data?.serviceFormId?.serviceResultDateOfService,
-                jobNo:legalDeliveryDataa?.data?.serviceFormId?.jobNo
+                jobNo: legalDeliveryDataa?.data?.serviceFormId?.jobNo
             }));
         } else if (legalDeliveryDataa?.searchResult === "standard") {
 
@@ -85,10 +85,10 @@ const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
         if (isLoaded) {
             const geoCoder = new window.google.maps.Geocoder();
             console.log('RESULT DATA: ', resultData);
-            
+
             geoCoder.geocode({ address: resultData?.address }, (results, status) => {
                 console.log('GEO STATUS ==> ', status);
-                
+
                 if (status === "OK") {
                     const location = results[0].geometry.location;
                     setAddress({
@@ -114,12 +114,13 @@ const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
         return <h1>Loading....</h1>;
     };
     return <>
-        <div ref={TransPerSlipReportPrintRef} className=" p-6 bg-whiteColor">
+        <div ref={TransPerSlipReportPrintRef} className=" p-6 bg-whiteColor capitalize">
+            <div>
+            <div className="h-[10vh] w-full bg-grayColor/70 mb-6"></div>
             <div className="flex items-start justify-center gap-y-6">
-
                 {/* LEFT PART STARTS */}
                 <div className="w-[50%]  text-base font-bold flex flex-col gap-y-4">
-                    <div className="bg-grayColor/10 p-1">
+                    <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
                         <div className="flex items-start gap-x-2">
                             <h1 className="w-[45%] ">Job No:</h1>
                             <p className="w-[40%] font-normal">{resultData?.jobNo}</p>
@@ -127,38 +128,41 @@ const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
                         <h1 className="">Agency DCA Lic: </h1>
                         <h1 className="">Process Server Lic: </h1>
                     </div>
-                    
-                    <div className="flex items-start gap-x-2">
+
+                    <div className="flex items-start gap-x-2 mb-2">
                         <h1 className="w-[45%] ">Plaintiff/Petitioner:</h1>
                         <p className="w-[40%] font-normal">{resultData?.plaintiffPetitioner}</p>
                     </div>
-                    <div className="flex items-start gap-x-2">
-                        <h1 className="w-[45%] ">Index:</h1>
-                        <p className="w-[40%] font-normal">{resultData?.index}</p>
+                    <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                        <div className="flex items-start gap-x-2">
+                            <h1 className="w-[45%] ">Index:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.index}</p>
+                        </div>
+                        <div className="flex items-start gap-x-2">
+                            <h1 className="w-[45%] ">Serve To:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.serveTo}</p>
+                        </div>
+                        <div className="flex items-start gap-x-2">
+                            <h1 className="w-[45%] ">Address:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.address}</p>
+                        </div>
                     </div>
-                    <div className="flex items-start gap-x-2">
-                        <h1 className="w-[45%] ">Serve To:</h1>
-                        <p className="w-[40%] font-normal">{resultData?.serveTo}</p>
-                    </div>
-                    <div className="flex items-start gap-x-2">
-                        <h1 className="w-[45%] ">Address:</h1>
-                        <p className="w-[40%] font-normal">{resultData?.address}</p>
-                    </div>
-                    <div className="flex items-start gap-x-2">
+                    <div className="flex items-start gap-x-2 mb-2">
                         <h1 className="w-[45%] ">Person Served:</h1>
                         <p className="w-[40%] font-normal">{resultData?.personServed}</p>
                     </div>
                     <h1 className="">Network Provided</h1>
-                    <div className="flex items-start gap-x-2">
-                        <h1 className="w-[45%] ">date Of Service:</h1>
-                        <p className="w-[40%] font-normal">{resultData?.dateOfService}</p>
-                    </div>
-                    <div className="flex items-start gap-x-2">
-                        <h1 className="w-[45%] ">GPS:</h1>
-                        <p className="w-[40%] font-normal"><span className=" mr-10">{address?.lat}</span>  <span>{address?.lng}</span></p>
-                    </div>
+                    <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                        <div className="flex items-start gap-x-2">
+                            <h1 className="w-[45%] ">date Of Service:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.dateOfService}</p>
+                        </div>
+                        <div className="flex items-start gap-x-2">
+                            <h1 className="w-[45%] ">GPS:</h1>
+                            <p className="w-[40%] font-normal"><span className=" mr-10">{address?.lat}</span>  <span>{address?.lng}</span></p>
+                        </div>
 
-
+                    </div>
                 </div>
                 {/* LEFT PART ENDS */}
 
@@ -170,7 +174,7 @@ const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
                         <GoogleMap
                             center={address}
                             zoom={15}
-                            mapContainerStyle={{height: "40vh" }}
+                            mapContainerStyle={{ height: "40vh" }}
                         >
                             <MarkerF position={address} />
 
@@ -178,18 +182,21 @@ const mapKey="AIzaSyDfkcgoTZ8x9oDnDcGgNuyV6ivVJGOjzfo"
                     </div>
                 </div>
             </div>
+            <div className="h-[10vh] w-full bg-grayColor/70 mt-6"></div>
+
+            </div>
         </div>
         {/* RIGHT(MAP) PART ENDS */}
         <div className="flex justify-end mt-5 mb-5 mr-5">
-                <ReactToPrint
-                    trigger={() => (
-                        <div className="w-[10%]">
-                            <Button text="Print" />
-                        </div>
-                    )}
-                    content={() => TransPerSlipReportPrintRef.current}
-                />
-            </div>
+            <ReactToPrint
+                trigger={() => (
+                    <div className="w-[10%]">
+                        <Button text="Print" />
+                    </div>
+                )}
+                content={() => TransPerSlipReportPrintRef.current}
+            />
+        </div>
         <div style={{ display: "none" }} >
             {/* The content to print */}
             <div className=" border-solid border-[6px] border-grayColor p-6 bg-whiteColor ">
