@@ -20,7 +20,7 @@ const LegalDelivery = () => {
     const [showDropDown, setShowDropDown] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
-    const filteredData = useSelector((state: RootState) => state?.legalDelivery?.legalDeliveryData)
+    const filteredData = useSelector((state: RootState) => state?.legalDelivery?.legalDeliveryData || [])
     const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData?.searchResult)
 
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: filteredData?.length > 0 && filteredData || [] })
