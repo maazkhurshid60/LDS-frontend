@@ -21,7 +21,7 @@ const LegalDelivery = () => {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
     const filteredData = useSelector((state: RootState) => state?.legalDelivery?.legalDeliveryData)
-    const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData.searchResult)
+    const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData?.searchResult)
 
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: filteredData?.length > 0 && filteredData || [] })
     // const agencyLicRef = useRef<HTMLButtonElement | null>(null);
