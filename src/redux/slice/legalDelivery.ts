@@ -9,7 +9,7 @@ const initialState = {
     legalDeliveryData: [],
     selectedLegalDeliveryData:{
         searchResult:"",
-        data:""
+        data:null
     },
     status: "idle"
 }
@@ -26,7 +26,7 @@ const legalDelivery = createSlice({
 
         },
         emptyLegalDeliveryReducer:(state)=>{
-            state.selectedLegalDeliveryData.data=""
+            state.selectedLegalDeliveryData.data=null
             state.selectedLegalDeliveryData.searchResult=""
             state.legalDeliveryData=[]
                 }
