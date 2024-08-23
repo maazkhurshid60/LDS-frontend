@@ -154,9 +154,9 @@ const serviceDataTable =Array.isArray(filteredData) ? filteredData?.map(item => 
             {filteredData?.length > 0 &&
             <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                 <div ref={dropdownRef}>
-                    <div className="flex flex-row items-center gap-x-1">
+                    <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
 
-                        <p className="cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>Affidavits Reports
+                        <p className="" >Affidavits Reports
 
                         </p>
                         <IoIosArrowDown

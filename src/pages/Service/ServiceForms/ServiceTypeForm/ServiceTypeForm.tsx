@@ -38,11 +38,11 @@ const StandardTypeForm = () => {
     // const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
     console.log("saved lt data", savedLTData)
     // GET ALL MAILING ADDRESSES THAT COMMING INSIDE THE FORMS 
-    const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress.serviceFormMailingAdress?.mailingAdresses)
+    const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress?.serviceFormMailingAdress?.mailingAdresses)
     const filterExistingFormMailingAdress = getFormMailingAdress?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
-    console.log("filterExistingFormMailingAdress", filterExistingFormMailingAdress)
+    console.log("filterExistingFormMailingAdress", getFormMailingAdress)
     const [checkedName, setCheckedName] = useState<string | null>(
         // LTServiceData?.find((data) => data?.isActive)?._id || null
     );
@@ -144,7 +144,7 @@ const StandardTypeForm = () => {
         setCheckedName(id);
     };
 
-    // GET SELECTED VALUES FROM ADD MAILING DROPSOWN
+    // GET SELECTED VALUES FROM ADD MAILING DROPDOWN
     const GetSelectedMailingFunction = (optionValue: string) => {
 
         isNewFormAdding ? dispatch(getMailAddress(optionValue)) : dispatch(addMailAddressIntoFormL(optionValue))

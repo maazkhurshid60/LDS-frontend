@@ -92,15 +92,15 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="city" error={errors.city} name="city" />
+                        register={register} label="city" error={errors.city} name="city" required/>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="state" error={errors.state} name="state" />
+                        register={register} label="state" error={errors.state} name="state" required/>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="apt" error={errors.apt} name="apt" />
+                        register={register} label="apt" error={errors.apt} name="apt" required/>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress} 
