@@ -108,7 +108,7 @@ const ResultForm = () => {
         } else {
 
             const updatingData = { ...addingData, resultFormId: allResultForm[resultFormIndex]?._id }
-
+console.log(updatingData)
             dispatch(updateResultFormThunk(updatingData))
         }
     }
@@ -162,7 +162,7 @@ const ResultForm = () => {
             reset()
         }
         else if (selectedSearchResultData && selectedSearchResultData?.length > 0) {
-       
+            
             console.log("selectedSearchResultData?.queryInformationLTFullName", selectedSearchResultData[0]?.queryInformationLTFullName)
             setValue("queryInformationLTFullName", selectedSearchResultData[0]?.queryInformationLTFullName),
                 setValue("queryInformationLTIndexNo", JSON.stringify(selectedSearchResultData[0]?.queryInformationLTIndexNo, 10));
@@ -197,7 +197,9 @@ const ResultForm = () => {
             setValue("serviceResultFloor", JSON.stringify(selectedSearchResultData[0]?.serviceResultFloor))
             setValue("serviceResultLock", JSON.stringify(selectedSearchResultData[0]?.serviceResultLock))
             setValue("serviceResultOtherDescription", selectedSearchResultData[0]?.serviceResultOtherDescription)
-            setValue("serviceResultSex", selectedSearchResultData[0]?.otherIdentifyingFeatures)
+            setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.otherIdentifyingFeatures)
+            setValue("serviceResultSex", selectedSearchResultData[0]?.serviceResultSex)
+
             setValue("serviceResultHair", selectedSearchResultData[0]?.serviceResultHair)
             setValue("serviceResultAge", JSON.stringify(selectedSearchResultData[0]?.serviceResultAge))
             setValue("serviceResultHeight", JSON.stringify(selectedSearchResultData[0]?.serviceResultHeight))
@@ -207,10 +209,10 @@ const ResultForm = () => {
             setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
         }
         else {
+            
             if(allResultForm && Array.isArray(allResultForm) && resultFormIndex >= 0 && resultFormIndex < allResultForm.length){
             setValue("queryInformationLTFullName", allResultForm[resultFormIndex]?.queryInformationLTFullName),
                 setValue("queryInformationLTIndexNo", JSON.stringify(allResultForm[resultFormIndex]?.queryInformationLTIndexNo, 10));
-
             setValue("queryInformationLTAddress", allResultForm[resultFormIndex]?.queryInformationLTAddress),
                 setValue("queryInformationLTBusinessName", allResultForm[resultFormIndex]?.queryInformationLTBusinessName),
                 setValue("queryInformationLTInputDate", allResultForm[resultFormIndex]?.queryInformationLTInputDate)
@@ -221,6 +223,8 @@ const ResultForm = () => {
             setValue("serviceResultScvType", allResultForm[resultFormIndex]?.serviceResultScvType ?? "")
             setValue("serviceResultClientId", allResultForm[resultFormIndex]?.serviceResultClientId ?? "")
             setValue("serviceResultJobNo", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultJobNo ?? ""))
+            setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.otherIdentifyingFeatures)
+
             setValue("serviceResultServerId", allResultForm[resultFormIndex]?.serviceResultServerId?._id ?? "")
             setValue("serviceResultResults", allResultForm[resultFormIndex]?.serviceResultResults ?? "")
             setValue("serviceResultDateOfService", allResultForm[resultFormIndex]?.serviceResultDateOfService)
@@ -241,7 +245,7 @@ const ResultForm = () => {
             setValue("serviceResultFloor", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultFloor))
             setValue("serviceResultLock", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultLock))
             setValue("serviceResultOtherDescription", allResultForm[resultFormIndex]?.serviceResultOtherDescription)
-            setValue("serviceResultSex", allResultForm[resultFormIndex]?.otherIdentifyingFeatures)
+            setValue("serviceResultSex", allResultForm[resultFormIndex]?.serviceResultSex)
             setValue("serviceResultHair", allResultForm[resultFormIndex]?.serviceResultHair)
             setValue("serviceResultAge", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultAge))
             setValue("serviceResultHeight", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultHeight))
@@ -250,12 +254,12 @@ const ResultForm = () => {
             setValue("serviceResultDateOfMailing", allResultForm[resultFormIndex]?.serviceResultDateOfMailing)
             setValue("serviceResultDateOfNotary", allResultForm[resultFormIndex]?.serviceResultDateOfNotary)
             // setValue("height", allResultForm[resultFormIndex]?.serviceResults?.description?.height)
-            // setIsConspicuous(allResultForm[resultFormIndex]?.serviceResults?.results)
-            console.log("allResultForm[resultFormIndex]?.serviceResultHeight",allResultForm[resultFormIndex]?.serviceResultWeight)
+            
+            setIsConspicuous(allResultForm[resultFormIndex]?.serviceResultResults)
         }else{
             toast.warn("Result data has not loaded yet .. will be loaded automatically or refresh the page")
         }
-        }
+    }
 
     }, [resultFormIndex, setValue, isNewResultFormAdd, allResultForm,selectedSearchResultData])
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC STARTS 
@@ -281,7 +285,7 @@ const ResultForm = () => {
     //         formElements[index + 1]?.focus(); // Focus the next input
     //     }
     // };
-
+console.log(isConspicuous)
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> :
 
