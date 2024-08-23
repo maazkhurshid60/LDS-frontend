@@ -74,9 +74,9 @@ const StandardTypeForm = () => {
     const [multipleFullname, setMultipleFullname] = useState<string[]>([]);
     const [joinedFullname, setJoinedFullname] = useState("");
 
+    console.log("servicetype<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",  )
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
-        // console.log("servicetype<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", serviceTypeOptions?.find(data=>data?.value===value)?.label)
         const { clientId, inputDate, caseNo } = getValues();
 
         if (!inputDate || !caseNo || !clientId || !checkedName) {
@@ -168,7 +168,10 @@ const StandardTypeForm = () => {
         if (!isNewFormAdding) {
             // console.log("new form is not adding");
             const currentData = allServiceFormData[serviceFormIndex];
-
+            const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
+            const id = allServiceFormData[serviceFormIndex]?._id
+            // console.log(data, id)
+            dispatch(getFormMailAddress({ data, id }))
             if (currentData) {
                 // Set form values
                 setValue("clientId", getExistingSelectedClientoption?.value);

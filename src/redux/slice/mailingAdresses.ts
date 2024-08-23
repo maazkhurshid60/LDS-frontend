@@ -62,6 +62,8 @@ const mailingAdresses = createSlice({
         // THIS STORE MAIL ADRESS INSIDE FORM COMMING FROM SERVICE FORM API
         getFormMailAddress: (state, action) => {
             const { data, id } = action.payload;
+            
+          
             state.serviceFormMailingAdress = { userId: id, mailingAdresses: data };
         },
         // THIS WILL ADD NEW MAIL ADDRESS INTO EXISTING FORM MAIL ADDRESS ARRAY
