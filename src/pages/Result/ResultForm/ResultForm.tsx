@@ -256,8 +256,6 @@ console.log(updatingData)
             // setValue("height", allResultForm[resultFormIndex]?.serviceResults?.description?.height)
             
             setIsConspicuous(allResultForm[resultFormIndex]?.serviceResultResults)
-        }else{
-            toast.warn("Result data has not loaded yet .. will be loaded automatically or refresh the page")
         }
     }
 
@@ -285,7 +283,7 @@ console.log(updatingData)
     //         formElements[index + 1]?.focus(); // Focus the next input
     //     }
     // };
-console.log(isConspicuous)
+console.log("allResultForm[0]",allResultForm[0])
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> :
 

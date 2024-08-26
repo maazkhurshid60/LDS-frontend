@@ -145,12 +145,17 @@ export default userId.reducer;
 // GET ALL USERS API
 export const getAllUsers = createAsyncThunk<User[]>(
     "userId/getAllUsers",
-    async () => {
+    async (_, thunkAPI) => {
+        const { dispatch } = thunkAPI;
+            dispatch(showSpinnerReducer(true));
         try {
             const res = await getAllUserApi();
             return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
             throw new Error("Failed to fetch all users");
+        }finally{
+            dispatch(showSpinnerReducer(false));
+
         }
     }
 );

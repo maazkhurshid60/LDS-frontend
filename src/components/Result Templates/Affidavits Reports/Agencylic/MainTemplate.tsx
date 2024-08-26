@@ -39,7 +39,8 @@ const AgencyLic = () => {
         address: "",
         firstNames: "",
         serverName: "",
-        licNo:""
+        licNo:"",
+        serverAddress:""
     })
     useEffect(() => {
         if (legalDeliveryDataa?.searchResult === "service" || legalDeliveryDataa?.searchResult === "standard") {
@@ -75,6 +76,7 @@ const AgencyLic = () => {
                 hair: legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
                 otherFeatures: legalDeliveryDataa?.data?.resultFormId?.serviceResultOtherFeatures,
                 licNo: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
+                serverAddress: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1,
             }))
             // SERVICES ENDS
 
@@ -109,13 +111,15 @@ const AgencyLic = () => {
                 hair: legalDeliveryDataa?.data?.serviceResultHair,
                 otherFeatures: legalDeliveryDataa?.data?.serviceResultOtherFeatures,
                 licNo: legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
+                serverAddress: legalDeliveryDataa?.data?.serviceResultServerId?.address1,
+
             }))
         }
     }, [])
     return (
         <>
             <div className="absolute h-[83.5vh] overflow-y-scroll relative">
-                <TemplateOutlet>
+            <TemplateOutlet>
                     <Header
                         index={header?.index}
                         affidavitName={header?.affidavitName}
@@ -145,6 +149,8 @@ const AgencyLic = () => {
                         address={bodyData?.address}
                         firstNames={bodyData?.firstNames}
                         serverName={bodyData?.serverName}
+                        serverAddress={bodyData?.serverAddress}
+
 
                     />
                     <Footer />
@@ -195,6 +201,8 @@ const AgencyLic = () => {
                         address={bodyData?.address}
                         firstNames={bodyData?.firstNames}
                         serverName={bodyData?.serverName}
+                        serverAddress={bodyData?.serverAddress}
+
 
                     />
                     <Footer />

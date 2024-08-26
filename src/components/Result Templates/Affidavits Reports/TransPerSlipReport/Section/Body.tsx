@@ -56,8 +56,8 @@ const Body:React.FC<BodyProps> = (item) => {
         <h1 className="w-[45%]">Description: <span className="font-semibold">{item?.description ? item?.description:"--N/A--"}</span></h1>
         <h1 className="w-[45%]">Person Served: <span className="font-semibold">{item?.personServed ? item?.personServed:"--N/A--"}</span></h1>
         <div>
-            <h1 className="bg-grayColorLight px-2 py-2">Attempt Date</h1>
-            <div className="flex flex-wrap items-center justify-between px-2 ">
+            <h1 className="bg-grayColorLight py-2">Attempt Date</h1>
+            <div className="flex flex-wrap items-center justify-between ">
                 <h1 className="w-[32%]">Date: <span className="font-semibold">{item?.date ? item?.date:"--N/A--"}</span></h1>
                 <h1 className="w-[32%]">Time: <span className="font-semibold">{item?.time ? item?.time:"--N/A--"}</span></h1>
                 <h1 className="w-[32%]">Date of Mailing: <span className="font-semibold">{item?.dateOfmailing ? item?.dateOfmailing:"--N/A--"}</span></h1>
@@ -65,7 +65,7 @@ const Body:React.FC<BodyProps> = (item) => {
             </div>
         </div>
         <DataTable 
-        sex={item?.dateOfmailing}
+        sex={item?.sex}
         skinColor={item?.skinColor}
         age={item?.age}
         height={item?.height}

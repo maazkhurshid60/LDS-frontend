@@ -50,7 +50,8 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
        
         console.log(JSON.stringify(updateData?.holidayYear),updateData?.holidayDate.slice(0,4))
         // if(updateData?.holidayYear!==updateData?.holidayDate.slice(0,4)){return alert("Holiday Year and Holiday Date's Year should be Same")}
-        if (JSON.stringify(updateData?.holidayYear)<updateData?.holidayDate.slice(0,4)) {
+            if (JSON.stringify(updateData?.holidayYear)>updateData?.holidayDate.slice(0,4))
+            {
             return alert("Holiday Date's Year should be smaller than Holiday Year");
           }
         disptach(showSpinnerReducer(true))

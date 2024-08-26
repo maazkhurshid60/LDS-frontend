@@ -40,7 +40,7 @@ const HolidayModal = () => {
         console.log("JSON.stringify(postHolidayData?.holidayYear)<postHolidayData?.holidayDate.slice(0,4)",JSON.stringify(postHolidayData?.holidayYear)<postHolidayData?.holidayDate.slice(0,4))
 
 
-        if (JSON.stringify(postHolidayData?.holidayYear)<postHolidayData?.holidayDate.slice(0,4)) {
+        if (JSON.stringify(postHolidayData?.holidayYear)>postHolidayData?.holidayDate.slice(0,4)) {
             return alert("Holiday Date's Year should be smaller than Holiday Year");
           }
         //           // disptach(showModalReducer(false))

@@ -122,11 +122,11 @@ const GPSReport = () => {
                 <div className="w-[50%]  text-base font-bold flex flex-col gap-y-4">
                     <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
                         <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">Job No:</h1>
+                            <h1 className="w-[45%] ">Job No#:</h1>
                             <p className="w-[40%] font-normal">{resultData?.jobNo}</p>
                         </div>
-                        <h1 className="">Agency DCA Lic: </h1>
-                        <h1 className="">Process Server Lic: </h1>
+                        <h1 className="">Agency DCA Lic#: </h1>
+                        <h1 className="">Process Server Lic#: </h1>
                     </div>
 
                     <div className="flex items-start gap-x-2 mb-2">
@@ -135,7 +135,7 @@ const GPSReport = () => {
                     </div>
                     <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
                         <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">Index:</h1>
+                            <h1 className="w-[45%] ">Index#:</h1>
                             <p className="w-[40%] font-normal">{resultData?.index}</p>
                         </div>
                         <div className="flex items-start gap-x-2">

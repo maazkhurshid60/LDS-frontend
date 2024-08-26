@@ -124,7 +124,9 @@ export default resultForm.reducer
 
 // ASYNC STARTS
 // GET ALL RESULT FORM STARTS
-export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async () => {
+export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async (_, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+        dispatch(showSpinnerReducer(true));
     try {
         const response = await axios.get(`${baseUrl}/result-form/all-result-forms`, {
             headers: {
@@ -135,7 +137,7 @@ export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async 
     } catch (error) {
         // alert(`${error?.response?.data?.message}`)
         console.log(error)
-    }
+    }finally{dispatch(showSpinnerReducer(false));}
 })
 // GET ALL RESULT FORM ENDS
 // ADD RESULT FORM STARTS

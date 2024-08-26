@@ -163,7 +163,7 @@ const TransPerSlipReport = () => {
                         date={bodyData?.date}
                         time={bodyData?.time}
                         dateOfmailing={bodyData?.dateOfmailing}
-                        sex={bodyData?.dateOfmailing}
+                        sex={bodyData?.sex}
                         skinColor={bodyData?.skinColor}
                         age={bodyData?.age}
                         height={bodyData?.height}
@@ -177,7 +177,6 @@ const TransPerSlipReport = () => {
                         noOfLocks={bodyData?.noOfLocks}
                         commentOtherFeature={bodyData?.commentOtherFeature}
                     />
-                    <Footer />
                 </TemplateOutlet>
                 <div className="flex justify-end mt-5 mb-5 mr-5">
                     <ReactToPrint
@@ -228,7 +227,6 @@ const TransPerSlipReport = () => {
                         noOfLocks={bodyData?.noOfLocks}
                         commentOtherFeature={bodyData?.commentOtherFeature}
                     />
-                    <Footer />
                 </TemplateOutlet>
                 </div>
             </div>

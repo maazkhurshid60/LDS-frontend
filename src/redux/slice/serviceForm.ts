@@ -97,7 +97,9 @@ export default serviceForm.reducer
 
 // ASYNC THUNK STARTS
 // GET ALL SERVICE FORM
-export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", async () => {
+export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", async (_, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+        dispatch(showSpinnerReducer(true));
     try {
         // console.log(data)
         const response = await axios.get(`${baseUrl}/service-form/all-service-forms`, {
@@ -109,6 +111,9 @@ export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", asyn
     } catch (error) {
         console.log(error)
         throw new Error(error)
+    }
+    finally {
+        dispatch(showSpinnerReducer(false));
     }
 })
 // DELETE SERVICE FORM

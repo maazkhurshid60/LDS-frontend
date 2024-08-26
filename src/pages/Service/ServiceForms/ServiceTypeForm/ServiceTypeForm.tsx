@@ -26,9 +26,11 @@ import axios from "axios";
 import { DeleteIcon } from "../../../../components/Icons/DeleteIcon";
 export type FormFields = z.infer<typeof LTFormSchema>
 import { RxCross2 } from "react-icons/rx";
-
+import Spinner from "../../../../components/Loader/Spinner"
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress.mailingAddressData)
+    const loadingSpinner = useSelector((state: RootState) => state.showSpinner?.isShowSpinner)
+    console.log("loadingSpinner",loadingSpinner)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
     const getMailingAddressDataOnFormAdding = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
     const filterMailingAddressDataOnFormAdding = getMailingAddressDataOnFormAdding?.filter((obj1, i, arr) =>
@@ -391,7 +393,7 @@ const StandardTypeForm = () => {
             setValue("inputDate","")
         }
     }, [inputeDate]);
-    return <div className="w-[100%]">
+    return   <div className="w-[100%]">
         <div className="w-full">
             <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
                 <div className="flex items-center justify-between flex-row-reverse	">
@@ -608,6 +610,7 @@ const StandardTypeForm = () => {
             </form>
         </div>
     </div>
+   
 }
 
 export default StandardTypeForm

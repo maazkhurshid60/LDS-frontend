@@ -117,7 +117,9 @@ export default userId.reducer;
 // GET ALL USERS API
 export const getAllRoles = createAsyncThunk<User[]>(
     "userId/getAllRoles",
-    async () => {
+    async (_, thunkAPI) => {
+        const { dispatch } = thunkAPI;
+            dispatch(showSpinnerReducer(true));
         try {
             const res = await getAllRoleApi();
             // toast.success("role called")
@@ -125,6 +127,8 @@ export const getAllRoles = createAsyncThunk<User[]>(
         } catch (error) {
             // toast.error("role doesnot called")
             throw new Error("Failed to fetch all roles");
+        }finally{
+            dispatch(showSpinnerReducer(false));
         }
     }
 );

@@ -1,6 +1,6 @@
 import React from "react";
 export interface SpinnerProps{
-    text:string
+    text?:string
 }
 const Spinner:React.FC<SpinnerProps>=({text})=>{
 return <div className="fixed -top-0 -left-0 w-[100%] h-[100vh] bg-blackColor/20 z-[99999999999] rounded-lg backdrop-blur-[2px]  flex flex-col items-center  justify-center">

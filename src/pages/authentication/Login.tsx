@@ -64,7 +64,7 @@ const Login = () => {
                     <PasswordField label="Password" register={register} error={errors?.password} name="password"/>
              
          
-                    <Button  text={isSubmitting?"logging":"login"}/>
+                    <Button  text={isSubmitting?"logging":"login"} disabled={isSubmitting}/>
              
             </form>
             {/* FORM ENDS */}
