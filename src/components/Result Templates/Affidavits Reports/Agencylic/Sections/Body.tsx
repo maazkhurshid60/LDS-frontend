@@ -67,7 +67,7 @@ const Body: React.FC<BodyProps> = (item) => {
             On {item?.dateOfMailing ? item?.dateOfMailing : "--N/A--"} I mailed a true copy to each respondent of the above mentioned notification properly enclosed, addressed and mailed in postpaid
             envelops by regular first class and certified mail (marked personal and confidiential) within New York state to each respondent at the
             address sought to be recovered which is respondents residence or corporate respondent(s) principal office or principal place of bussiness.</p>
-        <p>Addtional copies mailed regular and certified To:</p>
+        <p>Additional copies mailed regular and certified to:</p>
         <div className="font-semibold flex items-center justify-between w-full">
             <div>
             <p>Sworn to before me on</p>

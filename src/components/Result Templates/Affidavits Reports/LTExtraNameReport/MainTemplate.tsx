@@ -22,7 +22,7 @@ const LTExtraNameReport = () => {
     })
     console.log("legalDeliveryDataa", legalDeliveryDataa?.data?.lTSFirstName)
     useEffect(() => {
-        const ltName = legalDeliveryDataa?.data?.lTSFirstName.split(',')
+        const ltName = legalDeliveryDataa?.data?.lTSFirstName?.split(',')
         const extraltName = ltName?.splice(1)
   
       
