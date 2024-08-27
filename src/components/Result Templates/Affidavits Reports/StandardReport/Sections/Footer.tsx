@@ -1,10 +1,10 @@
 import React from "react"
 const Footer=()=>{
-    return <div className="flex items-center justify-between flex-wrap capitalize  w-full text-sm ">
+    return <div className="flex items-center justify-between flex-wrap capitalize  w-full text-sm capitalize ">
         {/* RIGHT SIDE OF FOOTER STARTS */}
         <div>
             <p>yasodra seenarine</p>
-            <p>notary republic state of new york</p>
+            <p>notary Public state of new york</p>
             <p>No: 01SE6163476</p>
             <p>Qualified in queens country commission expiration 03/26/27</p>
         </div>

@@ -14,6 +14,7 @@ export interface StandardReportProps {
 const StandardReport = () => {
     const StandardReportPrintRef = useRef<HTMLButtonElement | null>(null);
     const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData)
+
     const [header, setHeader] = useState({
         index: ""
     })
@@ -26,7 +27,16 @@ const StandardReport = () => {
         secondAttemptTime:"",
         recipientTitle:"",
         dateOfMailing:"",
-        lic:""
+        lic:"",
+        serverAddress:"",
+        serverName:"",
+        sex:"",
+        skinColor:"",
+        age:"",
+        height:"",
+        weight:"",
+        hair:"",
+        otherFeature:false
 
 
     })
@@ -44,10 +54,19 @@ const StandardReport = () => {
                 firstAttemptTime: legalDeliveryDataa?.data?.serviceResultFirstTimeOfService,
                 secondAttemptDate: legalDeliveryDataa?.data?.serviceResultSecondAttemptDate,
                 secondAttemptTime: legalDeliveryDataa?.data?.serviceResultSecondTimeOfService,
-                apt:legalDeliveryDataa?.data?.serviceFormId?.lTSApt,
                 recipientTitle:legalDeliveryDataa?.data?.serviceResultRecipientTitle,
                 dateOfMailing:legalDeliveryDataa?.data?.serviceResultDateOfMailing,
                 lic:legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
+                serverAddress:legalDeliveryDataa?.data?.serviceResultServerId?.address1,
+                serverName:legalDeliveryDataa?.data?.serviceResultServerId?.firstName,
+                apt:legalDeliveryDataa?.data?.serviceResultServerId?.apt,
+                sex:legalDeliveryDataa?.data?.serviceResultSex,
+                skinColor:legalDeliveryDataa?.data?.serviceResultSkinColor,
+                age:legalDeliveryDataa?.data?.serviceResultAge,
+                height:legalDeliveryDataa?.data?.serviceResultHeight,
+                weight:legalDeliveryDataa?.data?.serviceResultWeight,
+                hair:legalDeliveryDataa?.data?.serviceResultHair,
+                otherFeature:legalDeliveryDataa?.data?.serviceResultOtherDescription,
 
 
             }))
@@ -64,11 +83,19 @@ const StandardReport = () => {
                 firstAttemptTime: legalDeliveryDataa?.data?.resultFormId?.serviceResultFirstTimeOfService,
                 secondAttemptDate: legalDeliveryDataa?.data?.resultFormId?.serviceResultSecondAttemptDate,
                 secondAttemptTime: legalDeliveryDataa?.data?.resultFormId?.serviceResultSecondTimeOfService,
-                apt:legalDeliveryDataa?.data?.lTSApt,
+                apt:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.apt,
                 recipientTitle:legalDeliveryDataa?.data?.resultFormId?.serviceResultRecipientTitle,
                 dateOfMailing:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
                 lic:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
-
+                serverAddress:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1,
+                serverName:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.firstName,
+                sex:legalDeliveryDataa?.data?.resultFormId?.serviceResultSex,
+                skinColor:legalDeliveryDataa?.data?.resultFormId?.serviceResultSkinColor,
+                age:legalDeliveryDataa?.data?.resultFormId?.serviceResultAge,
+                height:legalDeliveryDataa?.data?.resultFormId?.serviceResultHeight,
+                weight:legalDeliveryDataa?.data?.resultFormId?.serviceResultWeight,
+                hair:legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
+                otherFeature:legalDeliveryDataa?.data?.resultFormId?.serviceResultOtherDescription,
 
             }))
         }
@@ -86,6 +113,17 @@ const StandardReport = () => {
                     recipientTitle={bodyData?.recipientTitle}
                     dateOfMailing={bodyData?.dateOfMailing}
                 lic={bodyData?.lic}
+                serverAddress={bodyData?.serverAddress}
+                serverName={bodyData?.serverName}
+                apt={bodyData?.apt}
+                sex={bodyData?.sex}
+                skinColor={bodyData?.skinColor}
+                age={bodyData?.age}
+                height={bodyData?.height}
+                weight={bodyData?.weight}
+                hair={bodyData?.hair}
+                otherFeature={bodyData?.otherFeature}
+
                     />
                     <Footer />
                 </TemplateOutlet>
@@ -113,6 +151,10 @@ const StandardReport = () => {
                     recipientTitle={bodyData?.recipientTitle}
                     dateOfMailing={bodyData?.dateOfMailing}
                 lic={bodyData?.lic}
+                serverAddress={bodyData?.serverAddress}
+                serverName={bodyData?.serverName}
+                apt={bodyData?.apt}
+
                     />
                     <Footer />
                 </TemplateOutlet>

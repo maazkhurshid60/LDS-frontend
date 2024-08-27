@@ -213,7 +213,7 @@ const TransPerSlipReport = () => {
                         date={bodyData?.date}
                         time={bodyData?.time}
                         dateOfmailing={bodyData?.dateOfmailing}
-                        sex={bodyData?.dateOfmailing}
+                        sex={bodyData?.sex}
                         skinColor={bodyData?.skinColor}
                         age={bodyData?.age}
                         height={bodyData?.height}
