@@ -150,11 +150,11 @@ export const addResultFormThunk = createAsyncThunk("addResultForm", async (data:
                 "Authorization": `Bearer ${accessToken}`
             },
         })
-        alert(`${response?.data?.message}`)
+        toast.success(`${response?.data?.message}`)
         dispatch(getAllResultFormThunk())
     } catch (error) {
         console.log(error)
-        alert(`${error?.response?.data?.message}`)
+        toast.error(`${error?.response?.data?.message}`)
     } finally {
         dispatch(showSpinnerReducer(false))
 

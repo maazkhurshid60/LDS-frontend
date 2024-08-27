@@ -141,6 +141,7 @@ const LiNonReports = () => {
                      dateOfMailing={bodyData?.dateOfMailing}
                      serverName={bodyData?.serverName}
                      lic={bodyData?.lic}
+                     address={bodyData?.address}
              
                     />
                     <Footer />
@@ -169,7 +170,10 @@ const LiNonReports = () => {
                      weight= {bodyData?.weight}
                      hair= {bodyData?.hair}
                      dateOfMailing={bodyData?.dateOfMailing}
+                     serverName={bodyData?.serverName}
+                     lic={bodyData?.lic}
                      address={bodyData?.address}
+             
                     />
                     <Footer />
                 </TemplateOutlet>

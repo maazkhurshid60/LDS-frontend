@@ -9,9 +9,9 @@ const Footer=()=>{
                 <p>SOME_TEXT_WILL_BE_THERE_FROM_BACKEND_API</p>
             </div>
         </div> */}
-        <div>
+        <div className="capitalize">
             <p>yasodra seenarine</p>
-            <p>notary republic state of new york</p>
+            <p>notary Public state of new york</p>
             <p>No: 01SE6163476</p>
             <p>Qualified in queens country commission expiration 03/26/27</p>        
         </div>

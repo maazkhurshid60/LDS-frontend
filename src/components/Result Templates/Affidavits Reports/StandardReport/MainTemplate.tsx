@@ -154,6 +154,13 @@ const StandardReport = () => {
                 serverAddress={bodyData?.serverAddress}
                 serverName={bodyData?.serverName}
                 apt={bodyData?.apt}
+                sex={bodyData?.sex}
+                skinColor={bodyData?.skinColor}
+                age={bodyData?.age}
+                height={bodyData?.height}
+                weight={bodyData?.weight}
+                hair={bodyData?.hair}
+                otherFeature={bodyData?.otherFeature}
 
                     />
                     <Footer />

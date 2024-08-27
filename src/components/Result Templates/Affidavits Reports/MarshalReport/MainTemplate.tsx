@@ -11,13 +11,14 @@ import { RootState } from "../../../../redux/store";
 const MarshalReport = () => {
     const MarshalReportPrintRef = useRef<HTMLButtonElement | null>(null);
     const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData)
-    console.log("legalDeliveryDataa?.data?.inputDate",  legalDeliveryDataa?.data?.resultFormId?.serviceResultDoorLocks)
+    console.log("legalDeliveryDataa?.data?.inputDate",  legalDeliveryDataa?.data)
 
     const [header, setHeader] = useState({
         index: "",
         affidavitName: "",
-        serviceName: "",
-        licNo: "",
+        serverName:"",
+        lic:"",
+        serverAddress:"",
 
     })
     const [bodyData, setBodyData] = useState({
@@ -40,7 +41,8 @@ const MarshalReport = () => {
         firstNames: "",
         serverName: "",
         licNo: "",
-        locks: ""
+        locks: "",
+        serverAddress:""
     })
     useEffect(() => {
         if (legalDeliveryDataa?.searchResult === "service" || legalDeliveryDataa?.searchResult === "standard") {
@@ -49,8 +51,10 @@ const MarshalReport = () => {
                 ...prev,
                 index: legalDeliveryDataa?.data?.oLTIndexNo,
                 affidavitName: legalDeliveryDataa?.data?.serviceType?.serviceTypeCode,
-                serviceName: "",
-                licNo: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
+                serverName:  legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.firstName,
+                lic: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
+                serverAddress: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1,
+
 
             }))
             setBodyData(prev => ({
@@ -76,8 +80,9 @@ const MarshalReport = () => {
                 hair: legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
                 otherFeatures: legalDeliveryDataa?.data?.resultFormId?.serviceResultOtherFeatures,
                 licNo: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
-                locks: legalDeliveryDataa?.data?.resultFormId?.serviceResultDoorLocks
-            }))
+                locks: legalDeliveryDataa?.data?.resultFormId?.serviceResultDoorLocks,
+                serverAddress: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1
+             }))
             // SERVICES ENDS
 
         } else if (legalDeliveryDataa?.searchResult === "result") {
@@ -85,8 +90,9 @@ const MarshalReport = () => {
                 ...prev,
                 index: legalDeliveryDataa?.data?.queryInformationLTIndexNo,
                 affidavitName: legalDeliveryDataa?.data?.serviceResultScvType?.serviceTypeCode,
-                serviceName: "",
-                licNo: legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo
+                serverName:  legalDeliveryDataa?.data?.serviceResultServerId?.firstName,
+                lic: legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
+                serverAddress: legalDeliveryDataa?.data?.serviceResultServerId?.address1,
             }))
             setBodyData(prev => ({
                 ...prev,
@@ -111,7 +117,9 @@ const MarshalReport = () => {
                 hair: legalDeliveryDataa?.data?.serviceResultHair,
                 otherFeatures: legalDeliveryDataa?.data?.serviceResultOtherFeatures,
                 licNo: legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
-                locks: legalDeliveryDataa?.data?.serviceResultDoorLocks
+                locks: legalDeliveryDataa?.data?.serviceResultDoorLocks,
+                serverAddress: legalDeliveryDataa?.data?.serviceResultServerId?.address1
+
             }))
         }
     }, [])
@@ -122,8 +130,12 @@ const MarshalReport = () => {
                     <Header
                         index={header?.index}
                         affidavitName={header?.affidavitName}
-                        licNo={header?.licNo}
-                        serviceName={header?.serviceName} />
+                        lic={header?.lic}
+                        serverName={header?.serverName} 
+                        serverAddress={header?.serverAddress}
+                        
+                        />
+
                     <Body
                         //RESULTS
                         apt={bodyData?.apt}
@@ -148,7 +160,7 @@ const MarshalReport = () => {
                         address={bodyData?.address}
                         firstNames={bodyData?.firstNames}
                         serverName={bodyData?.serverName}
-
+                        serverAddress={bodyData?.serverAddress}
                     />
                     <Footer />
                 </TemplateOutlet>
@@ -170,8 +182,12 @@ const MarshalReport = () => {
                     <Header
                         index={header?.index}
                         affidavitName={header?.affidavitName}
-                        licNo={header?.licNo}
-                        serviceName={header?.serviceName} />
+                        lic={header?.lic}
+                        serverName={header?.serverName} 
+                        serverAddress={header?.serverAddress}
+                        
+                        />
+
                     <Body
                         //RESULTS
                         apt={bodyData?.apt}
@@ -196,7 +212,7 @@ const MarshalReport = () => {
                         address={bodyData?.address}
                         firstNames={bodyData?.firstNames}
                         serverName={bodyData?.serverName}
-
+                        serverAddress={bodyData?.serverAddress}
                     />
                     <Footer />
                 </TemplateOutlet>

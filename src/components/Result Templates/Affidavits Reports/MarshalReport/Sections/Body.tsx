@@ -25,6 +25,7 @@ export interface BodyProps {
     address?: string
     firstNames?: string
     serverName?: string
+    serverAddress?:string
 }
 const Body: React.FC<BodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4">
@@ -32,21 +33,20 @@ const Body: React.FC<BodyProps> = (item) => {
         <p>I, <span className="font-semibold">{item?.serverName ? item?.serverName : "--N/A--"}</span> being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
             queens, New York  that on <span className="font-semibold">{item?.dateOfService ? item?.dateOfService : "--N/A--"}</span>.</p>
         <p>At the property sought to be recovered at <span className="font-semibold">{item?.address ? item?.address : "--N/A--"}</span> Apt# <span className="font-semibold">{item?.apt ? item?.apt : "--N/A--"}</span></p>
-        <p>The <span className="font-semibold">{item?.firstNames ? item?.firstNames : "--N/A--"}</span> was served on</p>
-        <p className="flex justify-start gap-x-4"><GrCheckbox size={18} /> Personal service on individual: individually served the within-named person with true copy(ies)of the paper(s) afore mentioned.</p>
+        <p>The _______________________________________  was served on <span className="font-semibold">{item?.firstNames ? item?.firstNames : "--N/A--"}</span></p>
+        <p className="flex justify-start gap-x-4"><GrCheckbox size={18} /> Personal service on individual: individually served the within-named person with true copy(ies) of the paper(s) aforementioned.</p>
         <div className="flex justify-start gap-x-4"><GrCheckbox size={18} />
             <div>
                 <p>Deponent was unable to serve:</p>
-                <p>Additional respodents by personal delivery but by gaining admittance to said property and delivery and leaving a true copy there of each</p>
-
+                <p>Additional respondents by personal delivery but by gaining admittance to said property and delivery and leaving a true copy thereof each</p>
             </div>
         </div>
         <div className="flex justify-start gap-x-4">
             <GrCheckbox size={50} />
             <div>
-                <p>Posted on door: by affixing a true copy there of  for each respondent on conspicuous part to with the entrance door of said property
+                <p>Posted on door: by affixing a true copy thereof  for each respondent on conspicuous part to with the entrance door of said property
                     , the tenant(s)/ occupant(s) place of bussiness premises is recipients <span className="font-semibold">{item?.reciepientTitle ? item?.reciepientTitle : "--N/A--"}</span> with in state. Deponent was unable to find
-                    respodent(s) or to find a person suitable age and discretion who SOMETEXTWILLBETHEREFROMBACKENDAPI there at during either of the two service
+                    respondent(s) or to find a person suitable age and discretion who _____________________________________ there at during either of the two service
                     attempts made on the following dates:
                 </p>
                 <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "--N/A--"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "--N/A--"} </span> </p>
@@ -64,8 +64,21 @@ const Body: React.FC<BodyProps> = (item) => {
                 </p>
             </div>
         </div>
-        <p>Addtional copies mailed regular and certified:</p>
+        <p className="text-center">Addtional copies mailed regular and certified:</p>
+        <div className="font-semibold flex items-center justify-between w-full">
+            <div>
+            <p>Sworn to before me on</p>
+            <p>{item?.dateOfMailing? item?.dateOfMailing:"--N/A--"}</p>
+            </div>
+            <div>
+            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "--N/A--"}</span></p>
+            <p>Lic#{item?.lic? item?.lic:"--N/A--"}</p>
+            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "--N/A--"}</span>
+            </p>
 
+            </div>
+
+        </div>
     </div>
 }
 export default Body

@@ -2,8 +2,10 @@ import React from "react";
 export interface HeaderProps{
     index?:string | number;
     affidavitName?:string;
-    serviceName?:string;
-    licNo?:string |number
+    serverName?:string 
+    lic?:string | number
+    serverAddress?:string 
+
 } 
 const Header:React.FC<HeaderProps>=(item)=>{
     return <div className="w-full flex items-center justify-between flex-wrap text-sm">
@@ -20,10 +22,14 @@ const Header:React.FC<HeaderProps>=(item)=>{
             <p>service</p>
             <p>{item?.serviceName}</p>
         </div> */}
-        <div className=" flex items-center gap-x-2 text-base">
-            <p>Lic#</p>
-            <p className="font-medium ">{item?.licNo ? item?.licNo:"--N/A--"}</p>
-        </div>
+       
+        <div className="flex items-start justify-start flex-col">
+            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "--N/A--"}</span></p>
+            <p>Lic#{item?.lic? item?.lic:"--N/A--"}</p>
+            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "--N/A--"}</span>
+            </p>
+
+            </div>
     </div>
 }
 
