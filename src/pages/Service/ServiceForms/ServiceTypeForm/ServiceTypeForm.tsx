@@ -331,11 +331,14 @@ const StandardTypeForm = () => {
 
             dispatch(updateServiceFormThunk(updatedData))
             dispatch(savedLTFormDataReducer(LTData))
+            dispatch(moveToStandardFormReducer("Standard"))
 
         } else {
 
             dispatch(savedLTFormDataReducer(LTData))
             toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
+            dispatch(moveToStandardFormReducer("Standard"))
+
         }
     }
     // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
@@ -397,7 +400,7 @@ const StandardTypeForm = () => {
         <div className="w-full">
             <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
                 <div className="flex items-center justify-between flex-row-reverse	">
-                    <Hints label="To Save L&T Data" keyName="Ctrl + S" />
+                    <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                         {jobNo &&
                             <div className="flex flex-col w-full items-start gap-1">

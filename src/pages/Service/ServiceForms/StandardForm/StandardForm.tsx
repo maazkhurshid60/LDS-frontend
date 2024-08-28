@@ -13,6 +13,7 @@ import { addServiceFormThunk, getAllServiceFormThunk, updateServiceFormThunk } f
 import Hints from "../../../Result/Hints/Hints";
 import Button from "../../../../components/Buttons/Button/Button";
 import { handleEnterKeyPress } from "../../../../utils/moveToNextFieldOnEnter";
+import { toast } from "react-toastify";
 export type FormFields = z.infer<typeof standardFormSchema>
 const StandardForm = () => {
     const userOptions = [{ value: "ZainCalzoni", label: "Zain Calzoni" }, { value: "cooperCulhane", label: "Cooper Culhane" }]
@@ -35,7 +36,7 @@ const StandardForm = () => {
     };
     const StandardServiceTypeFunction = (data) => {
         console.log("standardServiceType:checkedName", checkedName)
-        if(checkedName===null)return setCheckedName("empty")
+        if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: parseInt(data?.oSSTIndexNo), oSSTDescription: data?.oSSTDescription,
@@ -79,7 +80,7 @@ const StandardForm = () => {
             } else {
                 const UpdatedLTData: any = LTData
                 const updatedData = { ...UpdatedLTData, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
-                console.log("updating data to update api",LTData, updatedData);
+                console.log("updating data to update api", LTData, updatedData);
 
                 dispatch(updateServiceFormThunk(updatedData))
 
@@ -120,13 +121,31 @@ const StandardForm = () => {
         dispatch(getAllServiceFormThunk())
         // setValue("jobNo",allServiceFormData[0]?.jobNo)
     }, [])
+
+    // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.ctrlKey && event.key === 's' || event.key === 'Escape' || event.key === 'F10') {
+                event.preventDefault();
+                handleSubmit(StandardServiceTypeFunction)();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleSubmit, StandardServiceTypeFunction]);
+
     return <div className="w-[100%]">
         <div className="w-full">
             <form className="w-full">
+                <div className="w-full flex justify-end">
+                    <Hints label="To Save / Update Data" keyName="Ctrl + S / ESC" />
+                </div>
                 {/* STANDARD SERVICE TYPE STARTS */}
                 <div className="w-full">
                     <div className="flex items-center gap-x-2  mb-4">
-                    <h1 className="font-semibold   mb-4 text-base
+                        <h1 className="font-semibold   mb-4 text-base
                 md:text-md
                 lg:text-xl">Standard Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>                    {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
                     </div>
@@ -156,7 +175,7 @@ const StandardForm = () => {
                         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other Standard Description" error={errors.oSSTDescription} name="oSSTDescription" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" required/>
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" required />
                     </div>
                 </div>
                 {/* OTHER STANDARD SERVICE TYPE ENDS */}
@@ -182,7 +201,7 @@ const StandardForm = () => {
                 <div className="mt-6"><h1 className="font-semibold text-xl mb-4 ">Serve To</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.firstNameServe} name="firstNameServe" label="first name"  required/>
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.firstNameServe} name="firstNameServe" label="first name" required />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.addressServe} name="addressServe" label="address" required />
