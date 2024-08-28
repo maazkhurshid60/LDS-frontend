@@ -116,73 +116,73 @@ const GPSReport = () => {
     return <>
         <div ref={TransPerSlipReportPrintRef} className=" p-6 bg-whiteColor capitalize">
             <div>
-            <div className="h-[10vh] w-full bg-grayColor/70 mb-6"></div>
-            <div className="flex items-start justify-center gap-y-6">
-                {/* LEFT PART STARTS */}
-                <div className="w-[50%]  text-base font-bold flex flex-col gap-y-4">
-                    <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
-                        <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">Job No#:</h1>
-                            <p className="w-[40%] font-normal">{resultData?.jobNo}</p>
-                        </div>
-                        <h1 className="">Agency DCA Lic#: </h1>
-                        <h1 className="">Process Server Lic#: </h1>
-                    </div>
-
-                    <div className="flex items-start gap-x-2 mb-2">
-                        <h1 className="w-[45%] ">Plaintiff/Petitioner:</h1>
-                        <p className="w-[40%] font-normal">{resultData?.plaintiffPetitioner}</p>
-                    </div>
-                    <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
-                        <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">Index#:</h1>
-                            <p className="w-[40%] font-normal">{resultData?.index}</p>
-                        </div>
-                        <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">Serve To:</h1>
-                            <p className="w-[40%] font-normal">{resultData?.serveTo}</p>
-                        </div>
-                        <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">Address:</h1>
-                            <p className="w-[40%] font-normal">{resultData?.address}</p>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-x-2 mb-2">
-                        <h1 className="w-[45%] ">Person Served:</h1>
-                        <p className="w-[40%] font-normal">{resultData?.personServed}</p>
-                    </div>
-                    <h1 className="">Network Provided</h1>
-                    <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
-                        <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">date Of Service:</h1>
-                            <p className="w-[40%] font-normal">{resultData?.dateOfService}</p>
-                        </div>
-                        <div className="flex items-start gap-x-2">
-                            <h1 className="w-[45%] ">GPS:</h1>
-                            <p className="w-[40%] font-normal"><span className=" mr-10">{address?.lat}</span>  <span>{address?.lng}</span></p>
+                <div className="h-[10vh] w-full bg-grayColor/70 mb-6"></div>
+                <div className="flex items-start justify-center gap-y-6">
+                    {/* LEFT PART STARTS */}
+                    <div className="w-[50%]  text-base font-bold flex flex-col gap-y-4">
+                        <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Job No#:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.jobNo ? resultData?.jobNo : "______________________________"}</p>
+                            </div>
+                            <h1 className="">Agency DCA Lic#: </h1>
+                            <h1 className="">Process Server Lic#: </h1>
                         </div>
 
+                        <div className="flex items-start gap-x-2 mb-2">
+                            <h1 className="w-[45%] ">Plaintiff/Petitioner:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.plaintiffPetitioner ? resultData?.plaintiffPetitioner : "______________________________"}</p>
+                        </div>
+                        <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Index#:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.index ? resultData?.index : "______________________________"}</p>
+                            </div>
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Serve To:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.serveTo ? resultData?.serveTo : "______________________________"}</p>
+                            </div>
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Address:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.address ? resultData?.address : "______________________________"}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-x-2 mb-2">
+                            <h1 className="w-[45%] ">Person Served:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.personServed ? resultData?.personServed : "______________________________"}</p>
+                        </div>
+                        <h1 className="">Network Provided</h1>
+                        <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">date Of Service:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.dateOfService ? resultData?.dateOfService : "______________________________"}</p>
+                            </div>
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">GPS:</h1>
+                                <p className="w-[40%] font-normal"><span className=" mr-10">{address?.lat}</span>  <span>{address?.lng}</span></p>
+                            </div>
+
+                        </div>
+                    </div>
+                    {/* LEFT PART ENDS */}
+
+                    {/* RIGHT(MAP) PART STARTS */}
+                    <div className="w-[50%] h-[40vh]">
+
+                        <div className="w-full">
+
+                            <GoogleMap
+                                center={address}
+                                zoom={15}
+                                mapContainerStyle={{ height: "40vh" }}
+                            >
+                                <MarkerF position={address} />
+
+                            </GoogleMap>
+                        </div>
                     </div>
                 </div>
-                {/* LEFT PART ENDS */}
-
-                {/* RIGHT(MAP) PART STARTS */}
-                <div className="w-[50%] h-[40vh]">
-
-                    <div className="w-full">
-
-                        <GoogleMap
-                            center={address}
-                            zoom={15}
-                            mapContainerStyle={{ height: "40vh" }}
-                        >
-                            <MarkerF position={address} />
-
-                        </GoogleMap>
-                    </div>
-                </div>
-            </div>
-            <div className="h-[10vh] w-full bg-grayColor/70 mt-6"></div>
+                <div className="h-[10vh] w-full bg-grayColor/70 mt-6"></div>
 
             </div>
         </div>
@@ -201,22 +201,51 @@ const GPSReport = () => {
             {/* The content to print */}
             <div className=" border-solid border-[6px] border-grayColor p-6 bg-whiteColor ">
                 {/* LEFT PART STARTS */}
-                <div className="w-[50%] font-medium text-base font-semibold">
-                    <h1 className="">Job No: {resultData?.jobNo}</h1>
-                    <h1 className="">Agency DCA Lic: AgencyDCALic_FROM_BACKEND_API</h1>
-                    <h1 className="">Process Server Lic: ProcessServerLic_FROM_BACKEND_API</h1>
-                    <h1 className="">Plaintiff/Petitioner: Petitioner_FROM_BACKEND_API</h1>
-                    <h1 className="">Index: {resultData?.index}</h1>
-                    <h1 className="">Serve To: {resultData?.serveTo}</h1>
-                    <h1 className="">Address: {resultData?.address}</h1>
-                    <h1 className="">Person Served: {resultData?.personServed}</h1>
-                    <h1 className="">Network Provided: NetworkProvided_FROM_BACKEND_API</h1>
-                    <h1 className="">Date and Time of Service:  {resultData?.dateOfService}
-                    </h1>
-                    <h1 className="">GPS: <span className="ml-10 mr-10">{address?.lat}</span>  <span>{address?.lng}</span></h1>
+                <div className="w-[50%]  text-base font-bold flex flex-col gap-y-4">
+                        <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Job No#:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.jobNo ? resultData?.jobNo : "______________________________"}</p>
+                            </div>
+                            <h1 className="">Agency DCA Lic#: </h1>
+                            <h1 className="">Process Server Lic#: </h1>
+                        </div>
 
+                        <div className="flex items-start gap-x-2 mb-2">
+                            <h1 className="w-[45%] ">Plaintiff/Petitioner:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.plaintiffPetitioner ? resultData?.plaintiffPetitioner : "______________________________"}</p>
+                        </div>
+                        <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Index#:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.index ? resultData?.index : "______________________________"}</p>
+                            </div>
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Serve To:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.serveTo ? resultData?.serveTo : "______________________________"}</p>
+                            </div>
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">Address:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.address ? resultData?.address : "______________________________"}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-x-2 mb-2">
+                            <h1 className="w-[45%] ">Person Served:</h1>
+                            <p className="w-[40%] font-normal">{resultData?.personServed ? resultData?.personServed : "______________________________"}</p>
+                        </div>
+                        <h1 className="">Network Provided</h1>
+                        <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">date Of Service:</h1>
+                                <p className="w-[40%] font-normal">{resultData?.dateOfService ? resultData?.dateOfService : "______________________________"}</p>
+                            </div>
+                            <div className="flex items-start gap-x-2">
+                                <h1 className="w-[45%] ">GPS:</h1>
+                                <p className="w-[40%] font-normal"><span className=" mr-10">{address?.lat}</span>  <span>{address?.lng}</span></p>
+                            </div>
 
-                </div>
+                        </div>
+                    </div>
                 {/* LEFT PART ENDS */}
 
                 {/* RIGHT(MAP) PART STARTS */}

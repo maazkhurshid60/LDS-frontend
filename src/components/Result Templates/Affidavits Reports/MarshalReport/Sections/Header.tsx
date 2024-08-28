@@ -11,7 +11,7 @@ const Header:React.FC<HeaderProps>=(item)=>{
     return <div className="w-full flex items-center justify-between flex-wrap text-sm">
         <div className="capitalize flex items-center gap-x-2">
             <p>index #</p>
-            <p className="font-semibold">{item?.index ?item?.index :"--N/A--"}</p>
+            <p className="font-semibold">{item?.index ?item?.index :"__________"}</p>
         </div>
         <div className=" font-medium flex items-center gap-x-4 text-xl uppercase">
             <p>Affidavit of</p>
@@ -24,9 +24,9 @@ const Header:React.FC<HeaderProps>=(item)=>{
         </div> */}
        
         <div className="flex items-start justify-start flex-col">
-            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "--N/A--"}</span></p>
-            <p>Lic#{item?.lic? item?.lic:"--N/A--"}</p>
-            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "--N/A--"}</span>
+            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "__________"}</span></p>
+            <p>Lic#{item?.lic? item?.lic:"__________"}</p>
+            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "__________"}</span>
             </p>
 
             </div>

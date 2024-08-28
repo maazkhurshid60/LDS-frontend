@@ -50,24 +50,24 @@ const DataTable:React.FC<DataTableProps> = (item) => {
                 <tbody>
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-[2px] border-solid border-blackColor">
                         <th scope="row" className="px-6 py-4 border-[1px] border-solid border-blackColor text-gray-900 whitespace-nowrap dark:text-white">
-                            {item?.caseNo?item?.caseNo:"--N/A--"}
+                            {item?.caseNo?item?.caseNo:"______________________________"}
                         </th>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                            --N/A--
+                            ______________________________
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.index?item?.index:"--N/A--"}
+                        {item?.index?item?.index:"______________________________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.address?item?.address:"--N/A--"}                        </td>
+                        {item?.address?item?.address:"______________________________"}                        </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.apt?item?.apt:"--N/A--"}
+                        {item?.apt?item?.apt:"______________________________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.ltnames ? item?.ltnames:"--N/A--"}
+                        {item?.ltnames ? item?.ltnames:"______________________________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.extraname?.length>0 ?item?.extraname?.map(data=>data+","):"--N/A--"}
+                        {item?.extraname?.length>0 ?item?.extraname?.map(data=>data+","):"______________________________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
                             -
@@ -87,7 +87,7 @@ const DataTable:React.FC<DataTableProps> = (item) => {
     {/* SUMMARY STARTS */}
     <div className="flex items-center justify-between gap-x-8 font-bold text-base mt-8">
             <h1>Test Cases: 1</h1>
-            <h1>Total Add Names:   {item?.ltnames?.length>0 ?1:"--N/A--"}</h1>
+            <h1>Total Add Names:   {item?.ltnames?.length>0 ?1:"______________________________"}</h1>
             <h1>Total Add Extra Names: {item?.extraname?.length}</h1>
             <h1>Total RRR Names: 0</h1>
 

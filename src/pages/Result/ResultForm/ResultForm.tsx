@@ -199,6 +199,7 @@ console.log(updatingData)
             setValue("serviceResultOtherDescription", selectedSearchResultData[0]?.serviceResultOtherDescription)
             setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.otherIdentifyingFeatures)
             setValue("serviceResultSex", selectedSearchResultData[0]?.serviceResultSex)
+            setValue("serviceResultSkinColor", selectedSearchResultData[0]?.serviceResultSkinColor)
 
             setValue("serviceResultHair", selectedSearchResultData[0]?.serviceResultHair)
             setValue("serviceResultAge", JSON.stringify(selectedSearchResultData[0]?.serviceResultAge))
@@ -223,7 +224,8 @@ console.log(updatingData)
             setValue("serviceResultScvType", allResultForm[resultFormIndex]?.serviceResultScvType ?? "")
             setValue("serviceResultClientId", allResultForm[resultFormIndex]?.serviceResultClientId ?? "")
             setValue("serviceResultJobNo", JSON.stringify(allResultForm[resultFormIndex]?.serviceResultJobNo ?? ""))
-            setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.otherIdentifyingFeatures)
+            setValue("serviceResultOtherFeatures", allResultForm[resultFormIndex]?.otherIdentifyingFeatures)
+            setValue("serviceResultSkinColor", allResultForm[resultFormIndex]?.serviceResultSkinColor)
 
             setValue("serviceResultServerId", allResultForm[resultFormIndex]?.serviceResultServerId?._id ?? "")
             setValue("serviceResultResults", allResultForm[resultFormIndex]?.serviceResultResults ?? "")
@@ -283,7 +285,7 @@ console.log(updatingData)
     //         formElements[index + 1]?.focus(); // Focus the next input
     //     }
     // };
-console.log("allResultForm[0]",allResultForm[0])
+console.log("allResultForm[0]",selectedSearchResultData[resultFormIndex]?.serviceResultSkinColor)
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> :
 

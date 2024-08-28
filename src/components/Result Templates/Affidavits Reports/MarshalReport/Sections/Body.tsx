@@ -30,10 +30,10 @@ export interface BodyProps {
 const Body: React.FC<BodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4">
         <p>State of New York, country of Queens ss:</p>
-        <p>I, <span className="font-semibold">{item?.serverName ? item?.serverName : "--N/A--"}</span> being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
-            queens, New York  that on <span className="font-semibold">{item?.dateOfService ? item?.dateOfService : "--N/A--"}</span>.</p>
-        <p>At the property sought to be recovered at <span className="font-semibold">{item?.address ? item?.address : "--N/A--"}</span> Apt# <span className="font-semibold">{item?.apt ? item?.apt : "--N/A--"}</span></p>
-        <p>The _______________________________________  was served on <span className="font-semibold">{item?.firstNames ? item?.firstNames : "--N/A--"}</span></p>
+        <p>I, <span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span> being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
+            queens, New York  that on <span className="font-semibold">{item?.dateOfService ? item?.dateOfService : "______________________________"}</span>.</p>
+        <p>At the property sought to be recovered at <span className="font-semibold">{item?.address ? item?.address : "______________________________"}</span> Apt# <span className="font-semibold">{item?.apt ? item?.apt : "______________________________"}</span></p>
+        <p>The ______________________________  was served on <span className="font-semibold">{item?.firstNames ? item?.firstNames : "______________________________"}</span></p>
         <p className="flex justify-start gap-x-4"><GrCheckbox size={18} /> Personal service on individual: individually served the within-named person with true copy(ies) of the paper(s) aforementioned.</p>
         <div className="flex justify-start gap-x-4"><GrCheckbox size={18} />
             <div>
@@ -45,22 +45,22 @@ const Body: React.FC<BodyProps> = (item) => {
             <GrCheckbox size={50} />
             <div>
                 <p>Posted on door: by affixing a true copy thereof  for each respondent on conspicuous part to with the entrance door of said property
-                    , the tenant(s)/ occupant(s) place of bussiness premises is recipients <span className="font-semibold">{item?.reciepientTitle ? item?.reciepientTitle : "--N/A--"}</span> with in state. Deponent was unable to find
-                    respondent(s) or to find a person suitable age and discretion who _____________________________________ there at during either of the two service
+                    , the tenant(s)/ occupant(s) place of bussiness premises is recipients <span className="font-semibold">{item?.reciepientTitle ? item?.reciepientTitle : "______________________________"}</span> with in state. Deponent was unable to find
+                    respondent(s) or to find a person suitable age and discretion who ______________________________ there at during either of the two service
                     attempts made on the following dates:
                 </p>
-                <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "--N/A--"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "--N/A--"} </span> </p>
-                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "--N/A"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "--N/A--"}</span>  </p>
+                <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "______________________________"} </span> </p>
+                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "--N/A"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "______________________________"}</span>  </p>
                 <p>Approx, Door Description:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                     <p>
-                    Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor :"--N/A--"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
-                Locks:<span className="font-semibold">{item?.locks ? item?.locks :"--N/A--"}</span>
+                    Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor :"______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+                Locks:<span className="font-semibold">{item?.locks ? item?.locks :"______________________________"}</span>
                     </p>
                 </p>
-                <p>Approx, Description: Sex:<span className="font-semibold">{item?.sex ? item?.sex : "--N/A--"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skin Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor : "--N/A--"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Age:<span className="font-semibold">{item?.age ? item?.age : "--N/A--"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Height:<span className="font-semibold">{item?.height ? item?.height : "--N/A--"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Weight:<span className="font-semibold">{item?.height ? item?.height : "--N/A--"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hair:<span className="font-semibold">{item?.hair ? item?.hair : "--N/A--"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    other identifying features/comments:<span className="font-semibold">{item?.otherFeatures ? item?.otherFeatures : "--N/A--"}</span>
+                <p>Approx, Description: Sex:<span className="font-semibold">{item?.sex ? item?.sex : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skin Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Age:<span className="font-semibold">{item?.age ? item?.age : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Height:<span className="font-semibold">{item?.height ? item?.height : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Weight:<span className="font-semibold">{item?.height ? item?.height : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hair:<span className="font-semibold">{item?.hair ? item?.hair : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    other identifying features/comments:<span className="font-semibold">{item?.otherFeatures ? item?.otherFeatures : "______________________________"}</span>
                 </p>
             </div>
         </div>
@@ -68,12 +68,12 @@ const Body: React.FC<BodyProps> = (item) => {
         <div className="font-semibold flex items-center justify-between w-full">
             <div>
             <p>Sworn to before me on</p>
-            <p>{item?.dateOfMailing? item?.dateOfMailing:"--N/A--"}</p>
+            <p>{item?.dateOfMailing? item?.dateOfMailing:"______________________________"}</p>
             </div>
             <div>
-            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "--N/A--"}</span></p>
-            <p>Lic#{item?.lic? item?.lic:"--N/A--"}</p>
-            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "--N/A--"}</span>
+            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>
+            <p>Lic#{item?.lic? item?.lic:"______________________________"}</p>
+            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>
             </p>
 
             </div>

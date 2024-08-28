@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = (item) => {
                 civil court of the city of new york
             </h1>
             <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase underline">
-                L&T Index: <span className="font-semibold">{item?.index ? item?.index : "--N/A-- / _____________________________________"}</span>
+                L&T Index: <span className="font-semibold">{item?.index ? item?.index : "_____________________________________"}</span>
             </h1>
         </div>
         <div className="w-full flex items-center justify-between flex-wrap ">
