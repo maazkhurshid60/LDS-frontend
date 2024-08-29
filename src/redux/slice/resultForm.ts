@@ -164,7 +164,7 @@ export const addResultFormThunk = createAsyncThunk("addResultForm", async (data:
 // UPDATE RESULT FORM STARTS
 export const updateResultFormThunk = createAsyncThunk("updateResultForm", async (data: resultFormType, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
-    console.log("sending updating data", data)
+    console.log("sending updating data>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data?.resultFormId)
     try {
         const response = await axios.patch(`${baseUrl}/result-form/update`, data, {
             headers: {

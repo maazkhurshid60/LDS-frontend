@@ -36,7 +36,7 @@ const ResultForm = () => {
     const selectedSearchResultData = useSelector((state: RootState) => state.resultForm.selectedSearchResultData)
     const searchResultFormData = useSelector((state: RootState) => state.resultForm.searchResultFormData)
 
-    console.log("searchResultFormData", selectedSearchResultData, isNewResultFormAdd, selectedSearchResultData?.length > 0)
+    console.log("selectedResultFormData>>>>>>>>>>>>>>>>>>>>>>>>>>>.", selectedSearchResultData)
 
     // console.log("add new form set true", isConspicuous)
     // console.log(allResultForm[resultFormIndex], resultFormIndex)
@@ -106,10 +106,22 @@ const ResultForm = () => {
             // dispatch(searchResultFormAddReducer(false))
             // toast.success("Search Result Form will be applied")
         } else {
+            if(selectedSearchResultData && selectedSearchResultData?.length>0){
+                const updatingData = { ...addingData, resultFormId: selectedSearchResultData[0]?._id }
 
-            const updatingData = { ...addingData, resultFormId: allResultForm[resultFormIndex]?._id }
-console.log(updatingData)
+                console.log("selected search rsultdata",updatingData)
             dispatch(updateResultFormThunk(updatingData))
+
+            }
+            else{
+                const updatingData = { ...addingData, resultFormId: allResultForm[resultFormIndex]?._id }
+
+                console.log("updating rsultdata",updatingData)
+            dispatch(updateResultFormThunk(updatingData))
+            
+            }
+
+            // dispatch(updateResultFormThunk(updatingData))
         }
     }
     // SEARCH RESULT FORM

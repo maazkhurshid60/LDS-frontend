@@ -32,9 +32,11 @@ console.log("mv to standard form",moveToStandardForm)
     const cancelAddingFormFunction = () => {
         localStorage.setItem("serviceFormActiveSection", "0");
         setActiveAction(0)
+        dispatch(getLastServiceForm())
         dispatch(savedLTFormDataReducer(""))
         dispatch(moveToStandardFormReducer(""))
         dispatch(addNewFormAddReducer(false));
+        window.location.reload();
     };
 
     const addServiceFormFunction = () => {
@@ -48,7 +50,7 @@ console.log("mv to standard form",moveToStandardForm)
     const sotringActiveSectionFunction = (id: number) => {
         if (id === 0  && !isDataSaved ) {
             
-            const userConfirmed = window.confirm("You have unsaved changes. If you leave now, your data will be lost. Are you sure you want to continue?");
+            const userConfirmed = window.confirm("Please ensure You made saved changes. If you leave now, your data may be lost if you didnot ensure to make data save. Are you sure you want to continue?");
             if (userConfirmed) {
                 setActiveAction(id);
         dispatch(moveToStandardFormReducer(""))

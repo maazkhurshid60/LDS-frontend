@@ -166,15 +166,20 @@ const StandardTypeForm = () => {
         dispatch(getAllServiceFormThunk())
     }, [])
     // USE EFFECT TO SET VALUES OF INDEX 0 SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
+    
     useEffect(() => {
         if (!isNewFormAdding) {
-            // console.log("new form is not adding");
             const currentData = allServiceFormData[serviceFormIndex];
             const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
             const id = allServiceFormData[serviceFormIndex]?._id
             // console.log(data, id)
             dispatch(getFormMailAddress({ data, id }))
+            
             if (currentData) {
+                
+                console.log("new form is not adding****************************************", allServiceFormData[serviceFormIndex]?.inputDate);
+                console.log("current****************************************", getExistingSelectedClientoption);
+
                 // Set form values
                 setValue("clientId", getExistingSelectedClientoption?.value);
                 setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
@@ -199,6 +204,7 @@ const StandardTypeForm = () => {
                     setMultipleFullname([]);
                 }
                 setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
+               
             } else {
                 console.log("No current data found for the form index.");
             }
@@ -225,7 +231,10 @@ const StandardTypeForm = () => {
             {savedLTData?.lTSFirstName && setMultipleFullname(savedLTData?.lTSFirstName.split(',')); }
             setCheckedName(savedLTData?.lTServiceType?._id);
         }
+        
     }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding]);
+  
+    
 
     // }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding,  savedLTData]);
 
@@ -247,8 +256,10 @@ const StandardTypeForm = () => {
             setJobNo(savedLTData.jobNo);
 
 
-        } else {
-            setJobNo(1);
+        } 
+        else {
+            setJobNo(parseInt(allServiceFormData[0]?.jobNo))
+          
 
         }
     }, [isNewFormAdding])
