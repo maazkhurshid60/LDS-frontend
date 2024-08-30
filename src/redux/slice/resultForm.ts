@@ -173,11 +173,12 @@ export const updateResultFormThunk = createAsyncThunk("updateResultForm", async 
         })
         toast.success(`${response?.data?.message}`)
         dispatch(getAllResultFormThunk())
+        
     } catch (error) {
         toast.error(`${error?.response?.data?.message}`)
     } finally { }
     dispatch(showSpinnerReducer(false))
-
+    window.location.reload();
 })
 // UPDATE RESULT FORM ENDS
 // DELETE RESULT FORM STARTS

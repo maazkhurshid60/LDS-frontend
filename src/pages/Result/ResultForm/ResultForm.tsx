@@ -111,7 +111,7 @@ const ResultForm = () => {
 
                 console.log("selected search rsultdata",updatingData)
             dispatch(updateResultFormThunk(updatingData))
-
+           
             }
             else{
                 const updatingData = { ...addingData, resultFormId: allResultForm[resultFormIndex]?._id }
@@ -297,7 +297,7 @@ const ResultForm = () => {
     //         formElements[index + 1]?.focus(); // Focus the next input
     //     }
     // };
-console.log("allResultForm[0]",selectedSearchResultData[resultFormIndex]?.serviceResultSkinColor)
+
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> :
 
