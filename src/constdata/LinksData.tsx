@@ -30,6 +30,10 @@ export const linkData = [
                     { linkName: "Devices", to: "/administration/device" },
                     { linkName: "Holidays", to: "/administration/holiday" },
                     { linkName: "Settings", to: "/administration/setting" },
+                    { linkName: "LT Service Type", to: "/administration/lt-service-type" },
+                    { linkName: "Standard Service Type", to: "/administration/standard-service-type" },
+
+
                 ]
     },
     // {

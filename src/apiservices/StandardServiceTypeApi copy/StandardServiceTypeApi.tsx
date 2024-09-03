@@ -4,10 +4,10 @@ import { holidayType } from "../../type/holidayType/holidayType";
 const accessToken = localStorage.getItem("accessToken");
 
 //  ADD HOLIDAY API
-export const addLtServiceTypeApi = async (data: any) => {
+export const addStandardServiceTypeApi = async (data: any) => {
     try {
         // console.log(data)
-        const response = await axios.post(`${baseUrl}/ltservice-type/create`, data, {
+        const response = await axios.post(`${baseUrl}/standard-service-type/create`, data, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             }
@@ -21,14 +21,14 @@ export const addLtServiceTypeApi = async (data: any) => {
 
 
 // DELETE SERVICE RESULT API
-export const deleteLtServiceTypeApi = async (id: string) => {
+export const deleteStandardServiceTypeApi = async (id: string) => {
     try {
-        const response = await axios.delete(`${baseUrl}/ltservice-type/delete`, {
+        const response = await axios.delete(`${baseUrl}/standard-service-type/delete`, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             },
             data: {
-                lTServiceTypeId: id
+                standardServiceTypeId: id
             }
         });
         // console.log(response)
@@ -39,11 +39,11 @@ export const deleteLtServiceTypeApi = async (id: string) => {
     }
 }
 // UPDATE SERVICE RESULT API
-export const updateLtServiceTypeApi = async (data:any) => {
+export const updateStandardServiceTypeApi = async (data:any) => {
     console.log(">>>>>>>>>>>",data)
     try {
         const accessToken = localStorage.getItem("accessToken");
-        const response = await axios.patch(`${baseUrl}/ltservice-type/update`, data, {
+        const response = await axios.patch(`${baseUrl}/standard-service-type/update`, data, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             }

@@ -22,6 +22,8 @@ import NonMilReport from "../components/Result Templates/Affidavits Reports/NonM
 import StandardReport from "../components/Result Templates/Affidavits Reports/StandardReport/MainTemplate";
 import TransPerSlipReport from "../components/Result Templates/Affidavits Reports/TransPerSlipReport/MainTemplate";
 import GPSReport from "../components/Result Templates/GPSReport/MainTemplate";
+import LtServiceType from "../pages/LtServiceType/LtServiceType";
+import StandardServiceType from "../pages/StandardServiceType copy/StandardServiceType";
 
 
 const Routing = () => {
@@ -38,6 +40,9 @@ const Routing = () => {
                     <Route path="/administration/device" element={<Devices />} />
                     <Route path="/administration/setting" element={<Setting />} />
                     <Route path="/administration/holiday" element={<Holiday />} />
+                    <Route path="/administration/lt-service-type" element={<LtServiceType />} />
+                    <Route path="/administration/standard-service-type" element={<StandardServiceType />} />
+
                     <Route path="/administration/client" element={<Client />} />
                     <Route path="/administration/server" element={<Server />} />
                     <Route path="/operations/legal-delivery" element={<LegalDelivery />} />
@@ -52,6 +57,7 @@ const Routing = () => {
                     <Route path="/operations/legal-delivery/standard-reports" element={<StandardReport />} />
                     <Route path="/operations/legal-delivery/trans-per-slip-reports" element={<TransPerSlipReport />} />
                     <Route path="/operations/legal-delivery/gps-report" element={<GPSReport />} />
+
 
                     
                     
