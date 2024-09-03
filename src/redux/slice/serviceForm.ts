@@ -6,6 +6,7 @@ import { showModalReducer } from "./showModal";
 import { showSpinnerReducer } from "./spinner";
 import { serviceFormType } from "../../type/serviceFormType/serviceFormType";
 const accessToken = localStorage.getItem("accessToken");
+console.log("access tokenin service form");
 
 const initialState = {
     allServiceFormData: [] as serviceFormType[],
@@ -100,13 +101,18 @@ export default serviceForm.reducer
 export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
         dispatch(showSpinnerReducer(true));
+        if (!accessToken) {
+            localStorage.getItem("accessToken")
+          }
+        toast.success("called all service form data")
     try {
-        // console.log(data)
+        console.log("accessToken<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>",accessToken)
         const response = await axios.get(`${baseUrl}/service-form/all-service-forms`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
         })
+        console.log(response?.data?.data)
         return response?.data?.data
     } catch (error) {
         console.log(error)

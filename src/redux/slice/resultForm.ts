@@ -130,7 +130,7 @@ export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async 
     try {
         const response = await axios.get(`${baseUrl}/result-form/all-result-forms`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
         })
         return response?.data?.data
@@ -147,7 +147,7 @@ export const addResultFormThunk = createAsyncThunk("addResultForm", async (data:
     try {
         const response = await axios.post(`${baseUrl}/result-form/create`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
         })
         toast.success(`${response?.data?.message}`)
@@ -168,7 +168,7 @@ export const updateResultFormThunk = createAsyncThunk("updateResultForm", async 
     try {
         const response = await axios.patch(`${baseUrl}/result-form/update`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
         })
         toast.success(`${response?.data?.message}`)
@@ -187,7 +187,7 @@ export const deleteResultFormThunk = createAsyncThunk("deleteResultForm", async 
     try {
         const response = await axios.delete(`${baseUrl}/result-form/delete`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
             data: {
                 resultFormId: id
@@ -213,7 +213,7 @@ export const searchResultFormThunk = createAsyncThunk("searchResultForm", async 
     try {
         const response = await axios.post(`${baseUrl}/result-form/search-result-forms`,data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
         })
     

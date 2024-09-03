@@ -19,6 +19,7 @@ const Login = () => {
     // LOGIN FUNCTION STARTS
     const loginFunction = async(data) => {
         // alert(",mcxznv,mcxznv")
+       
         try {
             const response=await loginApi(data) 
             console.log(response?.data?.data)

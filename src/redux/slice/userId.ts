@@ -192,7 +192,7 @@ dispatch(showSpinnerReducer(true))
         try {
             const response = await axios.delete(`${baseUrl}/user/delete-user`, {
                 headers: {
-                    "Authorization": `Bearer ${accessToken}`
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
                 , data: { userId: data }
             })

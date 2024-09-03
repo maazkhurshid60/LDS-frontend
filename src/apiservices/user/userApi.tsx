@@ -28,7 +28,7 @@ export const registerUserApi=async(data)=>{
 export const getAllUserApi=async()=>{
     try {
         const response= await axios.get (`${baseUrl}/user/all-users`,{ headers: {
-            "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         } })
         return response
     } catch (error) {
@@ -40,7 +40,7 @@ export const getAllUserApi=async()=>{
 export const updateUserApi=async(data)=>{
     try {
         const response= await axios.patch (`${baseUrl}/user/update`,data,{ headers: {
-            "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         } })
         return response
     } catch (error) {
@@ -70,7 +70,7 @@ export const updateUserRoleApi=async(data:any)=>{
     console.log("><><><><",data)
     try {
         const response= await axios.patch (`${baseUrl}/user/update-user-roles`,data,{ headers: {
-            "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         } })
         return response
     } catch (error) {

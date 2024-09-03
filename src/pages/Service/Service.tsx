@@ -153,9 +153,9 @@ const Service = () => {
 
     console.log("All Service Form Data:", allServiceFormData);
 
-    useEffect(() => {
-        dispatch(getAllServiceFormThunk()); // Fetch data on component mount
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getAllServiceFormThunk()); // Fetch data on component mount
+    // }, [dispatch]);
 
     useEffect(() => {
         if (moveToStandardForm === "Standard") {
@@ -200,6 +200,12 @@ const Service = () => {
         }
     };
 
+
+    useEffect(() => {
+       console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<____________________",localStorage.getItem("accessToken"))
+        dispatch(getAllServiceFormThunk())
+    }, [])
+
     return (
         <>
             {showModal ? (
@@ -224,7 +230,7 @@ const Service = () => {
                         )}
                     </OutletLayoutHeader>
 
-                    {(!allServiceFormData.length && !isNewFormAdding) ? (
+                    {(!allServiceFormData?.length && !isNewFormAdding) ? (
                         <p className="mt-10 text-center">Service Form is empty</p>
                     ) : (
                         <>

@@ -10,7 +10,7 @@ console.log(accessToken)
  export const getAllRoleApi=async()=>{
     try {
         const response= await axios.get (`${baseUrl}/role/all-roles`,{ headers: {
-            "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         } })
         // toast.success("role called")
         // console.log('Result: ',response);
@@ -27,7 +27,7 @@ console.log(accessToken)
 export const addRoleApi=async(data:any)=>{
     try {
         const response= await axios.post(`${baseUrl}/role/create`,data, { headers: {
-            "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         } })
         return response
     } catch (error) {
@@ -45,7 +45,7 @@ export const deleteRoleApi=async(id:any)=>{
 
         const response = await axios.delete(`${baseUrl}/role/delete`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
             data:roleIdData  // Assuming 'data' contains any parameters for the delete request
         });
@@ -60,7 +60,7 @@ export const deleteRoleApi=async(id:any)=>{
 export const updateRoleApi=async(data)=>{
     try {
         const response= await axios.patch (`${baseUrl}/role/update`,data,{ headers: {
-            "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         } })
         return response
     } catch (error) {
