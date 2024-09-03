@@ -76,7 +76,7 @@ const StandardTypeForm = () => {
     const [multipleFullname, setMultipleFullname] = useState<string[]>([]);
     const [joinedFullname, setJoinedFullname] = useState("");
 
-    console.log("servicetype<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",joinedFullname)
+    console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",allServiceFormData)
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
         const { clientId, inputDate, caseNo } = getValues();

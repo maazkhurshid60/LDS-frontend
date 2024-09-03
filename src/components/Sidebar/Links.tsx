@@ -42,6 +42,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
         localStorage.setItem("serviceFormActiveSection", "0")
         dispatch(logoutUser())
         dispatch(emptyNavbarData())
+        localStorage.removeItem("accessToken")
         
         dispatch(emptyLegalDeliveryReducer())
 
