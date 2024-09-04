@@ -43,7 +43,6 @@
 //   );
 // };
 // export default CustomCheckBox
-
 import React from "react";
 import { FieldValues, UseFormRegister, Path } from "react-hook-form";
 
@@ -77,39 +76,36 @@ const CustomCheckBox = <TFieldValues extends FieldValues>({
         onKeyDown={onKeyDown}
         className="hidden"
       />
-      <div className="flex items-center">
-        <div
-          className={`h-4 w-4 rounded border-2 border-gray-300
-            bg-white
-           
-          flex justify-center items-center cursor-pointer`}
-          onClick={onChange}
-        >
-          {checked && (
-            <svg
-              className="h-3 w-3 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          )}
-        </div>
-        <label
-          htmlFor={name}
-          className="text-sm sm:font-semibold capitalize ml-3 cursor-pointer"
-          onClick={onChange}
-        >
-          {label}
-        </label>
+      <div
+        className={`h-4 w-4 rounded border-2 border-gray-300 flex justify-center items-center cursor-pointer ${
+          checked ? "text-whiteColor bg-primaryColor" : "bg-whiteColor"
+        }`}
+        onClick={onChange}
+      >
+        {checked && (
+          <svg
+            className="h-3 w-3 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        )}
       </div>
+      <label
+        htmlFor={name}
+        className="text-sm sm:font-semibold capitalize ml-3 cursor-pointer"
+        onClick={onChange}
+      >
+        {label}
+      </label>
       {error && <p className="text-red-500 text-xs">{error}</p>}
     </div>
   );
