@@ -17,7 +17,7 @@ import { IoMdClose } from "react-icons/io";
 import { LTFormSchema } from "../../../../schemas/service forms/L&TFormSchema";
 import { useGetAllData } from "../../../../hooks/getAllDataHook/useGetAllData";
 import Button from "../../../../components/Buttons/Button/Button";
-import { getAllServiceFormThunk, isDataSaveReducer, moveToStandardFormReducer, savedLTFormDataReducer, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
+import { addServiceFormThunk, getAllServiceFormThunk, isDataSaveReducer, moveToStandardFormReducer, savedLTFormDataReducer, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
 import Hints from "../../../Result/Hints/Hints";
 import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
 import { toast } from "react-toastify";
@@ -68,7 +68,7 @@ const StandardTypeForm = () => {
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
     const [serviceType, setServiceType] = useState()
     const dispatch = useDispatch()
-    const { register, formState: { errors }, control, handleSubmit, setValue, reset, getValues, watch } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
+    const { register, formState: { errors,isSubmitting }, control, handleSubmit, setValue, reset, getValues, watch } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
     const isUpdateMail = useSelector((state: RootState) => state.mailingAdress.isUpdatingMailAddress)
     const [jobNo, setJobNo] = useState<any>()
@@ -81,7 +81,7 @@ const StandardTypeForm = () => {
     const handleMoveToStandardForm = (value) => {
         const { clientId, inputDate, caseNo } = getValues();
 
-        if (!inputDate || !caseNo || !clientId || !checkedName) {
+        if (!inputDate || !caseNo || !clientId ) {
             // Show error message if either field is empty
             setValue("serviceType", "");
             toast.error("Input Date,case No ,clientI d and  lTServiceType are required!");
@@ -334,7 +334,7 @@ const StandardTypeForm = () => {
     const StandardTypeFormSubmitFunciton = (data) => {
         console.log(joinedFullname)
         if (checkedName === null) setCheckedName("empty")
-        console.log(">>>>>>>>>>>>>>saving StandardTypeFormSubmitFunciton>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data)        //    DATA FOR STANDARD FORM STARTS
+        console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000", data)        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: allServiceFormData[serviceFormIndex]?.sSDCourt,
@@ -359,7 +359,7 @@ const StandardTypeForm = () => {
             inputDate: data?.inputDate,
             clientId: data?.clientId,
             serviceType: data?.serviceType,
-            caseNo: data?.caseNo,
+            caseNo: parseInt(data?.caseNo),
             caption: data?.caption,
             lTServiceType: checkedName,
             noOfAddLMailings: isNewFormAdding ? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
@@ -383,19 +383,19 @@ const StandardTypeForm = () => {
         const updatedData = { ...LTData, standardServiceDetail, serviceFormId, standardServiceType: allServiceFormData[serviceFormIndex]?.standardServiceType?._id }
         // console.log("LTS UPDATED DATA", updatedData)
         // console.log("LT DATA", LTData)
-
+// console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000",data)
         // alert("k")
         if (!isNewFormAdding && allServiceFormData?.length > 1) {
 
             dispatch(updateServiceFormThunk(updatedData))
             dispatch(savedLTFormDataReducer(LTData))
-            dispatch(moveToStandardFormReducer("Standard"))
+            // dispatch(moveToStandardFormReducer("Standard"))
 
         } else {
 
-            dispatch(savedLTFormDataReducer(LTData))
-            toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
-            dispatch(moveToStandardFormReducer("Standard"))
+            dispatch(addServiceFormThunk(LTData))
+            // toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
+            // dispatch(moveToStandardFormReducer("Standard"))
 
         }
     }
@@ -508,7 +508,7 @@ const StandardTypeForm = () => {
                                     onChange={field.onChange}
                                     label="service type"
                                     error={errors.serviceType?.message as string}
-                                    // onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
+                                    onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
                                     required
 
                                 />
@@ -575,7 +575,7 @@ const StandardTypeForm = () => {
                                         </div>
 
                                         <input
-                                            className="w-[100px] focus:border-none focus:outline-none bg-grayColorLight/50"
+                                            className="w-[100%]  focus:border-none focus:outline-none bg-grayColorLight/50"
                                             value={inputFullname} // Bind the input field to inputFullname state
                                             onChange={(e) => setInputFullname(e.target.value)} // Update state on change
                                             onKeyDown={(e) => onKeyPressForAnotherName(e)}
@@ -678,7 +678,16 @@ const StandardTypeForm = () => {
                         <Button text="Save Data" onClick={dataSavedFunction} />
                     </div>
                 </div>} */}
+<div className="w-full flex justify-end flex-row mt-6" >
+                    <div className="w-[21%] " >
 
+                        <Button text={`${isNewFormAdding ? "add Data" : "Update Data"}`}
+                        //  onClick={handleSubmit(StandardServiceTypeFunction)}
+                            disabled={isSubmitting}
+
+                        />
+                    </div>
+                </div>
                 </form>
             </div>
         </div>

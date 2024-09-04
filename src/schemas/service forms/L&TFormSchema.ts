@@ -39,8 +39,8 @@ import { optional, z } from "zod"
 export const LTFormSchema = z.object({
     // jobNo: z.string().regex(/^\d+$/, { message: "job no must be number" }),
     // jobNo: z.string().min(1,{message:"Job No is required"}),
-    caseNo: z.string().regex(/^\d+$/, { message: "case no must be number" }),
     // caseNo: z.string().min(1,{message:"case No is required"}),
+    caseNo: z.string().regex(/^\d+$/, { message: "case no must be number" }),
 
     name: z.string().min(1, { message: "Name is require" }).optional(),
     oLTIndexNo: z.string().optional(),

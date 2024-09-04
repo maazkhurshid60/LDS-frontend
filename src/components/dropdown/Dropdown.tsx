@@ -219,7 +219,7 @@ const Dropdown: React.FC<DropdownProp> = ({
                                 <div
                                     key={option.value}
                                     onClick={() => handleOptionClick(option.value)}
-                                    className="cursor-pointer bg-grayColorLight font-medium hover:bg-whiteColor p-2 text-xs"
+                                    className="cursor-pointer capitalize bg-grayColorLight font-medium hover:bg-whiteColor p-2 text-xs"
                                 >
                                     {option.label}
                                 </div>

@@ -25,9 +25,24 @@ const StandardForm = () => {
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
     const getMailingAddressData = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress.serviceFormMailingAdress?.mailingAdresses)
+    
 
+    
     const userData = useSelector((state: RootState) => state?.userDetail)
     const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
+
+    const lastServiceFormIndex = allServiceFormData?.length - 1
+
+    const { data: clientData } = useGetAllData("/client/all-clients");
+    const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
+    const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
+    const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
+    const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === LTData?.clientId && { value: data?._id, label: data?.fullName })
+    const getExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
+const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
+    const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === LTData?.serviceType && { value: data?._id, label: data?.fullName })
+    const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
+    const [jobNo, setJobNo] = useState<any>()
     console.log("LTDATA", LTData)
     const dispatch = useDispatch()
     const handleCheckboxChange = (id: string) => {
@@ -35,7 +50,15 @@ const StandardForm = () => {
         setCheckedName(id);
     };
     const StandardServiceTypeFunction = (data) => {
-        console.log("standardServiceType:checkedName", checkedName)
+        const updatedLTDATA={
+            jobNo: parseInt(jobNo),
+            inputDate: data?.inputDate,
+            clientId: data?.clientId,
+            serviceType: data?.serviceType,
+            caseNo: parseInt(data?.caseNo),
+            caption: data?.caption,
+        }
+        console.log("standardServiceType:checkedName", updatedLTDATA)
         if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
@@ -67,19 +90,19 @@ const StandardForm = () => {
         }
         if (isNewFormAdding === true) {
             const LTDataaaaa: any = LTData
-            const updatedData = { ...LTDataaaaa, ...standardServiceDetail, standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
+            const updatedData = { ...LTDataaaaa,...standardServiceDetail, standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
 
-            console.log("adding data to add api", updatedData);
+            // console.log("adding data to add api", updatedData);
             dispatch(addServiceFormThunk(updatedData))
 
         } else {
             if (LTData === null) {
 
-                const updatedData = { ...LTDataa, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
+                const updatedData = { ...LTDataa,...updatedLTDATA, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
                 dispatch(updateServiceFormThunk(updatedData))
             } else {
                 const UpdatedLTData: any = LTData
-                const updatedData = { ...UpdatedLTData, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
+                const updatedData = { ...UpdatedLTData,...updatedLTDATA, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
                 console.log("updating data to update api", LTData, updatedData);
 
                 dispatch(updateServiceFormThunk(updatedData))
@@ -106,7 +129,31 @@ const StandardForm = () => {
             setValue("sSDDefendants", allServiceFormData[serviceFormIndex]?.sSDDefendants)
             setValue("sSDCourt", allServiceFormData[serviceFormIndex]?.sSDCourt)
             setCheckedName(allServiceFormData[serviceFormIndex]?.standardServiceType?._id)
+            setJobNo(allServiceFormData[serviceFormIndex]?.jobNo)
+            setValue("inputDate", allServiceFormData[serviceFormIndex]?.inputDate)
+            setValue("caption", allServiceFormData[serviceFormIndex]?.caption)
+            setValue("clientId", getExistingSelectedClientoption?.value);
+            setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
+            // setValue("caseNo", allServiceFormData[serviceFormIndex]?.caseNo) 
+            setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));       
         }
+        else {
+            if( LTData?.inputDate){
+                      setValue("inputDate", LTData?.inputDate);
+      
+                  }
+                  else{
+      
+                      const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+                      setValue("inputDate", currentDate);
+                  }
+      
+                  setValue("clientId", getSelectedClientoption?.value);
+                  setValue("serviceType", getSelectedServiceTypeOption?.value);
+                  setValue("caption", LTData?.caption);
+
+                  
+              }
     }, [allServiceFormData, serviceFormIndex, setValue])
 
     // USE EFFECT TO CLEAR THE INPUT FIELDS ON NEW DATA ENTRY
@@ -136,12 +183,110 @@ const StandardForm = () => {
         };
     }, [handleSubmit, StandardServiceTypeFunction]);
 
+    // CONVERT 24HR INTO 12 HR
+    const time24hr = allServiceFormData[serviceFormIndex]?.createdAt.split("T")[1].split(".")[0];
+    const updatedtime24hr = allServiceFormData[serviceFormIndex]?.updatedAt.split("T")[1].split(".")[0];
+
+
+// Function to convert 24-hour time to 12-hour format
+const convertTo12HourFormat = (time24hr) => {
+    let [hours, minutes, seconds] = time24hr.split(":");
+
+    // Convert hours from string to number
+    hours = parseInt(hours);
+
+    // Determine AM or PM
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert 24-hour time to 12-hour time
+    hours = hours % 12 || 12; // '0' hours should be '12'
+
+    // Return formatted time
+    return `${hours}:${minutes}:${seconds} ${ampm}`;
+};
+
+const time12hr = convertTo12HourFormat(time24hr);
+const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
+
+ // USE EFFECT TO CLEAR THE INPUT FIELDS ON NEW DATA ENTRY
+ useEffect(() => {
+    reset()
+    setCheckedName(null)
+    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    setValue("inputDate", currentDate);
+    if (allServiceFormData[lastServiceFormIndex]?.jobNo && parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) >= 1 && isNewFormAdding) {
+        setJobNo(parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) + 1);
+    } else if (LTData?.jobNo !== undefined) {
+        setJobNo(LTData.jobNo);
+    }
+    else {
+        if (allServiceFormData?.length > 0) {
+            setJobNo(parseInt(allServiceFormData[0]?.jobNo))
+        } else {
+            setJobNo(1)
+        }
+
+
+    }
+}, [isNewFormAdding])
+
     return <div className="w-[100%]">
         <div className="w-full">
             <form className="w-full">
-                <div className="w-full flex justify-end">
+                {/* <div className="w-full flex justify-end">
                     <Hints label="To Save / Update Data" keyName="Ctrl + S / ESC" />
-                </div>
+                </div> */}
+                <div className="flex items-center justify-between flex-row-reverse	">
+                        <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            {jobNo &&
+                                <div className="flex flex-col w-full items-start gap-1">
+                                    <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
+
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" required />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <Controller name="clientId" control={control} render={({ field }) => (
+                                <Dropdown
+                                    options={clientIdOptions}
+                                    // singleOption={getSelectedClientoption}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    label="Client id" error={errors.clientId?.message as string}
+                                    required
+                                />
+                            )} />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <Controller name="serviceType" control={control} render={({ field }) => (
+                                <Dropdown
+                                    options={serviceTypeOptions}
+                                    // singleOption={getSelectedServiceTypeOption}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    label="service type"
+                                    error={errors.serviceType?.message as string}
+                                    // onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
+                                    required
+
+                                />
+                            )} />
+                        </div>
+
+                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="caption" error={errors.caption} name="caption" />
+                        </div>
+                    </div>
                 {/* STANDARD SERVICE TYPE STARTS */}
                 <div className="w-full">
                     <div className="flex items-center gap-x-2  mb-4">
@@ -198,7 +343,7 @@ const StandardForm = () => {
                 </div>
                 {/* STANDARD SERVICE DETAIL ENDS */}
                 {/* SERVE TO STARTS */}
-                <div className="mt-6"><h1 className="font-semibold text-xl mb-4 ">Serve To</h1>
+                {/*<div className="mt-6"><h1 className="font-semibold text-xl mb-4 ">Serve To</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.firstNameServe} name="firstNameServe" label="first name" required />
@@ -219,21 +364,39 @@ const StandardForm = () => {
                             <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.zipServe} name="zipServe" label="zip" />
                         </div>
                     </div>
-                </div>
+                </div>*/}
                 {/*SERVE TO ENDS */}
                 {/* END OF FORM STARTS */}
                 <div className="mt-6">
                     <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>
                     <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
                             <label className="text-sm font-semibold capitalize">created By</label>
                             <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
                         </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
                             <label className="text-sm font-semibold capitalize">updated By</label>
                             <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
 
                         </div>
+                        {!isNewFormAdding && 
+                        <>
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                            <label className="text-sm font-semibold capitalize">Created At</label>
+                            <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt.split("T")[0]}</p>
+                            <p>Time: {time12hr}</p>
+
+                        </div>
+                        
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                        <label className="text-sm font-semibold capitalize">Updated At</label>
+                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt.split("T")[0]}</p>
+                        <p>Time: {updatedtime12hr}</p>
+
+                    </div>
+                        </>
+
+                        }
                     </div>
                 </div>
                 {/* END OF FORM ENDS */}

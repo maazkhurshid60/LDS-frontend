@@ -104,7 +104,7 @@ export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", asyn
         if (!accessToken) {
             localStorage.getItem("accessToken")
           }
-        toast.success("called all service form data")
+        // toast.success("called all service form data")
     try {
         console.log("accessToken<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>",accessToken)
         const response = await axios.get(`${baseUrl}/service-form/all-service-forms`, {
@@ -130,7 +130,7 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
         // console.log(data)
         const response = await axios.delete(`${baseUrl}/service-form/delete`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+       "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
             data: {
                 serviceFormId: id
@@ -157,7 +157,7 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
         // console.log(data)
         const response = await axios.patch(`${baseUrl}/service-form/update`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
 
         })
@@ -182,7 +182,7 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
         // console.log(data)
         const response = await axios.post(`${baseUrl}/service-form/create`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+         "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
 
         })
@@ -195,7 +195,7 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
         toast.error(`${error?.response?.data?.message}`)
     } finally {
         dispatch(showSpinnerReducer(false))
-        window.location.reload();
+        // window.location.reload();
 
     }
 })

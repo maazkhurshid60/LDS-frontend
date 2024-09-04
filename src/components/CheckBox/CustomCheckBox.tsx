@@ -1,31 +1,50 @@
-// import React from "react"
-// import { FieldValues, UseFormRegister, Path } from "react-hook-form"
 
-// interface CheckBox<TFieldValues extends FieldValues> {
-//   register: UseFormRegister<TFieldValues>
-//   name: Path<TFieldValues>
-//   label: string
-//   error?: string
+// import React, { useState } from "react";
+// import { FieldValues, UseFormRegister, Path } from "react-hook-form";
+
+// interface CheckBoxProps<TFieldValues extends FieldValues> {
+//   register: UseFormRegister<TFieldValues>;
+//   name: Path<TFieldValues>;
+//   label: string;
+//   checked: boolean;
+//   onChange: () => void;
+//   error?: string;
+//   onKeyDown?:any
 // }
 
 // const CustomCheckBox = <TFieldValues extends FieldValues>({
 //   register,
 //   name,
 //   label,
+//   checked,
+//   onChange,
 //   error,
-// }: CheckBox<TFieldValues>) => {
+//   onKeyDown
+// }: CheckBoxProps<TFieldValues>) => {
 //   return (
 //     <div>
-//       <input type="checkbox" id={name} {...register(name)} />
-//       <label htmlFor={name} className="text-sm sm:font-semibold capitalize ml-3">{label}</label>
+//       <input
+//         type="checkbox"
+      
+//         id={name}
+//         {...register(name)}
+//         checked={checked}
+//         onChange={onChange}
+//         onKeyDown={onKeyDown} 
+//       />
+//       <label
+//         htmlFor={name}
+//         className="text-sm sm:font-semibold capitalize ml-3"
+//       >
+//         {label}
+//       </label>
 //       {error && <p className="text-redColor text-xs">{error}</p>}
 //     </div>
-//   )
-// }
-
+//   );
+// };
 // export default CustomCheckBox
 
-import React, { useState } from "react";
+import React from "react";
 import { FieldValues, UseFormRegister, Path } from "react-hook-form";
 
 interface CheckBoxProps<TFieldValues extends FieldValues> {
@@ -35,7 +54,7 @@ interface CheckBoxProps<TFieldValues extends FieldValues> {
   checked: boolean;
   onChange: () => void;
   error?: string;
-  onKeyDown?:any
+  onKeyDown?: any;
 }
 
 const CustomCheckBox = <TFieldValues extends FieldValues>({
@@ -45,27 +64,55 @@ const CustomCheckBox = <TFieldValues extends FieldValues>({
   checked,
   onChange,
   error,
-  onKeyDown
+  onKeyDown,
 }: CheckBoxProps<TFieldValues>) => {
   return (
-    <div>
+    <div className="flex items-center">
       <input
         type="checkbox"
-      
         id={name}
         {...register(name)}
         checked={checked}
         onChange={onChange}
-        onKeyDown={onKeyDown} 
+        onKeyDown={onKeyDown}
+        className="hidden"
       />
-      <label
-        htmlFor={name}
-        className="text-sm sm:font-semibold capitalize ml-3"
-      >
-        {label}
-      </label>
-      {error && <p className="text-redColor text-xs">{error}</p>}
+      <div className="flex items-center">
+        <div
+          className={`h-4 w-4 rounded border-2 border-gray-300
+            bg-white
+           
+          flex justify-center items-center cursor-pointer`}
+          onClick={onChange}
+        >
+          {checked && (
+            <svg
+              className="h-3 w-3 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          )}
+        </div>
+        <label
+          htmlFor={name}
+          className="text-sm sm:font-semibold capitalize ml-3 cursor-pointer"
+          onClick={onChange}
+        >
+          {label}
+        </label>
+      </div>
+      {error && <p className="text-red-500 text-xs">{error}</p>}
     </div>
   );
 };
-export default CustomCheckBox
+
+export default CustomCheckBox;

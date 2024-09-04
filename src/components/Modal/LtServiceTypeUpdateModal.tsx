@@ -66,7 +66,7 @@ const LtServiceTypeUpdateModal: React.FC<Props> = ({ singledata }) => {
         }
     }
     useEffect(() => {
-        setValue("name", JSON.stringify(singledata?.name ?? ""))
+        setValue("name", singledata?.name ?? "")
 
     }, [])
     return <Modal

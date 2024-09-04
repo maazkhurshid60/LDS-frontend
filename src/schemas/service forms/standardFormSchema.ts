@@ -27,6 +27,11 @@ import { z } from "zod";
 
 export const standardFormSchema = z.object({
     // STANDARD SERVICE TYPE VALIDATION STARTS
+    caseNo: z.string().optional(),
+    inputDate: z.string().optional(),
+    clientId: z.string().optional(),
+    serviceType: z.string().optional(),
+    caption: z.string().optional(),
     standardServiceType:z.boolean().optional(),
     // indexNo: z.string().regex(/^\d+$/, { message: "index no must be number" }),
     // otherStandardDescription: z.string().min(1, { message: "Standard Description is required" }),
@@ -39,12 +44,12 @@ export const standardFormSchema = z.object({
         sSDPlaintiff:z.string().optional(),
         sSDCountry:z.string().optional(),
         // SERVE TO VALIDATION ENDS
-        firstNameServe:z.string().min(1, { message: "First name is required" }),
-        addressServe:z.string().min(1, { message: "address is required" }),
-        cityServe:z.string().optional(),
-        stateServe:z.string().optional(),
-        aptServe:z.string().optional(),
-        zipServe:z.string().optional(),
+        // firstNameServe:z.string().min(1, { message: "First name is required" }),
+        // addressServe:z.string().min(1, { message: "address is required" }),
+        // cityServe:z.string().optional(),
+        // stateServe:z.string().optional(),
+        // aptServe:z.string().optional(),
+        // zipServe:z.string().optional(),
     
     // SERVE TO VALIDATION ENDS
 
