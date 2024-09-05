@@ -193,46 +193,37 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
 
    
    
-    // CONVERT 24HR INTO 12 HR
-    const time24hr = allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[1]?.split(".")[0];
-    const updatedtime24hr = allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[1]?.split(".")[0];
-    console.log(updatedtime24hr)
-// Function to convert 24-hour time to 12-hour format
-const convertTo12HourFormat = (time24hr: string): string => {
-    // Ensure time24hr is defined and is a valid string
-    if (!time24hr || typeof time24hr !== 'string') {
+   // Function to convert UTC time string to local 12-hour format
+const convertUtcToLocal12HourFormat = (utcTime: string): string => {
+    // Ensure utcTime is defined and is a valid string
+    if (!utcTime || typeof utcTime !== 'string') {
         return ''; // return empty if invalid input
     }
 
-    // Split the time into hours, minutes, and optional seconds
-    let [hours, minutes, seconds] = time24hr.split(":");
+    // Create a Date object from the UTC time string
+    const date = new Date(utcTime);
 
-    // Convert hours from string to number
-    let hoursNumber = parseInt(hours, 10);
+    // Convert to local time and then to 12-hour format
+    const localTime = date.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    });
 
-    // Determine AM or PM
-    const ampm = hoursNumber >= 12 ? 'PM' : 'AM';
-
-    // Convert 24-hour time to 12-hour time
-    hoursNumber = hoursNumber % 12 || 12; // Convert '0' to '12' for 12-hour format
-
-    // Convert hours back to string and ensure two digits for hours and minutes
-    hours = hoursNumber.toString().padStart(2, '0');
-    minutes = minutes?.padStart(2, '0') || '00'; // If minutes are missing, default to '00'
-
-    // If seconds are defined, include them; otherwise, omit seconds
-    if (seconds) {
-        seconds = seconds.padStart(2, '0');
-        return `${hours}:${minutes}:${seconds} ${ampm}`;
-    }
-
-    // Return formatted time without seconds
-    return `${hours}:${minutes} ${ampm}`;
+    return localTime;
 };
 
 // Example usage
-const time12hr = convertTo12HourFormat(time24hr);
-const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
+const createdAtUtc = allServiceFormData[serviceFormIndex]?.createdAt;
+const updatedAtUtc = allServiceFormData[serviceFormIndex]?.updatedAt;
+
+const createdAtLocal12hr = createdAtUtc ? convertUtcToLocal12HourFormat(createdAtUtc) : '';
+const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedAtUtc) : '';
+
+console.log('Created At (Local 12-Hour):', createdAtLocal12hr);
+console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
+
 
 
 
@@ -412,14 +403,14 @@ const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
                         <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
                             <label className="text-sm font-semibold capitalize">Created At</label>
                             <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
-                            <p>Time: {time12hr}</p>
+                            <p>Time: {createdAtLocal12hr}</p>
 
                         </div>
                         
                         <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
                         <label className="text-sm font-semibold capitalize">Updated At</label>
                         <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
-                        <p>Time: {updatedtime12hr }</p>
+                        <p>Time: {updatedAtLocal12hr }</p>
 
                     </div>
                         </>
