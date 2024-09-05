@@ -47,7 +47,7 @@
 
 import React from "react";
 import { FieldError } from "react-hook-form";
-
+import "./textField.css"
 export interface TextFieldProps{
 label:string
 register?:any

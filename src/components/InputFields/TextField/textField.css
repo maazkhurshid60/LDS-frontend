@@ -1,4 +1,4 @@
-/* Custom styles for input[type="date"] */
+/* Custom styles for input[type="date"]
 input[type="date"] {
     appearance: none;
     -webkit-appearance: none;
@@ -7,21 +7,36 @@ input[type="date"] {
     z-index: 1;
     background-color: transparent;
     color: #000;
-    padding-right: 30px; /* Ensure space for the calendar icon */
+    padding-right: 30px;
 }
 
-/* Hide default calendar icon */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none; /* Hide the default calendar icon in WebKit browsers */
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    z-index: 2;
+    transform: translateY(-50%);
+    background-color: #F3F4F6; 
+    color: transparent;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }
 
-/* Add custom calendar icon */
-.custom-date-input {
-    background: url('path-to-your-custom-calendar-icon.svg') no-repeat right center;
-    background-size: 16px 16px; /* Adjust size as needed */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+    display: none;
 }
 
-/* Add custom calendar icon for other browsers (not all support this) */
-input[type="date"]::-moz-calendar-picker-indicator {
-    display: none; /* Hide the default calendar icon in Firefox */
+input[type="date"]::-moz-inner-spin-button,
+input[type="date"]::-moz-clear-button {
+    display: none;
+} */
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1)
+            brightness(50%)
+            sepia(100%)
+            saturate(10000%)
+            hue-rotate(180deg)
 }
