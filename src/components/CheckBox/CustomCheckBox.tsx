@@ -78,7 +78,7 @@ const CustomCheckBox = <TFieldValues extends FieldValues>({
       />
       <div
         className={`h-4 w-4 rounded border-2 border-gray-300 flex justify-center items-center cursor-pointer ${
-          checked ? "text-whiteColor bg-primaryColor" : "bg-whiteColor"
+          checked ? "text-[#fff] bg-primaryColor" : "bg-[#fff]"
         }`}
         onClick={onChange}
       >
