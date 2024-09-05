@@ -184,6 +184,7 @@ const Service = () => {
 
     const deleteServiceForm = () => {
         dispatch(showModalReducer(true));
+        
     };
 
     const sortingActiveSectionFunction = (id: number) => {

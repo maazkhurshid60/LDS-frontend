@@ -62,7 +62,7 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
         if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
-            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: parseInt(data?.oSSTIndexNo), oSSTDescription: data?.oSSTDescription,
+            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo:  parseInt(data?.oSSTIndexNo), oSSTDescription: data?.oSSTDescription,
             firstNameServe: data?.firstNameServe, addressServe: data?.addressServe, cityServe: data?.cityServe, stateServe: data?.stateServe, aptServe: data?.aptServe, zipServe: data?.zipServe
         }
         // const finalData = { ...serviceFormData, standardServiceDetail };
@@ -90,7 +90,8 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
         }
         if (isNewFormAdding === true) {
             const LTDataaaaa: any = LTData
-            const updatedData = { ...LTDataaaaa,...standardServiceDetail, standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
+            // const updatedData = { ...LTDataaaaa,...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id,standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
+            const updatedData = { ...LTDataaaaa,...standardServiceDetail,standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
 
             // console.log("adding data to add api", updatedData);
             dispatch(addServiceFormThunk(updatedData))
@@ -151,6 +152,8 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
                   setValue("clientId", getSelectedClientoption?.value);
                   setValue("serviceType", getSelectedServiceTypeOption?.value);
                   setValue("caption", LTData?.caption);
+                  setValue("caseNo", LTData?.caseNo);
+
 
                   
               }
@@ -184,26 +187,35 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
     }, [handleSubmit, StandardServiceTypeFunction]);
 
     // CONVERT 24HR INTO 12 HR
-    const time24hr = allServiceFormData[serviceFormIndex]?.createdAt.split("T")[1].split(".")[0];
-    const updatedtime24hr = allServiceFormData[serviceFormIndex]?.updatedAt.split("T")[1].split(".")[0];
+    const time24hr = allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[1]?.split(".")[0];
+    const updatedtime24hr = allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[1]?.split(".")[0];
 
 
 // Function to convert 24-hour time to 12-hour format
-const convertTo12HourFormat = (time24hr) => {
+const convertTo12HourFormat = (time24hr: string): string => {
+    // Ensure time24hr is defined and is a valid string
+    if (!time24hr || typeof time24hr !== 'string') {
+        return ''; // or handle the error appropriately
+    }
+
     let [hours, minutes, seconds] = time24hr.split(":");
 
     // Convert hours from string to number
-    hours = parseInt(hours);
+    let hoursNumber = parseInt(hours);
 
     // Determine AM or PM
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const ampm = hoursNumber >= 12 ? 'PM' : 'AM';
 
     // Convert 24-hour time to 12-hour time
-    hours = hours % 12 || 12; // '0' hours should be '12'
+    hoursNumber = hoursNumber % 12 || 12; // '0' hours should be '12'
+
+    // Convert hours back to string
+    hours = hoursNumber.toString();
 
     // Return formatted time
     return `${hours}:${minutes}:${seconds} ${ampm}`;
 };
+
 
 const time12hr = convertTo12HourFormat(time24hr);
 const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
@@ -288,7 +300,7 @@ const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
                         </div>
                     </div>
                 {/* STANDARD SERVICE TYPE STARTS */}
-                <div className="w-full">
+                <div className="w-full mt-6" >
                     <div className="flex items-center gap-x-2  mb-4">
                         <h1 className="font-semibold   mb-4 text-base
                 md:text-md
@@ -320,7 +332,7 @@ const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
                         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other Standard Description" error={errors.oSSTDescription} name="oSSTDescription" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" required />
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo"  />
                     </div>
                 </div>
                 {/* OTHER STANDARD SERVICE TYPE ENDS */}
@@ -383,14 +395,14 @@ const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
                         <>
                         <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
                             <label className="text-sm font-semibold capitalize">Created At</label>
-                            <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt.split("T")[0]}</p>
+                            <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
                             <p>Time: {time12hr}</p>
 
                         </div>
                         
                         <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
                         <label className="text-sm font-semibold capitalize">Updated At</label>
-                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt.split("T")[0]}</p>
+                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
                         <p>Time: {updatedtime12hr}</p>
 
                     </div>

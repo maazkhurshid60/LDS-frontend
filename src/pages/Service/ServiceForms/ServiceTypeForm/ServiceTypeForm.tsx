@@ -75,26 +75,55 @@ const StandardTypeForm = () => {
     const [inputFullname, setInputFullname] = useState("");
     const [multipleFullname, setMultipleFullname] = useState<string[]>([]);
     const [joinedFullname, setJoinedFullname] = useState("");
-
-    console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",allServiceFormData)
+const [headerFormData,setHeaderFormData]=useState<any>()
+    console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",headerFormData)
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
-        const { clientId, inputDate, caseNo } = getValues();
-
-        if (!inputDate || !caseNo || !clientId ) {
-            // Show error message if either field is empty
+        // Destructure the required values from the form
+        const { clientId, inputDate, caseNo,  caption,serviceType } = getValues();
+        
+        if (!inputDate || !caseNo || !clientId) {
+            // Show error message if any field is empty
             setValue("serviceType", "");
-            toast.error("Input Date,case No ,clientI d and  lTServiceType are required!");
+            toast.error("Input Date, case No, and clientId are required.");
             return;
         }
-        const data = serviceTypeOptions?.find(data => data?.value === value)?.label
-        if (data === "Standard") {
-
-            handleSubmit(StandardTypeFormSubmitFunciton)();
-            dispatch(moveToStandardFormReducer(data))
+    
+        const selectedServiceType = serviceTypeOptions?.find(option => option?.value === value)?.label;
+    
+        if (selectedServiceType === "Standard") {
+            // Update the headerFormData state with the required form values
+            setHeaderFormData({
+                jobNo,
+                clientId,
+                caption,
+                inputDate,
+                caseNo,
+                serviceType: selectedServiceType
+            });
+            const LTData={jobNo,clientId,caption,inputDate,caseNo,serviceType}
+            dispatch(savedLTFormDataReducer(LTData))
+            dispatch(moveToStandardFormReducer(selectedServiceType))
         }
+    };
+    
+    // const handleMoveToStandardForm = (value) => {
+    //     console.log("headerFormData",headerFormData)
+    //     const { clientId, inputDate, caseNo } = getValues();
 
-    }
+    //     if (!inputDate || !caseNo || !clientId ) {
+    //         // Show error message if either field is empty
+    //         setValue("serviceType", "");
+    //         toast.error("Input Date,case No and clientId");
+    //         return;
+    //     }
+    //     const data = serviceTypeOptions?.find(data => data?.value === value)?.label
+    //     if (data === "Standard") {
+    //         handleSubmit(StandardTypeFormSubmitFunciton)();
+    //         // dispatch(savedLTFormDataReducer(headerFormData))
+    //         // dispatch(moveToStandardFormReducer(data))
+    //     }
+    // }
     // GET LONGITUDE AND LATITUDE ON THE BASIS OF CITY STARTS
     const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
     const [city, setCity] = useState("Kohat");
@@ -331,9 +360,16 @@ const StandardTypeForm = () => {
     };
 
 
-    const StandardTypeFormSubmitFunciton = (data) => {
-        console.log(joinedFullname)
-        if (checkedName === null) setCheckedName("empty")
+    const StandardTypeFormSubmitFunciton = (data,value) => {
+        // alert("serviceTypeData")
+        // const serviceTypeData = serviceTypeOptions?.find(data => data?.value === value)?.label
+        // alert(serviceTypeData)
+        // if (serviceTypeData === "Standard") {
+        //     dispatch(savedLTFormDataReducer(headerFormData))
+        //     dispatch(moveToStandardFormReducer(data))
+        //     // handleSubmit(StandardTypeFormSubmitFunciton)();
+        // }
+       
         console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000", data)        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
@@ -377,22 +413,23 @@ const StandardTypeForm = () => {
             lTSCityLongitude: "",
             lTSCityLatitude: ""
         }
-        //    DATA FOR L&T FORM ENDS
-        // const selectedLTDataService=LTServiceData?.find((data,id)=>data?._id === checkedName)
-        // console.log("LT DATA SUBMIT",LTData)
-        const updatedData = { ...LTData, standardServiceDetail, serviceFormId, standardServiceType: allServiceFormData[serviceFormIndex]?.standardServiceType?._id }
-        // console.log("LTS UPDATED DATA", updatedData)
-        // console.log("LT DATA", LTData)
-// console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000",data)
-        // alert("k")
-        if (!isNewFormAdding && allServiceFormData?.length > 1) {
+       
 
+     
+        //    DATA FOR L&T FORM ENDS
+      
+        const updatedData = { ...LTData, standardServiceDetail, serviceFormId, standardServiceType: allServiceFormData[serviceFormIndex]?.standardServiceType?._id }
+
+        
+        if (checkedName === null) setCheckedName("empty")
+        if (!isNewFormAdding && allServiceFormData?.length > 1) {
             dispatch(updateServiceFormThunk(updatedData))
             dispatch(savedLTFormDataReducer(LTData))
             // dispatch(moveToStandardFormReducer("Standard"))
+           
 
         } else {
-
+            dispatch(savedLTFormDataReducer(LTData))
             dispatch(addServiceFormThunk(LTData))
             // toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
             // dispatch(moveToStandardFormReducer("Standard"))
