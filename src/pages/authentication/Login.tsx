@@ -51,7 +51,7 @@ const Login = () => {
                            inline-block text-whiteColor font-semibold text-base
                            sm:text-xl
                            lg:text-2xl ">
-                    Logo
+                    LDS
                 </h1>
                 <p className="capitalize font-medium text-sm md:text-lg opacity-[65%]">Enter Your Email & Password</p>
             </div>
