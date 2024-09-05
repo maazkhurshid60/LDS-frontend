@@ -116,7 +116,8 @@ const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick, getR
         <div className="relative w-full overflow-x-auto rounded-lg mt-4 border-[1px] border-borderColor border-solid rounded-xl capitalize text-sm sm:text-base">
             <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr className="bg-[#5D87B2] text-whiteColor">
+                    <tr className="bg-[#5D87B2] text-whiteColor !important"
+                    >
                         {headers?.map((header, index) => (
                             <th key={index} scope="col" className="px-2 py-3">
                                 {header}
