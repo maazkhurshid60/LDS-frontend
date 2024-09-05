@@ -452,6 +452,7 @@ const [headerFormData,setHeaderFormData]=useState<any>()
     // console.log("allServiceFormData[serviceFormIndex]", allServiceFormData[serviceFormIndex]?.lTServiceType?._id)
     const onKeyPressForAnotherName = (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
 
             if (multipleFullname.includes(e.target.value)) {
                 toast.error("Duplicate data can't be entered");
