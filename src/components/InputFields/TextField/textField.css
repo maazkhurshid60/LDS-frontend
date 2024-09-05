@@ -1,0 +1,27 @@
+/* Custom styles for input[type="date"] */
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+    color: #000;
+    padding-right: 30px; /* Ensure space for the calendar icon */
+}
+
+/* Hide default calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none; /* Hide the default calendar icon in WebKit browsers */
+}
+
+/* Add custom calendar icon */
+.custom-date-input {
+    background: url('path-to-your-custom-calendar-icon.svg') no-repeat right center;
+    background-size: 16px 16px; /* Adjust size as needed */
+}
+
+/* Add custom calendar icon for other browsers (not all support this) */
+input[type="date"]::-moz-calendar-picker-indicator {
+    display: none; /* Hide the default calendar icon in Firefox */
+}

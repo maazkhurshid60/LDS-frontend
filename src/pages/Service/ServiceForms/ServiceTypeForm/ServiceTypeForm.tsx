@@ -75,6 +75,8 @@ const StandardTypeForm = () => {
     const [inputFullname, setInputFullname] = useState("");
     const [multipleFullname, setMultipleFullname] = useState<string[]>([]);
     const [joinedFullname, setJoinedFullname] = useState("");
+    const userData = useSelector((state: RootState) => state?.userDetail)
+
 const [headerFormData,setHeaderFormData]=useState<any>()
     console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",headerFormData)
     // handleMoveToStandardForm
@@ -499,7 +501,46 @@ const [headerFormData,setHeaderFormData]=useState<any>()
             data._id
         }))
 
+    // CONVERT 24HR INTO 12 HR
+    const time24hr = allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[1]?.split(".")[0];
+    const updatedtime24hr = allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[1]?.split(".")[0];
+    console.log(updatedtime24hr)
+// Function to convert 24-hour time to 12-hour format
+const convertTo12HourFormat = (time24hr: string): string => {
+    // Ensure time24hr is defined and is a valid string
+    if (!time24hr || typeof time24hr !== 'string') {
+        return ''; // return empty if invalid input
+    }
 
+    // Split the time into hours, minutes, and optional seconds
+    let [hours, minutes, seconds] = time24hr.split(":");
+
+    // Convert hours from string to number
+    let hoursNumber = parseInt(hours, 10);
+
+    // Determine AM or PM
+    const ampm = hoursNumber >= 12 ? 'PM' : 'AM';
+
+    // Convert 24-hour time to 12-hour time
+    hoursNumber = hoursNumber % 12 || 12; // Convert '0' to '12' for 12-hour format
+
+    // Convert hours back to string and ensure two digits for hours and minutes
+    hours = hoursNumber.toString().padStart(2, '0');
+    minutes = minutes?.padStart(2, '0') || '00'; // If minutes are missing, default to '00'
+
+    // If seconds are defined, include them; otherwise, omit seconds
+    if (seconds) {
+        seconds = seconds.padStart(2, '0');
+        return `${hours}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    // Return formatted time without seconds
+    return `${hours}:${minutes} ${ampm}`;
+};
+
+// Example usage
+const time12hr = convertTo12HourFormat(time24hr);
+const updatedtime12hr = convertTo12HourFormat(updatedtime24hr);
 
 
     return <>
@@ -716,6 +757,40 @@ const [headerFormData,setHeaderFormData]=useState<any>()
                         <Button text="Save Data" onClick={dataSavedFunction} />
                     </div>
                 </div>} */}
+                {/* END OF FORM STARTS */}
+                <div className="mt-6">
+                    <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>
+                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                            <label className="text-sm font-semibold capitalize">created By</label>
+                            <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+                        </div>
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                            <label className="text-sm font-semibold capitalize">updated By</label>
+                            <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+
+                        </div>
+                        {!isNewFormAdding && 
+                        <>
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                            <label className="text-sm font-semibold capitalize">Created At</label>
+                            <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
+                            <p>Time: {time12hr}</p>
+
+                        </div>
+                        
+                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                        <label className="text-sm font-semibold capitalize">Updated At</label>
+                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
+                        <p>Time: {updatedtime12hr }</p>
+
+                    </div>
+                        </>
+
+                        }
+                    </div>
+                </div>
+                {/* END OF FORM ENDS */}
 <div className="w-full flex justify-end flex-row mt-6" >
                     <div className="w-[21%] " >
 

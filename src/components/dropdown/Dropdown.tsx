@@ -210,7 +210,7 @@ const Dropdown: React.FC<DropdownProp> = ({
                         <input
                             type="text"
                             placeholder="Search..."
-                            className="w-full border-b border-borderColor p-2"
+                            className="w-full border-b border-borderColor p-2 bg-whiteColor"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
