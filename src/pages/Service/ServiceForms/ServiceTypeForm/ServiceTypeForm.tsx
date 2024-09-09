@@ -85,10 +85,10 @@ const StandardTypeForm = () => {
         // Destructure the required values from the form
         const { clientId, inputDate, caseNo, caption, serviceType } = getValues();
 
-        if (!inputDate || !caseNo || !clientId) {
+        if (!caseNo || !clientId) {
             // Show error message if any field is empty
             setValue("serviceType", "");
-            toast.error("Input Date, case No, and clientId are required.");
+            toast.error("Case No and Client Id are required.");
             return;
         }
 
@@ -715,7 +715,7 @@ const StandardTypeForm = () => {
                 md:text-md
                 lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>
                         <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                            {staticData?.map((data, index) => {
+                            {LTServiceData?.map((data, index) => {
                                 return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
                                     <CustomCheckBox
                                         onKeyDown={handleEnterKeyPress}
