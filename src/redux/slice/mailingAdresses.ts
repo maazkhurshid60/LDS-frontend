@@ -4,24 +4,25 @@ import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
 import { maillingType } from "../../type/maillingAddressType/maillingAddressType";
 import { toast } from "react-toastify";
 const accessToken = localStorage.getItem("accessToken");
-export interface MailingAddress{ 
-address:String
-apt:String
-city:String
-createdAt:String
-firstName:String
-rRR:Boolean
-state:String
-updatedAt:String
-zip:Number
-__v:Number
-_id:String}
+export interface MailingAddress {
+    address: String
+    apt: String
+    city: String
+    createdAt: String
+    firstName: String
+    rRR: Boolean
+    state: String
+    updatedAt: String
+    zip: Number
+    __v: Number
+    _id: String
+}
 
 const initialState = {
     mailingAddressData: [],
     getSelectMail: [],
-    isAddingMailAddress:false,
-    isUpdatingMailAddress:false,
+    isAddingMailAddress: false,
+    isUpdatingMailAddress: false,
     serviceFormMailingAdress: {
         userId: null,
         mailingAdresses: []
@@ -37,15 +38,15 @@ const mailingAdresses = createSlice({
             // console.log("new mailing address",action.payload)
             state.mailingAddressData.push(action.payload)
         },
-        isAddingMailAddressReducer:(state,action)=>{
-            state.isAddingMailAddress=action.payload
+        isAddingMailAddressReducer: (state, action) => {
+            state.isAddingMailAddress = action.payload
         },
-        emptyMailingAddressOnNewFormAddReducer:(state)=>{
-            state.serviceFormMailingAdress.mailingAdresses=[]
+        emptyMailingAddressOnNewFormAddReducer: (state) => {
+            state.serviceFormMailingAdress.mailingAdresses = []
 
         },
-        isUpdaitngMailAddressReducer:(state,action)=>{
-            state.isUpdatingMailAddress=action.payload
+        isUpdaitngMailAddressReducer: (state, action) => {
+            state.isUpdatingMailAddress = action.payload
         },
         getMailAddress: (state, action) => {
             const allMailingData = JSON.stringify(state.mailingAddressData)
@@ -62,8 +63,8 @@ const mailingAdresses = createSlice({
         // THIS STORE MAIL ADRESS INSIDE FORM COMMING FROM SERVICE FORM API
         getFormMailAddress: (state, action) => {
             const { data, id } = action.payload;
-            
-          
+
+
             state.serviceFormMailingAdress = { userId: id, mailingAdresses: data };
         },
         // THIS WILL ADD NEW MAIL ADDRESS INTO EXISTING FORM MAIL ADDRESS ARRAY
@@ -74,7 +75,7 @@ const mailingAdresses = createSlice({
             console.log(onemail)
             state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
         },
-         // THIS WILL UPDATE DATA OF EXISTING MAIL ADDRESS ARRAY ON THE BASIS OF INDEX
+        // THIS WILL UPDATE DATA OF EXISTING MAIL ADDRESS ARRAY ON THE BASIS OF INDEX
         //  updateMailAddressIntoForm: (state, action) => {
         //      const {updatedData,id}=action.payload
         //      const allMailingData = JSON.stringify(state.mailingAddressData)
@@ -87,7 +88,7 @@ const mailingAdresses = createSlice({
             const allMailingData = JSON.stringify(state.serviceFormMailingAdress.mailingAdresses)
             const allMailDataArray = JSON.parse(allMailingData)
             const mailAddressAfterDeletion = allMailDataArray?.filter((mail, id) => id !== action.payload)
-            console.log("<><><>",mailAddressAfterDeletion)
+            console.log("<><><>", mailAddressAfterDeletion)
             state.serviceFormMailingAdress.mailingAdresses = mailAddressAfterDeletion
         },
     },
@@ -145,8 +146,8 @@ const mailingAdresses = createSlice({
     }
 })
 
-export const { addMailAddress, getMailAddress, getMailAddressAfterDeletion, getFormMailAddress,emptyMailingAddressOnNewFormAddReducer,
-    addMailAddressIntoFormL, getFormMailAddressAfterDeletion ,isAddingMailAddressReducer,isUpdaitngMailAddressReducer} = mailingAdresses.actions
+export const { addMailAddress, getMailAddress, getMailAddressAfterDeletion, getFormMailAddress, emptyMailingAddressOnNewFormAddReducer,
+    addMailAddressIntoFormL, getFormMailAddressAfterDeletion, isAddingMailAddressReducer, isUpdaitngMailAddressReducer } = mailingAdresses.actions
 export default mailingAdresses.reducer
 
 
@@ -157,7 +158,7 @@ export const getAllMailingAddressThunk = createAsyncThunk("getAllMailingAddress"
         // console.log(data)
         const response = await axios.get(`${baseUrl}/mailing-address/all-mailing-address`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
         })
         return response?.data?.data
@@ -173,7 +174,7 @@ export const createMailingAddressThunk = createAsyncThunk("createAllMailingAddre
         // console.log(data)
         const response = await axios.post(`${baseUrl}/mailing-address/create`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
         })
         toast.success(`${response?.data?.message}`)
@@ -192,7 +193,7 @@ export const updateMailingAddressThunk = createAsyncThunk("updateAllMailingAddre
         // console.log(data)
         const response = await axios.patch(`${baseUrl}/mailing-address/update`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
         })
         toast.success(`${response?.data?.message}`)
@@ -211,7 +212,7 @@ export const deleteMailingAddressThunk = createAsyncThunk("deleteAllMailingAddre
     try {
         const response = await axios.delete(`${baseUrl}/mailing-address/delete`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
             data: {
                 mailingAddressId: id

@@ -25,9 +25,9 @@ const StandardForm = () => {
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
     const getMailingAddressData = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress.serviceFormMailingAdress?.mailingAdresses)
-    
 
-    
+
+
     const userData = useSelector((state: RootState) => state?.userDetail)
     const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
 
@@ -39,7 +39,7 @@ const StandardForm = () => {
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
     const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === LTData?.clientId && { value: data?._id, label: data?.fullName })
     const getExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
-const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
+    const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === LTData?.serviceType && { value: data?._id, label: data?.fullName })
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
     const [jobNo, setJobNo] = useState<any>()
@@ -50,7 +50,7 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
         setCheckedName(id);
     };
     const StandardServiceTypeFunction = (data) => {
-        const updatedLTDATA={
+        const updatedLTDATA = {
             jobNo: parseInt(jobNo),
             inputDate: data?.inputDate,
             clientId: data?.clientId,
@@ -62,7 +62,7 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
         if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
-            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo:  parseInt(data?.oSSTIndexNo), oSSTDescription: data?.oSSTDescription,
+            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: parseInt(data?.oSSTIndexNo), oSSTDescription: data?.oSSTDescription,
             firstNameServe: data?.firstNameServe, addressServe: data?.addressServe, cityServe: data?.cityServe, stateServe: data?.stateServe, aptServe: data?.aptServe, zipServe: data?.zipServe
         }
         // const finalData = { ...serviceFormData, standardServiceDetail };
@@ -91,7 +91,7 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
         if (isNewFormAdding === true) {
             const LTDataaaaa: any = LTData
             // const updatedData = { ...LTDataaaaa,...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id,standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
-            const updatedData = { ...LTDataaaaa,...standardServiceDetail,standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
+            const updatedData = { ...LTDataaaaa, ...standardServiceDetail, standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
 
             // console.log("adding data to add api", updatedData);
             dispatch(addServiceFormThunk(updatedData))
@@ -99,11 +99,11 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
         } else {
             if (LTData === null) {
 
-                const updatedData = { ...LTDataa,...updatedLTDATA, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
+                const updatedData = { ...LTDataa, ...updatedLTDATA, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
                 dispatch(updateServiceFormThunk(updatedData))
             } else {
                 const UpdatedLTData: any = LTData
-                const updatedData = { ...UpdatedLTData,...updatedLTDATA, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
+                const updatedData = { ...UpdatedLTData, ...updatedLTDATA, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
                 console.log("updating data to update api", LTData, updatedData);
 
                 dispatch(updateServiceFormThunk(updatedData))
@@ -117,20 +117,20 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
     useEffect(() => {
         if (!isNewFormAdding) {
             setValue(
-                "oSSTIndexNo", 
+                "oSSTIndexNo",
                 allServiceFormData[serviceFormIndex]?.oSSTIndexNo
-                  ? JSON.stringify(allServiceFormData[serviceFormIndex].oSSTIndexNo)
-                  : ""
-              )
-              ,
+                    ? JSON.stringify(allServiceFormData[serviceFormIndex].oSSTIndexNo)
+                    : ""
+            )
+                ,
                 setValue("oSSTDescription", allServiceFormData[serviceFormIndex]?.oSSTDescription),
-            //     setValue("zipServe", allServiceFormData[serviceFormIndex]?.zipServe)
-            // setValue("aptServe", allServiceFormData[serviceFormIndex]?.aptServe)
-            // setValue("stateServe", allServiceFormData[serviceFormIndex]?.stateServe)
-            // setValue("cityServe", allServiceFormData[serviceFormIndex]?.cityServe)
-            // setValue("addressServe", allServiceFormData[serviceFormIndex]?.addressServe)
-            // setValue("firstNameServe", allServiceFormData[serviceFormIndex]?.firstNameServe)
-            setValue("sSDCountry", allServiceFormData[serviceFormIndex]?.sSDCountry)
+                //     setValue("zipServe", allServiceFormData[serviceFormIndex]?.zipServe)
+                // setValue("aptServe", allServiceFormData[serviceFormIndex]?.aptServe)
+                // setValue("stateServe", allServiceFormData[serviceFormIndex]?.stateServe)
+                // setValue("cityServe", allServiceFormData[serviceFormIndex]?.cityServe)
+                // setValue("addressServe", allServiceFormData[serviceFormIndex]?.addressServe)
+                // setValue("firstNameServe", allServiceFormData[serviceFormIndex]?.firstNameServe)
+                setValue("sSDCountry", allServiceFormData[serviceFormIndex]?.sSDCountry)
             setValue("sSDPlaintiff", allServiceFormData[serviceFormIndex]?.sSDPlaintiff)
             setValue("sSDDefendants", allServiceFormData[serviceFormIndex]?.sSDDefendants)
             setValue("sSDCourt", allServiceFormData[serviceFormIndex]?.sSDCourt)
@@ -141,27 +141,27 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
             setValue("clientId", getExistingSelectedClientoption?.value);
             setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
             // setValue("caseNo", allServiceFormData[serviceFormIndex]?.caseNo) 
-            setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));       
+            setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));
         }
         else {
-            if( LTData?.inputDate){
-                      setValue("inputDate", LTData?.inputDate);
-      
-                  }
-                  else{
-      
-                      const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-                      setValue("inputDate", currentDate);
-                  }
-      
-                  setValue("clientId", getSelectedClientoption?.value);
-                  setValue("serviceType", getSelectedServiceTypeOption?.value);
-                  setValue("caption", LTData?.caption);
-                  setValue("caseNo", LTData?.caseNo);
+            if (LTData?.inputDate) {
+                setValue("inputDate", LTData?.inputDate);
+
+            }
+            else {
+
+                const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+                setValue("inputDate", currentDate);
+            }
+
+            setValue("clientId", getSelectedClientoption?.value);
+            setValue("serviceType", getSelectedServiceTypeOption?.value);
+            setValue("caption", LTData?.caption);
+            setValue("caseNo", LTData?.caseNo);
 
 
-                  
-              }
+
+        }
     }, [allServiceFormData, serviceFormIndex, setValue])
 
     // USE EFFECT TO CLEAR THE INPUT FIELDS ON NEW DATA ENTRY
@@ -191,63 +191,63 @@ const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: 
         };
     }, [handleSubmit, StandardServiceTypeFunction]);
 
-   
-   
-   // Function to convert UTC time string to local 12-hour format
-const convertUtcToLocal12HourFormat = (utcTime: string): string => {
-    // Ensure utcTime is defined and is a valid string
-    if (!utcTime || typeof utcTime !== 'string') {
-        return ''; // return empty if invalid input
-    }
-
-    // Create a Date object from the UTC time string
-    const date = new Date(utcTime);
-
-    // Convert to local time and then to 12-hour format
-    const localTime = date.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-    });
-
-    return localTime;
-};
-
-// Example usage
-const createdAtUtc = allServiceFormData[serviceFormIndex]?.createdAt;
-const updatedAtUtc = allServiceFormData[serviceFormIndex]?.updatedAt;
-
-const createdAtLocal12hr = createdAtUtc ? convertUtcToLocal12HourFormat(createdAtUtc) : '';
-const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedAtUtc) : '';
-
-console.log('Created At (Local 12-Hour):', createdAtLocal12hr);
-console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
 
 
-
-
- // USE EFFECT TO CLEAR THE INPUT FIELDS ON NEW DATA ENTRY
- useEffect(() => {
-    reset()
-    setCheckedName(null)
-    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-    setValue("inputDate", currentDate);
-    if (allServiceFormData[lastServiceFormIndex]?.jobNo && parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) >= 1 && isNewFormAdding) {
-        setJobNo(parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) + 1);
-    } else if (LTData?.jobNo !== undefined) {
-        setJobNo(LTData.jobNo);
-    }
-    else {
-        if (allServiceFormData?.length > 0) {
-            setJobNo(parseInt(allServiceFormData[0]?.jobNo))
-        } else {
-            setJobNo(1)
+    // Function to convert UTC time string to local 12-hour format
+    const convertUtcToLocal12HourFormat = (utcTime: string): string => {
+        // Ensure utcTime is defined and is a valid string
+        if (!utcTime || typeof utcTime !== 'string') {
+            return ''; // return empty if invalid input
         }
 
+        // Create a Date object from the UTC time string
+        const date = new Date(utcTime);
 
-    }
-}, [isNewFormAdding])
+        // Convert to local time and then to 12-hour format
+        const localTime = date.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+
+        return localTime;
+    };
+
+    // Example usage
+    const createdAtUtc = allServiceFormData[serviceFormIndex]?.createdAt;
+    const updatedAtUtc = allServiceFormData[serviceFormIndex]?.updatedAt;
+
+    const createdAtLocal12hr = createdAtUtc ? convertUtcToLocal12HourFormat(createdAtUtc) : '';
+    const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedAtUtc) : '';
+
+    console.log('Created At (Local 12-Hour):', createdAtLocal12hr);
+    console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
+
+
+
+
+    // USE EFFECT TO CLEAR THE INPUT FIELDS ON NEW DATA ENTRY
+    useEffect(() => {
+        reset()
+        setCheckedName(null)
+        const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+        setValue("inputDate", currentDate);
+        if (allServiceFormData[lastServiceFormIndex]?.jobNo && parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) >= 1 && isNewFormAdding) {
+            setJobNo(parseInt(allServiceFormData[lastServiceFormIndex]?.jobNo) + 1);
+        } else if (LTData?.jobNo !== undefined) {
+            setJobNo(LTData.jobNo);
+        }
+        else {
+            if (allServiceFormData?.length > 0) {
+                setJobNo(parseInt(allServiceFormData[0]?.jobNo))
+            } else {
+                setJobNo(1)
+            }
+
+
+        }
+    }, [isNewFormAdding])
 
     return <div className="w-[100%]">
         <div className="w-full">
@@ -256,56 +256,56 @@ console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
                     <Hints label="To Save / Update Data" keyName="Ctrl + S / ESC" />
                 </div> */}
                 <div className="flex items-center justify-between flex-row-reverse	">
-                        <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {jobNo &&
-                                <div className="flex flex-col w-full items-start gap-1">
-                                    <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
-                                </div>
-                            }
-                        </div>
+                    <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        {jobNo &&
+                            <div className="flex flex-col w-full items-start gap-1">
+                                <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
+
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" required />
+                    </div>
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <Controller name="clientId" control={control} render={({ field }) => (
+                            <Dropdown
+                                options={clientIdOptions}
+                                // singleOption={getSelectedClientoption}
+                                value={field.value}
+                                onChange={field.onChange}
+                                label="Client id" error={errors.clientId?.message as string}
+                                required
+                            />
+                        )} />
+                    </div>
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
+                    </div>
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <Controller name="serviceType" control={control} render={({ field }) => (
+                            <Dropdown
+                                options={serviceTypeOptions}
+                                // singleOption={getSelectedServiceTypeOption}
+                                value={field.value}
+                                onChange={field.onChange}
+                                label="service type"
+                                error={errors.serviceType?.message as string}
+                                // onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
+                                required
+
+                            />
+                        )} />
                     </div>
 
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
-
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" required />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <Controller name="clientId" control={control} render={({ field }) => (
-                                <Dropdown
-                                    options={clientIdOptions}
-                                    // singleOption={getSelectedClientoption}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    label="Client id" error={errors.clientId?.message as string}
-                                    required
-                                />
-                            )} />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <Controller name="serviceType" control={control} render={({ field }) => (
-                                <Dropdown
-                                    options={serviceTypeOptions}
-                                    // singleOption={getSelectedServiceTypeOption}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    label="service type"
-                                    error={errors.serviceType?.message as string}
-                                    // onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
-                                    required
-
-                                />
-                            )} />
-                        </div>
-
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="caption" error={errors.caption} name="caption" />
-                        </div>
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="caption" error={errors.caption} name="caption" />
                     </div>
+                </div>
                 {/* STANDARD SERVICE TYPE STARTS */}
                 <div className="w-full mt-6" >
                     <div className="flex items-center gap-x-2  mb-4">
@@ -322,9 +322,9 @@ console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
                                     onKeyDown={handleEnterKeyPress}
                                     register={register}
                                     name={data?.name}
-                                    label={data.name}
-                                    checked={checkedName === data._id}
-                                    onChange={() => handleCheckboxChange(data._id)}
+                                    label={data?.name?.replace(/[^a-zA-Z0-9]/g, "_")}
+                                    checked={checkedName === data?._id}
+                                    onChange={() => handleCheckboxChange(data?._id)}
                                 />
                             </div>
                         })}
@@ -339,7 +339,7 @@ console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
                         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other Standard Description" error={errors.oSSTDescription} name="oSSTDescription" />
                     </div>
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo"  />
+                        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" />
                     </div>
                 </div>
                 {/* OTHER STANDARD SERVICE TYPE ENDS */}
@@ -398,22 +398,22 @@ console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
                             <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
 
                         </div>
-                        {!isNewFormAdding && 
-                        <>
-                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                            <label className="text-sm font-semibold capitalize">Created At</label>
-                            <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
-                            <p>Time: {createdAtLocal12hr}</p>
+                        {!isNewFormAdding &&
+                            <>
+                                <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                    <label className="text-sm font-semibold capitalize">Created At</label>
+                                    <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
+                                    <p>Time: {createdAtLocal12hr}</p>
 
-                        </div>
-                        
-                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                        <label className="text-sm font-semibold capitalize">Updated At</label>
-                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
-                        <p>Time: {updatedAtLocal12hr }</p>
+                                </div>
 
-                    </div>
-                        </>
+                                <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                    <label className="text-sm font-semibold capitalize">Updated At</label>
+                                    <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
+                                    <p>Time: {updatedAtLocal12hr}</p>
+
+                                </div>
+                            </>
 
                         }
                     </div>

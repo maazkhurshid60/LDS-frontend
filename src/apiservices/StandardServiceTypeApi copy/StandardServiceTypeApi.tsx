@@ -1,6 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "../baseUrl/baseUrl"
 import { holidayType } from "../../type/holidayType/holidayType";
+import api from "../axiosInstance";
 const accessToken = localStorage.getItem("accessToken");
 
 //  ADD HOLIDAY API
@@ -23,10 +24,16 @@ export const addStandardServiceTypeApi = async (data: any) => {
 // DELETE SERVICE RESULT API
 export const deleteStandardServiceTypeApi = async (id: string) => {
     try {
-        const response = await axios.delete(`${baseUrl}/standard-service-type/delete`, {
-            headers: {
-                "Authorization": `Bearer ${accessToken}`
-            },
+        // const response = await axios.delete(`${baseUrl}/standard-service-type/delete`, {
+        //     headers: {
+        //         "Authorization": `Bearer ${accessToken}`
+        //     },
+        //     data: {
+        //         standardServiceTypeId: id
+        //     }
+        // });
+        const response = await api.delete(`${baseUrl}/standard-service-type/delete`, {
+
             data: {
                 standardServiceTypeId: id
             }
@@ -39,20 +46,21 @@ export const deleteStandardServiceTypeApi = async (id: string) => {
     }
 }
 // UPDATE SERVICE RESULT API
-export const updateStandardServiceTypeApi = async (data:any) => {
-    console.log(">>>>>>>>>>>",data)
+export const updateStandardServiceTypeApi = async (data: any) => {
+    console.log(">>>>>>>>>>>", data)
     try {
         const accessToken = localStorage.getItem("accessToken");
-        const response = await axios.patch(`${baseUrl}/standard-service-type/update`, data, {
-            headers: {
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
+        // const response = await axios.patch(`${baseUrl}/standard-service-type/update`, data, {
+        //     headers: {
+        //         "Authorization": `Bearer ${accessToken}`
+        //     }
+        // })
+        const response = await api.patch(`/standard-service-type/update`, data)
         console.log(response)
         return response
     } catch (error) {
         // alert(`${error?.response?.data?.message}`)
         console.log(error?.response?.data)
-        throw Error (error)
+        throw Error(error)
     }
 }

@@ -27,16 +27,17 @@ import { DeleteIcon } from "../../../../components/Icons/DeleteIcon";
 export type FormFields = z.infer<typeof LTFormSchema>
 import { RxCross2 } from "react-icons/rx";
 import Spinner from "../../../../components/Loader/Spinner"
+import CustomCheckBox from "../../../../components/CheckBox/CustomCheckBox";
 const StandardTypeForm = () => {
-    const mailingAddressData = useSelector((state: RootState) => state.mailingAdress.mailingAddressData)
+    const mailingAddressData = useSelector((state: RootState) => state.mailingAdress?.mailingAddressData)
     const loadingSpinner = useSelector((state: RootState) => state.showSpinner?.isShowSpinner)
     console.log("loadingSpinner", loadingSpinner)
-    const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
-    const getMailingAddressDataOnFormAdding = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
+    const isNewFormAdding = useSelector((state: RootState) => state.serviceForm?.isNewFormAdd)
+    const getMailingAddressDataOnFormAdding = useSelector((state: RootState) => state.mailingAdress?.getSelectMail)
     const filterMailingAddressDataOnFormAdding = getMailingAddressDataOnFormAdding?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
-    const savedLTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
+    const savedLTData = useSelector((state: RootState) => state.serviceForm?.savedLTFormData)
     // const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
     console.log("saved lt data", savedLTData)
     // GET ALL MAILING ADDRESSES THAT COMMING INSIDE THE FORMS 
@@ -45,9 +46,9 @@ const StandardTypeForm = () => {
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
     console.log("filterExistingFormMailingAdress", getFormMailingAdress)
-    const [checkedName, setCheckedName] = useState<string | null>(
-        // LTServiceData?.find((data) => data?.isActive)?._id || null
-    );
+    const [checkedName, setCheckedName] = useState<string | null>()
+    // LTServiceData?.find((data) => data?.isActive)?._id || null
+    // );
 
     const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
     const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
@@ -68,7 +69,7 @@ const StandardTypeForm = () => {
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
     const [serviceType, setServiceType] = useState()
     const dispatch = useDispatch()
-    const { register, formState: { errors,isSubmitting }, control, handleSubmit, setValue, reset, getValues, watch } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
+    const { register, formState: { errors, isSubmitting }, control, handleSubmit, setValue, reset, getValues, watch } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
     const isUpdateMail = useSelector((state: RootState) => state.mailingAdress.isUpdatingMailAddress)
     const [jobNo, setJobNo] = useState<any>()
@@ -77,22 +78,22 @@ const StandardTypeForm = () => {
     const [joinedFullname, setJoinedFullname] = useState("");
     const userData = useSelector((state: RootState) => state?.userDetail)
 
-const [headerFormData,setHeaderFormData]=useState<any>()
-    console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",headerFormData)
+    const [headerFormData, setHeaderFormData] = useState<any>()
+    console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", headerFormData)
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
         // Destructure the required values from the form
-        const { clientId, inputDate, caseNo,  caption,serviceType } = getValues();
-        
+        const { clientId, inputDate, caseNo, caption, serviceType } = getValues();
+
         if (!inputDate || !caseNo || !clientId) {
             // Show error message if any field is empty
             setValue("serviceType", "");
             toast.error("Input Date, case No, and clientId are required.");
             return;
         }
-    
+
         const selectedServiceType = serviceTypeOptions?.find(option => option?.value === value)?.label;
-    
+
         if (selectedServiceType === "Standard") {
             // Update the headerFormData state with the required form values
             setHeaderFormData({
@@ -103,12 +104,12 @@ const [headerFormData,setHeaderFormData]=useState<any>()
                 caseNo,
                 serviceType: selectedServiceType
             });
-            const LTData={jobNo,clientId,caption,inputDate,caseNo,serviceType}
+            const LTData = { jobNo, clientId, caption, inputDate, caseNo, serviceType }
             dispatch(savedLTFormDataReducer(LTData))
             dispatch(moveToStandardFormReducer(selectedServiceType))
         }
     };
-    
+
     // const handleMoveToStandardForm = (value) => {
     //     console.log("headerFormData",headerFormData)
     //     const { clientId, inputDate, caseNo } = getValues();
@@ -245,11 +246,11 @@ const [headerFormData,setHeaderFormData]=useState<any>()
             }
         }
         else {
-      if( savedLTData?.inputDate){
+            if (savedLTData?.inputDate) {
                 setValue("inputDate", savedLTData?.inputDate);
 
             }
-            else{
+            else {
 
                 const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
                 setValue("inputDate", currentDate);
@@ -362,7 +363,7 @@ const [headerFormData,setHeaderFormData]=useState<any>()
     };
 
 
-    const StandardTypeFormSubmitFunciton = (data,value) => {
+    const StandardTypeFormSubmitFunciton = (data, value) => {
         // alert("serviceTypeData")
         // const serviceTypeData = serviceTypeOptions?.find(data => data?.value === value)?.label
         // alert(serviceTypeData)
@@ -371,7 +372,7 @@ const [headerFormData,setHeaderFormData]=useState<any>()
         //     dispatch(moveToStandardFormReducer(data))
         //     // handleSubmit(StandardTypeFormSubmitFunciton)();
         // }
-       
+
         console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000", data)        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
@@ -415,20 +416,20 @@ const [headerFormData,setHeaderFormData]=useState<any>()
             lTSCityLongitude: "",
             lTSCityLatitude: ""
         }
-       
 
-     
+
+
         //    DATA FOR L&T FORM ENDS
-      
+
         const updatedData = { ...LTData, standardServiceDetail, serviceFormId, standardServiceType: allServiceFormData[serviceFormIndex]?.standardServiceType?._id }
 
-        
+
         if (checkedName === null) setCheckedName("empty")
         if (!isNewFormAdding && allServiceFormData?.length > 1) {
             dispatch(updateServiceFormThunk(updatedData))
             dispatch(savedLTFormDataReducer(LTData))
             // dispatch(moveToStandardFormReducer("Standard"))
-           
+
 
         } else {
             dispatch(savedLTFormDataReducer(LTData))
@@ -501,72 +502,158 @@ const [headerFormData,setHeaderFormData]=useState<any>()
             data._id
         }))
 
-// // Function to convert 24-hour time to 12-hour format
-// const convertTo12HourFormat = (time24hr: string): string => {
-//     // Ensure time24hr is defined and is a valid string
-//     if (!time24hr || typeof time24hr !== 'string') {
-//         return ''; // return empty if invalid input
-//     }
+    // // Function to convert 24-hour time to 12-hour format
+    // const convertTo12HourFormat = (time24hr: string): string => {
+    //     // Ensure time24hr is defined and is a valid string
+    //     if (!time24hr || typeof time24hr !== 'string') {
+    //         return ''; // return empty if invalid input
+    //     }
 
-//     // Split the time into hours, minutes, and optional seconds
-//     let [hours, minutes, seconds] = time24hr.split(":");
+    //     // Split the time into hours, minutes, and optional seconds
+    //     let [hours, minutes, seconds] = time24hr.split(":");
 
-//     // Convert hours from string to number
-//     let hoursNumber = parseInt(hours, 10);
+    //     // Convert hours from string to number
+    //     let hoursNumber = parseInt(hours, 10);
 
-//     // Determine AM or PM
-//     const ampm = hoursNumber >= 12 ? 'PM' : 'AM';
+    //     // Determine AM or PM
+    //     const ampm = hoursNumber >= 12 ? 'PM' : 'AM';
 
-//     // Convert 24-hour time to 12-hour time
-//     hoursNumber = hoursNumber % 12 || 12; // Convert '0' to '12' for 12-hour format
+    //     // Convert 24-hour time to 12-hour time
+    //     hoursNumber = hoursNumber % 12 || 12; // Convert '0' to '12' for 12-hour format
 
-//     // Convert hours back to string and ensure two digits for hours and minutes
-//     hours = hoursNumber.toString().padStart(2, '0');
-//     minutes = minutes?.padStart(2, '0') || '00'; // If minutes are missing, default to '00'
+    //     // Convert hours back to string and ensure two digits for hours and minutes
+    //     hours = hoursNumber.toString().padStart(2, '0');
+    //     minutes = minutes?.padStart(2, '0') || '00'; // If minutes are missing, default to '00'
 
-//     // If seconds are defined, include them; otherwise, omit seconds
-//     if (seconds) {
-//         seconds = seconds.padStart(2, '0');
-//         return `${hours}:${minutes}:${seconds} ${ampm}`;
-//     }
+    //     // If seconds are defined, include them; otherwise, omit seconds
+    //     if (seconds) {
+    //         seconds = seconds.padStart(2, '0');
+    //         return `${hours}:${minutes}:${seconds} ${ampm}`;
+    //     }
 
-//     // Return formatted time without seconds
-//     return `${hours}:${minutes} ${ampm}`;
-// };
+    //     // Return formatted time without seconds
+    //     return `${hours}:${minutes} ${ampm}`;
+    // };
 
-// Function to convert UTC time string to local 12-hour format
-const convertUtcToLocal12HourFormat = (utcTime: string): string => {
-    // Ensure utcTime is defined and is a valid string
-    if (!utcTime || typeof utcTime !== 'string') {
-        return ''; // return empty if invalid input
-    }
+    // Function to convert UTC time string to local 12-hour format
+    const convertUtcToLocal12HourFormat = (utcTime: string): string => {
+        // Ensure utcTime is defined and is a valid string
+        if (!utcTime || typeof utcTime !== 'string') {
+            return ''; // return empty if invalid input
+        }
 
-    // Create a Date object from the UTC time string
-    const date = new Date(utcTime);
+        // Create a Date object from the UTC time string
+        const date = new Date(utcTime);
 
-    // Convert to local time and then to 12-hour format
-    const localTime = date.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-    });
+        // Convert to local time and then to 12-hour format
+        const localTime = date.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
 
-    return localTime;
-};
+        return localTime;
+    };
 
-// Example usage
-const createdAtUtc = allServiceFormData[serviceFormIndex]?.createdAt;
-const updatedAtUtc = allServiceFormData[serviceFormIndex]?.updatedAt;
+    // Example usage
+    const createdAtUtc = allServiceFormData[serviceFormIndex]?.createdAt;
+    const updatedAtUtc = allServiceFormData[serviceFormIndex]?.updatedAt;
 
-const createdAtLocal12hr = createdAtUtc ? convertUtcToLocal12HourFormat(createdAtUtc) : '';
-const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedAtUtc) : '';
-
-
+    const createdAtLocal12hr = createdAtUtc ? convertUtcToLocal12HourFormat(createdAtUtc) : '';
+    const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedAtUtc) : '';
 
 
 
+    console.log("checkboxex<<????????????????????", LTServiceData?.map((data, index) => data?._id))
+    // {
+    //     return <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+    //         <CheckBox
+    //             onKeyDown={handleEnterKeyPress}
+    //             register={register}
+    //             name={data?.name}
+    //             label={data?.name}
+    //             checked={checkedName === data._id}
+    //             onChange={() => handleCheckboxChange(data._id)}
+    //         />
+    //     </div>
+    // })}
 
+    const staticData = [
+        {
+            _id: "66d58357c4a5f1c560716a76",
+            name: "FOURTEEN (14) Day Demand Notice, F.D.C.P.A",
+            // name: "FOURTEEN (14) Day Demand Notice",
+            isActive: false,
+            createdAt: "2024-09-02T09:20:23.100Z",
+            updatedAt: "2024-09-08T18:42:15.975Z",
+            __v: 0
+        },
+        {
+            "_id": "66d5835dc4a5f1c560716a7b",
+            "name": "THIRTY (30) DAY DEMAND NOTICE & 30 DAY DEBTOR NOTICE",
+            "isActive": false,
+            "createdAt": "2024-09-02T09:20:29.930Z",
+            "updatedAt": "2024-09-08T18:42:23.845Z",
+            "__v": 0
+        },
+        {
+            "_id": "66d58361c4a5f1c560716a80",
+            "name": "NOTICE OF PETITION AND PETITION, NOTICE OF ELECTRONIC FILING",
+            "isActive": false,
+            "createdAt": "2024-09-02T09:20:33.652Z",
+            "updatedAt": "2024-09-08T18:42:31.283Z",
+            "__v": 0
+        },
+        {
+            "_id": "66d58365c4a5f1c560716a85",
+            "name": "NOTICE OF PETITION AND PETITION HOLDOVER, NOTICE OF ELECTRONIC FILING",
+            "isActive": false,
+            "createdAt": "2024-09-02T09:20:37.328Z",
+            "updatedAt": "2024-09-08T18:42:37.522Z",
+            "__v": 0
+        },
+        {
+            "_id": "66d583a3c4a5f1c560716a8a",
+            "name": "NOTICE OF EVICTION",
+            "isActive": false,
+            "createdAt": "2024-09-02T09:21:39.083Z",
+            "updatedAt": "2024-09-08T18:43:02.148Z",
+            "__v": 0
+        },
+        {
+            "_id": "66d583bbc4a5f1c560716a8f",
+            "name": "THIRTY (30) DAY NOTICE OF TERMINATION",
+            "isActive": false,
+            "createdAt": "2024-09-02T09:22:03.206Z",
+            "updatedAt": "2024-09-08T18:43:10.676Z",
+            "__v": 0
+        },
+        {
+            "_id": "66d583d5c4a5f1c560716a94",
+            "name": "Ninety (90) Day Notice Of Termination",
+            "isActive": false,
+            "createdAt": "2024-09-02T09:22:29.335Z",
+            "updatedAt": "2024-09-08T18:43:16.354Z",
+            "__v": 0
+        },
+        {
+            "_id": "66d583e9c4a5f1c560716a99",
+            "name": "Notice of Petition & Petition Holdover",
+            "isActive": false,
+            "createdAt": "2024-09-02T09:22:49.715Z",
+            "updatedAt": "2024-09-02T09:22:49.715Z",
+            "__v": 0
+        },
+        {
+            "_id": "66d73ea3adc8ffa37662b0d2",
+            "name": "Sixty (60) Day Notice Of Termination",
+            "isActive": false,
+            "createdAt": "2024-09-03T16:51:47.350Z",
+            "updatedAt": "2024-09-08T18:43:22.036Z",
+            "__v": 0
+        }
+    ]
     return <>
         <div className="w-[100%]">
             <div className="w-full">
@@ -628,15 +715,15 @@ const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedA
                 md:text-md
                 lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>
                         <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                            {LTServiceData?.map((data, index) => {
-                                return <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                    <CheckBox
+                            {staticData?.map((data, index) => {
+                                return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
+                                    <CustomCheckBox
                                         onKeyDown={handleEnterKeyPress}
                                         register={register}
-                                        name={data?.name}
+                                        name={data?.name?.replace(/[^a-zA-Z0-9]/g, "")}
                                         label={data?.name}
-                                        checked={checkedName === data._id}
-                                        onChange={() => handleCheckboxChange(data._id)}
+                                        checked={checkedName === data?._id}
+                                        onChange={() => handleCheckboxChange(data?._id)}
                                     />
                                 </div>
                             })}
@@ -680,7 +767,7 @@ const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedA
                                         <input
                                             className="w-[100%]  focus:border-none focus:outline-none bg-grayColorLight/50"
                                             value={inputFullname} // Bind the input field to inputFullname state
-                                            onChange={(e) => setInputFullname(e.target.value)} // Update state on change
+                                            onChange={(e) => setInputFullname(e?.target?.value)} // Update state on change
                                             onKeyDown={(e) => onKeyPressForAnotherName(e)}
                                         />
                                     </div>
@@ -781,50 +868,50 @@ const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedA
                         <Button text="Save Data" onClick={dataSavedFunction} />
                     </div>
                 </div>} */}
-                {/* END OF FORM STARTS */}
-                <div className="mt-6">
-                    <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
-                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                            <label className="text-sm font-semibold capitalize">created By</label>
-                            <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+                    {/* END OF FORM STARTS */}
+                    <div className="mt-6">
+                        <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
+                            <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                <label className="text-sm font-semibold capitalize">created By</label>
+                                <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                <label className="text-sm font-semibold capitalize">updated By</label>
+                                <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+
+                            </div>
+                            {!isNewFormAdding &&
+                                <>
+                                    <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                        <label className="text-sm font-semibold capitalize">Created At</label>
+                                        <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
+                                        <p>Time: {createdAtLocal12hr}</p>
+
+                                    </div>
+
+                                    <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                        <label className="text-sm font-semibold capitalize">Updated At</label>
+                                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
+                                        <p>Time: {updatedAtLocal12hr}</p>
+
+                                    </div>
+                                </>
+
+                            }
                         </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                            <label className="text-sm font-semibold capitalize">updated By</label>
-                            <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+                    </div>
+                    {/* END OF FORM ENDS */}
+                    <div className="w-full flex justify-end flex-row mt-6" >
+                        <div className="w-[21%] " >
 
+                            <Button text={`${isNewFormAdding ? "add Data" : "Update Data"}`}
+                                //  onClick={handleSubmit(StandardServiceTypeFunction)}
+                                disabled={isSubmitting}
+
+                            />
                         </div>
-                        {!isNewFormAdding && 
-                        <>
-                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                            <label className="text-sm font-semibold capitalize">Created At</label>
-                            <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
-                            <p>Time: {createdAtLocal12hr}</p>
-
-                        </div>
-                        
-                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                        <label className="text-sm font-semibold capitalize">Updated At</label>
-                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
-                        <p>Time: {updatedAtLocal12hr }</p>
-
                     </div>
-                        </>
-
-                        }
-                    </div>
-                </div>
-                {/* END OF FORM ENDS */}
-<div className="w-full flex justify-end flex-row mt-6" >
-                    <div className="w-[21%] " >
-
-                        <Button text={`${isNewFormAdding ? "add Data" : "Update Data"}`}
-                        //  onClick={handleSubmit(StandardServiceTypeFunction)}
-                            disabled={isSubmitting}
-
-                        />
-                    </div>
-                </div>
                 </form>
             </div>
         </div>

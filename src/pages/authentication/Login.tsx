@@ -13,19 +13,19 @@ import Button from "../../components/Buttons/Button/Button";
 import PasswordField from "../../components/InputFields/PasswordField/PasswordField"
 import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter";
 const Login = () => {
-    const { register, formState: { errors ,isSubmitting}, handleSubmit } = useForm({ resolver: zodResolver(loginSchema) },)
-    const dispatch=useDispatch();
-    const navigate=useNavigate()
+    const { register, formState: { errors, isSubmitting }, handleSubmit } = useForm({ resolver: zodResolver(loginSchema) },)
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
     // LOGIN FUNCTION STARTS
-    const loginFunction = async(data) => {
+    const loginFunction = async (data) => {
         // alert(",mcxznv,mcxznv")
-       
+
         try {
-            const response=await loginApi(data) 
+            const response = await loginApi(data)
             console.log(response?.data?.data)
             dispatch(loginUser(response?.data?.data))
             const accessToken = response?.data?.data?.accessToken;
-            localStorage.setItem("accessToken", accessToken); 
+            localStorage.setItem("accessToken", accessToken);
             toast.success(`${response?.data?.message}`)
             navigate("/")
         } catch (error) {
@@ -35,8 +35,8 @@ const Login = () => {
         // const role="admin"
         // const userData={name:data?.userName,role}
         // console.log(userData)
-    //    dispatch(loginUser(userData))
-    //    navigate("/")
+        //    dispatch(loginUser(userData))
+        //    navigate("/")
     }
     // LOGIN FUNCTION ENDS
     return <div className="w-full bg-whiteColor flex items-center justify-center h-[100vh] ">
@@ -58,15 +58,15 @@ const Login = () => {
             {/* HEADER ENDS */}
             {/* FORM STARTS */}
             <form onSubmit={handleSubmit(loginFunction)} className="flex flex-col gap-4 mt-8">
-         
-                    <TextField onKeyDown={handleEnterKeyPress} label="User Name" register={register} error={errors?.userName} name="userName"/>
-             
-         
-                    <PasswordField label="Password" register={register} error={errors?.password} name="password"/>
-             
-         
-                    <Button  text={isSubmitting?"logging":"login"} disabled={isSubmitting}/>
-             
+
+                <TextField onKeyDown={handleEnterKeyPress} label="User Name" register={register} error={errors?.userName} name="userName" />
+
+
+                <PasswordField label="Password" register={register} error={errors?.password} name="password" />
+
+
+                <Button text={isSubmitting ? "logging" : "login"} disabled={isSubmitting} />
+
             </form>
             {/* FORM ENDS */}
         </div>

@@ -3,7 +3,7 @@ import Modal from "./Modal"
 import { useDispatch } from "react-redux"
 import { showModalReducer, showUpdateModalReducer } from "../../redux/slice/showModal"
 import { useForm } from "react-hook-form"
-import CheckBox from "../../components/CheckBox/CustomCheckBox"
+import CheckBox from "../../components/CheckBox/CheckBox"
 import TextField from "../InputFields/TextField/TextField"
 import { addServiceResultApi, updateServiceResultApi } from "../../apiservices/serviceResult/serviceResult";
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -28,16 +28,16 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(deviceSchema) })
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-8 flex-wrap mb-8 overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="device code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Device Code" required/>
+            <TextField onKeyDown={handleEnterKeyPress} label="device code" register={register} error={errors.deviceCode} name="deviceCode" placeholder="Enter Device Code" required />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="device Name" register={register} error={errors.deviceName} name="deviceName" placeholder="Enter Device Name" required/>
+            <TextField onKeyDown={handleEnterKeyPress} label="device Name" register={register} error={errors.deviceName} name="deviceName" placeholder="Enter Device Name" required />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="product Type" register={register} error={errors.productType} name="productType" placeholder="Enter Product Type" />
+            <TextField onKeyDown={handleEnterKeyPress} label="product Type" register={register} error={errors.productType} name="productType" placeholder="Enter Product Type" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <CheckBox  onKeyDown={handleEnterKeyPress} label="Active" register={register} error={errors.isActive?.message} name="isActive" />
+            <CheckBox onKeyDown={handleEnterKeyPress} label="Active" register={register} error={errors.isActive?.message} name="isActive" />
         </div>
     </form>
     const updateDeviceFunction = async (data) => {
@@ -52,7 +52,7 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
         } catch (error) {
             toast.error(`something went wrong`)
             disptach(showUpdateModalReducer(false))
-        }finally{
+        } finally {
             disptach(showSpinnerReducer(false))
 
         }
@@ -63,7 +63,7 @@ const DeviceModalUpdate: React.FC<Props> = ({ singledata }) => {
         setValue("deviceName", singledata?.deviceName ?? "")
         setValue("productType", singledata?.productType ?? "")
         setValue("isActive", singledata?.isActive ?? true)
-        console.log(">>>>>>>>>>>>>>>",typeof singledata?.deviceId)
+        console.log(">>>>>>>>>>>>>>>", typeof singledata?.deviceId)
     }, [])
     return <Modal
         modalHeading="Update Device"

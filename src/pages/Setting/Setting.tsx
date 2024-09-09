@@ -82,18 +82,18 @@ const Setting = () => {
                         </OutletLayoutHeader>
                         <form className="flex flex-col gap-2 mt-6">
                             {data?.map((setting) => {
-                                const isChecked = checkedValues[setting._id]?.value ?? setting.value;
+                                const isChecked = checkedValues[setting?._id]?.value ?? setting?.value;
                                 return (
                                     <div key={setting._id}>
                                         <input
                                             type="checkbox"
-                                            id={setting.label}
-                                            {...register(setting.label)}
+                                            id={setting?.label}
+                                            {...register(setting?.label)}
                                             checked={isChecked}
-                                            onChange={() => updateSingleSettingFunction(setting._id, isChecked)}
+                                            onChange={() => updateSingleSettingFunction(setting?._id, isChecked)}
                                         />
                                         <label
-                                            htmlFor={setting.label}
+                                            htmlFor={setting?.label}
                                             className="text-sm sm:font-semibold capitalize ml-3"
                                         >
                                             {setting.label}
@@ -103,7 +103,7 @@ const Setting = () => {
                             })}
                         </form>
                     </div>
-                        {/* <GPSReport/> */}
+                    {/* <GPSReport/> */}
                 </OutletLayout>}
         </>
     );
