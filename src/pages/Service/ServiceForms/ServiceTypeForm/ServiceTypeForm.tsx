@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import TextField from "../../../../components/InputFields/TextField/TextField";
 import TextArea from "../../../../components/InputFields/TextArea/TextArea";
@@ -77,8 +77,8 @@ const StandardTypeForm = () => {
     const [multipleFullname, setMultipleFullname] = useState<string[]>([]);
     const [joinedFullname, setJoinedFullname] = useState("");
     const userData = useSelector((state: RootState) => state?.userDetail)
-
     const [headerFormData, setHeaderFormData] = useState<any>()
+    const detailSectionRef = useRef(null);
     console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", headerFormData)
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
@@ -174,9 +174,12 @@ const StandardTypeForm = () => {
     // console.log("allServiceFormData[serviceFormIndex]?.standardServiceDetail?.firstName", allServiceFormData[serviceFormIndex]?.standardServiceType?._id)
 
 
-    const handleCheckboxChange = (id: string) => {
-        console.log("id checkoubox", id)
-        setCheckedName(id);
+    const handleCheckboxChange = (data: any) => {
+        console.log("id checkoubox", data)
+        setCheckedName(data?._id);
+        if (data?.name === 'Other L&T') {
+            detailSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     // GET SELECTED VALUES FROM ADD MAILING DROPDOWN
@@ -723,7 +726,7 @@ const StandardTypeForm = () => {
                                         name={data?.name?.replace(/[^a-zA-Z0-9]/g, "")}
                                         label={data?.name}
                                         checked={checkedName === data?._id}
-                                        onChange={() => handleCheckboxChange(data?._id)}
+                                        onChange={() => handleCheckboxChange(data)}
                                     />
                                 </div>
                             })}
@@ -743,7 +746,7 @@ const StandardTypeForm = () => {
                     {/* OTHER L&T SERVICE TYPE ENDS */}
 
                     {/* L&T SERVICE TYPE STARTS */}
-                    <div className="mt-6">
+                    <div className="mt-6" ref={detailSectionRef}>
                         <h1 className="font-semibold  mb-4 text-base
                 md:text-md
                 lg:text-xl">L&T Service Detail</h1>
