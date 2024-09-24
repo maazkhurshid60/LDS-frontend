@@ -4,7 +4,7 @@ import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import Searchbar from "../../components/Searchbar/Searchbar";
 import Filter from "../../components/Filter/Filter";
 import Table from "../../components/Tables/Table";
-import {  headersResult, headersService, headersStandard, tableData } from "../../constdata/LegalDeliveryData";
+import { headersResult, headersService, headersStandard, tableData } from "../../constdata/LegalDeliveryData";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import Pagination from "../../components/Pagination/Pagination";
 import FilterMenu from "./FilterSection/FilterMenu/FilterMenu";
@@ -15,6 +15,7 @@ import { emptyLegalDeliveryReducer, getSingleLegalDeliveryReducer } from "../../
 import TableWithoutAction from "../../components/Tables/TableWithoutAction";
 import { RootState } from "../../redux/store";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
+import { toast } from "react-toastify";
 const LegalDelivery = () => {
     const [showFilterMenu, setShowFilterMenu] = useState(false)
     const [showDropDown, setShowDropDown] = useState(false)
@@ -78,7 +79,7 @@ const LegalDelivery = () => {
         }
     };
     const getUserIdFunction = (userId: string, index) => {
-        const selectedData = filteredData?.find((data, id) => data?._id === userId)
+        const selectedData = filteredData?.filter((data, id) => data?._id === userId)
         console.log(selectedData)
         dispatch(getSingleLegalDeliveryReducer(selectedData))
     }
@@ -93,41 +94,74 @@ const LegalDelivery = () => {
     //     dispatch(emptyLegalDeliveryReducer())
 
     // }, [])
-console.log("filteredData",filteredData)
-const serviceTableHeader=["Job","Client Code","Input Date","Server Code","Full Name","Case Paper Type","Bussiness Name","Address","Caption","City","Zip","Serv City","Case No"]
-const serviceDataTable =Array.isArray(filteredData) ? filteredData?.map(item => ({
-    _id:item?._id,
-    jobNo: item?.jobNo,
-    clientCode: item?.clientId?.code,
-    inputDate: item?.inputDate,
-    serverCode: item?.resultFormId?.serviceResultServerId?.serverCode,
-    fullName: item?.lTSFirstName,
-    casePaperType: "",  // Static value
-    bussinessName: item?.lTSBusinessName,
-    address: item?.lTSAddress,
-    caption: item?.caption,
-    city: item?.lTSCity,
-    zip: item?.lTSZip,
-    servCity: item?.cityServe,
-    caseNo: item?.caseNo
-  })):[];
-  const resultDataTable=Array.isArray(filteredData) ? filteredData?.map(item => ({
-    _id:item?._id,
-    jobNo:item?.serviceFormId?.jobNo,
-    clientCode: item?.serviceResultClientId?.code,
-    inputDate: item?.queryInformationLTInputDate,
-    serverCode: item?.serviceResultServerId?.serverCode,
-    fullName: item?.serviceFormId?.lTSFirstName,
-    casePaperType: "",  // Static value
-    bussinessName: item?.queryInformationLTBusinessName ,
-    address: item?.queryInformationLTAddress,
-    caption: item?.serviceFormId?.caption,
-    city: item?.serviceFormId?.lTSCity,
-    zip: item?.serviceFormId?.lTSZip,
-    servCity: item?.serviceFormId?.cityServe,
-    caseNo: item?.serviceFormId?.caseNo
-  })):[];
-  
+    console.log("filteredData", filteredData)
+    const serviceTableHeader = ["Job", "Client Code", "Input Date", "Server Code", "Full Name", "Case Paper Type", "Bussiness Name", "Address", "Caption", "City", "Zip", "Serv City", "Case No"]
+    const serviceDataTable = Array.isArray(filteredData) ? filteredData?.map(item => ({
+        _id: item?._id,
+        jobNo: item?.jobNo,
+        clientCode: item?.clientId?.code,
+        inputDate: item?.inputDate,
+        serverCode: item?.serviceResultServerId?.serverCode,
+        fullName: item?.lTSFirstName,
+        casePaperType: "",  // Static value
+        bussinessName: item?.lTSBusinessName,
+        address: item?.lTSAddress,
+        caption: item?.caption,
+        city: item?.lTSCity,
+        zip: item?.lTSZip,
+        servCity: item?.cityServe,
+        caseNo: item?.caseNo
+    })) : [];
+    const resultDataTable = Array.isArray(filteredData) ? filteredData?.map(item => ({
+        _id: item?._id,
+        jobNo: item?.jobNo,
+        clientCode: item?.clientId?.code,
+        inputDate: item?.inputDate,
+        serverCode: item?.serviceResultServerId?.serverCode,
+        fullName: item?.lTSFirstName,
+        casePaperType: "",  // Static value
+        bussinessName: item?.lTSBusinessName,
+        address: item?.lTSAddress,
+        caption: item?.caption,
+        city: item?.lTSCity,
+        zip: item?.lTSZip,
+        servCity: item?.cityServe,
+        caseNo: item?.caseNo
+    })) : [];
+
+
+    const handleCtrlA = (event: KeyboardEvent) => {
+        if (event.ctrlKey && event.key === 'a') {
+
+
+            event.preventDefault(); // Prevent default Ctrl+A browser action (selecting text)
+            selectAllRecords();
+        }
+    };
+
+    const selectAllRecords = () => {
+        if (filteredData?.length > 0) {
+            console.log("all data", filteredData)
+
+            // filteredData.forEach((data) => {
+            //     dispatch(getSingleLegalDeliveryReducer(data));
+            // });
+            dispatch(getSingleLegalDeliveryReducer(filteredData));
+
+            toast.success("All Data has been selected. Generate any report.")
+        }
+
+    };
+
+    useEffect(() => {
+        // Add event listener for keydown to detect Ctrl+A
+        document.addEventListener('keydown', handleCtrlA);
+
+        // Cleanup event listener on unmount
+        return () => {
+            document.removeEventListener('keydown', handleCtrlA);
+        };
+    }, [filteredData]);
 
     return <div className="w-[95%] m-auto">
         {/* <GPSReport/> */}
@@ -152,38 +186,38 @@ const serviceDataTable =Array.isArray(filteredData) ? filteredData?.map(item => 
                 <Filter onClick={() => setShowFilterMenu(!showFilterMenu)} />
             </div> */}
             {filteredData?.length > 0 &&
-            <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
-                <div ref={dropdownRef}>
-                    <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
+                <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
+                    <div ref={dropdownRef}>
+                        <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
 
-                        <p className="" >Affidavits Reports
+                            <p className="" >Affidavits Reports
 
-                        </p>
-                        <IoIosArrowDown
-                            size={12}
-                            className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
-                        />
-                    </div>
-                    {showDropDown &&
-                        <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
-                            <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
-                            <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
-                            <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
-                            <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
-                            <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
-                            <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
-                            <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
+                            </p>
+                            <IoIosArrowDown
+                                size={12}
+                                className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
+                            />
                         </div>
-                    }
-                </div>
-                <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
+                        {showDropDown &&
+                            <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
+                                <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
+                                <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
+                                <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
+                                <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
+                                <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
+                                <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
+                                <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
+                            </div>
+                        }
+                    </div>
+                    <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
-                <p className="cursor-pointer" onClick={()=>dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
-                {/* <p className="cursor-pointer">Column Layout</p>
+                    <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
+                    {/* <p className="cursor-pointer">Column Layout</p>
                 <p className="cursor-pointer">Enable Actions</p>
                 <p className="cursor-pointer">Generate Geo Code</p>
                 <p className="cursor-pointer">Sort Records</p> */}
-            </div>}
+                </div>}
             {/* <Table headers={headers} tableData={currentTableData} getRowData={getUserIdFunction} /> */}
             {filteredData?.length > 0 ?
                 <>
@@ -196,14 +230,14 @@ const serviceDataTable =Array.isArray(filteredData) ? filteredData?.map(item => 
                                     : serviceTableHeader
                         }
                         // tableData={serviceDataTable}
-                        tableData={  searchDataName === "result"
+                        tableData={searchDataName === "result"
                             ? resultDataTable
                             : searchDataName === "standard"
                                 ? serviceDataTable
                                 : serviceDataTable}
                         getRowData={getUserIdFunction}
-                    />                    
-                    
+                    />
+
                     <Pagination
                         totalPages={totalPages}
                         currentPage={currentPage}

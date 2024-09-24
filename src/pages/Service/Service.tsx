@@ -114,7 +114,7 @@
 //                         {activeSection === 0 ? <StandardTypeForm /> : <StandardForm />}
 //                     </div>
 //                     </>}
-                   
+
 //                 </div>
 //             )}
 //         </>
@@ -131,7 +131,7 @@ import BorderButton from "../../components/Buttons/BorderButton/BorderButton";
 import { MdDeleteOutline, MdOutlineEdit, MdOutlineDone, MdMonitor, MdArrowBackIos, MdArrowForwardIos, MdLastPage, MdFirstPage, MdAdd } from "react-icons/md";
 import StandardTypeForm from "./ServiceForms/ServiceTypeForm/ServiceTypeForm";
 import StandardForm from "./ServiceForms/StandardForm/StandardForm";
-import { addNewFormAddReducer, getAllServiceFormThunk, getFirstServiceForm, getLastServiceForm, getNextServiceForm, getPreviousServiceForm, moveToStandardFormReducer, savedLTFormDataReducer } from "../../redux/slice/serviceForm";
+import { addNewFormAddReducer, getAllServiceFormThunk, getCancelIsSearchServiceForm, getFirstServiceForm, getLastServiceForm, getNextServiceForm, getPreviousServiceForm, moveToStandardFormReducer, savedLTFormDataReducer } from "../../redux/slice/serviceForm";
 import { RootState } from "../../redux/store";
 import DeleteServiceFormModal from "../../components/Modal/DeleteServiceFormModal";
 import { showModalReducer } from "../../redux/slice/showModal";
@@ -150,6 +150,8 @@ const Service = () => {
     const showModal = useSelector((state: RootState) => state?.showModal.isShowModal);
     const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex);
     const moveToStandardForm = useSelector((state: RootState) => state.serviceForm.isMoveToStandardForm);
+    const selectedSearchServiceFormData = useSelector((state: RootState) => state.serviceForm.selectedSearchServicetData)
+    const isSearchServiceForm = useSelector((state: RootState) => state.serviceForm.isSearchServiceForm)
 
     console.log("All Service Form Data:", allServiceFormData);
 
@@ -159,6 +161,7 @@ const Service = () => {
 
     useEffect(() => {
         if (moveToStandardForm === "Standard") {
+            console.log("moved to standard form")
             setActiveSection(1);
             localStorage.setItem("serviceFormActiveSection", "1");
         }
@@ -184,8 +187,13 @@ const Service = () => {
 
     const deleteServiceForm = () => {
         dispatch(showModalReducer(true));
-        
+
     };
+
+    const cancelSearchFormFunction = () => {
+        dispatch(getCancelIsSearchServiceForm())
+        window.location.reload();
+    }
 
     const sortingActiveSectionFunction = (id: number) => {
         if (id === 0 && !isDataSaved) {
@@ -203,7 +211,7 @@ const Service = () => {
 
 
     useEffect(() => {
-       console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<____________________",localStorage.getItem("accessToken"))
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<____________________", localStorage.getItem("accessToken"))
         dispatch(getAllServiceFormThunk())
     }, [])
 
@@ -219,16 +227,18 @@ const Service = () => {
                                 {isDataSaved && <BorderButton buttonText="add" icon={<MdAdd />} isIcon onClick={addServiceFormFunction} />}
                                 <BorderButton buttonText="cancel" onClick={cancelAddingFormFunction} />
                             </>
-                        ) : (
-                            <>
-                                <BorderButton buttonText="add" icon={<MdAdd />} isIcon onClick={addNewFormFunction} />
-                                <BorderButton buttonText="delete" icon={<MdDeleteOutline />} isIcon onClick={deleteServiceForm} />
-                                <BorderButton buttonText="previous" icon={<MdArrowBackIos />} isIcon onClick={() => dispatch(getPreviousServiceForm())} />
-                                <BorderButton buttonText="next" icon={<MdArrowForwardIos />} isRightIcon onClick={() => dispatch(getNextServiceForm())} />
-                                <BorderButton buttonText="first" icon={<MdFirstPage />} isIcon onClick={() => dispatch(getFirstServiceForm())} />
-                                <BorderButton buttonText="last" icon={<MdLastPage />} isRightIcon onClick={() => dispatch(getLastServiceForm())} />
-                            </>
-                        )}
+                        ) : isSearchServiceForm || selectedSearchServiceFormData?.length > 0 ?
+                            (<BorderButton buttonText="cancel" onClick={cancelSearchFormFunction} />)
+                            : (
+                                <>
+                                    <BorderButton buttonText="add" icon={<MdAdd />} isIcon onClick={addNewFormFunction} />
+                                    <BorderButton buttonText="delete" icon={<MdDeleteOutline />} isIcon onClick={deleteServiceForm} />
+                                    <BorderButton buttonText="previous" icon={<MdArrowBackIos />} isIcon onClick={() => dispatch(getPreviousServiceForm())} />
+                                    <BorderButton buttonText="next" icon={<MdArrowForwardIos />} isRightIcon onClick={() => dispatch(getNextServiceForm())} />
+                                    <BorderButton buttonText="first" icon={<MdFirstPage />} isIcon onClick={() => dispatch(getFirstServiceForm())} />
+                                    <BorderButton buttonText="last" icon={<MdLastPage />} isRightIcon onClick={() => dispatch(getLastServiceForm())} />
+                                </>
+                            )}
                     </OutletLayoutHeader>
 
                     {(!allServiceFormData?.length && !isNewFormAdding) ? (

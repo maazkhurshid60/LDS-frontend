@@ -17,7 +17,7 @@ import { IoMdClose } from "react-icons/io";
 import { LTFormSchema } from "../../../../schemas/service forms/L&TFormSchema";
 import { useGetAllData } from "../../../../hooks/getAllDataHook/useGetAllData";
 import Button from "../../../../components/Buttons/Button/Button";
-import { addServiceFormThunk, getAllServiceFormThunk, isDataSaveReducer, moveToStandardFormReducer, savedLTFormDataReducer, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
+import { addServiceFormThunk, getAllServiceFormThunk, getIsSearchServiceForm, isDataSaveReducer, moveToStandardFormReducer, savedLTFormDataReducer, searchServiceFormThunk, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
 import Hints from "../../../Result/Hints/Hints";
 import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
 import { toast } from "react-toastify";
@@ -28,6 +28,10 @@ export type FormFields = z.infer<typeof LTFormSchema>
 import { RxCross2 } from "react-icons/rx";
 import Spinner from "../../../../components/Loader/Spinner"
 import CustomCheckBox from "../../../../components/CheckBox/CustomCheckBox";
+import DatePicker from "react-datepicker";
+import SearchResultData from "../../../Service/ServiceForms/ServiceTypeForm/SearchResultData";
+import { MdAdd } from "react-icons/md";
+
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress?.mailingAddressData)
     const loadingSpinner = useSelector((state: RootState) => state.showSpinner?.isShowSpinner)
@@ -79,22 +83,75 @@ const StandardTypeForm = () => {
     const userData = useSelector((state: RootState) => state?.userDetail)
     const [headerFormData, setHeaderFormData] = useState<any>()
     const detailSectionRef = useRef(null);
-    console.log("allServiceFormData<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", headerFormData)
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", allServiceFormData[serviceFormIndex]);
+
+    // SEARCH SERVICE FORM STARTS
+    // const [isSearchServiceForm, setIsSearchSericeForm] = useState(false)
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const allSeacrhServiceFormData = useSelector((state: RootState) => state.serviceForm.allSearchServiceFormData)
+    const isSearchServiceForm = useSelector((state: RootState) => state.serviceForm.isSearchServiceForm)
+    const selectedSearchServiceFormData = useSelector((state: RootState) => state.serviceForm.selectedSearchServicetData)
+    const getSearchExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.clientId?._id && { value: data?._id, label: data?.fullName })
+    const getSearchExistingSelectedServiceType = serviceTypeOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.serviceType?._id && { value: data?._id, label: data?.fullName })
+    // const selectedServiceType = serviceTypeOptions?.find(option => option?.value === value)?.label;
+    const [selectedServiceType, setSelectedServiceType] = useState()
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", selectedSearchServiceFormData);
+    // TAB FUNCTIONALITY STARTS HERE
+    const businessNameRef = useRef<HTMLInputElement>(null);
+    // TAB FUNCTIONALITY ENDS HERE
+    console.log("bussniessnamref", businessNameRef)
+    // Manually set the values for startDate and endDate in the form
+    const handleStartDateChange = (date) => {
+        setStartDate(date);
+        setValue("startDate", date ? date.toISOString() : "");
+    };
+
+    const handleEndDateChange = (date) => {
+        setEndDate(date);
+        setValue("endDate", date ? date.toISOString() : "");
+    };
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'F4') {
+                event.preventDefault();
+                // handleSubmit(searchResultFormFunction)();
+                dispatch(getIsSearchServiceForm(true))
+
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [])
+
+    // SEARCH SERVICE FORM ENDS
+
+
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
         // Destructure the required values from the form
         const { clientId, inputDate, caseNo, caption, serviceType } = getValues();
 
-        if (!caseNo || !clientId) {
+        if (!clientId) {
             // Show error message if any field is empty
             setValue("serviceType", "");
-            toast.error("Case No and Client Id are required.");
+            toast.error("Client Id are required.");
             return;
         }
 
-        const selectedServiceType = serviceTypeOptions?.find(option => option?.value === value)?.label;
-
-        if (selectedServiceType === "Standard") {
+        const label = serviceTypeOptions?.find(option => option?.value === value)?.label;
+        setSelectedServiceType(serviceTypeOptions?.find(option => option?.value === value)?.label)
+        // if (selectedServiceType === "commercial") {
+        //     // Use a timeout to ensure the ref is set after the render
+        //     setTimeout(() => {
+        //         console.log('Business Name Ref:', businessNameRef.current);
+        //         businessNameRef.current?.focus(); // Focus on the business name input field
+        //     }, 0);
+        // }
+        if (label === "Standard") {
             // Update the headerFormData state with the required form values
             setHeaderFormData({
                 jobNo,
@@ -107,6 +164,7 @@ const StandardTypeForm = () => {
             const LTData = { jobNo, clientId, caption, inputDate, caseNo, serviceType }
             dispatch(savedLTFormDataReducer(LTData))
             dispatch(moveToStandardFormReducer(selectedServiceType))
+            toast.success("Called")
         }
     };
 
@@ -206,8 +264,42 @@ const StandardTypeForm = () => {
     // USE EFFECT TO SET VALUES OF INDEX 0 SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
 
     useEffect(() => {
+        // alert("seleted calles")
+        console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////", allServiceFormData[serviceFormIndex]?.lTSFirstName)
 
-        if (!isNewFormAdding) {
+        if (selectedSearchServiceFormData?.length > 0) {
+            // Set form values
+            setValue("clientId", getSearchExistingSelectedClientoption?.value);
+            setValue("serviceType", getSearchExistingSelectedServiceType?.value);
+            setJobNo(JSON.stringify(selectedSearchServiceFormData[0]?.jobNo));
+            setValue("inputDate", selectedSearchServiceFormData[0]?.inputDate);
+            setValue("caseNo", JSON.stringify(selectedSearchServiceFormData[0]?.caseNo));
+            if (selectedSearchServiceFormData[0]?.oLTIndexNo === null) setValue("oLTIndexNo", "");
+            else setValue("oLTIndexNo", selectedSearchServiceFormData[0]?.oLTIndexNo);
+            setValue("oLTDescription", selectedSearchServiceFormData[0]?.oLTDescription);
+            setValue("caption", selectedSearchServiceFormData[0]?.caption);
+            setValue("lTSBusinessName", selectedSearchServiceFormData[0]?.lTSBusinessName);
+            setValue("lTSAddress", selectedSearchServiceFormData[0]?.lTSAddress);
+            setValue("lTSApt", selectedSearchServiceFormData[0]?.lTSApt);
+            setValue("lTSCity", selectedSearchServiceFormData[0]?.lTSCity);
+            setValue("lTSState", selectedSearchServiceFormData[0]?.lTSState);
+            setValue("lTSZip", selectedSearchServiceFormData[0]?.lTSZip);
+            setValue("lTSDescription", selectedSearchServiceFormData[0]?.lTSDescription);
+            setCheckedName(selectedSearchServiceFormData[0]?.lTServiceType?._id);
+            const data = selectedSearchServiceFormData[0]?.mailingAddresses
+            const id = selectedSearchServiceFormData[0]?._id
+            dispatch(getFormMailAddress({ data, id }))
+            if (selectedSearchServiceFormData[0]?.lTSFirstName) {
+                setMultipleFullname(selectedSearchServiceFormData[0]?.lTSFirstName.split(','));
+                // alert("lTSFirstName")
+            }
+            else {
+                // alert("qqq")
+
+                setMultipleFullname([]);
+            }
+        }
+        else if (!isNewFormAdding) {
             const currentData = allServiceFormData[serviceFormIndex];
             const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
             const id = allServiceFormData[serviceFormIndex]?._id
@@ -216,7 +308,7 @@ const StandardTypeForm = () => {
 
             if (currentData) {
 
-                console.log("new form is not adding****************************************", allServiceFormData[serviceFormIndex]?.inputDate);
+                // console.log("new form is not adding****************************************", allServiceFormData[serviceFormIndex]?.inputDate);
                 //    toast.success("current****************************************");
 
                 // Set form values
@@ -226,8 +318,7 @@ const StandardTypeForm = () => {
                 setValue("inputDate", currentData?.inputDate);
                 setValue("caseNo", JSON.stringify(currentData?.caseNo));
                 if (currentData?.oLTIndexNo === null) setValue("oLTIndexNo", "");
-                else setValue("oLTIndexNo", JSON.stringify(currentData?.oLTIndexNo));
-
+                else setValue("oLTIndexNo", currentData?.oLTIndexNo);
                 setValue("oLTDescription", currentData?.oLTDescription);
                 setValue("caption", currentData?.caption);
                 setValue("lTSBusinessName", currentData?.lTSBusinessName);
@@ -237,10 +328,16 @@ const StandardTypeForm = () => {
                 setValue("lTSState", currentData?.lTSState);
                 setValue("lTSZip", currentData?.lTSZip);
                 setValue("lTSDescription", currentData?.lTSDescription);
+                // console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////", currentData?.inputDate)
                 if (currentData?.lTSFirstName) {
                     setMultipleFullname(currentData.lTSFirstName.split(','));
-                } else {
+                    // alert("lTSFirstName")
+                }
+                else {
+                    // alert("qqq")
+                    // selectedSearchServiceFormData[0]?.lTSFirstName
                     setMultipleFullname([]);
+                    setJoinedFullname(currentData?.lTSFirstName)
                 }
                 setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
 
@@ -311,7 +408,7 @@ const StandardTypeForm = () => {
         //         setCheckedName(savedLTData?.lTServiceType)
         //     }
 
-    }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding]);
+    }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding, selectedSearchServiceFormData, isSearchServiceForm]);
 
 
 
@@ -366,7 +463,7 @@ const StandardTypeForm = () => {
     };
 
 
-    const StandardTypeFormSubmitFunciton = (data, value) => {
+    const StandardTypeFormSubmitFunciton = (data) => {
         // alert("serviceTypeData")
         // const serviceTypeData = serviceTypeOptions?.find(data => data?.value === value)?.label
         // alert(serviceTypeData)
@@ -375,7 +472,7 @@ const StandardTypeForm = () => {
         //     dispatch(moveToStandardFormReducer(data))
         //     // handleSubmit(StandardTypeFormSubmitFunciton)();
         // }
-
+        // alert("called")
         console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000", data)        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
@@ -406,7 +503,8 @@ const StandardTypeForm = () => {
             lTServiceType: checkedName,
             noOfAddLMailings: isNewFormAdding ? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
             mailingAddresses: isNewFormAdding ? getMailingAddressDataOnFormAdding : getFormMailingAdress,
-            lTSFirstName: joinedFullname,
+            // lTSFirstName: joinedFullname,
+            lTSFirstName: joinedFullname === "" ? allServiceFormData[serviceFormIndex]?.lTSFirstName : joinedFullname,
             lTSBusinessName: data?.lTSBusinessName,
             lTSAddress: data?.lTSAddress,
             lTSApt: data?.lTSApt,
@@ -428,10 +526,50 @@ const StandardTypeForm = () => {
 
 
         if (checkedName === null) setCheckedName("empty")
-        if (!isNewFormAdding && allServiceFormData?.length > 1) {
+        // IF SEARCH FORM TRUE
+        if (isSearchServiceForm === true) {
+            const formatedStartDate = startDate !== null ? new Date(startDate) : null;
+            const formatedEndDate = endDate !== null ? new Date(endDate) : null;
+            const formattedDateStart = formatedStartDate?.toLocaleDateString('en-US', {
+                weekday: 'long',  // e.g., Thursday
+                year: 'numeric',  // e.g., 2024
+                month: 'long',    // e.g., September
+                day: 'numeric'    // e.g., 13
+            });
+            const formattedDateEnd = formatedEndDate?.toLocaleDateString('en-US', {
+                weekday: 'long',  // e.g., Thursday
+                year: 'numeric',  // e.g., 2024
+                month: 'long',    // e.g., September
+                day: 'numeric'    // e.g., 13
+            })
+
+            const searchData = {
+                startDate: formattedDateStart,
+                endDate: formattedDateEnd
+            }
+            // toast.success("called")
+            console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<search>>>>>>>>>>>>>>>>>>>>>>>>>>>", searchData)
+            dispatch(searchServiceFormThunk(searchData))
+            // dispatch(searchResultFormAddReducer(false))
+            // toast.success("Search Result Form will be applied")
+        }
+        else if (!isNewFormAdding && selectedSearchServiceFormData?.length > 0) {
+            const sendDataToUpdateApi = {
+                ...updatedData, // Spreads all data from the object
+                serviceFormId: selectedSearchServiceFormData[0]?._id // Adds serviceFormId field
+            };
+            const { updatedAt, __v, _id, ...filteredData } = sendDataToUpdateApi;
+
+            // console.log("sendDataToAddApi", sendDataToUpdateApi?.caption)
+            dispatch(updateServiceFormThunk(sendDataToUpdateApi))
+
+            // toast.success("called")
+        }
+        else if (!isNewFormAdding && allServiceFormData?.length > 0) {
             dispatch(updateServiceFormThunk(updatedData))
             dispatch(savedLTFormDataReducer(LTData))
             // dispatch(moveToStandardFormReducer("Standard"))
+            console.log("updating data", updatedData?.lTSAddress, "updatedData?.lTSAddress", data?.lTSAddress)
 
 
         } else {
@@ -457,6 +595,11 @@ const StandardTypeForm = () => {
     }, [handleSubmit, StandardTypeFormSubmitFunciton]);
     // console.log("allServiceFormData[serviceFormIndex]", allServiceFormData[serviceFormIndex]?.lTServiceType?._id)
     const onKeyPressForAnotherName = (e) => {
+        if (e.key === "Tab") {
+            e.preventDefault()
+            handleEnterKeyPress(event, "residential", allIndex)
+            // toast.success("cal")
+        }
         if (e.key === 'Enter') {
             e.preventDefault();
 
@@ -486,6 +629,72 @@ const StandardTypeForm = () => {
         setJoinedFullname(freshData.join(','));
     }
 
+    // ADD DUPLICATE SERVICE FORM
+
+
+    const addDuplicateServiceForm = (event) => {
+        event.preventDefault();
+        const { caption, caseNo,
+            clientId,
+            inputDate,
+            // oSSTDescription,
+            // oSSTIndexNo, 
+
+            lTSAddress,
+            // standardServiceType, 
+
+            lTSBusinessName,
+            lTSZip,
+            lTSState,
+            lTSCity,
+            lTSApt,
+            lTSFirstName,
+
+            lTSDescription,
+            // sSDCourt,
+            // sSDDefendants,
+            // sSDPlaintiff,
+            serviceType,
+            lTServiceType
+        } = getValues();
+        // caseNo: parseInt(caseNo),
+        const caseNooo = parseInt(caseNo ?? '0')
+        setJoinedFullname(multipleFullname.join(","))
+        console.log("sendDataToAddApi", joinedFullname)
+
+        const sendDataToAddApi = {
+            jobNo: allServiceFormData[allServiceFormData?.length - 1]?.jobNo + 1,
+            caption,
+            caseNo: parseInt(caseNo ?? '0'),
+            clientId,
+            inputDate,
+            lTSFirstName: joinedFullname,
+            oSSTDescription: selectedSearchServiceFormData[0]?.oSSTDescription,
+            oSSTIndexNo: selectedSearchServiceFormData[0]?.oSSTIndexNo,
+            sSDCourt: selectedSearchServiceFormData[0]?.sSDCourt,
+            sSDDefendants: selectedSearchServiceFormData[0]?.sSDDefendants,
+            sSDPlaintiff: selectedSearchServiceFormData[0]?.sSDPlaintiff,
+            lTSAddress,
+            standardServiceType: selectedSearchServiceFormData[0]?.standardServiceType,
+            lTSBusinessName,
+            lTSZip,
+            lTSState,
+            lTSCity,
+            lTSApt,
+            lTSDescription,
+            serviceType,
+            lTServiceType: checkedName,
+            mailingAddresses: filterExistingFormMailingAdress,
+            noOfMailingAddres: filterExistingFormMailingAdress?.length
+        }
+        // toast.success(`${caption}`)
+        // console.log("sendDataToAddApi", sendDataToAddApi)
+        dispatch(addServiceFormThunk(sendDataToAddApi))
+    }
+
+
+
+
     const inputeDate = watch("inputDate");
     useEffect(() => {
         const isHoliday = holidayData?.find(data => data?.holidayDate === inputeDate)
@@ -500,43 +709,10 @@ const StandardTypeForm = () => {
     }, [inputeDate]);
 
 
-    console.log(">>>>>>>>>>>>>>>>>>>", checkedName,
-        LTServiceData?.find((data, index) => {
-            data._id
-        }))
-
-    // // Function to convert 24-hour time to 12-hour format
-    // const convertTo12HourFormat = (time24hr: string): string => {
-    //     // Ensure time24hr is defined and is a valid string
-    //     if (!time24hr || typeof time24hr !== 'string') {
-    //         return ''; // return empty if invalid input
-    //     }
-
-    //     // Split the time into hours, minutes, and optional seconds
-    //     let [hours, minutes, seconds] = time24hr.split(":");
-
-    //     // Convert hours from string to number
-    //     let hoursNumber = parseInt(hours, 10);
-
-    //     // Determine AM or PM
-    //     const ampm = hoursNumber >= 12 ? 'PM' : 'AM';
-
-    //     // Convert 24-hour time to 12-hour time
-    //     hoursNumber = hoursNumber % 12 || 12; // Convert '0' to '12' for 12-hour format
-
-    //     // Convert hours back to string and ensure two digits for hours and minutes
-    //     hours = hoursNumber.toString().padStart(2, '0');
-    //     minutes = minutes?.padStart(2, '0') || '00'; // If minutes are missing, default to '00'
-
-    //     // If seconds are defined, include them; otherwise, omit seconds
-    //     if (seconds) {
-    //         seconds = seconds.padStart(2, '0');
-    //         return `${hours}:${minutes}:${seconds} ${ampm}`;
-    //     }
-
-    //     // Return formatted time without seconds
-    //     return `${hours}:${minutes} ${ampm}`;
-    // };
+    // console.log(">>>>>>>>>>>>>>>>>>>", checkedName,
+    //     LTServiceData?.find((data, index) => {
+    //         data._id
+    //     }))
 
     // Function to convert UTC time string to local 12-hour format
     const convertUtcToLocal12HourFormat = (utcTime: string): string => {
@@ -568,356 +744,469 @@ const StandardTypeForm = () => {
 
 
 
-    console.log("checkboxex<<????????????????????", LTServiceData?.map((data, index) => data?._id))
-    // {
-    //     return <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-    //         <CheckBox
-    //             onKeyDown={handleEnterKeyPress}
-    //             register={register}
-    //             name={data?.name}
-    //             label={data?.name}
-    //             checked={checkedName === data._id}
-    //             onChange={() => handleCheckboxChange(data._id)}
-    //         />
-    //     </div>
-    // })}
+    console.log("service type", selectedServiceType)
 
-    const staticData = [
-        {
-            _id: "66d58357c4a5f1c560716a76",
-            name: "FOURTEEN (14) Day Demand Notice, F.D.C.P.A",
-            // name: "FOURTEEN (14) Day Demand Notice",
-            isActive: false,
-            createdAt: "2024-09-02T09:20:23.100Z",
-            updatedAt: "2024-09-08T18:42:15.975Z",
-            __v: 0
-        },
-        {
-            "_id": "66d5835dc4a5f1c560716a7b",
-            "name": "THIRTY (30) DAY DEMAND NOTICE & 30 DAY DEBTOR NOTICE",
-            "isActive": false,
-            "createdAt": "2024-09-02T09:20:29.930Z",
-            "updatedAt": "2024-09-08T18:42:23.845Z",
-            "__v": 0
-        },
-        {
-            "_id": "66d58361c4a5f1c560716a80",
-            "name": "NOTICE OF PETITION AND PETITION, NOTICE OF ELECTRONIC FILING",
-            "isActive": false,
-            "createdAt": "2024-09-02T09:20:33.652Z",
-            "updatedAt": "2024-09-08T18:42:31.283Z",
-            "__v": 0
-        },
-        {
-            "_id": "66d58365c4a5f1c560716a85",
-            "name": "NOTICE OF PETITION AND PETITION HOLDOVER, NOTICE OF ELECTRONIC FILING",
-            "isActive": false,
-            "createdAt": "2024-09-02T09:20:37.328Z",
-            "updatedAt": "2024-09-08T18:42:37.522Z",
-            "__v": 0
-        },
-        {
-            "_id": "66d583a3c4a5f1c560716a8a",
-            "name": "NOTICE OF EVICTION",
-            "isActive": false,
-            "createdAt": "2024-09-02T09:21:39.083Z",
-            "updatedAt": "2024-09-08T18:43:02.148Z",
-            "__v": 0
-        },
-        {
-            "_id": "66d583bbc4a5f1c560716a8f",
-            "name": "THIRTY (30) DAY NOTICE OF TERMINATION",
-            "isActive": false,
-            "createdAt": "2024-09-02T09:22:03.206Z",
-            "updatedAt": "2024-09-08T18:43:10.676Z",
-            "__v": 0
-        },
-        {
-            "_id": "66d583d5c4a5f1c560716a94",
-            "name": "Ninety (90) Day Notice Of Termination",
-            "isActive": false,
-            "createdAt": "2024-09-02T09:22:29.335Z",
-            "updatedAt": "2024-09-08T18:43:16.354Z",
-            "__v": 0
-        },
-        {
-            "_id": "66d583e9c4a5f1c560716a99",
-            "name": "Notice of Petition & Petition Holdover",
-            "isActive": false,
-            "createdAt": "2024-09-02T09:22:49.715Z",
-            "updatedAt": "2024-09-02T09:22:49.715Z",
-            "__v": 0
-        },
-        {
-            "_id": "66d73ea3adc8ffa37662b0d2",
-            "name": "Sixty (60) Day Notice Of Termination",
-            "isActive": false,
-            "createdAt": "2024-09-03T16:51:47.350Z",
-            "updatedAt": "2024-09-08T18:43:22.036Z",
-            "__v": 0
+    // NAVIGATION STARTS
+    const captionRef = useRef<HTMLInputElement>(null);
+    const checkboxRefs = useRef<(HTMLInputElement | null)[]>([]);
+    const serviceTypeRef = useRef<any>(null);
+    const [openServiceTypeOptions, setOpenServiceType] = useState(false)
+    const [shouldFocusCaption, setShouldFocusCaption] = useState("");
+    const [allIndex, setAllIndex] = useState()
+    useEffect(() => { setAllIndex(LTServiceData?.length + 2) }, [LTServiceData])
+    console.log("all index", allIndex)
+    const firstNameRef = useRef<HTMLInputElement>(null);
+    const bussinessnameRef = useRef<HTMLInputElement>(null);
+    const desRef = useRef<HTMLInputElement>(null);
+
+
+
+
+
+    const handleEnterKeyPressCheckboxFocus = (event: React.KeyboardEvent) => {
+        const { serviceType } = getValues(); // Assuming this gets the form values
+        if (event.key === 'Enter' || event.key === 'Tab') {
+            event.preventDefault(); // Prevent default form submission
+
+            const currentFocusedElement = document.activeElement;
+            const currentCheckboxIndex = checkboxRefs.current.findIndex(ref => ref === currentFocusedElement);
+
+            if (currentCheckboxIndex >= 0) {
+                const currentCheckbox = checkboxRefs.current[currentCheckboxIndex] as HTMLInputElement;
+
+                // Check if the current checkbox is checked
+                if (currentCheckbox.checked) {
+                    // If checked, move to the next input based on selected service type
+
+                    // if (selectedServiceType === "residential") {
+                    handleEnterKeyPress(event, "checkbox", allIndex)// Move to the Index Number input
+
+                    // } else {
+                    //     bussinessnameRef.current?.focus(); // Move to the Discretion input
+                    // }
+                } else {
+                    // If not checked, focus the next checkbox
+                    const nextCheckbox = checkboxRefs.current[currentCheckboxIndex + 1];
+                    if (nextCheckbox) {
+                        nextCheckbox.focus();
+                    } else {
+                        // If no more checkboxes, focus on the first checkbox or another input as needed
+                        checkboxRefs.current[0]?.focus(); // Fallback to first checkbox
+                    }
+                }
+            } else {
+                // If focused on caption or any other input, focus the first checkbox
+                if (currentFocusedElement === captionRef.current) {
+                    checkboxRefs.current[0]?.focus();
+                } else {
+                    checkboxRefs.current[0]?.focus();
+                }
+            }
         }
-    ]
+    };
+
+    useEffect(() => { setOpenServiceType(false) }, [isNewFormAdding])
+
+    const handleClientSelect = (event, ref, id) => {
+        console.log(ref)
+        if (id === "serviceType") {
+            setOpenServiceType(true);
+        }
+        else if (id === "caption") { console.log("caption", captionRef) }
+
+    };
+
+    // NAVIGATION ENDS
+
+
     return <>
-        <div className="w-[100%]">
-            <div className="w-full">
-                <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
-                    <div className="flex items-center justify-between flex-row-reverse	">
-                        <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {jobNo &&
-                                <div className="flex flex-col w-full items-start gap-1">
-                                    <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
-                                </div>
-                            }
-                        </div>
-                    </div>
+        {allSeacrhServiceFormData?.length > 0 && isSearchServiceForm ? <SearchResultData /> :
+            <div className="w-[100%]">
+                <div className="w-full">
+                    <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
+                        <div className="flex items-center justify-between flex-row-reverse	">
+                            <div className="flex items-center gap-x-2">
 
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
+                                {selectedSearchServiceFormData?.length > 0 && <BorderButton buttonText="Duplicate Form" icon={<MdAdd />} isIcon onClick={addDuplicateServiceForm} />
+                                }
+                                <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                {jobNo &&
 
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="Input date" error={errors.inputDate} name="inputDate" type="date" required />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <Controller name="clientId" control={control} render={({ field }) => (
-                                <Dropdown
-                                    options={clientIdOptions}
-                                    // singleOption={getSelectedClientoption}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    label="Client id" error={errors.clientId?.message as string}
-                                    required
-                                />
-                            )} />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <Controller name="serviceType" control={control} render={({ field }) => (
-                                <Dropdown
-                                    options={serviceTypeOptions}
-                                    // singleOption={getSelectedServiceTypeOption}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    label="service type"
-                                    error={errors.serviceType?.message as string}
-                                    onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
-                                    required
+                                    <div className="flex flex-col w-full items-start gap-1">
+                                        <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
+                                    </div>
 
-                                />
-                            )} />
+
+                                }
+                                {isSearchServiceForm &&
+                                    <div>
+                                        <div className="flex items-center gap-x-6">
+                                            <div className="w-full flex items-center">
+                                                <label className="w-[180px] font-semibold">Start Date</label>
+                                                <DatePicker
+                                                    selected={startDate}
+                                                    // onChange={(date) => setStartDate(date)}
+                                                    selectsStart
+                                                    startDate={startDate}
+                                                    endDate={endDate}
+                                                    onChange={handleStartDateChange}
+
+                                                    className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
+                             focus:border-primaryColor focus:outline-primaryColor"
+                                                    placeholderText="Start Date"
+                                                />
+                                            </div>
+                                            <div className="w-full flex items-center">
+                                                <label className="w-[180px] font-semibold">End Date</label>
+                                                <DatePicker
+                                                    selected={endDate}
+                                                    // onChange={(date) => setEndDate(date)}
+                                                    selectsEnd
+                                                    startDate={startDate}
+                                                    endDate={endDate}
+                                                    onChange={handleEndDateChange}
+
+                                                    className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
+                             focus:border-primaryColor focus:outline-primaryColor"
+                                                    placeholderText="End Date"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>}
+                            </div>
                         </div>
 
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="caption" error={errors.caption} name="caption" />
-                        </div>
-                    </div>
-                    {/* L&T SERVICE TYPE STARTS */}
-                    <div className="mt-6">
-                        <h1 className="font-semibold   mb-4 text-base
-                md:text-md
-                lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>
-                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                            {LTServiceData?.map((data, index) => {
-                                return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
-                                    <CustomCheckBox
-                                        onKeyDown={handleEnterKeyPress}
-                                        register={register}
-                                        name={data?.name?.replace(/[^a-zA-Z0-9]/g, "")}
-                                        label={data?.name}
-                                        checked={checkedName === data?._id}
-                                        onChange={() => handleCheckboxChange(data)}
-                                    />
-                                </div>
-                            })}
-                        </div>
-                        {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
-                    </div>
-                    {/* L&T SERVICE TYPE ENDS */}
-                    {/* OTHER L&T SERVICE TYPE STARTS */}
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-6" >
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other L&T Description" error={errors.oLTDescription} name="oLTDescription" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" />
-                        </div>
-                    </div>
-                    {/* OTHER L&T SERVICE TYPE ENDS */}
-
-                    {/* L&T SERVICE TYPE STARTS */}
-                    <div className="mt-6" ref={detailSectionRef}>
-                        <h1 className="font-semibold  mb-4 text-base
-                md:text-md
-                lg:text-xl">L&T Service Detail</h1>
-                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
 
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" /> */}
-                                <div className="flex flex-col w-full items-start gap-1 flex-wrap">
-                                    <label className=" font-normal sm:font-medium text-sm capitalize">Full Name</label>
-                                    <div className="flex items-center flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1 text-wrap">
-                                        <div className="flex items-center gap-x-3 flex-wrap">
-                                            {multipleFullname?.length > 0 && multipleFullname?.map(data =>
-                                                <div className="flex items-center gap-x-1">
-                                                    <p>{data}</p>
-                                                    <RxCross2 className="text-redColor cursor-pointer" size={14} onClick={() => deleteName(data)} />
-                                                </div>
-                                            )}
+                                <TextField onKeyDown={handleEnterKeyPress} register={register} readOnly label="Input date" error={errors.inputDate} name="inputDate" type="date" required />
+
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+
+                                <Controller name="clientId" control={control} render={({ field }) => (
+                                    <Dropdown
+                                        options={clientIdOptions}
+                                        // singleOption={getSelectedClientoption}
+                                        value={field.value}
+                                        // onChange={field.onChange}
+                                        label="Client id" error={errors.clientId?.message as string}
+                                        required
+                                        isOpenOption={isNewFormAdding}
+                                        onChange={(value) => {
+                                            field.onChange(value);
+                                            // handleClientSelect(value); // Handle client selection
+                                        }}
+                                        onKeyDown={() => handleClientSelect("a", "serviceType", "serviceType")}
+                                        id="clientId"
+
+                                    />
+                                )} />
+                            </div>
+
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <Controller name="serviceType" control={control} render={({ field }) => (
+                                    <Dropdown
+                                        options={serviceTypeOptions}
+                                        value={field.value}
+                                        onChange={(value) => {
+                                            field.onChange(value); // Update the field value
+                                            // toast.success("Cal"); // Show success toast
+
+                                            // You can call handleEnterKeyPress with default or context values
+                                            const simulatedEvent = {
+                                                target: {
+                                                    form: document.querySelector("form"), // Assuming the dropdown is in a form
+                                                },
+                                            };
+
+                                            handleEnterKeyPress(simulatedEvent, value, 1); // Call your function with simulated event
+                                        }}
+
+                                        label="service type"
+                                        error={errors.serviceType?.message as string}
+                                        onValueChange={(value) => { handleMoveToStandardForm(value) }} // Update state
+                                        required
+
+                                        ref={serviceTypeRef}
+                                        onKeyDown={handleClientSelect}
+                                        id="serviceType"
+                                        isOpenOption={openServiceTypeOptions}
+                                    />
+                                )} />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
+                            </div>
+
+
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                {/* <TextField id="caption" onKeyDown={handleEnterKeyPressCheckboxFocus} register={register} label="caption" error={errors.caption} name="caption" ref={captionRef} /> */}
+                                <TextField
+                                    id="caption"
+                                    onKeyDown={handleEnterKeyPressCheckboxFocus}
+                                    register={register}
+                                    label="caption"
+                                    error={errors.caption}
+                                    name="caption"
+                                    ref={captionRef}
+                                />
+                            </div>
+                        </div>
+                        {/* L&T SERVICE TYPE STARTS */}
+                        {/* <CustomCheckBox
+                            onKeyDown={handleEnterKeyPressCheckboxFocus}
+                            ref={checkboxRefs}
+                            register={register}
+                            name={"focuscheckbox"}
+                            label={"checkbox"}
+                            checked={checkedName}
+                            onChange={() => handleCheckboxChange(checkbox)}
+                        /> */}
+                        <div className="mt-6">
+                            <h1 className="font-semibold   mb-4 text-base
+            md:text-md
+            lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>
+                            <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
+                                {LTServiceData?.map((data, index) => {
+                                    return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
+                                        {/* <CustomCheckBox
+                                            onKeyDown={handleEnterKeyPressCheckboxFocus}
+                                            ref={addCheckboxRef(index)}
+                                            register={register}
+                                            name={data?.name?.replace(/[^a-zA-Z0-9]/g, "")}
+                                            label={data?.name}
+                                            checked={checkedName === data?._id}
+                                            onChange={() => handleCheckboxChange(data)}
+                                        /> */}
+                                        <CustomCheckBox
+                                            onKeyDown={handleEnterKeyPressCheckboxFocus}
+                                            ref={el => (checkboxRefs.current[index] = el)} // Store the checkbox refs
+                                            register={register}
+                                            name={data?.name?.replace(/[^a-zA-Z0-9]/g, "")}
+                                            label={data?.name}
+                                            checked={checkedName === data?._id}
+                                            onChange={() => handleCheckboxChange(data)}
+                                        />
+                                    </div>
+                                })}
+                            </div>
+                            {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
+                        </div>
+                        {/* L&T SERVICE TYPE ENDS */}
+                        {/* OTHER L&T SERVICE TYPE STARTS */}
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-6" >
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress} ref={desRef} register={register} label="Other L&T Description" error={errors.oLTDescription} name="oLTDescription" />
+                                {/* <div className="flex flex-col w-full items-start gap-1">
+                                    <label className="font-normal sm:font-medium text-sm capitalize">Other L&T Description</label>
+
+                                    <input
+                                        ref={discriRef}
+                                        {...register("oLTDescription")} // Spread the field properties
+                                        onKeyDown={handleEnterKeyPressCheckboxFocus}
+                                    // className={`w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor ${errors.oLTDescription ? 'border-red-500' : 'border-gray-300'}`}
+                                    />
+
+
+                                </div> */}
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                {/* <TextField onKeyDown={() => handleEnterKeyPress(selectedServiceType)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" /> */}
+                                <TextField onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" />
+                                {/* <div className="flex flex-col w-full items-start gap-1">
+                                    <label className="font-normal sm:font-medium text-sm capitalize">Index Number</label>
+                                    <input
+                                        ref={indexNumberRef}
+                                        // className={`w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor ${errors.oLTIndexNo ? 'border-red-500' : 'border-gray-300'}`}
+                                        // {...register("oLTIndexNo")}
+
+                                        onKeyDown={handleEnterKeyPressCheckboxFocus}
+                                    />
+                                </div> */}
+                            </div>
+                        </div>
+                        {/* OTHER L&T SERVICE TYPE ENDS */}
+
+                        {/* L&T SERVICE TYPE STARTS */}
+                        <div className="mt-6" ref={detailSectionRef}>
+                            <h1 className="font-semibold  mb-4 text-base
+            md:text-md
+            lg:text-xl">L&T Service Detail</h1>
+                            <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
+
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]" >
+                                    {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" /> */}
+                                    <div className="flex flex-col w-full items-start gap-1 flex-wrap">
+                                        <label className=" font-normal sm:font-medium text-sm capitalize">Full Name</label>
+                                        <div className="flex items-center flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1 text-wrap">
+                                            <div className="flex items-center gap-x-3 flex-wrap">
+                                                {multipleFullname?.length > 0 && multipleFullname?.map(data =>
+                                                    <div className="flex items-center gap-x-1">
+                                                        <p>{data}</p>
+                                                        <RxCross2 className="text-redColor cursor-pointer" size={14} onClick={() => deleteName(data)} />
+                                                    </div>
+                                                )}
+
+                                            </div>
+
+                                            <input
+                                                className="w-[100%]  focus:border-none focus:outline-none bg-grayColorLight/50"
+                                                value={inputFullname}
+                                                id={allIndex?.length + 2}
+                                                ref={firstNameRef} // Bind the input field to inputFullname state
+                                                onChange={(e) => setInputFullname(e?.target?.value)} // Update state on change
+                                                onKeyDown={(e) => onKeyPressForAnotherName(e)}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField ref={businessNameRef} onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress} register={register} label="address" error={errors.lTSAddress} name="lTSAddress" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt" error={errors.lTSApt} name="lTSApt" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress} register={register} label="city" error={errors.lTSCity} name="lTSCity" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
+                                </div>
+                                <div className="w-[100%]">
+                                    <TextArea register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
+                                </div>
+                            </div>
+
+                        </div>
+                        {/* L&T SERVICE TYPE ENDS */}
+                        {/* ADDING MAILING STARTS */}
+                        <div className="mt-6  relative">
+                            <div className="flex items-start gap-x-4  ">
+                                {mailingAddressData?.length > 0 && <div className="w-[100%] md:w-[46%] mb-4 lg:w-[30%] 	">
+                                    <Controller name="mailingAddress" control={control} render={({ field }) => (
+                                        <GetSelectedMailing
+                                            options={mailingAddressData}
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            label="Client Mailing Addresses"
+                                            error={errors.mailingAddress?.message as string}
+                                            getMailFunction={GetSelectedMailingFunction}
+                                        />
+                                    )} />
+                                </div>}
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4">
+                                    <BorderButton
+                                        isIcon
+                                        buttonText="add new mailing address"
+                                        icon={< IoMdAdd />}
+                                        onClick={() => dispatch(isAddingMailAddressReducer(true))}
+                                    />
+                                </div>
+                            </div>
+                            {isAddMail &&
+                                <div>
+                                    <AddMailing />
+                                </div>}
+
+                            {/* DISPLAY ALL EXISTING MAILING ADDRESS EXISTING INISDE FORM STARTS*/}
+                            {!isNewFormAdding && filterExistingFormMailingAdress?.length > 0 && (
+                                <div className="mt-4">
+                                    {filterExistingFormMailingAdress?.map((data: any, id) => (
+                                        <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
+                                            {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
+                                            <IoMdClose onClick={() => dispatch(getFormMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
+                                            {/* SENDING DATA TO ADDMAILING COMPONENT IF DATA IS SELECTED FORM DROPDOWN */}
+                                            {/* <AddMailing data={data} id={id+1} /> */}
+                                            <ShowAllAddMailingAddress data={data} id={id} />
+
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {/* DISPLAY ALL EXISTING MAILING ADDRESS EXISTING INISDE FORM STARTS*/}
+                            {/* DISPLAY ALL SELECTED MAILING STARTS */}
+                            {isNewFormAdding && filterMailingAddressDataOnFormAdding?.length > 0 && (
+                                <div className="mt-4">
+                                    {filterMailingAddressDataOnFormAdding?.map((data: any, id) => (
+                                        <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
+                                            {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
+                                            <IoMdClose onClick={() => dispatch(getMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
+                                            {/* SENDING DATA TO ADDMAILING COMPONENT IF DATA IS SELECTED FORM DROPDOWN */}
+                                            {/* <AddMailing data={data} id={id} /> */}
+                                            <ShowAllAddMailingAddress data={data} id={id} />
+
+
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {/* DISPLAY ALL SELECTED MAILING ENDS */}
+
+                        </div>
+                        {/* ADDING MAILING ENDS
+            {isNewFormAdding && <div className="w-full flex justify-end flex-row mt-6" >
+                <div className="w-[21%] " >
+                    <Button text="Save Data" onClick={dataSavedFunction} />
+                </div>
+            </div>} */}
+                        {/* END OF FORM STARTS */}
+                        <div className="mt-6">
+                            <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>
+                            <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
+                                <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                    <label className="text-sm font-semibold capitalize">created By</label>
+                                    <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                    <label className="text-sm font-semibold capitalize">updated By</label>
+                                    <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
+
+                                </div>
+                                {!isNewFormAdding &&
+                                    <>
+                                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                            <label className="text-sm font-semibold capitalize">Created At</label>
+                                            <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
+                                            <p>Time: {createdAtLocal12hr}</p>
 
                                         </div>
 
-                                        <input
-                                            className="w-[100%]  focus:border-none focus:outline-none bg-grayColorLight/50"
-                                            value={inputFullname} // Bind the input field to inputFullname state
-                                            onChange={(e) => setInputFullname(e?.target?.value)} // Update state on change
-                                            onKeyDown={(e) => onKeyPressForAnotherName(e)}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="address" error={errors.lTSAddress} name="lTSAddress" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt" error={errors.lTSApt} name="lTSApt" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="city" error={errors.lTSCity} name="lTSCity" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
-                            </div>
-                            <div className="w-[100%]">
-                                <TextArea register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
+                                        <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
+                                            <label className="text-sm font-semibold capitalize">Updated At</label>
+                                            <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
+                                            <p>Time: {updatedAtLocal12hr}</p>
+
+                                        </div>
+                                    </>
+
+                                }
                             </div>
                         </div>
+                        {/* END OF FORM ENDS */}
+                        <div className="w-full flex justify-end flex-row mt-6" >
+                            <div className="w-[21%] " >
 
-                    </div>
-                    {/* L&T SERVICE TYPE ENDS */}
-                    {/* ADDING MAILING STARTS */}
-                    <div className="mt-6  relative">
-                        <div className="flex items-start gap-x-4  ">
-                            {mailingAddressData?.length > 0 && <div className="w-[100%] md:w-[46%] mb-4 lg:w-[30%] 	">
-                                <Controller name="mailingAddress" control={control} render={({ field }) => (
-                                    <GetSelectedMailing
-                                        options={mailingAddressData}
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        label="Client Mailing Addresses"
-                                        error={errors.mailingAddress?.message as string}
-                                        getMailFunction={GetSelectedMailingFunction}
-                                    />
-                                )} />
-                            </div>}
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4">
-                                <BorderButton
-                                    isIcon
-                                    buttonText="add new mailing address"
-                                    icon={< IoMdAdd />}
-                                    onClick={() => dispatch(isAddingMailAddressReducer(true))}
+                                <Button text={`${isNewFormAdding ? "add Data" : "Update Data"}`}
+                                    //  onClick={handleSubmit(StandardServiceTypeFunction)}
+                                    disabled={isSubmitting}
+
                                 />
                             </div>
                         </div>
-                        {isAddMail &&
-                            <div>
-                                <AddMailing />
-                            </div>}
-
-                        {/* DISPLAY ALL EXISTING MAILING ADDRESS EXISTING INISDE FORM STARTS*/}
-                        {!isNewFormAdding && filterExistingFormMailingAdress?.length > 0 && (
-                            <div className="mt-4">
-                                {filterExistingFormMailingAdress?.map((data: any, id) => (
-                                    <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
-                                        {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
-                                        <IoMdClose onClick={() => dispatch(getFormMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
-                                        {/* SENDING DATA TO ADDMAILING COMPONENT IF DATA IS SELECTED FORM DROPDOWN */}
-                                        {/* <AddMailing data={data} id={id+1} /> */}
-                                        <ShowAllAddMailingAddress data={data} id={id} />
-
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {/* DISPLAY ALL EXISTING MAILING ADDRESS EXISTING INISDE FORM STARTS*/}
-                        {/* DISPLAY ALL SELECTED MAILING STARTS */}
-                        {isNewFormAdding && filterMailingAddressDataOnFormAdding?.length > 0 && (
-                            <div className="mt-4">
-                                {filterMailingAddressDataOnFormAdding?.map((data: any, id) => (
-                                    <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
-                                        {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
-                                        <IoMdClose onClick={() => dispatch(getMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
-                                        {/* SENDING DATA TO ADDMAILING COMPONENT IF DATA IS SELECTED FORM DROPDOWN */}
-                                        {/* <AddMailing data={data} id={id} /> */}
-                                        <ShowAllAddMailingAddress data={data} id={id} />
-
-
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {/* DISPLAY ALL SELECTED MAILING ENDS */}
-
-                    </div>
-                    {/* ADDING MAILING ENDS
-                {isNewFormAdding && <div className="w-full flex justify-end flex-row mt-6" >
-                    <div className="w-[21%] " >
-                        <Button text="Save Data" onClick={dataSavedFunction} />
-                    </div>
-                </div>} */}
-                    {/* END OF FORM STARTS */}
-                    <div className="mt-6">
-                        <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>
-                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
-                            <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                                <label className="text-sm font-semibold capitalize">created By</label>
-                                <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                                <label className="text-sm font-semibold capitalize">updated By</label>
-                                <p>{userData?.userDetails?.user?.firstName} {userData?.userDetails?.user?.lastName}</p>
-
-                            </div>
-                            {!isNewFormAdding &&
-                                <>
-                                    <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                                        <label className="text-sm font-semibold capitalize">Created At</label>
-                                        <p>Date: {allServiceFormData[serviceFormIndex]?.createdAt?.split("T")[0]}</p>
-                                        <p>Time: {createdAtLocal12hr}</p>
-
-                                    </div>
-
-                                    <div className="w-[100%] md:w-[46%] lg:w-[20%] ">
-                                        <label className="text-sm font-semibold capitalize">Updated At</label>
-                                        <p>Date: {allServiceFormData[serviceFormIndex]?.updatedAt?.split("T")[0]}</p>
-                                        <p>Time: {updatedAtLocal12hr}</p>
-
-                                    </div>
-                                </>
-
-                            }
-                        </div>
-                    </div>
-                    {/* END OF FORM ENDS */}
-                    <div className="w-full flex justify-end flex-row mt-6" >
-                        <div className="w-[21%] " >
-
-                            <Button text={`${isNewFormAdding ? "add Data" : "Update Data"}`}
-                                //  onClick={handleSubmit(StandardServiceTypeFunction)}
-                                disabled={isSubmitting}
-
-                            />
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
+        }
+
     </>
 
 }

@@ -44,8 +44,8 @@ const Modal: React.FC<ModalProps> = ({ modalHeading, modalBody, borderButtonText
             {/* MODAL FOOTER STARTS */}
             <div className="flex item-center justify-end gap-4">
                 <div className="w-[30%] sm:w-[20%]"> <BorderButton buttonText={borderButtonText} onClick={onBorderButtonClick} /></div>
-                <div className="w-[45%] sm:w-[20%]"><Button text={filledButtonText} onClick={onFilledButtonClick} disabled={disabled} />
-                </div>
+                {filledButtonText && <div className="w-[45%] sm:w-[20%]"><Button text={filledButtonText} onClick={onFilledButtonClick} disabled={disabled} />
+                </div>}
             </div>
             {/* MODAL FOOTER ENDS */}
 

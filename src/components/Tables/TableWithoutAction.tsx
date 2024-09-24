@@ -105,12 +105,12 @@ import React, { useState } from "react";
 interface TableWithoutActionProps {
     headers: string[];
     tableData: any; // Assuming all rows have similar structure
-    getRowData?: (rowIndex: number) => void;
+    getRowData?: (rowData: string) => void;
 }
 
 const TableWithoutAction: React.FC<TableWithoutActionProps> = ({ headers, tableData, getRowData }) => {
     const [clickedRowIndex, setClickedRowIndex] = useState<number | null>(null);
-console.log("tableData",tableData)
+    console.log("tableData", tableData)
     // Function to filter out unnecessary keys from rowData
     // const filterOutIdKeys = (rowData: Record<string, any>): Record<string, any> => {
     //     const filteredData: Record<string, any> = {};
@@ -144,11 +144,11 @@ console.log("tableData",tableData)
                         filteredData[key] = value.name;
                     } else if (key === 'lastUpdatedBy' && value.userName) {
                         filteredData[key] = value.userName;
-                    }else if (key === 'serviceFormCreatedBy' && value.userName) {
+                    } else if (key === 'serviceFormCreatedBy' && value.userName) {
                         filteredData[key] = value.userName;
                     } else if (key === 'serviceType' && value.serviceTypeCode) {
                         filteredData[key] = value.serviceTypeCode;
-                    }  else if (key === 'standardServiceType' && value.name) {
+                    } else if (key === 'standardServiceType' && value.name) {
                         filteredData[key] = value.name;
                     } else {
                         // Handle other nested objects if necessary
@@ -161,12 +161,14 @@ console.log("tableData",tableData)
         });
         return filteredData;
     };
-    
 
-    const handleRowClick = (rowData:string,rowIndex: number) => {
+
+    const handleRowClick = (rowData: string, rowIndex: number) => {
         setClickedRowIndex(rowIndex);
         if (getRowData) {
-            getRowData(rowData,rowIndex);
+            getRowData(rowData);
+            // getRowData(rowData);
+
         }
     };
     console.log(tableData)
@@ -190,12 +192,12 @@ console.log("tableData",tableData)
                             <tr
                                 key={rowIndex}
                                 className={`cursor-pointer  hover:bg-borderColor hover:text-blackColor  ${clickedRowIndex === rowIndex ? "bg-borderColor" : rowIndex % 2 === 0 ? "bg-XwhiteColor" : "bg-[#F1F5F8]"} font-medium text-sm sm:text-base`}
-                                onClick={() => handleRowClick(rowData?._id,rowIndex)}
+                                onClick={() => handleRowClick(rowData?._id, rowIndex)}
                             >
                                 {Object.values(filteredData).map((value, colIndex) => (
-                                    <td key={colIndex} className="px-6 py-2 font-normal text-sm">                                        
-                                      {/* {typeof value === 'string' && value.length > 4 ? `${value.slice(0, 4)}...` : value} */}
-                                      {value}
+                                    <td key={colIndex} className="px-6 py-2 font-normal text-sm">
+                                        {/* {typeof value === 'string' && value.length > 4 ? `${value.slice(0, 4)}...` : value} */}
+                                        {value}
                                     </td>
                                 ))}
                             </tr>

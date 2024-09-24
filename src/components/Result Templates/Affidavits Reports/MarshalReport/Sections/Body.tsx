@@ -18,14 +18,14 @@ export interface BodyProps {
     hair?: string
     otherFeatures?: string
     lic?: string | number
-    locks?:string | number
+    locks?: string | number
     //SERVICES
     inputDate?: string
     time?: string
     address?: string
     firstNames?: string
     serverName?: string
-    serverAddress?:string
+    serverAddress?: string
 }
 const Body: React.FC<BodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4">
@@ -50,11 +50,11 @@ const Body: React.FC<BodyProps> = (item) => {
                     attempts made on the following dates:
                 </p>
                 <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "______________________________"} </span> </p>
-                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "--N/A"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "______________________________"}</span>  </p>
-                <p>Approx, Door Description:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "______________________________"}</span>  </p>
+                <p>Approx, Door Description:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <p>
-                    Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor :"______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
-                Locks:<span className="font-semibold">{item?.locks ? item?.locks :"______________________________"}</span>
+                        Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Locks:<span className="font-semibold">{item?.locks ? item?.locks : "______________________________"}</span>
                     </p>
                 </p>
                 <p>Approx, Description: Sex:<span className="font-semibold">{item?.sex ? item?.sex : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skin Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -67,14 +67,14 @@ const Body: React.FC<BodyProps> = (item) => {
         <p className="text-center">Addtional copies mailed regular and certified:</p>
         <div className="font-semibold flex items-center justify-between w-full">
             <div>
-            <p>Sworn to before me on</p>
-            <p>{item?.dateOfMailing? item?.dateOfMailing:"______________________________"}</p>
+                <p>Sworn to before me on</p>
+                <p>{item?.dateOfMailing ? item?.dateOfMailing : "______________________________"}</p>
             </div>
             <div>
-            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>
-            <p>Lic#{item?.lic? item?.lic:"______________________________"}</p>
-            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>
-            </p>
+                <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>
+                <p>Lic#{item?.lic ? item?.lic : "______________________________"}</p>
+                <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>
+                </p>
 
             </div>
 

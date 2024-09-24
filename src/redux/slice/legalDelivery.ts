@@ -13,14 +13,14 @@ interface ISelectedLegalDelivery {
 interface IInitialState {
     legalDeliveryData: any[],
     selectedLegalDeliveryData: ISelectedLegalDelivery,
-    status: string   
+    status: string
 }
 
 const initialState: IInitialState = {
     legalDeliveryData: [],
     selectedLegalDeliveryData: {
-        searchResult:"",
-        data:null
+        searchResult: "",
+        data: null
     },
     status: "idle"
 }
@@ -30,17 +30,18 @@ const legalDelivery = createSlice({
     initialState: initialState,
     reducers: {
         getSingleLegalDeliveryReducer: (state, action) => {
+            console.log("all filtered dataa", action.payload)
             state.selectedLegalDeliveryData.data = action?.payload
         },
-        getSearchNameReducer:(state,action)=>{
+        getSearchNameReducer: (state, action) => {
             state.selectedLegalDeliveryData.searchResult = action?.payload
 
         },
-        emptyLegalDeliveryReducer:(state)=>{
-            state.selectedLegalDeliveryData.data=null
-            state.selectedLegalDeliveryData.searchResult=""
-            state.legalDeliveryData=[]
-                }
+        emptyLegalDeliveryReducer: (state) => {
+            state.selectedLegalDeliveryData.data = null
+            state.selectedLegalDeliveryData.searchResult = ""
+            state.legalDeliveryData = []
+        }
     },
     extraReducers: (builders) => {
         builders.addCase(getAllFilteredDataThunk.pending, (state) => {
@@ -55,14 +56,14 @@ const legalDelivery = createSlice({
         })
         builders.addCase(getAllFilteredDataThunk.rejected, (state) => {
             console.log(">>>>>>>>>>>>>>>>>>>>>", state.status)
-            
+
             state.status = "failed"
 
         })
     }
 })
 
-export const { getSingleLegalDeliveryReducer ,getSearchNameReducer,emptyLegalDeliveryReducer} = legalDelivery.actions
+export const { getSingleLegalDeliveryReducer, getSearchNameReducer, emptyLegalDeliveryReducer } = legalDelivery.actions
 export default legalDelivery.reducer
 
 // ASYNC THUNK STARTS
@@ -72,15 +73,16 @@ export const getAllFilteredDataThunk = createAsyncThunk("getAllFilterData", asyn
         searchIn: searchdata?.searchIn,
         data: searchdata?.data,
     }
-    
-    
+
+
     // dispatch(showSpinnerReducer(true))
-    
+
     try {
-        const response = await axios.post(`${baseUrl}/legal-delivery/search`, se, {
+        const response = await axios.post(`${baseUrl}/service-form/all-service-forms-range`, searchdata, {
             headers: { "Authorization": `Bearer ${accessToken}`, },
         })
-        console.log("sending data", se)
+        console.log("sending data", searchdata)
+        toast.success(`${response?.data?.message}`)
         return response?.data?.data
     } catch (error) {
         toast.error(`${error?.response?.data?.message}`)

@@ -1,14 +1,16 @@
 import React from "react";
-export interface DataTableProps{
+export interface DataTableProps {
     caseNo: string | number,
-        index: string |number,
-        address: string,
-        apt: string | number,
-        ltnames: string,
-        extraname: string[]
+    index: string | number,
+    address: string,
+    apt: string | number,
+    ltnames: string,
+    extraname: any
 }
-const DataTable:React.FC<DataTableProps> = (item) => {
-    console.log(item)
+const DataTable: React.FC<DataTableProps> = (item) => {
+    console.log("item?.extraname?.length", item?.extraname)
+    const extraa = item?.extraname.slice(1);
+    console.log("extra?????????", extraa)
     return <div>
 
         <div className="relative overflow-x-auto">
@@ -50,24 +52,24 @@ const DataTable:React.FC<DataTableProps> = (item) => {
                 <tbody>
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-[2px] border-solid border-blackColor">
                         <th scope="row" className="px-6 py-4 border-[1px] border-solid border-blackColor text-gray-900 whitespace-nowrap dark:text-white">
-                            {item?.caseNo?item?.caseNo:"______________________________"}
+                            {item?.caseNo ? item?.caseNo : "________"}
                         </th>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                            ______________________________
+                            ________
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.index?item?.index:"______________________________"}
+                            {item?.index ? item?.index : "________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.address?item?.address:"______________________________"}                        </td>
+                            {item?.address ? item?.address : "________"}                        </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.apt?item?.apt:"______________________________"}
+                            {item?.apt ? item?.apt : "________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.ltnames ? item?.ltnames:"______________________________"}
+                            {item?.ltnames ? item?.ltnames : "________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
-                        {item?.extraname?.length>0 ?item?.extraname?.map(data=>data+","):"______________________________"}
+                            {extraa?.length > 0 ? extraa?.map(data => data + ",") : "________"}
                         </td>
                         <td className="px-6 py-4 border-[1px] border-solid border-blackColor">
                             -
@@ -79,21 +81,21 @@ const DataTable:React.FC<DataTableProps> = (item) => {
                         </td>
 
                     </tr>
-                    
+
                 </tbody>
             </table>
         </div>
 
-    {/* SUMMARY STARTS */}
-    <div className="flex items-center justify-between gap-x-8 font-bold text-base mt-8">
+        {/* SUMMARY STARTS */}
+        <div className="flex items-center justify-between gap-x-8 font-bold text-base mt-8">
             <h1>Test Cases: 1</h1>
-            <h1>Total Add Names:   {item?.ltnames?.length>0 ?1:"______________________________"}</h1>
+            <h1>Total Add Names:   {item?.ltnames?.length > 0 ? 1 : "________"}</h1>
             <h1>Total Add Extra Names: {item?.extraname?.length}</h1>
             <h1>Total RRR Names: 0</h1>
 
-    
-    </div>
-    {/* SUMMARY ENDS */}
+
+        </div>
+        {/* SUMMARY ENDS */}
 
     </div>
 }

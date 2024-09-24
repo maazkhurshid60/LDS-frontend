@@ -5,8 +5,8 @@ export interface HeaderProps {
     petitioner?: string,
     against?: string,
     //SERVICES
-    firstNameServe?:string
-    address?:string
+    firstNameServe?: string
+    address?: string
 
 
 }
@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = (item) => {
                 district court of the state of new york
             </h1>
             <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase underline">
-                L&T Index: <span className="font-semibold">{item?.index ? item?.index :"______________________________" }</span>
+                L&T Index: <span className="font-semibold">{item?.index ? item?.index : "______________________________"}</span>
             </h1>
         </div>
         <div className="w-full flex items-center justify-between flex-wrap ">
@@ -28,16 +28,16 @@ const Header: React.FC<HeaderProps> = (item) => {
             <h1 className="font-bold flex items-center gap-x-2 text-xl ">
                 Affidavit of Investigation</h1>
         </div>
-<div className="font-bold ">
+        <div className="font-bold ">
 
-        <h1 className="flex items-center gap-x-2 text-lg underline">
-            Petitioner-landord-Against 
-        </h1>
-        <p className=" text-xl">{item?.firstNameServe? item?.firstNameServe:"--N/A--"}</p>
-        <p className=" text-xl">{item?.address? item?.address:"--N/A--"}</p>
+            <h1 className="flex items-center gap-x-2 text-lg underline">
+                Petitioner-landord-Against
+            </h1>
+            <p className=" text-xl">{item?.firstNameServe ? item?.firstNameServe : "______________________________"}</p>
+            <p className=" text-xl">{item?.address ? item?.address : "______________________________"}</p>
 
-</div>
-        
+        </div>
+
     </div>
 }
 export default Header

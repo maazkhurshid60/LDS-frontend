@@ -12,6 +12,7 @@ import { loginApi } from "../../apiservices/user/userApi";
 import Button from "../../components/Buttons/Button/Button";
 import PasswordField from "../../components/InputFields/PasswordField/PasswordField"
 import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter";
+import { emptyLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
 const Login = () => {
     const { register, formState: { errors, isSubmitting }, handleSubmit } = useForm({ resolver: zodResolver(loginSchema) },)
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const Login = () => {
             dispatch(loginUser(response?.data?.data))
             const accessToken = response?.data?.data?.accessToken;
             localStorage.setItem("accessToken", accessToken);
+            dispatch(emptyLegalDeliveryReducer())
             toast.success(`${response?.data?.message}`)
             navigate("/")
         } catch (error) {

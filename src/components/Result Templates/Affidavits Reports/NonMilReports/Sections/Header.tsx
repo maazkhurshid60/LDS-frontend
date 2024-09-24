@@ -6,6 +6,7 @@ export interface HeaderProps {
 
 }
 const Header: React.FC<HeaderProps> = (item) => {
+    console.log(item?.index)
     return <div className="w-full flex items-center justify-between flex-wrap gap-y-5">
         <div className="w-full flex items-center justify-between flex-wrap ">
             <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase underline">
@@ -27,7 +28,7 @@ const Header: React.FC<HeaderProps> = (item) => {
         <h1 className="font-bold flex items-center gap-x-2 text-xl underline">
             Petitioner-landord-Against
         </h1>
-        
+
     </div>
 }
 export default Header

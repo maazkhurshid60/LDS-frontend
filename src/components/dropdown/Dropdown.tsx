@@ -135,6 +135,9 @@ export interface DropdownProp {
     required?: boolean;
     error: string;
     label: string;
+    isOpenOption?: boolean;
+    onKeyDown?: any
+    id?: string
 }
 
 export interface option {
@@ -149,12 +152,15 @@ const Dropdown: React.FC<DropdownProp> = ({
     label,
     onChange,
     onValueChange,
-    required = false
+    required = false,
+    isOpenOption = false,
+    onKeyDown,
+    id
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const dropdownRef = useRef<HTMLDivElement>(null);
-
+    const inputRef = useRef<HTMLInputElement>(null);
     const handleSelectClick = () => {
         setIsOpen(!isOpen);
     };
@@ -178,18 +184,30 @@ const Dropdown: React.FC<DropdownProp> = ({
     };
 
     useEffect(() => {
+
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+    useEffect(() => {
+        const handleNewFormAddingChange = () => {
+            setIsOpen(isOpenOption);
+        };
+        handleNewFormAddingChange()
+    }, [isOpenOption])
 
     const filteredOptions = options.filter(option =>
         option.label.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
+    useEffect(() => {
+        if (isOpen) {
+            inputRef.current?.focus(); // Focus the input field when dropdown opens
+        }
+    }, [isOpen]);
+    console.log(onkeydown)
     return (
-        <div className="w-full" ref={dropdownRef}>
+        <div className="w-full" ref={dropdownRef} onKeyDown={onKeyDown} tabIndex={0} id={id}>
             <label className="sm:font-medium text-sm capitalize">
                 {label}
                 {required && <span className="text-redColor">*</span>}
@@ -213,6 +231,7 @@ const Dropdown: React.FC<DropdownProp> = ({
                             className="w-full border-b border-borderColor p-2 bg-whiteColor"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
+                            ref={inputRef}
                         />
                         {filteredOptions.length > 0 ? (
                             filteredOptions.map((option) => (
@@ -231,7 +250,7 @@ const Dropdown: React.FC<DropdownProp> = ({
                 )}
             </div>
             {error && <p className="text-xs text-redColor">{error}</p>}
-        </div>
+        </div >
     );
 };
 
@@ -297,7 +316,7 @@ export default Dropdown;
 //     }, []);
 //     return (
 //         <div className="w-full" ref={dropdownRef}>
-//             <label className="sm:font-medium text-sm capitalize">{label} 
+//             <label className="sm:font-medium text-sm capitalize">{label}
 //                 {required && <span className="text-redColor">*</span> }
 //                 </label>
 //             <div className="w-full relative">

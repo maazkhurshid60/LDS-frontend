@@ -6,23 +6,43 @@ import { showModalReducer } from "./showModal";
 import { showSpinnerReducer } from "./spinner";
 import { serviceFormType } from "../../type/serviceFormType/serviceFormType";
 import api from "../../apiservices/axiosInstance";
+import { selectedSearchResultDataReducer } from "./resultForm";
 const accessToken = localStorage.getItem("accessToken");
 console.log("access tokenin service form");
 
 const initialState = {
     allServiceFormData: [] as serviceFormType[],
+    allSearchServiceFormData: [] as serviceFormType[],
+    isSearchServiceForm: false,
+    selectedSearchServicetData: "",
     isNewFormAdd: false,
     isDataSaved: false,
     savedLTFormData: null,
     serviceFormIndex: 0,
     singleServiceForm: null,
     isMoveToStandardForm: "",
-    status: "idle"
+    status: "idle",
+    isDatePairModal: false,
+    datepairs: {
+        firstAttemptDate: null,
+        secondAttemptDate: null
+    }
 }
 const serviceForm = createSlice({
     name: "serviceForm",
     initialState: initialState,
     reducers: {
+        isDatePairModalReducer: ((state, action) => {
+            state.isDatePairModal = action.payload
+        }),
+        addDatePairModalReducer: ((state, action) => {
+            const { firstAttepmtDate, secondAttepmtDate } = action.payload
+            console.log(firstAttepmtDate,
+                secondAttepmtDate)
+            state.datepairs.firstAttemptDate = firstAttepmtDate;
+            state.datepairs.secondAttemptDate = secondAttepmtDate;
+
+        }),
         addNewFormAddReducer: ((state, action) => {
             state.isNewFormAdd = action.payload
         }),
@@ -55,6 +75,17 @@ const serviceForm = createSlice({
             state.serviceFormIndex = state.allServiceFormData.length - 1;
             // state.singleUser = [state.allUser.tableData[state.userId]]; // Wrap in array if accessing a single user
         },
+        getSelectedSearchServicetData: (state, action) => {
+            state.selectedSearchServicetData = action.payload
+        },
+        getIsSearchServiceForm: (state, action) => {
+            state.isSearchServiceForm = action.payload
+        },
+        getCancelIsSearchServiceForm: (state) => {
+            state.isSearchServiceForm = false
+            state.selectedSearchServicetData = ""
+
+        }
 
     },
     extraReducers: builder => {
@@ -90,11 +121,23 @@ const serviceForm = createSlice({
         builder.addCase(updateServiceFormThunk.rejected, (state) => {
             state.status = "failed"
         })
+        builder.addCase(searchServiceFormThunk.pending, (state) => {
+            state.status = "loading"
+        })
+        builder.addCase(searchServiceFormThunk.fulfilled, (state, action) => {
+            state.status = "success"
+            state.allSearchServiceFormData = action.payload
+
+        })
+        builder.addCase(searchServiceFormThunk.rejected, (state) => {
+            state.status = "failed"
+        })
     }
 })
 
 export const { addNewFormAddReducer, isDataSaveReducer, savedLTFormDataReducer, getNextServiceForm, getPreviousServiceForm, getFirstServiceForm
-    , getLastServiceForm, moveToStandardFormReducer } = serviceForm.actions
+    , getLastServiceForm, moveToStandardFormReducer, getSelectedSearchServicetData, getIsSearchServiceForm, getCancelIsSearchServiceForm, isDatePairModalReducer
+    , addDatePairModalReducer } = serviceForm.actions
 export default serviceForm.reducer
 
 // ASYNC THUNK STARTS
@@ -182,6 +225,7 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
         toast.error("Something went wrong. Try Later")
     } finally {
         dispatch(showSpinnerReducer(false))
+        window.location.reload();
 
     }
 })
@@ -201,13 +245,40 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
         dispatch(getAllServiceFormThunk())
         toast.success(`${response?.data?.message}`)
         dispatch(showModalReducer(false))
-        console.log(response)
+
     } catch (error) {
-        console.log(error)
+        console.log("EOROR ADD FORM???????????????????", error)
         toast.error(`${error?.response?.data?.message}`)
     } finally {
         dispatch(showSpinnerReducer(false))
-        window.location.reload();
+        // window.location.reload();
+
+    }
+})
+
+// SEARCH SERVICE FORM BY DATES
+export const searchServiceFormThunk = createAsyncThunk("addServiceForm", async (data: any, { dispatch }) => {
+    console.log("search form data from result form data", data)
+    dispatch(showSpinnerReducer(true))
+
+    try {
+        console.log(data)
+        const response = await axios.post(`${baseUrl}/service-form/all-service-forms-range`, data, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+            },
+
+        })
+        toast.success(`${response?.data?.message}`)
+        console.log("response?.data?.data", response?.data?.data)
+        return response?.data?.data
+    } catch (error) {
+        console.log(error)
+        toast.error(`${error?.response?.data?.message}`)
+    }
+    finally {
+        dispatch(showSpinnerReducer(false))
+        // window.location.reload();
 
     }
 })

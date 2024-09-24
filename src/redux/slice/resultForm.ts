@@ -14,16 +14,30 @@ const initialState = {
     resultFormIndex: 0,
     isNewResultFormAdd: false,
     isSearchResultForm: false,
-    searchResultFormData:[],
-    selectedSearchResultData:[],
-
-
+    searchResultFormData: [],
+    selectedSearchResultData: [],
+    isDatePairModal: false,
+    datepairs: {
+        firstAttemptDate: null,
+        secondAttemptDate: null
+    }
 }
 
 const resultForm = createSlice({
     name: "resultForm",
     initialState: initialState,
     reducers: {
+        cancelDatePairModalReducer: ((state, action) => {
+            state.isDatePairModal = action.payload
+        }),
+        addDatePairModalReducer: ((state, action) => {
+            const { firstAttepmtDate, secondAttepmtDate } = action.payload
+            console.log(firstAttepmtDate,
+                secondAttepmtDate)
+            state.datepairs.firstAttemptDate = firstAttepmtDate;
+            state.datepairs.secondAttemptDate = secondAttepmtDate;
+
+        }),
         addNewResultFormAddReducer: ((state, action) => {
             state.isNewResultFormAdd = action.payload
         }),
@@ -57,7 +71,12 @@ const resultForm = createSlice({
         }),
         getLastResultFormReducer: (state => {
             state.resultFormIndex = state.allResultFormData?.length - 1
-        })
+        }),
+        getCancelIsSearchServiceForm: (state) => {
+            state.isSearchResultForm = false
+            state.searchResultFormData = []
+            state.selectedSearchResultData = []
+        }
     },
     extraReducers: (builder) => {
         // BUILDER FOR GET ALL RESULT FORM
@@ -103,30 +122,31 @@ const resultForm = createSlice({
             addCase(deleteResultFormThunk.rejected, state => {
                 state.status = "failed"
             }).
-              // BUILDER FOR SEARCH RESULT FORM
-            addCase(searchResultFormThunk.pending,(state)=>{
-                state.status="loading"
+            // BUILDER FOR SEARCH RESULT FORM
+            addCase(searchResultFormThunk.pending, (state) => {
+                state.status = "loading"
             }).
-            addCase(searchResultFormThunk.fulfilled,(state,action)=>{
-                state.status="success"
-                state.searchResultFormData=action.payload
+            addCase(searchResultFormThunk.fulfilled, (state, action) => {
+                state.status = "success"
+                state.searchResultFormData = action.payload
             }).
-            addCase(searchResultFormThunk.rejected,(state)=>{
-                state.status="failed"
+            addCase(searchResultFormThunk.rejected, (state) => {
+                state.status = "failed"
             })
-            
+
     }
 })
-export const { addNewResultFormAddReducer, getNextResultFormReducer, getPreviousResultFormReducer, 
-                getFirstResultFormReducer, getLastResultFormReducer, searchResultFormAddReducer , 
-                emptySelectedSearchResultFormAddReducer,selectedSearchResultDataReducer,emptySearchResultFormDataAddReducer} = resultForm.actions
+export const { addNewResultFormAddReducer, getNextResultFormReducer, getPreviousResultFormReducer,
+    getFirstResultFormReducer, getLastResultFormReducer, searchResultFormAddReducer, getCancelIsSearchServiceForm,
+    emptySelectedSearchResultFormAddReducer, selectedSearchResultDataReducer, emptySearchResultFormDataAddReducer, cancelDatePairModalReducer
+    , addDatePairModalReducer } = resultForm.actions
 export default resultForm.reducer
 
 // ASYNC STARTS
 // GET ALL RESULT FORM STARTS
 export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
-        dispatch(showSpinnerReducer(true));
+    dispatch(showSpinnerReducer(true));
     try {
         const response = await axios.get(`${baseUrl}/result-form/all-result-forms`, {
             headers: {
@@ -137,7 +157,7 @@ export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async 
     } catch (error) {
         // alert(`${error?.response?.data?.message}`)
         console.log(error)
-    }finally{dispatch(showSpinnerReducer(false));}
+    } finally { dispatch(showSpinnerReducer(false)); }
 })
 // GET ALL RESULT FORM ENDS
 // ADD RESULT FORM STARTS
@@ -173,7 +193,7 @@ export const updateResultFormThunk = createAsyncThunk("updateResultForm", async 
         })
         toast.success(`${response?.data?.message}`)
         dispatch(getAllResultFormThunk())
-        
+
     } catch (error) {
         toast.error(`${error?.response?.data?.message}`)
     } finally { }
@@ -211,17 +231,17 @@ export const deleteResultFormThunk = createAsyncThunk("deleteResultForm", async 
 export const searchResultFormThunk = createAsyncThunk("searchResultForm", async (data: any) => {
     console.log(data)
     try {
-        const response = await axios.post(`${baseUrl}/result-form/search-result-forms`,data, {
+        const response = await axios.post(`${baseUrl}/result-form/search-result-forms`, data, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
         })
-    
+
         return response?.data
     } catch (error) {
         // alert(`${error?.response?.data?.message}`)
         toast.error(`${error?.response?.data?.message}`)
-        
+
 
     }
 })
