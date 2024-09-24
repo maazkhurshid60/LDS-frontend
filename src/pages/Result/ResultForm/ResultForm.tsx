@@ -24,7 +24,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import TextArea from "../../../components/InputFields/TextArea/TextArea";
 import DatePairs from "../../../components/Modal/DatePairsModal";
 import DatePairsModal from "../../../components/Modal/DatePairsModal";
-import { DistanceMatrixService, GoogleMap, LoadScript } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, DistanceMatrixService } from '@react-google-maps/api';
+
 import FormatedIndexInputField from "../../../components/InputFields/TextField/FormatedIndexInputField";
 export type FormFields = z.infer<typeof LTFormSchema>
 
@@ -724,7 +725,7 @@ const ResultForm = () => {
 
     // };
     const handleDistanceMatrixResponse = (response) => {
-        toast.success("called");
+        // toast.success("called");
         if (response && response.rows[0].elements[0].status === "OK") {
             const distance = response.rows[0].elements[0].distance;
             const duration = response.rows[0].elements[0].duration?.text; // e.g., "2hr 40mins"
@@ -1037,7 +1038,7 @@ const ResultForm = () => {
                                     )}
                                 </GoogleMap>
                             </LoadScript> */}
-                            <LoadScript
+                            {/* <LoadScript
                                 googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg"
                                 loadingElement={<div>Loading...</div>} // Optional loading element
                                 onLoad={onLoad}
@@ -1057,6 +1058,22 @@ const ResultForm = () => {
                                         />
                                     )}
                                 </GoogleMap>
+                            </LoadScript> */}
+                            <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg">
+                                <GoogleMap
+                                    center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
+                                    zoom={8}
+                                >
+                                    <DistanceMatrixService
+                                        options={{
+                                            origins: [previousForm?.lTSAddress || ''],
+                                            destinations: [allServiceForm[serviceFormIndex]?.lTSAddress || ''],
+                                            travelMode: "DRIVING",
+                                        }}
+                                        callback={handleDistanceMatrixResponse}
+                                    />
+                                </GoogleMap>
+
                             </LoadScript>
                             {/* {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && */}
                             {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id &&
