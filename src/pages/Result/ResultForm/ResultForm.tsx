@@ -1004,14 +1004,13 @@ const ResultForm = () => {
                                 </GoogleMap>
 
                             </LoadScript> */}
-
-                            <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg" onLoad={onLoad}
+                            {googleLoaded && <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg" onLoad={onLoad}
                             >
                                 <GoogleMap
                                     center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
                                     zoom={8}
                                 >
-                                    {googleLoaded && previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
+                                    {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
                                         <DistanceMatrixService
                                             options={{
                                                 origins: [previousForm?.lTSAddress || ''], // Fallback to empty string if undefined
@@ -1022,7 +1021,8 @@ const ResultForm = () => {
                                         />
                                     )}
                                 </GoogleMap>
-                            </LoadScript>
+                            </LoadScript>}
+
                             {googleLoaded && previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress &&
                                 <TextField onKeyDown={handleEnterKeyPress} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
                                 // <div className="flex flex-col w-full items-start gap-1">
