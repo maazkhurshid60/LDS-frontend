@@ -778,9 +778,11 @@ const ResultForm = () => {
         setPreviousAddress(serviceResultServerId)
     }, [serverId])
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", previousForm?.serviceResultServerId?._id, previousAddress, previousForm?.serviceResultServerId?._id === previousAddress)
+    const [googleLoaded, setGoogleLoaded] = useState(false);
     const onLoad = useCallback(() => {
         // This will be called once the library has fully loaded
         console.log("Google Maps Loaded");
+        setGoogleLoaded(true);
     }, []);
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
@@ -1007,7 +1009,7 @@ const ResultForm = () => {
                                     )}
                                 </GoogleMap>
                             </LoadScript>
-                            {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress &&
+                            {googleLoaded && previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress &&
                                 <TextField onKeyDown={handleEnterKeyPress} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
                                 // <div className="flex flex-col w-full items-start gap-1">
                                 //     <label className="font-normal sm:font-medium text-sm capitalize">
