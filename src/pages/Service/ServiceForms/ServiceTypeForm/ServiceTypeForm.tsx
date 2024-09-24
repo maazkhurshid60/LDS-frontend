@@ -96,7 +96,8 @@ const StandardTypeForm = () => {
     const getSearchExistingSelectedServiceType = serviceTypeOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.serviceType?._id && { value: data?._id, label: data?.fullName })
     // const selectedServiceType = serviceTypeOptions?.find(option => option?.value === value)?.label;
     const [selectedServiceType, setSelectedServiceType] = useState()
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", selectedSearchServiceFormData);
+    const currentYear = new Date().getFullYear().toString().slice(-2);
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", currentYear);
     // TAB FUNCTIONALITY STARTS HERE
     const businessNameRef = useRef<HTMLInputElement>(null);
     // TAB FUNCTIONALITY ENDS HERE

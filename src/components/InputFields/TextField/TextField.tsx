@@ -175,7 +175,8 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>((props, ref) => {
 
                 placeholder={placeholder}
                 name={name}
-                {...register?.(name)}
+                // {...register?.(name)             }
+                {...register?.(name, { onChange })}
                 defaultValue={defaultValue}
                 onKeyDown={onKeyDown}
                 readOnly={readOnly}

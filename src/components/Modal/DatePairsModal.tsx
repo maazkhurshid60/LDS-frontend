@@ -154,7 +154,10 @@ const DatePairsModal = () => {
     const isCurrentWeek = (date) => {
         const currentWeekStartDate = getCurrentWeekStartDate();
         const nextWeekStartDate = getNextWeekStartDate();
-        return date >= currentWeekStartDate && date < nextWeekStartDate;
+
+        // Normalize the date to remove the time component
+        const normalizedDate = new Date(date.setHours(0, 0, 0, 0));
+        return normalizedDate >= currentWeekStartDate && normalizedDate < nextWeekStartDate;
     };
 
     // Helper function to check if a date falls within the last week
@@ -171,14 +174,22 @@ const DatePairsModal = () => {
     const secondDate = new Date(datepairs?.secondAttemptDate);
 
     const showInCurrentWeek = isCurrentWeek(firstDate) && isCurrentWeek(secondDate);
+
     const showInLastWeek = isLastWeek(firstDate) && isLastWeek(secondDate);
 
     // Helper function to get the day name from a date
     const getDayName = (date) => {
         return date.toLocaleDateString('en-US', { weekday: 'long' });
     };
+    console.log("<><>", firstDate, secondDate)
 
-    console.log(getDayName(firstDate), selectedPair.firstAttemptDate, "-", getDayName(secondDate), selectedPair.secondAttemptDate)
+    // console.log(getDayName(firstDate), selectedPair.firstAttemptDate, "-", getDayName(secondDate), selectedPair.secondAttemptDate)
+    console.log("Current Week Start Date:", getCurrentWeekStartDate());
+    console.log("Next Week Start Date:", getNextWeekStartDate());
+    console.log("First Date:", firstDate);
+    console.log("Second Date:", secondDate);
+    console.log("lastweek", showInCurrentWeek, showInCurrentWeek ? (getDayName(firstDate), ",", selectedPair.firstAttemptDate, "-", getDayName(secondDate), selectedPair.secondAttemptDate)
+        : null)
 
     const modalBody = (
         <div className="mb-4">
@@ -203,7 +214,7 @@ const DatePairsModal = () => {
                             </div>
                         );
                     })}
-                    {showInLastWeek ? (
+                    {showInLastWeek || showInCurrentWeek === false && showInLastWeek === false ? (
                         <div className="px-4 py-1 bg-primaryColor text-whiteColor rounded-lg">
                             <p>Selected Date Pairs</p>
                             <div className="flex items-center gap-x-2 ">
@@ -248,6 +259,7 @@ const DatePairsModal = () => {
                 </div>
                 {/* current week's days ends */}
             </div >
+            {showInCurrentWeek === false && showInLastWeek === false && <p className="px-4 py-1 bg-primaryColor text-whiteColor rounded-lg">The Dates You Have selected in before the previous week</p>}
         </div >
     );
 

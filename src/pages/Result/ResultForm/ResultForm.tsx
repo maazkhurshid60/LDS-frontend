@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TextField from "../../../components/InputFields/TextField/TextField";
 import Hints from "../Hints/Hints";
 import Dropdown from "../../../components/dropdown/Dropdown";
@@ -27,7 +27,7 @@ import DatePairsModal from "../../../components/Modal/DatePairsModal";
 import { DistanceMatrixService, GoogleMap, LoadScript } from "@react-google-maps/api";
 export type FormFields = z.infer<typeof LTFormSchema>
 const ResultForm = () => {
-    const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
+    const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch, getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const { data: clientData } = useGetAllData("/client/all-clients");
     const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
@@ -146,7 +146,9 @@ const ResultForm = () => {
     // submitResultFormFunction
     const submitResultFormFunction = (data) => {
         // debugger
-        console.log("selected search rsultdata==================================================================", data?.serviceResultTimeOfService)
+        console.log("selected search rsultdata==================================================================", data?.serviceResultTimeOfService,
+            data?.serviceResultFirstTimeOfService,
+            data?.serviceResultSecondTimeOfService)
 
 
         const addingData = {
@@ -764,8 +766,22 @@ const ResultForm = () => {
         setValue("timeTrip", newValue); // Update the form state
         updateTimes(newValue); // Call the function to update times
     };
-
-
+    // USEEFFECT FOR TRACKNG SERVVER ID AND CALCULATE TIMETRIP
+    const serverId = watch("serviceResultServerId");
+    const { serviceResultServerId } = getValues()
+    const [previousAddress, setPreviousAddress] = useState<string | undefined>("")
+    useEffect(() => {
+        // toast.success("called")
+        // setValue("serviceResultServerId", serviceResultServerId)
+        // setValue("")
+        handleDistanceMatrixResponse()
+        setPreviousAddress(serviceResultServerId)
+    }, [serverId])
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", previousForm?.serviceResultServerId?._id, previousAddress, previousForm?.serviceResultServerId?._id === previousAddress)
+    const onLoad = useCallback(() => {
+        // This will be called once the library has fully loaded
+        console.log("Google Maps Loaded");
+    }, []);
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
             <DatePairsModal /> :
@@ -972,41 +988,43 @@ const ResultForm = () => {
                                 </GoogleMap>
 
                             </LoadScript> */}
-                            <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg">
+
+                            <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg" onLoad={onLoad}
+                            >
                                 <GoogleMap
                                     center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
                                     zoom={8}
                                 >
-                                    {previousForm?.lTSAddress && allServiceForm[serviceFormIndex]?.lTSAddress && (
+                                    {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
                                         <DistanceMatrixService
                                             options={{
                                                 origins: [previousForm?.lTSAddress || ''], // Fallback to empty string if undefined
                                                 destinations: [allServiceForm[serviceFormIndex]?.lTSAddress || ''], // Same fallback
-                                                travelMode: google.maps.TravelMode.DRIVING, // Use the enum value
+                                                travelMode: google?.maps?.TravelMode?.DRIVING, // Use the enum value
                                             }}
                                             callback={handleDistanceMatrixResponse}
                                         />
                                     )}
                                 </GoogleMap>
                             </LoadScript>
-                            {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id &&
-                                // <TextField onKeyDown={handleEnterKeyPress} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" required />
-                                <div className="flex flex-col w-full items-start gap-1">
-                                    <label className="font-normal sm:font-medium text-sm capitalize">
-                                        Suggested Time Trip (mins)
-                                    </label>
-                                    <input
-                                        // ref={ref}
-                                        type="text"
-                                        className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor"
+                            {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress &&
+                                <TextField onKeyDown={handleEnterKeyPress} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
+                                // <div className="flex flex-col w-full items-start gap-1">
+                                //     <label className="font-normal sm:font-medium text-sm capitalize">
+                                //         Suggested Time Trip (mins)
+                                //     </label>
+                                //     <input
+                                //         // ref={ref}
+                                //         type="text"
+                                //         className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor"
 
-                                        {...register?.("timeTrip")}
-                                        // defaultValue={defaultValue}
-                                        onKeyDown={handleEnterKeyPress}
+                                //         {...register?.("timeTrip")}
+                                //         // defaultValue={defaultValue}
+                                //         onKeyDown={handleEnterKeyPress}
 
-                                        onChange={handleTimeTripChange}
-                                    />
-                                </div>
+                                //         onChange={handleTimeTripChange}
+                                //     />
+                                // </div>
 
                             }
 
@@ -1026,7 +1044,7 @@ const ResultForm = () => {
                                 />
                             )} />
                         </div>
-                        {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id && <div className="w-[100%] md:w-[46%] lg:w-[30%] flex flex-col w-full items-start gap-1">
+                        {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && <div className="w-[100%] md:w-[46%] lg:w-[30%] flex flex-col w-full items-start gap-1">
                             <label className="font-normal sm:font-medium text-sm capitalize">
                                 Previous Address:</label>
                             <label
