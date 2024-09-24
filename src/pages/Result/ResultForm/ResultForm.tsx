@@ -27,6 +27,7 @@ import DatePairsModal from "../../../components/Modal/DatePairsModal";
 import { DistanceMatrixService, GoogleMap, LoadScript } from "@react-google-maps/api";
 import FormatedIndexInputField from "../../../components/InputFields/TextField/FormatedIndexInputField";
 export type FormFields = z.infer<typeof LTFormSchema>
+
 const ResultForm = () => {
     const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch, getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const { data: clientData } = useGetAllData("/client/all-clients");
@@ -707,19 +708,32 @@ const ResultForm = () => {
         setValue("endDate", date ? date.toISOString() : "");
     };
 
+    // const handleDistanceMatrixResponse = (response) => {
+    //     toast.success("called")
+    //     if (response && response.rows[0].elements[0].status === "OK") {
+    //         const distance = response.rows[0].elements[0].distance;
+    //         const duration = response.rows[0].elements[0].duration?.text; // e.g., "2hr 40mins"
+    //         const totalMinutes = convertDurationToMinutes(duration);
+    //         // const totalMinutes = convertDurationToMinutes(duration);
+    //         setValue("timeTrip", JSON.stringify(totalMinutes));
+    //         setSuggestedTimeTrip(totalMinutes)
+    //         toast?.success(`${totalMinutes}`)
+    //         console.log("Total Time in Minutes:{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", duration, totalMinutes); // Output total minutes
+    //     }
+
+
+    // };
     const handleDistanceMatrixResponse = (response) => {
-        // toast.success("called")
+        toast.success("called");
         if (response && response.rows[0].elements[0].status === "OK") {
             const distance = response.rows[0].elements[0].distance;
             const duration = response.rows[0].elements[0].duration?.text; // e.g., "2hr 40mins"
             const totalMinutes = convertDurationToMinutes(duration);
-            // const totalMinutes = convertDurationToMinutes(duration);
             setValue("timeTrip", JSON.stringify(totalMinutes));
-            setSuggestedTimeTrip(totalMinutes)
-            console.log("Total Time in Minutes:{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", duration, totalMinutes); // Output total minutes
+            setSuggestedTimeTrip(totalMinutes);
+            toast.success(`${totalMinutes}`);
+            console.log("Total Time in Minutes:", duration, totalMinutes); // Output total minutes
         }
-
-
     };
     const convertDurationToMinutes = (duration) => {
         let totalMinutes = 0;
@@ -1004,7 +1018,8 @@ const ResultForm = () => {
                                 </GoogleMap>
 
                             </LoadScript> */}
-                            {googleLoaded && <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg" onLoad={onLoad}
+
+                            {/* <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg" onLoad={onLoad}
                             >
                                 <GoogleMap
                                     center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
@@ -1021,9 +1036,31 @@ const ResultForm = () => {
                                         />
                                     )}
                                 </GoogleMap>
-                            </LoadScript>}
+                            </LoadScript> */}
+                            <LoadScript
+                                googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg"
+                                loadingElement={<div>Loading...</div>} // Optional loading element
+                                onLoad={onLoad}
+                            >
+                                <GoogleMap
+                                    center={{ lat: -34.397, lng: 150.644 }} // Dummy center
+                                    zoom={8}
+                                >
+                                    {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
+                                        <DistanceMatrixService
+                                            options={{
+                                                origins: [previousForm?.lTSAddress || ''],
+                                                destinations: [allServiceForm[serviceFormIndex]?.lTSAddress || ''],
+                                                travelMode: google?.maps?.TravelMode?.DRIVING,
+                                            }}
+                                            callback={handleDistanceMatrixResponse} // Make sure this is correctly assigned
+                                        />
+                                    )}
+                                </GoogleMap>
+                            </LoadScript>
+                            {/* {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && */}
+                            {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id &&
 
-                            {googleLoaded && previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress &&
                                 <TextField onKeyDown={handleEnterKeyPress} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
                                 // <div className="flex flex-col w-full items-start gap-1">
                                 //     <label className="font-normal sm:font-medium text-sm capitalize">
