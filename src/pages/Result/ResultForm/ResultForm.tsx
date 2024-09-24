@@ -781,14 +781,14 @@ const ResultForm = () => {
     const [googleLoaded, setGoogleLoaded] = useState(false);
     const onLoad = useCallback(() => {
         // This will be called once the library has fully loaded
-        console.log("Google Maps Loaded");
+        console.log("Google Maps Loaded", window.google); // Log the google object
         setGoogleLoaded(true);
+
     }, []);
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
             <DatePairsModal /> :
             <form onSubmit={handleSubmit(submitResultFormFunction)}>
-                <button type="submit">Submit</button>
                 {/* QUERY INFORMATION (L&T) FORM STARTS */}
                 <div className="mt-6">
                     <h1 className="font-semibold  mb-4 text-base
