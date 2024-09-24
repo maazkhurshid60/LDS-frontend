@@ -1011,7 +1011,7 @@ const ResultForm = () => {
                                     center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
                                     zoom={8}
                                 >
-                                    {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
+                                    {googleLoaded && previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
                                         <DistanceMatrixService
                                             options={{
                                                 origins: [previousForm?.lTSAddress || ''], // Fallback to empty string if undefined
