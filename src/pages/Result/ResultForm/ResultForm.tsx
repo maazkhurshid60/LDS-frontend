@@ -732,7 +732,6 @@ const ResultForm = () => {
             const totalMinutes = convertDurationToMinutes(duration);
             setValue("timeTrip", JSON.stringify(totalMinutes));
             setSuggestedTimeTrip(totalMinutes);
-            toast.success(`${totalMinutes}`);
             console.log("Total Time in Minutes:", duration, totalMinutes); // Output total minutes
         }
     };
