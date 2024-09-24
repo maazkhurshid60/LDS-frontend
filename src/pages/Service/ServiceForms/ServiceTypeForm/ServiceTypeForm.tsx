@@ -1017,14 +1017,14 @@ const StandardTypeForm = () => {
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 {/* <TextField onKeyDown={() => handleEnterKeyPress(selectedServiceType)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" /> */}
-                                {/* <TextField onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" placeholder={`LT1234/${currentYear}`} /> */}
-                                <FormatedIndexInputField
+                                <TextField onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" placeholder={`LT1234/${currentYear}`} />
+                                {/* <FormatedIndexInputField
                                     name="oLTIndexNo"
                                     control={control}
                                     label="Index Number"
                                     error={errors.oLTIndexNo}
                                     placeholder="LT1234/24" // Placeholder without the year
-                                />
+                                /> */}
                                 {/* <div className="flex flex-col w-full items-start gap-1">
                                     <label className="font-normal sm:font-medium text-sm capitalize">Index Number</label>
                                     <input
