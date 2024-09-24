@@ -25,6 +25,7 @@ import TextArea from "../../../components/InputFields/TextArea/TextArea";
 import DatePairs from "../../../components/Modal/DatePairsModal";
 import DatePairsModal from "../../../components/Modal/DatePairsModal";
 import { DistanceMatrixService, GoogleMap, LoadScript } from "@react-google-maps/api";
+import FormatedIndexInputField from "../../../components/InputFields/TextField/FormatedIndexInputField";
 export type FormFields = z.infer<typeof LTFormSchema>
 const ResultForm = () => {
     const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch, getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
@@ -66,6 +67,8 @@ const ResultForm = () => {
     const [lTSServed, setLTSServed] = useState<string[]>([])
     const [lTSNotServed, setLTSNotServed] = useState<string[]>([])
     const [suggestedTimeTrip, setSuggestedTimeTrip] = useState<any>()
+    const currentYear = new Date().getFullYear().toString().slice(-2);
+    const [oLTIndex, setOltIndex] = useState("")
     console.log("selectedResultFormData>>>>>>>>>>>>>>>>>>>>>>>>>>>.", previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id)
 
 
@@ -153,7 +156,7 @@ const ResultForm = () => {
 
         const addingData = {
             lTSFirstName: data?.lTSFirstName,
-            oLTIndexNo: parseInt(data?.oLTIndexNo),
+            oLTIndexNo: oLTIndex + "/" + currentYear,
             lTSAddress: data?.lTSAddress,
             lTSBusinessName: data?.lTSBusinessName,
             inputDate: data?.inputDate,
@@ -384,8 +387,13 @@ const ResultForm = () => {
             setValue("clientId", getSearchExistingSelectedClientoption?.value);
             // setValue("serviceType", getSearchExistingSelectedServiceType?.value);
             console.log("inputDate", selectedSearchResultData[0]?.inputDate)
-            setValue("lTSFirstName", selectedSearchResultData[0]?.lTSFirstName),
-                setValue("oLTIndexNo", selectedSearchResultData[0]?.oLTIndexNo);
+            setValue("lTSFirstName", selectedSearchResultData[0]?.lTSFirstName)
+            // setValue("oLTIndexNo", selectedSearchResultData[0]?.oLTIndexNo);
+
+            if (selectedSearchResultData[0]?.oLTIndexNo === null) setOltIndex("")
+            else setOltIndex(selectedSearchResultData[0]?.oLTIndexNo)
+
+
             setValue("lTSDescription", selectedSearchResultData[0]?.lTSDescription),
                 setValue("lTSCity", selectedSearchResultData[0]?.lTSCity),
                 setValue("lTSApt", selectedSearchResultData[0]?.lTSApt),
@@ -511,9 +519,11 @@ const ResultForm = () => {
                 }
                 dispatch(addDatePairModalReducer(data))
                 console.log("queryInformationLTInputDate", allServiceForm[serviceFormIndex]?.lTSFirstName)
-                setValue("lTSFirstName", allServiceForm[serviceFormIndex]?.lTSFirstName),
-                    // setValue("queryInformationLTIndexNo", JSON.stringify(allServiceForm[serviceFormIndex]?.queryInformationLTIndexNo, 10));
-                    setValue("oLTIndexNo", allServiceForm[serviceFormIndex]?.oLTIndexNo);
+                setValue("lTSFirstName", allServiceForm[serviceFormIndex]?.lTSFirstName)
+                // setValue("queryInformationLTIndexNo", JSON.stringify(allServiceForm[serviceFormIndex]?.queryInformationLTIndexNo, 10));
+                // setValue("oLTIndexNo", allServiceForm[serviceFormIndex]?.oLTIndexNo);
+                if (allServiceForm[serviceFormIndex]?.oLTIndexNo === null) setOltIndex("")
+                else setOltIndex(allServiceForm[serviceFormIndex]?.oLTIndexNo)
 
                 setValue("lTSAddress", allServiceForm[serviceFormIndex]?.lTSAddress),
                     setValue("lTSApt", allServiceForm[serviceFormIndex]?.lTSApt),
@@ -801,7 +811,11 @@ const ResultForm = () => {
                             />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="index no" error={errors.oLTIndexNo} name="oLTIndexNo" onKeyDown={handleEnterKeyPress}
+                            {/* <TextField register={register} label="index no" error={errors.oLTIndexNo} name="oLTIndexNo" onKeyDown={handleEnterKeyPress}
+                            /> */}
+                            <FormatedIndexInputField
+                                onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" oltIndexValue={oLTIndex}
+                                onChange={setOltIndex} year={currentYear}
                             />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">

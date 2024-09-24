@@ -84,7 +84,6 @@ const StandardTypeForm = () => {
     const userData = useSelector((state: RootState) => state?.userDetail)
     const [headerFormData, setHeaderFormData] = useState<any>()
     const detailSectionRef = useRef(null);
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", allServiceFormData[serviceFormIndex]);
 
     // SEARCH SERVICE FORM STARTS
     // const [isSearchServiceForm, setIsSearchSericeForm] = useState(false)
@@ -98,7 +97,8 @@ const StandardTypeForm = () => {
     // const selectedServiceType = serviceTypeOptions?.find(option => option?.value === value)?.label;
     const [selectedServiceType, setSelectedServiceType] = useState()
     const currentYear = new Date().getFullYear().toString().slice(-2);
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", currentYear);
+    const [oLTIndex, setOltIndex] = useState("")
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", oLTIndex);
     // TAB FUNCTIONALITY STARTS HERE
     const businessNameRef = useRef<HTMLInputElement>(null);
     // TAB FUNCTIONALITY ENDS HERE
@@ -255,6 +255,7 @@ const StandardTypeForm = () => {
             dispatch(emptyMailingAddressOnNewFormAddReducer())
             setMultipleFullname([])
             setJoinedFullname("");
+            setOltIndex("")
 
         }
     }, [isNewFormAdding, reset]);
@@ -267,7 +268,7 @@ const StandardTypeForm = () => {
 
     useEffect(() => {
         // alert("seleted calles")
-        console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////", allServiceFormData[serviceFormIndex]?.lTSFirstName)
+        console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////", allServiceFormData[serviceFormIndex]?.oLTIndexNo)
 
         if (selectedSearchServiceFormData?.length > 0) {
             // Set form values
@@ -276,8 +277,11 @@ const StandardTypeForm = () => {
             setJobNo(JSON.stringify(selectedSearchServiceFormData[0]?.jobNo));
             setValue("inputDate", selectedSearchServiceFormData[0]?.inputDate);
             setValue("caseNo", JSON.stringify(selectedSearchServiceFormData[0]?.caseNo));
-            if (selectedSearchServiceFormData[0]?.oLTIndexNo === null) setValue("oLTIndexNo", "");
-            else setValue("oLTIndexNo", selectedSearchServiceFormData[0]?.oLTIndexNo);
+            // if (selectedSearchServiceFormData[0]?.oLTIndexNo === null) setValue("oLTIndexNo", "");
+            // else setValue("oLTIndexNo", selectedSearchServiceFormData[0]?.oLTIndexNo);
+            if (selectedSearchServiceFormData[0]?.oLTIndexNo === null) setOltIndex("");
+            else setOltIndex(selectedSearchServiceFormData[0]?.oLTIndexNo);
+
             setValue("oLTDescription", selectedSearchServiceFormData[0]?.oLTDescription);
             setValue("caption", selectedSearchServiceFormData[0]?.caption);
             setValue("lTSBusinessName", selectedSearchServiceFormData[0]?.lTSBusinessName);
@@ -319,8 +323,10 @@ const StandardTypeForm = () => {
                 setJobNo(JSON.stringify(currentData?.jobNo));
                 setValue("inputDate", currentData?.inputDate);
                 setValue("caseNo", JSON.stringify(currentData?.caseNo));
-                if (currentData?.oLTIndexNo === null) setValue("oLTIndexNo", "");
-                else setValue("oLTIndexNo", currentData?.oLTIndexNo);
+                // if (currentData?.oLTIndexNo === null) setValue("oLTIndexNo", "");
+                // else setValue("oLTIndexNo", currentData?.oLTIndexNo);
+                if (currentData?.oLTIndexNo === null) setOltIndex("");
+                else setOltIndex(currentData?.oLTIndexNo);
                 setValue("oLTDescription", currentData?.oLTDescription);
                 setValue("caption", currentData?.caption);
                 setValue("lTSBusinessName", currentData?.lTSBusinessName);
@@ -361,7 +367,7 @@ const StandardTypeForm = () => {
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
             // setValue("inputDate", savedLTData?.inputDate);
-            setValue("oLTIndexNo", JSON.stringify(savedLTData?.oLTIndexNo));
+            setValue("oLTIndexNo", savedLTData?.oLTIndexNo);
 
             setValue("caseNo", savedLTData?.caseNo);
             setValue("caption", savedLTData?.caption);
@@ -475,7 +481,7 @@ const StandardTypeForm = () => {
         //     // handleSubmit(StandardTypeFormSubmitFunciton)();
         // }
         // alert("called")
-        console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000", data)        //    DATA FOR STANDARD FORM STARTS
+        console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000", oLTIndex + "/" + currentYear)        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: allServiceFormData[serviceFormIndex]?.sSDCourt,
@@ -508,13 +514,14 @@ const StandardTypeForm = () => {
             // lTSFirstName: joinedFullname,
             lTSFirstName: joinedFullname === "" ? allServiceFormData[serviceFormIndex]?.lTSFirstName : joinedFullname,
             lTSBusinessName: data?.lTSBusinessName,
+
             lTSAddress: data?.lTSAddress,
             lTSApt: data?.lTSApt,
             lTSCity: data?.lTSCity,
             lTSState: data?.lTSState,
             lTSZip: data?.lTSZip,
             lTSDescription: data?.lTSDescription,
-            oLTIndexNo: parseInt(data?.oLTIndexNo),
+            oLTIndexNo: oLTIndex + "/" + currentYear,
             oLTDescription: data?.oLTDescription,
             lTSCityLongitude: "",
             lTSCityLatitude: ""
@@ -1017,14 +1024,12 @@ const StandardTypeForm = () => {
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 {/* <TextField onKeyDown={() => handleEnterKeyPress(selectedServiceType)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" /> */}
-                                <TextField onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" placeholder={`LT1234/${currentYear}`} />
-                                {/* <FormatedIndexInputField
-                                    name="oLTIndexNo"
-                                    control={control}
-                                    label="Index Number"
-                                    error={errors.oLTIndexNo}
-                                    placeholder="LT1234/24" // Placeholder without the year
-                                /> */}
+
+                                {/* <TextField onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" placeholder={`LT1234/${currentYear}`} /> */}
+                                <FormatedIndexInputField
+                                    onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" oltIndexValue={oLTIndex}
+                                    onChange={setOltIndex} year={currentYear}
+                                />
                                 {/* <div className="flex flex-col w-full items-start gap-1">
                                     <label className="font-normal sm:font-medium text-sm capitalize">Index Number</label>
                                     <input

@@ -18,6 +18,7 @@ import SearchResultData from "../ServiceTypeForm/SearchResultData";
 import BorderButton from "../../../../components/Buttons/BorderButton/BorderButton";
 import { MdAdd } from "react-icons/md";
 import CustomCheckBox from "../../../../components/CheckBox/CustomCheckBox";
+import FormatedIndexInputField from "../../../../components/InputFields/TextField/FormatedIndexInputField";
 
 export type FormFields = z.infer<typeof standardFormSchema>
 const StandardForm = () => {
@@ -30,7 +31,8 @@ const StandardForm = () => {
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm.isNewFormAdd)
     const getMailingAddressData = useSelector((state: RootState) => state.mailingAdress.getSelectMail)
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress.serviceFormMailingAdress?.mailingAdresses)
-
+    const currentYear = new Date().getFullYear().toString().slice(-2);
+    const [oSTIndex, setOStIndex] = useState("")
 
 
     const userData = useSelector((state: RootState) => state?.userDetail)
@@ -92,7 +94,7 @@ const StandardForm = () => {
         if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
-            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: parseInt(data?.oSSTIndexNo), oSSTDescription: data?.oSSTDescription,
+            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: oSTIndex + "/" + currentYear, oSSTDescription: data?.oSSTDescription,
             firstNameServe: data?.firstNameServe, addressServe: data?.addressServe, cityServe: data?.cityServe, stateServe: data?.stateServe, aptServe: data?.aptServe, zipServe: data?.zipServe
         }
         // const finalData = { ...serviceFormData, standardServiceDetail };
@@ -180,12 +182,14 @@ const StandardForm = () => {
             //         ? JSON.stringify(selectedSearchServiceFormData[0].oSSTIndexNo)
             //         : ""
             // )
-            setValue(
-                "oSSTIndexNo",
-                selectedSearchServiceFormData[0]?.oSSTIndexNo
-                    ? selectedSearchServiceFormData[0].oSSTIndexNo
-                    : ""
-            )
+            // setValue(
+            //     "oSSTIndexNo",
+            //     selectedSearchServiceFormData[0]?.oSSTIndexNo
+            //         ? selectedSearchServiceFormData[0].oSSTIndexNo
+            //         : ""
+            // )
+            if (selectedSearchServiceFormData[0]?.oSSTIndexNo === null) setOStIndex("");
+            else setOStIndex(selectedSearchServiceFormData[0].oSSTIndexNo)
                 ,
                 setValue("oSSTDescription", selectedSearchServiceFormData[0]?.oSSTDescription),
 
@@ -215,14 +219,16 @@ const StandardForm = () => {
             //         ? JSON.stringify(allServiceFormData[serviceFormIndex].oSSTIndexNo)
             //         : ""
             // )
-            setValue(
-                "oSSTIndexNo",
-                allServiceFormData[serviceFormIndex]?.oSSTIndexNo
-                    ? allServiceFormData[serviceFormIndex].oSSTIndexNo
-                    : ""
-            )
-                ,
-                setValue("oSSTDescription", allServiceFormData[serviceFormIndex]?.oSSTDescription),
+            // setValue(
+            //     "oSSTIndexNo",
+            //     allServiceFormData[serviceFormIndex]?.oSSTIndexNo
+            //         ? allServiceFormData[serviceFormIndex].oSSTIndexNo
+            //         : ""
+            // )
+            if (allServiceFormData[serviceFormIndex]?.oSSTIndexNo === null) setOStIndex("");
+            else setOStIndex(allServiceFormData[serviceFormIndex].oSSTIndexNo)
+
+            setValue("oSSTDescription", allServiceFormData[serviceFormIndex]?.oSSTDescription),
                 //     setValue("zipServe", allServiceFormData[serviceFormIndex]?.zipServe)
                 // setValue("aptServe", allServiceFormData[serviceFormIndex]?.aptServe)
                 // setValue("stateServe", allServiceFormData[serviceFormIndex]?.stateServe)
@@ -268,6 +274,7 @@ const StandardForm = () => {
         if (isNewFormAdding) {
             reset();
             setCheckedName(null);
+            setOStIndex("")
         }
     }, [isNewFormAdding, reset]);
     // USE EFFECT TO GET ALL SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
@@ -395,7 +402,7 @@ const StandardForm = () => {
             clientId,
             inputDate,
             oSSTDescription,
-            oSSTIndexNo,
+            oSSTIndexNo: oSTIndex + "/" + currentYear,
             sSDCourt,
             sSDDefendants,
             sSDPlaintiff,
@@ -577,7 +584,11 @@ const StandardForm = () => {
                                 <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other Standard Description" error={errors.oSSTDescription} name="oSSTDescription" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" />
+                                {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" /> */}
+                                <FormatedIndexInputField
+                                    onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oLTIndexNo" oltIndexValue={oSTIndex}
+                                    onChange={setOStIndex} year={currentYear}
+                                />
                             </div>
                         </div>
                         {/* OTHER STANDARD SERVICE TYPE ENDS */}
