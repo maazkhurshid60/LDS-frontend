@@ -729,17 +729,7 @@ const ResultForm = () => {
 
 
     // };
-    const handleDistanceMatrixResponse = (response) => {
-        // toast.success("called");
-        if (response && response.rows[0].elements[0].status === "OK") {
-            const distance = response.rows[0].elements[0].distance;
-            const duration = response.rows[0].elements[0].duration?.text; // e.g., "2hr 40mins"
-            const totalMinutes = convertDurationToMinutes(duration);
-            setValue("timeTrip", JSON.stringify(totalMinutes));
-            setSuggestedTimeTrip(totalMinutes);
-            console.log("Total Time in Minutes:", duration, totalMinutes); // Output total minutes
-        }
-    };
+
     const convertDurationToMinutes = (duration) => {
         let totalMinutes = 0;
 
@@ -774,26 +764,68 @@ const ResultForm = () => {
         setLTSNotServed((prevNotServed) => prevNotServed.filter((serve) => serve !== data));
     };
 
+    // const updateTimes = (timeTripValue) => {
+    //     const totalMinutes = parseInt(timeTripValue, 10);
+
+    //     // Only run if totalMinutes is a valid number
+    //     if (!isNaN(totalMinutes) && timeTripValue !== '') {
+    //         const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, totalMinutes);
+    //         const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, totalMinutes);
+
+    //         console.log("Second time:", secondTime);
+    //         setValue("serviceResultSecondTimeOfService", secondTime);
+    //         setValue("serviceResultFirstTimeOfService", firstTime);
+    //         setValue("serviceResultTimeOfService", secondTime);
+    //     }
+    // };
+    const handleDistanceMatrixResponse = (response) => {
+        // toast.success("called");
+        if (response && response.rows[0].elements[0].status === "OK") {
+            const distance = response.rows[0].elements[0].distance;
+            const duration = response.rows[0].elements[0].duration?.text; // e.g., "2hr 40mins"
+            const totalMinutes = convertDurationToMinutes(duration);
+            setValue("timeTrip", JSON.stringify(totalMinutes));
+            setSuggestedTimeTrip(totalMinutes);
+            // toast.success("called")
+            console.log("Total Time in Minutes:", duration, totalMinutes); // Output total minutes
+        }
+    };
+    // useEffect(() => { handleDistanceMatrixResponse(response) }, [])
     const updateTimes = (timeTripValue) => {
         const totalMinutes = parseInt(timeTripValue, 10);
-
         // Only run if totalMinutes is a valid number
         if (!isNaN(totalMinutes) && timeTripValue !== '') {
             const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, totalMinutes);
             const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, totalMinutes);
-
-            console.log("Second time:", secondTime);
-            setValue("serviceResultSecondTimeOfService", secondTime);
-            setValue("serviceResultFirstTimeOfService", firstTime);
-            setValue("serviceResultTimeOfService", secondTime);
+            // Confirm update for the first time
+            const confirmFirstTime = window.confirm(`Do you want to add ${totalMinutes} minutes to serviceResultFirstTimeOfService?`);
+            if (confirmFirstTime) {
+                console.log("First time:", firstTime);
+                setValue("serviceResultFirstTimeOfService", firstTime);
+                setValue("serviceResultTimeOfService", secondTime);
+            }
+            // Confirm update for the second time
+            const confirmSecondTime = window.confirm(`Do you want to add ${totalMinutes} minutes to serviceResultSecondTimeOfService?`);
+            if (confirmSecondTime) {
+                console.log("Second time:", secondTime);
+                setValue("serviceResultSecondTimeOfService", secondTime);
+            }
         }
     };
+
 
     // Call updateTimes whenever timeTripValue changes
     const handleTimeTripChange = (event) => {
         const newValue = event.target.value;
         setValue("timeTrip", newValue); // Update the form state
-        updateTimes(newValue); // Call the function to update times
+        // updateTimes(newValue); // Call the function to update times
+        // Check if Enter key is pressed
+        if (event.key === 'Enter') {
+            const totalMinutes = parseInt(newValue, 10);
+            if (!isNaN(totalMinutes)) {
+                updateTimes(totalMinutes); // Call the function to update times
+            }
+        }
     };
     // USEEFFECT FOR TRACKNG SERVVER ID AND CALCULATE TIMETRIP
     const serverId = watch("serviceResultServerId");
@@ -1082,7 +1114,7 @@ const ResultForm = () => {
                             {/* {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && */}
                             {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id &&
 
-                                <TextField onKeyDown={handleEnterKeyPress} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
+                                <TextField onKeyDown={handleTimeTripChange} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
                                 // <div className="flex flex-col w-full items-start gap-1">
                                 //     <label className="font-normal sm:font-medium text-sm capitalize">
                                 //         Suggested Time Trip (mins)
