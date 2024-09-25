@@ -71,8 +71,9 @@ const ResultForm = () => {
     const [suggestedTimeTrip, setSuggestedTimeTrip] = useState<any>()
     const currentYear = new Date().getFullYear().toString().slice(-2);
     const [oLTIndex, setOltIndex] = useState("")
-    console.log("selectedResultFormData>>>>>>>>>>>>>>>>>>>>>>>>>>>.", previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id)
+    console.log("selectedResultFormData>>>>>>>>>>>>>>>>>>>>>>>>>>>.", lTSFirstNameArray?.length)
     const [currentServerId, setCurrentServerId] = useState<string>()
+    const [resultId, setResultId] = useState<string>(undefined)
 
     const addMinutesToTime = (timeString, minutesToAdd) => {
         console.log("timestring", timeString);
@@ -160,6 +161,13 @@ const ResultForm = () => {
             lTSFirstName: data?.lTSFirstName,
             oLTIndexNo: oLTIndex + "/" + currentYear,
             lTSAddress: data?.lTSAddress,
+            lTSState: data?.lTSState,
+            lTSApt: data?.lTSApt,
+            lTSCity: data?.lTSCity,
+            lTSZip: data?.lTSZip,
+            lTSDescription: data?.lTSDescription,
+
+
             lTSBusinessName: data?.lTSBusinessName,
             inputDate: data?.inputDate,
             sSDDefendants: data?.sSDDefendants,
@@ -322,7 +330,7 @@ const ResultForm = () => {
             else {
                 const updatingData = { ...addingData, serviceFormId: allServiceForm[serviceFormIndex]?._id }
 
-                // console.log("selected search rsultdata==================================================================", updatingData)
+                console.log("selected search rsultdata==================================================================", updatingData)
 
                 // HERE UPDATE SERVICE FORM API WILL BE CALLED
                 dispatch(updateServiceFormThunk(updatingData))
@@ -400,6 +408,7 @@ const ResultForm = () => {
             if (selectedSearchResultData[0]?.oLTIndexNo === null) setOltIndex("")
             else setOltIndex(selectedSearchResultData[0]?.oLTIndexNo)
 
+            console.log('SPLIT: ', selectedSearchResultData[0]?.serviceResultlTServed?.split(","));
 
             setValue("lTSDescription", selectedSearchResultData[0]?.lTSDescription),
                 setValue("lTSCity", selectedSearchResultData[0]?.lTSCity),
@@ -420,6 +429,7 @@ const ResultForm = () => {
             setValue("jobNo", JSON.stringify(selectedSearchResultData[0]?.jobNo ?? ""))
             setValue("serviceResultServerId", getSearchExistingSelectedServeroption?.value)
             setValue("serviceResultResults", selectedSearchResultData[0]?.serviceResultResults ?? "")
+            setResultId(selectedSearchResultData[0]?.serviceResultResults ?? "")
             setValue("serviceResultDateOfService", selectedSearchResultData[0]?.serviceResultDateOfService)
             // setValue("serviceResultTimeService", selectedSearchResultData[0]?.serviceResultTimeService)
             setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
@@ -458,7 +468,7 @@ const ResultForm = () => {
 
             }
 
-
+            // if (resultId === "personal" || resultId === "personalplus") {
             // Convert lTSFirstName to an array
             const lTSFirstNames = allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") || [];
 
@@ -487,7 +497,7 @@ const ResultForm = () => {
             // Update state
             setLTSServed(finalServed);
             setLTSNotServed(filteredNotServed);
-
+            // }
             setValue("serviceResultHair", selectedSearchResultData[0]?.serviceResultHair)
             setValue("serviceResultAge", JSON.stringify(selectedSearchResultData[0]?.serviceResultAge))
             setValue("serviceResultHeight", JSON.stringify(selectedSearchResultData[0]?.serviceResultHeight))
@@ -558,6 +568,7 @@ const ResultForm = () => {
 
                 setValue("serviceResultServerId", allServiceForm[serviceFormIndex]?.serviceResultServerId?._id ?? "")
                 setValue("serviceResultResults", allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
+                setResultId(allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
                 setValue("serviceResultDateOfService", allServiceForm[serviceFormIndex]?.serviceResultDateOfService)
                 // const updatedTime = addMinutesToTime(previousForm?.serviceResultTimeOfService, 50);
                 // setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
@@ -589,6 +600,8 @@ const ResultForm = () => {
 
                 // Convert lTSFirstName to an array
                 const lTSFirstNames = allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") || [];
+                console.log('LT FIRST NAMES: ', lTSFirstNames);
+
 
                 // Get the current served and not served arrays
                 const currentServed = allServiceForm[serviceFormIndex]?.serviceResultlTServed === undefined || allServiceForm[serviceFormIndex]?.serviceResultlTServed === ""
@@ -623,10 +636,13 @@ const ResultForm = () => {
                     ...updatedServed?.filter(name => !filteredNotServed?.includes(name))
                 ];
 
+                console.log('FINAL SERVED: ', finalServed);
+
+
                 // Set the states
                 setLTSServed(finalServed);
                 setLTSNotServed(filteredNotServed);
-                console.log("allServiceForm[serviceFormIndex]?.serviceResultlTServed?.split", allServiceForm[serviceFormIndex]?.serviceResultlTServed === undefined || allServiceForm[serviceFormIndex]?.serviceResultlTServed === "" ? allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") : allServiceForm[serviceFormIndex]?.serviceResultlTServed?.split(","))
+                // console.log("allServiceForm[serviceFormIndex]?.serviceResultlTServed?.split", allServiceForm[serviceFormIndex]?.serviceResultlTServed === undefined || allServiceForm[serviceFormIndex]?.serviceResultlTServed === "" ? allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") : allServiceForm[serviceFormIndex]?.serviceResultlTServed?.split(","))
 
 
                 setValue("serviceResultlTNotServed", allServiceForm[serviceFormIndex]?.serviceResultlTNotServed)
@@ -654,6 +670,7 @@ const ResultForm = () => {
                 // setValue("height", allServiceForm[serviceFormIndex]?.serviceResults?.description?.height)
 
                 setIsConspicuous(allServiceForm[serviceFormIndex]?.serviceResultResults)
+                setResultId(allServiceForm[serviceFormIndex]?.serviceResultResults)
             }
         }
 
@@ -926,6 +943,17 @@ const ResultForm = () => {
 
         setValue("lTSZip", formattedValue); // Update the form state
     };
+    const handleResultIdChange = (selectedValue) => {
+        // This function is called when the server ID changes
+        console.log("Selected Server ID:", selectedValue);
+        // You can perform any additional actions here
+        setValue("serviceResultResults", selectedValue);
+        setResultId(selectedValue);
+
+
+    };
+
+    console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", lTSServed)
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
             <DatePairsModal /> :
@@ -1069,8 +1097,9 @@ const ResultForm = () => {
     md:text-md
     lg:text-xl ">Hints</h1>
                         <div className="flex flex-row gap-x-4 mt-2 flex-wrap gap-y-4">
-                            <Hints keyName="Esc" label="finish" />
-                            <Hints keyName="f7 + f10" label="find" />
+                            <Hints keyName="Esc" label="Cancel" />
+                            <Hints keyName="f7 " label="Find" />
+                            <Hints keyName="f10" label="Save" />
                             {/* <Hints keyName="f4" label="ditto field" /> */}
                         </div>
 
@@ -1255,7 +1284,12 @@ const ResultForm = () => {
                                 <Dropdown
                                     options={resultOptions}
                                     value={field.value}
-                                    onChange={field.onChange}
+                                    // onChange={field.onChange}
+                                    onChange={(option) => {
+                                        console.log(option);
+                                        field.onChange(option); // Call the function to update form state
+                                        handleResultIdChange(option); // Call your additional logic
+                                    }}
                                     onValueChange={(value) => setIsConspicuous(value)} // Update state
 
                                     label="result" error={errors.serviceResultResults?.message as string}
@@ -1313,17 +1347,39 @@ const ResultForm = () => {
                             {/* <TextField onKeyDown={handleEnterKeyPress}
                                 register={register} label="L&T Served" error={errors.serviceResultlTServed} name="serviceResultlTServed" /> */}
                             <label>LT Served</label>
-                            <div className="flex items-center flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1">
+                            <div className="flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1">
+                                {(resultId === "personal" || resultId === "personalplus") &&
+                                    lTSServed?.map(data => { return <div className="flex items-center gap-x-2 "><p>{data}</p> <IoMdAdd onClick={() => { removeLTSName(data) }} className="p-[2px] cursor-pointer  rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor" size={20} />  </div> })
 
-                                {lTSServed?.map(data => { return <div className="flex items-center gap-x-2"><p>{data}</p> <IoMdAdd onClick={() => { removeLTSName(data) }} className="p-[2px] cursor-pointer  rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor" size={20} />  </div> })}
+                                }
+                                {/* {lTSServed?.map(data => { return <div className="flex items-center gap-x-2"><p>{data}</p> <IoMdAdd onClick={() => { removeLTSName(data) }} className="p-[2px] cursor-pointer  rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor" size={20} />  </div> })} */}
                             </div>
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             {/* <TextField onKeyDown={handleEnterKeyPress}
                                 register={register} label="L&T Not Served" error={errors.serviceResultlTNotServed} name="serviceResultlTNotServed" /> */}
                             <label>LT Not Served</label>
-                            <div className="flex items-center flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg ">
-                                {lTSNotServed?.length === 0 ? (
+                            <div className="flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg ">
+                                {(resultId === "personal" || resultId === "personalplus") &&
+                                    (lTSNotServed?.length === 0 ? (
+                                        <div className="h-8">
+                                        </div>
+                                    ) : (
+                                        Array.isArray(lTSNotServed) &&
+                                        lTSNotServed.map((data) => (
+                                            <div key={data} className="flex items-center gap-x-2 px-2 py-1">
+                                                <p>{data}</p>
+                                                <IoMdAdd
+                                                    onClick={() => removeLTSNotName(data)}
+                                                    className="p-[2px] cursor-pointer rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor"
+                                                    size={20}
+                                                />
+                                            </div>
+                                        ))
+                                    ))
+                                }
+
+                                {/* {lTSNotServed?.length === 0 ? (
                                     <div className="h-8">
                                     </div>
                                 ) : (
@@ -1338,7 +1394,7 @@ const ResultForm = () => {
                                             />
                                         </div>
                                     ))
-                                )}
+                                )} */}
                             </div>
 
 

@@ -67,8 +67,10 @@ const Result = () => {
                 md:text-md
                 lg:text-xl">Hints</h1>
                 <div className="flex flex-row gap-x-4 mt-2 flex-wrap gap-y-4">
-                    <Hints keyName="Esc" label="finish" />
-                    <Hints keyName="f7 + f10" label="find" />
+                    <Hints keyName="Esc" label="Cancel" />
+                    <Hints keyName="f7 " label="Find" />
+                    <Hints keyName="f10" label="Save" />
+
                 </div>
             </div>
             {/* RESULT FORM */}

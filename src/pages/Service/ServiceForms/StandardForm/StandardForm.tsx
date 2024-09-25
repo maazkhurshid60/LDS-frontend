@@ -491,8 +491,9 @@ const StandardForm = () => {
 
                                 {selectedSearchServiceFormData?.length > 0 && <BorderButton buttonText="Duplicate Form" icon={<MdAdd />} isIcon onClick={addDuplicateServiceForm} />
                                 }
-                                <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
-                            </div>
+                                <Hints keyName="Esc" label="Cancel" />
+                                <Hints keyName="f4 " label="Find" />
+                                <Hints keyName="f10 / Ctrl + S " label="Save" />                            </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 {jobNo &&
                                     <div className="flex flex-col w-full items-start gap-1">
