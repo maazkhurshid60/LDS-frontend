@@ -1,15 +1,15 @@
 import { useState } from "react";
 
-export const usePaginationCalc=({tableData})=>{
+export const usePaginationCalc = ({ tableData }) => {
     // PAGE CALCULATION STARTS
     const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    const dataLimit = 10; // Define your data limit here
+    const dataLimit = 5; // Define your data limit here
     const totalPages = Math.ceil(tableData?.length / dataLimit);
     const onPageChange = (page: number) => {
         setCurrentPage(page); // Update current page state
         // You can perform any additional actions here, such as fetching data for the new page
     };
-    const checkLastRecord=()=>{
+    const checkLastRecord = () => {
         if (currentTableData?.length === 1 && currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
@@ -18,7 +18,7 @@ export const usePaginationCalc=({tableData})=>{
     const lastIndexItem = dataLimit * currentPage;
     const firstIndexItem = lastIndexItem - dataLimit;
     const currentTableData = tableData?.slice(firstIndexItem, lastIndexItem);
-   
-// PAGE CALCULATION ENDS
-    return {totalPages,currentPage,currentTableData,dataLimit,onPageChange,checkLastRecord}
+
+    // PAGE CALCULATION ENDS
+    return { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord }
 }

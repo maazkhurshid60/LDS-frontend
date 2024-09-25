@@ -229,12 +229,12 @@ const LegalDelivery = () => {
                                     ? serviceTableHeader
                                     : serviceTableHeader
                         }
-                        // tableData={serviceDataTable}
-                        tableData={searchDataName === "result"
-                            ? resultDataTable
-                            : searchDataName === "standard"
-                                ? serviceDataTable
-                                : serviceDataTable}
+                        tableData={currentTableData}
+                        // tableData={searchDataName === "result"
+                        //     ? resultDataTable
+                        //     : searchDataName === "standard"
+                        //         ? serviceDataTable
+                        //         : serviceDataTable}
                         getRowData={getUserIdFunction}
                     />
 
