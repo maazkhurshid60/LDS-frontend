@@ -36,7 +36,7 @@ const ResultForm = () => {
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
     const { data: serverIdData } = useGetAllData("/server/all-servers");
     const serverIdOptions = serverIdData?.map((data, id) => { return { value: data?._id, label: data?.serverCode } })
-    console.log("clientIdOptionsclientIdOptionsclientIdOptions", serverIdOptions, clientIdOptions)
+    // console.log("clientIdOptionsclientIdOptionsclientIdOptions", serverIdOptions, clientIdOptions)
     const substituteDeliveredToOptions = [{ value: "jandoe", label: "Jan Doe" }, { value: "johndoe", label: "John Doe" }]
     const corporateReciepientOptions = [{ value: "jandoe", label: "Jan Doe" }, { value: "johndoe", label: "John Doe" }]
 
@@ -72,7 +72,7 @@ const ResultForm = () => {
     const currentYear = new Date().getFullYear().toString().slice(-2);
     const [oLTIndex, setOltIndex] = useState("")
     console.log("selectedResultFormData>>>>>>>>>>>>>>>>>>>>>>>>>>>.", previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id)
-
+    const [currentServerId, setCurrentServerId] = useState<string>()
 
     const addMinutesToTime = (timeString, minutesToAdd) => {
         console.log("timestring", timeString);
@@ -779,15 +779,15 @@ const ResultForm = () => {
     //     }
     // };
     const handleDistanceMatrixResponse = (response) => {
-        // toast.success("called");
-        if (response && response.rows[0].elements[0].status === "OK") {
-            const distance = response.rows[0].elements[0].distance;
-            const duration = response.rows[0].elements[0].duration?.text; // e.g., "2hr 40mins"
+        if (response && response?.rows[0]?.elements[0].status === "OK") {
+            const distance = response?.rows[0]?.elements[0]?.distance;
+            const duration = response?.rows[0]?.elements[0]?.duration?.text; // e.g., "2hr 40mins"
             const totalMinutes = convertDurationToMinutes(duration);
             setValue("timeTrip", JSON.stringify(totalMinutes));
             setSuggestedTimeTrip(totalMinutes);
             // toast.success("called")
             console.log("Total Time in Minutes:", duration, totalMinutes); // Output total minutes
+            // toast.success("called");
         }
     };
     // useEffect(() => { handleDistanceMatrixResponse(response) }, [])
@@ -832,14 +832,80 @@ const ResultForm = () => {
     const serverId = watch("serviceResultServerId");
     const { serviceResultServerId } = getValues()
     const [previousAddress, setPreviousAddress] = useState<string | undefined>("")
+    // useEffect(() => {
+    //     // toast.success("called")
+    //     // setValue("serviceResultServerId", serviceResultServerId)
+    //     // setValue("")
+    //     // handleDistanceMatrixResponse()
+    //     setPreviousAddress(serviceResultServerId)
+    //     // Fetch the Distance Matrix
+    //     const fetchDistanceMatrix = () => {
+    //         const origins = [previousForm?.lTSAddress || ''];
+    //         const destinations = [allServiceForm[serviceFormIndex]?.lTSAddress || ''];
+    //         // toast.success(`${origins[0]} && ${destinations[0]}`)
+    //         if (origins[0] && destinations[0]) {
+    //             // toast.success("cll")
+    //             // Here, you can either set up the DistanceMatrixService again or trigger it
+    //             return (
+    //                 <DistanceMatrixService
+    //                     options={{
+    //                         origins,
+    //                         destinations,
+    //                         travelMode: "DRIVING",
+    //                     }}
+    //                     callback={handleDistanceMatrixResponse}
+    //                 />
+    //             );
+    //         }
+    //     };
+
+    //     fetchDistanceMatrix();
+    //     // setValue("serviceResultServerId", serviceResultServerId)
+    //     console.log("previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id", previousForm?.serviceResultServerId?._id, serviceResultServerId, previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id)
+
+    //     // toast.success("Distance matrix fetched");
+    //     // toast.success("cll")
+    // }, [serverId, previousForm, allServiceForm])
+
+    const handleServerIdChange = (selectedValue) => {
+        // This function is called when the server ID changes
+        console.log("Selected Server ID:", selectedValue);
+        // You can perform any additional actions here
+        setValue("serviceResultServerId", selectedValue);
+        setCurrentServerId(selectedValue);
+
+        console.log("Updated Server ID:", selectedValue === previousForm?.serviceResultServerId?._id);
+
+    };
     useEffect(() => {
-        // toast.success("called")
-        // setValue("serviceResultServerId", serviceResultServerId)
-        // setValue("")
-        // handleDistanceMatrixResponse()
         setPreviousAddress(serviceResultServerId)
-    }, [serverId])
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", previousForm?.serviceResultServerId?._id, previousAddress, previousForm?.serviceResultServerId?._id === previousAddress)
+        // Fetch the Distance Matrix
+        const fetchDistanceMatrix = () => {
+            const origins = [previousForm?.lTSAddress || ''];
+            const destinations = [allServiceForm[serviceFormIndex]?.lTSAddress || ''];
+            // toast.success(`${origins[0]} && ${destinations[0]}`)
+            if (origins[0] && destinations[0]) {
+                // toast.success("cll")
+                // Here, you can either set up the DistanceMatrixService again or trigger it
+                return (
+                    <DistanceMatrixService
+                        options={{
+                            origins,
+                            destinations,
+                            travelMode: "DRIVING",
+                        }}
+                        callback={handleDistanceMatrixResponse}
+                    />
+                );
+            }
+        };
+
+        fetchDistanceMatrix();
+        // setValue("serviceResultServerId", serviceResultServerId)
+        // console.log("previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id", previousForm?.serviceResultServerId?._id, allServiceForm[serviceFormIndex]?.serviceResultServerId?._id, previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id)
+        // Update the value in the form
+        console.log("Updated Server ID:", allServiceForm[serviceFormIndex]?.serviceResultServerId?._id, previousForm?.serviceResultServerId?._id);
+    }, [allServiceForm, serviceFormIndex, serverId]);
     const [googleLoaded, setGoogleLoaded] = useState(false);
     const onLoad = useCallback(() => {
         // This will be called once the library has fully loaded
@@ -847,6 +913,7 @@ const ResultForm = () => {
         setGoogleLoaded(true);
 
     }, []);
+    // const serverId = watch("serviceResultServerId")
     const handleZipChange = (event) => {
         const { value } = event.target;
         const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
@@ -855,6 +922,7 @@ const ResultForm = () => {
         if (sanitizedValue.length > 3) {
             formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
         }
+
 
         setValue("lTSZip", formattedValue); // Update the form state
     };
@@ -1124,10 +1192,12 @@ const ResultForm = () => {
                                 </GoogleMap>
 
                             </LoadScript>
-                            {/* {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && */}
-                            {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id &&
+                            {/* <TextField onKeyDown={handleTimeTripChange} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" /> */}
 
+                            {/* {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && */}
+                            {previousForm?.serviceResultServerId?._id === currentServerId &&
                                 <TextField onKeyDown={handleTimeTripChange} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
+
                                 // <div className="flex flex-col w-full items-start gap-1">
                                 //     <label className="font-normal sm:font-medium text-sm capitalize">
                                 //         Suggested Time Trip (mins)
@@ -1146,6 +1216,8 @@ const ResultForm = () => {
                                 // </div>
 
                             }
+                            {/* <TextField onKeyDown={handleTimeTripChange} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" /> */}
+
 
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
@@ -1158,10 +1230,17 @@ const ResultForm = () => {
                                 <Dropdown
                                     options={serverIdOptions}
                                     value={field.value}
-                                    onChange={field.onChange}
+                                    // onChange={field.onChange}
+                                    onChange={(option) => {
+                                        console.log(option);
+                                        field.onChange(option); // Call the function to update form state
+                                        handleServerIdChange(option); // Call your additional logic
+                                    }}
                                     label="server Id" error={errors.serviceResultServerId?.message as string}
                                 />
                             )} />
+
+
                         </div>
                         {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && <div className="w-[100%] md:w-[46%] lg:w-[30%] flex flex-col w-full items-start gap-1">
                             <label className="font-normal sm:font-medium text-sm capitalize">

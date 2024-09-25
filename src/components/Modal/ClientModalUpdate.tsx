@@ -73,7 +73,7 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
             <TextField onKeyDown={handleEnterKeyPress} label="apt" register={register} error={errors.apt} name="apt" placeholder="Enter apt" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <CheckBox onKeyDown={handleEnterKeyPress} label="Enable Case Navigation" register={register} error={errors.isActive?.message} name="isActive" />
+            <CheckBox onKeyDown={handleEnterKeyPress} label="Is Active" register={register} error={errors.isActive?.message} name="isActive" />
         </div>
     </form>
     const updateServiceResultFunction = async (data) => {

@@ -152,7 +152,7 @@ export interface TextFieldProps {
 
 const TextField = forwardRef<HTMLInputElement, TextFieldProps>((props, ref) => {
     const { label, register, error, name, placeholder, maxLength, type = "text", defaultValue, onChange, onKeyDown, required = false, readOnly = false, id, shouldFocus } = props;
-    console.log(ref)
+    // console.log(ref)
 
     return (
         <div className="flex flex-col w-full items-start gap-1">

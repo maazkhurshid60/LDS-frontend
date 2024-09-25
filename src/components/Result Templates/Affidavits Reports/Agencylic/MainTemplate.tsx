@@ -133,7 +133,7 @@ const AgencyLic = () => {
     }, [])
     return (
         <>
-            <div className="absolute h-[83.5vh] overflow-y-scroll relative">
+            <div className="absolute overflow-y-scroll relative">
                 {resultData?.map(data => {
                     return <>
                         <TemplateOutlet>

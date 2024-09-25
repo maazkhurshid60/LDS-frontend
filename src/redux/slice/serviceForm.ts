@@ -251,7 +251,7 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
         toast.error(`${error?.response?.data?.message}`)
     } finally {
         dispatch(showSpinnerReducer(false))
-        // window.location.reload();
+        window.location.reload();
 
     }
 })
