@@ -19,13 +19,23 @@ export type FormFields = z.infer<typeof userInputSectionSchema>
 
 const AdministrationServerModal = () => {
     const dispatch = useDispatch()
-    const { register, handleSubmit, formState: { errors, isSubmitting }, control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
+    const { register, handleSubmit, formState: { errors, isSubmitting }, control, setValue } = useForm<FormFields>({ resolver: zodResolver(userInputSectionSchema) })
     const { isLoading, error, data } = useGetAllData("/device/all-devices")
     const { refetch } = useGetAllData("/server/all-servers")
 
     const options = data?.map((options, index: number) => { return { label: options?.deviceCode, value: options?._id } })
     console.log(":data", data, "options", options)
+    const handleZipChange = (event) => {
+        const { value } = event.target;
+        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
 
+        let formattedValue = sanitizedValue;
+        if (sanitizedValue.length > 3) {
+            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        }
+
+        setValue("zip", formattedValue); // Update the form state
+    };
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" required />
@@ -61,8 +71,9 @@ const AdministrationServerModal = () => {
         {/* <div className="w-full md:w-[38%] xl:w-[30%]">
         <TextField onKeyDown={handleEnterKeyPress}  label="city" register={register} error={errors.city} name="city" placeholder="Enter City"/>
         </div> */}
+
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" required />
+            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" required maxLength={7} onChange={handleZipChange} />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" required />
@@ -84,9 +95,9 @@ const AdministrationServerModal = () => {
     // ADD ADMINISTRATION FUNCTION
     const administrationFunction = async (data) => {
         console.log(typeof parseInt(data?.zip))
-        const zip = parseInt(data?.zip)
+        // const zip = parseInt(data?.zip)
         const licenseNo = parseInt(data?.licenseNo)
-        const postData = { ...data, zip, licenseNo }
+        const postData = { ...data, licenseNo }
         // console.log(postData)
         dispatch(showSpinnerReducer(true))
         try {

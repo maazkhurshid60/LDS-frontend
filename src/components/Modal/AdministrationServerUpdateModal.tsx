@@ -28,6 +28,17 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
     const options = data?.map((options) => ({ label: options?.deviceCode, value: options?._id }));
     console.log(":data", data, "options", options)
     console.log("singledata>>>>>>", singledata)
+    const handleZipChange = (event) => {
+        const { value } = event.target;
+        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
+
+        let formattedValue = sanitizedValue;
+        if (sanitizedValue.length > 3) {
+            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        }
+
+        setValue("zip", formattedValue); // Update the form state
+    };
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" required />
@@ -73,7 +84,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
             <TextField onKeyDown={handleEnterKeyPress}  label="city" register={register} error={errors.city} name="city" placeholder="Enter City"/>
             </div> */}
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" required />
+            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" required maxLength={7} onChange={handleZipChange} />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" required />
@@ -98,9 +109,9 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
         try {
 
             console.log(typeof parseInt(data?.zip))
-            const zip = parseInt(data?.zip)
+            // const zip = data?.zip
             const licenseNo = parseInt(data?.licenseNo)
-            const postData = { ...data, zip, licenseNo, serverId: singledata?._id }
+            const postData = { ...data, licenseNo, serverId: singledata?._id }
             console.log("postdata", postData)
             await updateServerApi(postData)
             dispatch(showUpdateModalReducer(false))
@@ -124,7 +135,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
             setValue("country", singledata.country ?? "");
             setValue("state", singledata.state ?? "");
             setValue("phone", singledata.phone ?? "");
-            setValue("zip", singledata.zip?.toString() ?? "");
+            setValue("zip", singledata?.zip)
             setValue("fax", singledata.fax?.toString() ?? "");
             setValue("licenseNo", singledata.licenseNo?.toString() ?? "");
             setValue("apt", singledata.apt?.toString() ?? "");

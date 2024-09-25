@@ -195,7 +195,7 @@ const TableWithoutAction: React.FC<TableWithoutActionProps> = ({ headers, tableD
                                 onClick={() => handleRowClick(rowData?._id, rowIndex)}
                             >
                                 {Object.values(filteredData).map((value, colIndex) => (
-                                    <td key={colIndex} className="px-6 py-2 font-normal text-sm">
+                                    <td key={colIndex} className="px-6 py-2 font-normal text-sm h-[60px]">
                                         {typeof value === 'string' && value.length > 10 ? `${value.slice(0, 4)}...` : value}
                                         {/* {value} */}
                                     </td>

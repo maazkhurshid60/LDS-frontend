@@ -17,7 +17,7 @@
 
 // const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick,getRowData,onUpdateClick }) => {
 //     const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
-    
+
 //     // Function to filter out _id keys from rowData
 //     const filterOutIdKeys = (rowData: Record<string, any>): Record<string, any> => {
 //         const filteredData: Record<string, any> = {};
@@ -25,7 +25,7 @@
 //             if (key !== "_id" && key !== "createdAt" && key !== "updatedAt" && key !== "__v" && key !== "roles" && key !== "isActive" 
 //                 && key !== "fax"
 //             && key !== "zip" && key!=="address2"
-         
+
 //             ) {
 //                 filteredData[key] = rowData[key];
 //             }
@@ -105,7 +105,7 @@ const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick, getR
         const filteredData: Record<string, any> = {};
         Object.keys(rowData).forEach((key) => {
             if (key !== "_id" && key !== "createdAt" && key !== "updatedAt" && key !== "__v" && key !== "roles" && key !== "isActive"
-                && key !== "fax" && key !== "zip" && key !== "address2") {
+                && key !== "fax" && key !== "address2") {
                 filteredData[key] = rowData[key];
             }
         });
@@ -128,7 +128,13 @@ const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick, getR
                 <tbody>
                     {tableData?.map((rowData, rowIndex) => {
                         const filteredData = filterOutIdKeys(rowData);
+                        console.log('Row Data: ', filteredData);
 
+                        // console.log(
+                        //     Object.values(filteredData).map((value, colIndex) => (
+                        //         value
+                        //     ))
+                        // )
                         return (
                             <tr
                                 key={rowIndex}
@@ -138,11 +144,11 @@ const Table2Col: React.FC<Table2ColProps> = ({ headers, tableData, onClick, getR
                             >
                                 {Object.values(filteredData).map((value, colIndex) => (
                                     <td key={colIndex} className="px-6 py-2 font-normal text-sm">
-                                        {typeof value === "string" && value.length > 10 ? `${value.slice(0, 15)}...` : value}
+                                        {typeof value === "string" && value.length > 10 ? `${value.slice(0, 10)}...` : value}
                                     </td>
                                 ))}
                                 {userInfo?.roles?.find((data) => data?.name === "Admin") && (
-                                    <td key={rowIndex} className="px-6 py-2 font-normal text-sm flex flex-row gap-x-4 items-center justify-center">
+                                    <td key={rowIndex} className="px-6 py-2 font-normal text-sm flex flex-row gap-x-4 items-center justify-center h-[60px]">
                                         <DeleteIcon onClick={() => onClick && onClick(rowData?._id)} />
                                         <EditIcon onClick={() => onUpdateClick && onUpdateClick(rowData?._id)} />
                                     </td>

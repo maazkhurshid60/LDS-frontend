@@ -238,7 +238,7 @@ const ResultForm = () => {
                 startDate: formattedDateStart,
                 endDate: formattedDateEnd,
                 lTSAddress: data?.lTSAddress, lTSApt: data?.lTSApt, lTSBusinessName: data?.lTSBusinessName, lTSCity: data?.lTSCity,
-                lTSDescription: data?.lTSDescription, lTSFirstName: data?.lTSFirstName, oLTIndexNo: oLTIndex + "/" + currentYear, lTSZip: data?.lTSZip, lTSState: data?.lTSState
+                lTSDescription: data?.lTSDescription, lTSFirstName: data?.lTSFirstName, oLTIndexNo: oLTIndex !== "" ? oLTIndex + "/" + currentYear : "", lTSZip: data?.lTSZip, lTSState: data?.lTSState
                 // queryInformationLTAddress: data?.queryInformationLTAddress,
                 //     // queryInformationLTBusinessName: data?.queryInformationLTBusinessName,
                 //     // queryInformationLTFullName: data?.queryInformationLTFullName,
@@ -798,17 +798,18 @@ const ResultForm = () => {
             const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, totalMinutes);
             const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, totalMinutes);
             // Confirm update for the first time
-            const confirmFirstTime = window.confirm(`Do you want to add ${totalMinutes} minutes to serviceResultFirstTimeOfService?`);
+            const confirmFirstTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 1st Time Attempt?`);
             if (confirmFirstTime) {
                 console.log("First time:", firstTime);
                 setValue("serviceResultFirstTimeOfService", firstTime);
-                setValue("serviceResultTimeOfService", secondTime);
             }
             // Confirm update for the second time
-            const confirmSecondTime = window.confirm(`Do you want to add ${totalMinutes} minutes to serviceResultSecondTimeOfService?`);
+            const confirmSecondTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 2nd Time Attempt?`);
             if (confirmSecondTime) {
                 console.log("Second time:", secondTime);
                 setValue("serviceResultSecondTimeOfService", secondTime);
+                setValue("serviceResultTimeOfService", secondTime);
+
             }
         }
     };
@@ -846,6 +847,17 @@ const ResultForm = () => {
         setGoogleLoaded(true);
 
     }, []);
+    const handleZipChange = (event) => {
+        const { value } = event.target;
+        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
+
+        let formattedValue = sanitizedValue;
+        if (sanitizedValue.length > 3) {
+            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        }
+
+        setValue("lTSZip", formattedValue); // Update the form state
+    };
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
             <DatePairsModal /> :
@@ -886,8 +898,9 @@ const ResultForm = () => {
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
                         </div>
+
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
+                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" maxLength={7} onChange={handleZipChange} />
                         </div>
                         <div className="w-[30%]">
                             <TextArea row={1} register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />

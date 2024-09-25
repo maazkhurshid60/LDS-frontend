@@ -23,6 +23,17 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
     const disptach = useDispatch()
     const { isLoading, error, data, refetch } = useGetAllData("/client/all-clients")
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(clientSchema) })
+    const handleZipChange = (event) => {
+        const { value } = event.target;
+        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
+
+        let formattedValue = sanitizedValue;
+        if (sanitizedValue.length > 3) {
+            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        }
+
+        setValue("zip", formattedValue); // Update the form state
+    };
     const modalBody = <form className="flex items-center justify-center gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
 
@@ -50,7 +61,7 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
             <TextField onKeyDown={handleEnterKeyPress} label="city" register={register} error={errors.city} name="city" placeholder="Enter City" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" />
+            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" maxLength={7} onChange={handleZipChange} />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" required />
@@ -96,7 +107,7 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
         setValue("fullName", singledata?.fullName ?? "")
         setValue("mi", singledata?.mi ?? "")
         setValue("phone", singledata?.phone ?? "")
-        setValue("zip", JSON.stringify(singledata?.zip) ?? "")
+        setValue("zip", singledata?.zip)
         setValue("isActive", singledata?.isActive ?? true)
     }, [])
 

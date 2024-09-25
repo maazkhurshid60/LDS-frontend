@@ -519,7 +519,9 @@ const StandardTypeForm = () => {
             lTSApt: data?.lTSApt,
             lTSCity: data?.lTSCity,
             lTSState: data?.lTSState,
+            // lTSZip: data.lTSZip.replace(/-/g, ''),
             lTSZip: data?.lTSZip,
+
             lTSDescription: data?.lTSDescription,
             oLTIndexNo: oLTIndex + "/" + currentYear,
             oLTDescription: data?.oLTDescription,
@@ -827,7 +829,18 @@ const StandardTypeForm = () => {
 
     // NAVIGATION ENDS
 
+    // Function to handle zip code formatting
+    const handleZipChange = (event) => {
+        const { value } = event.target;
+        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
 
+        let formattedValue = sanitizedValue;
+        if (sanitizedValue.length > 3) {
+            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        }
+
+        setValue("lTSZip", formattedValue); // Update the form state
+    };
     return <>
         {allSeacrhServiceFormData?.length > 0 && isSearchServiceForm ? <SearchResultData /> :
             <div className="w-[100%]">
@@ -947,7 +960,7 @@ const StandardTypeForm = () => {
                                 )} />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
+                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" />
                             </div>
 
 
@@ -1093,7 +1106,9 @@ const StandardTypeForm = () => {
                                     <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
                                 </div>
                                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                    <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
+                                    <TextField maxLength={7}
+                                        onChange={handleZipChange}
+                                        onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
                                 </div>
                                 <div className="w-[100%]">
                                     <TextArea register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />

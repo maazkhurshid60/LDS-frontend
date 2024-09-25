@@ -147,10 +147,11 @@ export interface TextFieldProps {
     onChange?: any;
     id?: string; // Add id to props
     shouldFocus?: boolean;
+    maxLength?: any
 }
 
 const TextField = forwardRef<HTMLInputElement, TextFieldProps>((props, ref) => {
-    const { label, register, error, name, placeholder, type = "text", defaultValue, onChange, onKeyDown, required = false, readOnly = false, id, shouldFocus } = props;
+    const { label, register, error, name, placeholder, maxLength, type = "text", defaultValue, onChange, onKeyDown, required = false, readOnly = false, id, shouldFocus } = props;
     console.log(ref)
 
     return (
@@ -169,6 +170,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>((props, ref) => {
                         ref.current = e; // Assign to the current ref if it's an object
                     }
                 }}
+                maxLength={maxLength}
                 id={id} // Use the id prop here
                 type={type}
                 className={`w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor`}

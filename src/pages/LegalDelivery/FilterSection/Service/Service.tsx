@@ -74,7 +74,7 @@ const Service = () => {
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="address " error={errors.lTSAddress} name="lTSAddress" />
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt " error={errors.lTSApt} name="lTSApt" />
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="city " error={errors.lTSCity} name="lTSCity" />
-        <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip " error={errors.lTSZip} name="lTSZip" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip " error={errors.lTSZip} name="lTSZip" maxLength={6} />
         {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="commercial Description " error={errors.commercialDescription} name="commercialDescription" /> */}
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other L&T Description " error={errors.oLTDescription} name="oLTDescription" />
 
