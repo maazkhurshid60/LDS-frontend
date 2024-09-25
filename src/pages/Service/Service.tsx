@@ -214,7 +214,34 @@ const Service = () => {
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<____________________", localStorage.getItem("accessToken"))
         dispatch(getAllServiceFormThunk())
     }, [])
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cancelSearchFormFunction();
 
+
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [cancelSearchFormFunction])
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cancelAddingFormFunction();
+
+
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [cancelAddingFormFunction])
     return (
         <>
             {showModal ? (

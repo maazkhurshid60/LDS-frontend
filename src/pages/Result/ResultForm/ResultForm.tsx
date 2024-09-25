@@ -237,6 +237,8 @@ const ResultForm = () => {
             const searchData = {
                 startDate: formattedDateStart,
                 endDate: formattedDateEnd,
+                lTSAddress: data?.lTSAddress, lTSApt: data?.lTSApt, lTSBusinessName: data?.lTSBusinessName, lTSCity: data?.lTSCity,
+                lTSDescription: data?.lTSDescription, lTSFirstName: data?.lTSFirstName, oLTIndexNo: oLTIndex + "/" + currentYear, lTSZip: data?.lTSZip, lTSState: data?.lTSState
                 // queryInformationLTAddress: data?.queryInformationLTAddress,
                 //     // queryInformationLTBusinessName: data?.queryInformationLTBusinessName,
                 //     // queryInformationLTFullName: data?.queryInformationLTFullName,
@@ -244,10 +246,11 @@ const ResultForm = () => {
                 //     // queryInformationLTInputDate: data?.queryInformationLTInputDate,
             }
 
-            console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<search>>>>>>>>>>>>>>>>>>>>>>>>>>>", searchData)
+            console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<search>>>>>>>>>>>>>>>>>>>>>>>>>>>", searchData
+            )
             // dispatch(searchResultFormThunk(searchData))
             dispatch(searchServiceFormThunk(searchData))
-            dispatch(searchResultFormAddReducer(false))
+            // dispatch(searchResultFormAddReducer(false))
             // toast.success("Search Result Form will be applied")
         } else {
             if (selectedSearchResultData && selectedSearchResultData?.length > 0) {
@@ -353,7 +356,7 @@ const ResultForm = () => {
     // USE EFFECT WILL BE CALLED ON PRESSING F10 KEY
     useEffect(() => {
         const handleKeyDown = (event) => {
-            if (event.key === 'F10' || event.key === 'Escape') {
+            if (event.key === 'F10') {
                 event.preventDefault();
                 handleSubmit(submitResultFormFunction)();
 
@@ -372,6 +375,8 @@ const ResultForm = () => {
                 // handleSubmit(searchResultFormFunction)();
                 dispatch(getIsSearchServiceForm(true))
                 searchResultFormFunction()
+                reset()
+                setOltIndex("")
 
             }
         }

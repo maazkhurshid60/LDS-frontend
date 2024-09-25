@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import OutletLayoutHeader from "../../components/OutletLayout/OutLayoutHeader";
 import BorderButton from "../../components/Buttons/BorderButton/BorderButton";
 import { MdDeleteOutline, MdOutlineEdit, MdOutlineDone, MdArrowBackIos, MdArrowForwardIos, MdLastPage, MdFirstPage, MdMonitor, MdAdd } from "react-icons/md";
@@ -22,9 +22,25 @@ const Result = () => {
         dispatch(addNewResultFormAddReducer(false))
     }
     const cancelSearchFormFunction = () => {
+
         dispatch(getCancelIsSearchServiceForm())
         window.location.reload();
     }
+    // USE EFFECT WILL BE CALLED ON PRESSING F10 KEY
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cancelSearchFormFunction();
+
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [cancelSearchFormFunction])
+    console.log("isSearchResultForm", isSearchResultForm)
     return <div className=" bg-whiteColor p-2 sm:p-8 w-[95%] m-auto border-[1px] border-borderColor border-solid rounded-xl shadow-smShadow">
         <OutletLayoutHeader heading="Result Form">
             {isNewResultFormAdding ? <BorderButton buttonText="cancel" onClick={cancelAddingFormFunction} />
