@@ -4,7 +4,7 @@ import { z } from "zod";
 import { addingMailingSchema } from "../../../../schemas/service forms/addingMailing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextField from "../../../../components/InputFields/TextField/TextField";
-import CheckBox from "../../../../components/CheckBox/CustomCheckBox"
+import CheckBox from "../../../../components/CheckBox/CheckBox"
 import Button from "../../../../components/Buttons/Button/Button"
 import { useDispatch, useSelector } from "react-redux";
 import { addMailAddress, createMailingAddressThunk, deleteMailingAddressThunk, getMailAddressAfterDeletion, isAddingMailAddressReducer, updateMailAddressIntoForm, updateMailAddressIntoFormL, updateMailingAddressThunk } from "../../../../redux/slice/mailingAdresses";
@@ -29,6 +29,7 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
     const AddMailingFunction = async (data) => {
         const zip = parseInt(data?.zip)
         const mailAddres = { ...data, zip: zip }
+        console.log("data", data)
         dispatch(createMailingAddressThunk(mailAddres))
         reset()
 
@@ -83,31 +84,31 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
         <form className="flex flex-col items-end">
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField onKeyDown={handleEnterKeyPress} 
+                    <TextField onKeyDown={handleEnterKeyPress}
                         register={register} label="full Name" error={errors.firstName} name="firstName" required />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="address" error={errors.address} name="address" required/>
+                    <TextField onKeyDown={handleEnterKeyPress}
+                        register={register} label="address" error={errors.address} name="address" required />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="city" error={errors.city} name="city" required/>
+                    <TextField onKeyDown={handleEnterKeyPress}
+                        register={register} label="city" error={errors.city} name="city" required />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="state" error={errors.state} name="state" required/>
+                    <TextField onKeyDown={handleEnterKeyPress}
+                        register={register} label="state" error={errors.state} name="state" required />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="apt" error={errors.apt} name="apt" required/>
+                    <TextField onKeyDown={handleEnterKeyPress}
+                        register={register} label="apt" error={errors.apt} name="apt" required />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField onKeyDown={handleEnterKeyPress} 
-                        register={register} label="zip" error={errors.zip} name="zip" required/>
+                    <TextField onKeyDown={handleEnterKeyPress}
+                        register={register} label="zip" error={errors.zip} name="zip" required />
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <CheckBox onKeyDown={handleEnterKeyPress} 
+                    <CheckBox onKeyDown={handleEnterKeyPress}
                         register={register} label="RRR" error={errors.rRR?.message} name="rRR" />
                 </div>
             </div>
