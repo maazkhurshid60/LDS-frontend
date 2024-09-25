@@ -3,9 +3,12 @@ import { toast } from 'react-toastify';
 import { logoutUser } from '../redux/slice/userDetail';
 import { useDispatch } from 'react-redux';
 
+import { baseUrl } from './baseUrl/baseUrl';
+
 // Create an Axios instance
 const api = axios.create({
-    baseURL: "https://lds-backend-server.onrender.com/api/v1",
+    baseURL: baseUrl
+    // baseURL: "https://lds-backend-server.onrender.com/api/v1",
 });
 
 
