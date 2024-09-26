@@ -34,18 +34,6 @@ const ServiceType = () => {
     const [searchedData, setSearchedData] = useState()
     const [searchValue, setSearchValue] = useState("")
     const dispatch = useDispatch();
-    // const [currentPage, setCurrentPage] = useState(1); // State to manage current page
-    // const dataLimit = 5; // Define your data limit here
-    // const totalPages = Math.ceil(data?.length / dataLimit);
-
-    // const onPageChange = (page: number) => {
-    //     setCurrentPage(page); // Update current page state
-    // };
-
-    // // Calculate the indices for the current page's data slice
-    // const lastIndexItem = dataLimit * currentPage;
-    // const firstIndexItem = lastIndexItem - dataLimit;
-    // const currentTableData = data?.slice(firstIndexItem, lastIndexItem);
 
     const deleteData = async (id: string) => {
         dispatch(showSpinnerReducer(true))
@@ -55,7 +43,6 @@ const ServiceType = () => {
             await refetch();
             checkLastRecord()
         } catch (error) {
-            console.log(error);
             toast.error("Something went wrong");
         } finally {
             dispatch(showSpinnerReducer(false))
@@ -75,7 +62,7 @@ const ServiceType = () => {
                 value?.toString().toLowerCase().includes(searchValue.toLowerCase())
             )
         ))
-    }, [searchValue,data])
+    }, [searchValue, data])
 
     if (isLoading) return <DataLoader text="Service type" />;
 
@@ -99,11 +86,9 @@ const ServiceType = () => {
                                     onClick={() => dispatch(showModalReducer(true))}
                                 />
                             )}
-                            {/* <BorderButton buttonText="Filter" disabled /> */}
                         </OutletLayoutHeader>
                         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
                             <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                            {/* <Filter /> */}
                         </div>
                         <Table
                             headers={headers}

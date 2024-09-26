@@ -36,24 +36,18 @@ import FormatedIndexInputField from "../../../../components/InputFields/TextFiel
 const StandardTypeForm = () => {
     const mailingAddressData = useSelector((state: RootState) => state.mailingAdress?.mailingAddressData)
     const loadingSpinner = useSelector((state: RootState) => state.showSpinner?.isShowSpinner)
-    console.log("loadingSpinner", loadingSpinner)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm?.isNewFormAdd)
     const getMailingAddressDataOnFormAdding = useSelector((state: RootState) => state.mailingAdress?.getSelectMail)
     const filterMailingAddressDataOnFormAdding = getMailingAddressDataOnFormAdding?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
     const savedLTData = useSelector((state: RootState) => state.serviceForm?.savedLTFormData)
-    // const LTData = useSelector((state: RootState) => state.serviceForm.savedLTFormData)
-    console.log("saved lt data", savedLTData)
     // GET ALL MAILING ADDRESSES THAT COMMING INSIDE THE FORMS 
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress?.serviceFormMailingAdress?.mailingAdresses)
     const filterExistingFormMailingAdress = getFormMailingAdress?.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
-    console.log("filterExistingFormMailingAdress", getFormMailingAdress)
     const [checkedName, setCheckedName] = useState<string | null>()
-    // LTServiceData?.find((data) => data?.isActive)?._id || null
-    // );
 
     const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
     const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
@@ -68,7 +62,6 @@ const StandardTypeForm = () => {
     const getSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === savedLTData?.clientId && { value: data?._id, label: data?.fullName })
     const getExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
 
-    console.log("clientIdOptions", holidayData)
     const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === savedLTData?.serviceType && { value: data?._id, label: data?.fullName })
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
@@ -86,7 +79,6 @@ const StandardTypeForm = () => {
     const detailSectionRef = useRef(null);
 
     // SEARCH SERVICE FORM STARTS
-    // const [isSearchServiceForm, setIsSearchSericeForm] = useState(false)
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const allSeacrhServiceFormData = useSelector((state: RootState) => state.serviceForm.allSearchServiceFormData)
@@ -94,15 +86,12 @@ const StandardTypeForm = () => {
     const selectedSearchServiceFormData = useSelector((state: RootState) => state.serviceForm.selectedSearchServicetData)
     const getSearchExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const getSearchExistingSelectedServiceType = serviceTypeOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.serviceType?._id && { value: data?._id, label: data?.fullName })
-    // const selectedServiceType = serviceTypeOptions?.find(option => option?.value === value)?.label;
     const [selectedServiceType, setSelectedServiceType] = useState()
     const currentYear = new Date().getFullYear().toString().slice(-2);
     const [oLTIndex, setOltIndex] = useState("")
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&****************************************", oLTIndex);
     // TAB FUNCTIONALITY STARTS HERE
     const businessNameRef = useRef<HTMLInputElement>(null);
     // TAB FUNCTIONALITY ENDS HERE
-    console.log("bussniessnamref", businessNameRef)
     // Manually set the values for startDate and endDate in the form
     const handleStartDateChange = (date) => {
         setStartDate(date);
@@ -118,7 +107,6 @@ const StandardTypeForm = () => {
         const handleKeyDown = (event) => {
             if (event.key === 'F4') {
                 event.preventDefault();
-                // handleSubmit(searchResultFormFunction)();
                 dispatch(getIsSearchServiceForm(true))
 
             }
@@ -146,13 +134,7 @@ const StandardTypeForm = () => {
 
         const label = serviceTypeOptions?.find(option => option?.value === value)?.label;
         setSelectedServiceType(serviceTypeOptions?.find(option => option?.value === value)?.label)
-        // if (selectedServiceType === "commercial") {
-        //     // Use a timeout to ensure the ref is set after the render
-        //     setTimeout(() => {
-        //         console.log('Business Name Ref:', businessNameRef.current);
-        //         businessNameRef.current?.focus(); // Focus on the business name input field
-        //     }, 0);
-        // }
+
         if (label === "Standard") {
             // Update the headerFormData state with the required form values
             setHeaderFormData({
@@ -166,27 +148,9 @@ const StandardTypeForm = () => {
             const LTData = { jobNo, clientId, caption, inputDate, caseNo, serviceType }
             dispatch(savedLTFormDataReducer(LTData))
             dispatch(moveToStandardFormReducer(selectedServiceType))
-            toast.success("Called")
         }
     };
 
-    // const handleMoveToStandardForm = (value) => {
-    //     console.log("headerFormData",headerFormData)
-    //     const { clientId, inputDate, caseNo } = getValues();
-
-    //     if (!inputDate || !caseNo || !clientId ) {
-    //         // Show error message if either field is empty
-    //         setValue("serviceType", "");
-    //         toast.error("Input Date,case No and clientId");
-    //         return;
-    //     }
-    //     const data = serviceTypeOptions?.find(data => data?.value === value)?.label
-    //     if (data === "Standard") {
-    //         handleSubmit(StandardTypeFormSubmitFunciton)();
-    //         // dispatch(savedLTFormDataReducer(headerFormData))
-    //         // dispatch(moveToStandardFormReducer(data))
-    //     }
-    // }
     // GET LONGITUDE AND LATITUDE ON THE BASIS OF CITY STARTS
     const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
     const [city, setCity] = useState("Kohat");
@@ -203,8 +167,6 @@ const StandardTypeForm = () => {
                 }
             );
 
-            // console.log("Full API Response:", response.data); // Log the entire API response
-
             if (response?.data?.results && response.data.results.length > 0) {
                 const location = response.data.results[0].geometry.location;
                 setCoordinates({
@@ -212,10 +174,10 @@ const StandardTypeForm = () => {
                     lng: location.lng,
                 });
             } else {
-                console.warn("No results found for the given city name.");
+                toast.warn("No results found for the given city name.");
             }
         } catch (error) {
-            console.error("Error fetching the coordinates:", error);
+            toast.error("Error fetching the coordinates:");
         }
     };
 
@@ -223,19 +185,10 @@ const StandardTypeForm = () => {
         getCoordinates();
     }, [city]);
 
-    useEffect(() => {
-        console.log("Longitude:", coordinates.lng);
-        console.log("Latitude:", coordinates.lat);
-    }, [coordinates]);
-
     // GET LONGITUDE AND LATITUDE ON THE BASIS OF CITY ENDS
 
     // const [isAddMail, dispatch(isAddingMailAddressReducer] = us)eState(false)
-    // console.log("allServiceFormData[serviceFormIndex]?.standardServiceDetail?.firstName", allServiceFormData[serviceFormIndex]?.standardServiceType?._id)
-
-
     const handleCheckboxChange = (data: any) => {
-        console.log("id checkoubox", data)
         setCheckedName(data?._id);
         if (data?.name === 'Other L&T') {
             detailSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -267,8 +220,6 @@ const StandardTypeForm = () => {
     // USE EFFECT TO SET VALUES OF INDEX 0 SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
 
     useEffect(() => {
-        // alert("seleted calles")
-        console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////", allServiceFormData[serviceFormIndex]?.oLTIndexNo)
 
         if (selectedSearchServiceFormData?.length > 0) {
             // Set form values
@@ -277,8 +228,6 @@ const StandardTypeForm = () => {
             setJobNo(JSON.stringify(selectedSearchServiceFormData[0]?.jobNo));
             setValue("inputDate", selectedSearchServiceFormData[0]?.inputDate);
             setValue("caseNo", JSON.stringify(selectedSearchServiceFormData[0]?.caseNo));
-            // if (selectedSearchServiceFormData[0]?.oLTIndexNo === null) setValue("oLTIndexNo", "");
-            // else setValue("oLTIndexNo", selectedSearchServiceFormData[0]?.oLTIndexNo);
             if (selectedSearchServiceFormData[0]?.oLTIndexNo === null) setOltIndex("");
             else setOltIndex(selectedSearchServiceFormData[0]?.oLTIndexNo);
 
@@ -297,11 +246,8 @@ const StandardTypeForm = () => {
             dispatch(getFormMailAddress({ data, id }))
             if (selectedSearchServiceFormData[0]?.lTSFirstName) {
                 setMultipleFullname(selectedSearchServiceFormData[0]?.lTSFirstName.split(','));
-                // alert("lTSFirstName")
             }
             else {
-                // alert("qqq")
-
                 setMultipleFullname([]);
             }
         }
@@ -309,22 +255,16 @@ const StandardTypeForm = () => {
             const currentData = allServiceFormData[serviceFormIndex];
             const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
             const id = allServiceFormData[serviceFormIndex]?._id
-            // console.log(data, id)
             dispatch(getFormMailAddress({ data, id }))
 
             if (currentData) {
-
-                // console.log("new form is not adding****************************************", allServiceFormData[serviceFormIndex]?.inputDate);
-                //    toast.success("current****************************************");
-
                 // Set form values
                 setValue("clientId", getExistingSelectedClientoption?.value);
                 setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
                 setJobNo(JSON.stringify(currentData?.jobNo));
                 setValue("inputDate", currentData?.inputDate);
                 setValue("caseNo", JSON.stringify(currentData?.caseNo));
-                // if (currentData?.oLTIndexNo === null) setValue("oLTIndexNo", "");
-                // else setValue("oLTIndexNo", currentData?.oLTIndexNo);
+
                 if (currentData?.oLTIndexNo === null) setOltIndex("");
                 else setOltIndex(currentData?.oLTIndexNo);
                 setValue("oLTDescription", currentData?.oLTDescription);
@@ -336,21 +276,17 @@ const StandardTypeForm = () => {
                 setValue("lTSState", currentData?.lTSState);
                 setValue("lTSZip", currentData?.lTSZip);
                 setValue("lTSDescription", currentData?.lTSDescription);
-                // console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////", currentData?.inputDate)
                 if (currentData?.lTSFirstName) {
                     setMultipleFullname(currentData.lTSFirstName.split(','));
-                    // alert("lTSFirstName")
                 }
                 else {
-                    // alert("qqq")
-                    // selectedSearchServiceFormData[0]?.lTSFirstName
                     setMultipleFullname([]);
                     setJoinedFullname(currentData?.lTSFirstName)
                 }
                 setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
 
             } else {
-                console.log("No current data found for the form index.");
+                toast.error("No current data found for the form index.");
             }
         }
         else {
@@ -366,12 +302,10 @@ const StandardTypeForm = () => {
 
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
-            // setValue("inputDate", savedLTData?.inputDate);
             setValue("oLTIndexNo", savedLTData?.oLTIndexNo);
 
             setValue("caseNo", savedLTData?.caseNo);
             setValue("caption", savedLTData?.caption);
-            // setValue("lTSFirstName", savedLTData?.lTSFirstName);
             setValue("lTSBusinessName", savedLTData?.lTSBusinessName);
             setValue("lTSAddress", savedLTData?.address);
             setValue("lTSApt", savedLTData?.lTSApt);
@@ -379,51 +313,12 @@ const StandardTypeForm = () => {
             setValue("lTSState", savedLTData?.lTSState);
             setValue("lTSZip", savedLTData?.lTSZip);
             setValue("lTSDescription", savedLTData?.lTSDescription);
-            // alert(savedLTData?.lTServiceType?._id)
             { savedLTData?.lTSFirstName && setMultipleFullname(savedLTData?.lTSFirstName.split(',')); }
             setCheckedName(savedLTData?.lTServiceType?._id);
             setCheckedName(savedLTData?.lTServiceType)
         }
 
-        //    if (jobNo===1) {
-        //     // toast.success("new form is adding");
-        //     if( savedLTData?.inputDate){
-        //         setValue("inputDate", savedLTData?.inputDate);
-
-        //     }
-        //     else{
-
-        //         const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-        //         setValue("inputDate", currentDate);
-        //     }
-        //         setValue("clientId", getSelectedClientoption?.value);
-        //         setValue("serviceType", getSelectedServiceTypeOption?.value);
-        //         setValue("oLTIndexNo", JSON.stringify(savedLTData?.oLTIndexNo));
-
-        //         setValue("caseNo", savedLTData?.caseNo);
-        //         setValue("caption", savedLTData?.caption);
-        //         // setValue("lTSFirstName", savedLTData?.lTSFirstName);
-        //         setValue("lTSBusinessName", savedLTData?.lTSBusinessName);
-        //         setValue("lTSAddress", savedLTData?.address);
-        //         setValue("lTSApt", savedLTData?.lTSApt);
-        //         setValue("lTSCity", savedLTData?.lTSCity);
-        //         setValue("lTSState", savedLTData?.lTSState);
-        //         setValue("lTSZip", savedLTData?.lTSZip);
-        //         setValue("lTSDescription", savedLTData?.lTSDescription);
-        //         // alert(savedLTData?.lTServiceType?._id)
-        //         {savedLTData?.lTSFirstName && setMultipleFullname(savedLTData?.lTSFirstName.split(',')); }
-        //         setCheckedName(savedLTData?.lTServiceType?._id);
-        //         setCheckedName(savedLTData?.lTServiceType)
-        //     }
-
     }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding, selectedSearchServiceFormData, isSearchServiceForm]);
-
-
-
-    // }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding,  savedLTData]);
-
-    // }, [allServiceFormData, serviceFormIndex, setValue, isNewFormAdding, getExistingSelectedClientoption, getExistingSelectedServiceTypeoption, savedLTData]);
-
 
     // USE EFFECT TO GET ALL MAILING ADDRESS FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
@@ -454,7 +349,6 @@ const StandardTypeForm = () => {
     useEffect(() => {
         const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
         const id = allServiceFormData[serviceFormIndex]?._id
-        // console.log(data, id)
         dispatch(getFormMailAddress({ data, id }))
     }, [serviceFormIndex])
     // FUNCTION TO SAVE DATA
@@ -472,16 +366,7 @@ const StandardTypeForm = () => {
 
 
     const StandardTypeFormSubmitFunciton = (data) => {
-        // alert("serviceTypeData")
-        // const serviceTypeData = serviceTypeOptions?.find(data => data?.value === value)?.label
-        // alert(serviceTypeData)
-        // if (serviceTypeData === "Standard") {
-        //     dispatch(savedLTFormDataReducer(headerFormData))
-        //     dispatch(moveToStandardFormReducer(data))
-        //     // handleSubmit(StandardTypeFormSubmitFunciton)();
-        // }
-        // alert("called")
-        console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000", oLTIndex + "/" + currentYear)        //    DATA FOR STANDARD FORM STARTS
+        //    DATA FOR STANDARD FORM STARTS
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: allServiceFormData[serviceFormIndex]?.sSDCourt,
@@ -495,13 +380,11 @@ const StandardTypeForm = () => {
             aptServe: allServiceFormData[serviceFormIndex]?.aptServe,
             zipServe: allServiceFormData[serviceFormIndex]?.zipServe
         }
-        // console.log(">>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>.", standardServiceDetail)
         //    DATA FOR STANDARD FORM ENDS
 
         //    DATA FOR L&T FORM STARTS
         const serviceFormId = allServiceFormData[serviceFormIndex]?._id
         const LTData = {
-            // serviceFormId,
             jobNo: parseInt(jobNo),
             inputDate: data?.inputDate,
             clientId: data?.clientId,
@@ -511,7 +394,6 @@ const StandardTypeForm = () => {
             lTServiceType: checkedName,
             noOfAddLMailings: isNewFormAdding ? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
             mailingAddresses: isNewFormAdding ? getMailingAddressDataOnFormAdding : getFormMailingAdress,
-            // lTSFirstName: joinedFullname,
             lTSFirstName: joinedFullname === "" ? allServiceFormData[serviceFormIndex]?.lTSFirstName : joinedFullname,
             lTSBusinessName: data?.lTSBusinessName,
 
@@ -519,7 +401,6 @@ const StandardTypeForm = () => {
             lTSApt: data?.lTSApt,
             lTSCity: data?.lTSCity,
             lTSState: data?.lTSState,
-            // lTSZip: data.lTSZip.replace(/-/g, ''),
             lTSZip: data?.lTSZip,
 
             lTSDescription: data?.lTSDescription,
@@ -558,11 +439,8 @@ const StandardTypeForm = () => {
                 startDate: formattedDateStart,
                 endDate: formattedDateEnd
             }
-            // toast.success("called")
-            console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<search>>>>>>>>>>>>>>>>>>>>>>>>>>>", searchData)
             dispatch(searchServiceFormThunk(searchData))
-            // dispatch(searchResultFormAddReducer(false))
-            // toast.success("Search Result Form will be applied")
+
         }
         else if (!isNewFormAdding && selectedSearchServiceFormData?.length > 0) {
             const sendDataToUpdateApi = {
@@ -571,24 +449,15 @@ const StandardTypeForm = () => {
             };
             const { updatedAt, __v, _id, ...filteredData } = sendDataToUpdateApi;
 
-            // console.log("sendDataToAddApi", sendDataToUpdateApi?.caption)
             dispatch(updateServiceFormThunk(sendDataToUpdateApi))
 
-            // toast.success("called")
         }
         else if (!isNewFormAdding && allServiceFormData?.length > 0) {
             dispatch(updateServiceFormThunk(updatedData))
             dispatch(savedLTFormDataReducer(LTData))
-            // dispatch(moveToStandardFormReducer("Standard"))
-            console.log("updating data", updatedData?.lTSAddress, "updatedData?.lTSAddress", data?.lTSAddress)
-
-
         } else {
             dispatch(savedLTFormDataReducer(LTData))
             dispatch(addServiceFormThunk(LTData))
-            // toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
-            // dispatch(moveToStandardFormReducer("Standard"))
-
         }
     }
     // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
@@ -604,12 +473,10 @@ const StandardTypeForm = () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [handleSubmit, StandardTypeFormSubmitFunciton]);
-    // console.log("allServiceFormData[serviceFormIndex]", allServiceFormData[serviceFormIndex]?.lTServiceType?._id)
     const onKeyPressForAnotherName = (e) => {
         if (e.key === "Tab") {
             e.preventDefault()
             handleEnterKeyPress(event, "residential", allIndex)
-            // toast.success("cal")
         }
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -621,17 +488,12 @@ const StandardTypeForm = () => {
                 setMultipleFullname(updatedFullname);
 
                 const joinedNames = updatedFullname.join(',');
-                console.log(">>>>>>>>", joinedNames);
                 setJoinedFullname(joinedNames);
             }
 
             setInputFullname("");
         }
-        // else if (e.key === 'Escape') {
-        //     setInputFullname(""); // Clear input on 'Escape' key press
-        //     const joinedNames = multipleFullname.join(',');
-        //     setJoinedFullname(joinedNames); // Or do something else with the joined string
-        // }
+
 
     }
     const deleteName = (data) => {
@@ -648,12 +510,7 @@ const StandardTypeForm = () => {
         const { caption, caseNo,
             clientId,
             inputDate,
-            // oSSTDescription,
-            // oSSTIndexNo, 
-
             lTSAddress,
-            // standardServiceType, 
-
             lTSBusinessName,
             lTSZip,
             lTSState,
@@ -662,16 +519,12 @@ const StandardTypeForm = () => {
             lTSFirstName,
 
             lTSDescription,
-            // sSDCourt,
-            // sSDDefendants,
-            // sSDPlaintiff,
+
             serviceType,
             lTServiceType
         } = getValues();
-        // caseNo: parseInt(caseNo),
         const caseNooo = parseInt(caseNo ?? '0')
         setJoinedFullname(multipleFullname.join(","))
-        console.log("sendDataToAddApi", joinedFullname)
 
         const sendDataToAddApi = {
             jobNo: allServiceFormData[allServiceFormData?.length - 1]?.jobNo + 1,
@@ -698,8 +551,7 @@ const StandardTypeForm = () => {
             mailingAddresses: filterExistingFormMailingAdress,
             noOfMailingAddres: filterExistingFormMailingAdress?.length
         }
-        // toast.success(`${caption}`)
-        // console.log("sendDataToAddApi", sendDataToAddApi)
+
         dispatch(addServiceFormThunk(sendDataToAddApi))
     }
 
@@ -718,12 +570,6 @@ const StandardTypeForm = () => {
             setValue("inputDate", "")
         }
     }, [inputeDate]);
-
-
-    // console.log(">>>>>>>>>>>>>>>>>>>", checkedName,
-    //     LTServiceData?.find((data, index) => {
-    //         data._id
-    //     }))
 
     // Function to convert UTC time string to local 12-hour format
     const convertUtcToLocal12HourFormat = (utcTime: string): string => {
@@ -753,10 +599,6 @@ const StandardTypeForm = () => {
     const createdAtLocal12hr = createdAtUtc ? convertUtcToLocal12HourFormat(createdAtUtc) : '';
     const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedAtUtc) : '';
 
-
-
-    console.log("service type", selectedServiceType)
-
     // NAVIGATION STARTS
     const captionRef = useRef<HTMLInputElement>(null);
     const checkboxRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -765,14 +607,9 @@ const StandardTypeForm = () => {
     const [shouldFocusCaption, setShouldFocusCaption] = useState("");
     const [allIndex, setAllIndex] = useState()
     useEffect(() => { setAllIndex(LTServiceData?.length + 2) }, [LTServiceData])
-    console.log("all index", allIndex)
     const firstNameRef = useRef<HTMLInputElement>(null);
     const bussinessnameRef = useRef<HTMLInputElement>(null);
     const desRef = useRef<HTMLInputElement>(null);
-
-
-
-
 
     const handleEnterKeyPressCheckboxFocus = (event: React.KeyboardEvent) => {
         const { serviceType } = getValues(); // Assuming this gets the form values
@@ -788,13 +625,7 @@ const StandardTypeForm = () => {
                 // Check if the current checkbox is checked
                 if (currentCheckbox.checked) {
                     // If checked, move to the next input based on selected service type
-
-                    // if (selectedServiceType === "residential") {
                     handleEnterKeyPress(event, "checkbox", allIndex)// Move to the Index Number input
-
-                    // } else {
-                    //     bussinessnameRef.current?.focus(); // Move to the Discretion input
-                    // }
                 } else {
                     // If not checked, focus the next checkbox
                     const nextCheckbox = checkboxRefs.current[currentCheckboxIndex + 1];
@@ -819,11 +650,10 @@ const StandardTypeForm = () => {
     useEffect(() => { setOpenServiceType(false) }, [isNewFormAdding])
 
     const handleClientSelect = (event, ref, id) => {
-        console.log(ref)
         if (id === "serviceType") {
             setOpenServiceType(true);
         }
-        else if (id === "caption") { console.log("caption", captionRef) }
+        else if (id === "caption") { }
 
     };
 
@@ -871,7 +701,6 @@ const StandardTypeForm = () => {
                                                 <label className="w-[180px] font-semibold">Start Date</label>
                                                 <DatePicker
                                                     selected={startDate}
-                                                    // onChange={(date) => setStartDate(date)}
                                                     selectsStart
                                                     startDate={startDate}
                                                     endDate={endDate}
@@ -886,7 +715,6 @@ const StandardTypeForm = () => {
                                                 <label className="w-[180px] font-semibold">End Date</label>
                                                 <DatePicker
                                                     selected={endDate}
-                                                    // onChange={(date) => setEndDate(date)}
                                                     selectsEnd
                                                     startDate={startDate}
                                                     endDate={endDate}
@@ -913,15 +741,12 @@ const StandardTypeForm = () => {
                                 <Controller name="clientId" control={control} render={({ field }) => (
                                     <Dropdown
                                         options={clientIdOptions}
-                                        // singleOption={getSelectedClientoption}
                                         value={field.value}
-                                        // onChange={field.onChange}
                                         label="Client id" error={errors.clientId?.message as string}
                                         required
                                         isOpenOption={isNewFormAdding}
                                         onChange={(value) => {
                                             field.onChange(value);
-                                            // handleClientSelect(value); // Handle client selection
                                         }}
                                         onKeyDown={() => handleClientSelect("a", "serviceType", "serviceType")}
                                         id="clientId"
@@ -937,8 +762,6 @@ const StandardTypeForm = () => {
                                         value={field.value}
                                         onChange={(value) => {
                                             field.onChange(value); // Update the field value
-                                            // toast.success("Cal"); // Show success toast
-
                                             // You can call handleEnterKeyPress with default or context values
                                             const simulatedEvent = {
                                                 target: {
@@ -967,7 +790,6 @@ const StandardTypeForm = () => {
 
 
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                {/* <TextField id="caption" onKeyDown={handleEnterKeyPressCheckboxFocus} register={register} label="caption" error={errors.caption} name="caption" ref={captionRef} /> */}
                                 <TextField
                                     id="caption"
                                     onKeyDown={handleEnterKeyPressCheckboxFocus}
@@ -980,15 +802,7 @@ const StandardTypeForm = () => {
                             </div>
                         </div>
                         {/* L&T SERVICE TYPE STARTS */}
-                        {/* <CustomCheckBox
-                            onKeyDown={handleEnterKeyPressCheckboxFocus}
-                            ref={checkboxRefs}
-                            register={register}
-                            name={"focuscheckbox"}
-                            label={"checkbox"}
-                            checked={checkedName}
-                            onChange={() => handleCheckboxChange(checkbox)}
-                        /> */}
+
                         <div className="mt-6">
                             <h1 className="font-semibold   mb-4 text-base
             md:text-md
@@ -996,15 +810,7 @@ const StandardTypeForm = () => {
                             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                                 {LTServiceData?.map((data, index) => {
                                     return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
-                                        {/* <CustomCheckBox
-                                            onKeyDown={handleEnterKeyPressCheckboxFocus}
-                                            ref={addCheckboxRef(index)}
-                                            register={register}
-                                            name={data?.name?.replace(/[^a-zA-Z0-9]/g, "")}
-                                            label={data?.name}
-                                            checked={checkedName === data?._id}
-                                            onChange={() => handleCheckboxChange(data)}
-                                        /> */}
+
                                         <CustomCheckBox
                                             onKeyDown={handleEnterKeyPressCheckboxFocus}
                                             ref={el => (checkboxRefs.current[index] = el)} // Store the checkbox refs
@@ -1024,37 +830,14 @@ const StandardTypeForm = () => {
                         <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-6" >
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress} ref={desRef} register={register} label="Other L&T Description" error={errors.oLTDescription} name="oLTDescription" />
-                                {/* <div className="flex flex-col w-full items-start gap-1">
-                                    <label className="font-normal sm:font-medium text-sm capitalize">Other L&T Description</label>
 
-                                    <input
-                                        ref={discriRef}
-                                        {...register("oLTDescription")} // Spread the field properties
-                                        onKeyDown={handleEnterKeyPressCheckboxFocus}
-                                    // className={`w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor ${errors.oLTDescription ? 'border-red-500' : 'border-gray-300'}`}
-                                    />
-
-
-                                </div> */}
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                {/* <TextField onKeyDown={() => handleEnterKeyPress(selectedServiceType)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" /> */}
-
-                                {/* <TextField onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" placeholder={`LT1234/${currentYear}`} /> */}
                                 <FormatedIndexInputField
                                     onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" oltIndexValue={oLTIndex}
                                     onChange={setOltIndex} year={currentYear}
                                 />
-                                {/* <div className="flex flex-col w-full items-start gap-1">
-                                    <label className="font-normal sm:font-medium text-sm capitalize">Index Number</label>
-                                    <input
-                                        ref={indexNumberRef}
-                                        // className={`w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor ${errors.oLTIndexNo ? 'border-red-500' : 'border-gray-300'}`}
-                                        // {...register("oLTIndexNo")}
 
-                                        onKeyDown={handleEnterKeyPressCheckboxFocus}
-                                    />
-                                </div> */}
                             </div>
                         </div>
                         {/* OTHER L&T SERVICE TYPE ENDS */}
@@ -1067,7 +850,6 @@ const StandardTypeForm = () => {
                             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
 
                                 <div className="w-[100%] md:w-[46%] lg:w-[30%]" >
-                                    {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" /> */}
                                     <div className="flex flex-col w-full items-start gap-1 flex-wrap">
                                         <label className=" font-normal sm:font-medium text-sm capitalize">Full Name</label>
                                         <div className="flex items-center flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1 text-wrap">
@@ -1153,10 +935,8 @@ const StandardTypeForm = () => {
                                 <div className="mt-4">
                                     {filterExistingFormMailingAdress?.map((data: any, id) => (
                                         <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
-                                            {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
                                             <IoMdClose onClick={() => dispatch(getFormMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
                                             {/* SENDING DATA TO ADDMAILING COMPONENT IF DATA IS SELECTED FORM DROPDOWN */}
-                                            {/* <AddMailing data={data} id={id+1} /> */}
                                             <ShowAllAddMailingAddress data={data} id={id} />
 
                                         </div>
@@ -1169,10 +949,8 @@ const StandardTypeForm = () => {
                                 <div className="mt-4">
                                     {filterMailingAddressDataOnFormAdding?.map((data: any, id) => (
                                         <div key={id} className="relative border-[1px] border-solid border-borderColor/10 bg-grayColorLight/50 shadow-smShadow rounded-lg p-4 mt-2">
-                                            {/* <DeleteIcon onClick={()=>deleteMailingData(data,id)}/> */}
                                             <IoMdClose onClick={() => dispatch(getMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
                                             {/* SENDING DATA TO ADDMAILING COMPONENT IF DATA IS SELECTED FORM DROPDOWN */}
-                                            {/* <AddMailing data={data} id={id} /> */}
                                             <ShowAllAddMailingAddress data={data} id={id} />
 
 
@@ -1183,12 +961,7 @@ const StandardTypeForm = () => {
                             {/* DISPLAY ALL SELECTED MAILING ENDS */}
 
                         </div>
-                        {/* ADDING MAILING ENDS
-            {isNewFormAdding && <div className="w-full flex justify-end flex-row mt-6" >
-                <div className="w-[21%] " >
-                    <Button text="Save Data" onClick={dataSavedFunction} />
-                </div>
-            </div>} */}
+                        {/* ADDING MAILING ENDS*/}
                         {/* END OF FORM STARTS */}
                         <div className="mt-6">
                             <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>
@@ -1227,7 +1000,6 @@ const StandardTypeForm = () => {
                             <div className="w-[21%] " >
 
                                 <Button text={`${isNewFormAdding ? "add Data" : "Update Data"}`}
-                                    //  onClick={handleSubmit(StandardServiceTypeFunction)}
                                     disabled={isSubmitting}
 
                                 />

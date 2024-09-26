@@ -36,43 +36,29 @@ const AvailableRoleSection = () => {
     }
 
     const deleteRoleFunction = (id: string) => {
-        // console.log("delete id", id)
         dispatch(deleteRole(id))
 
     }
 
     const updateRoleFunction = (id: string) => {
-        console.log("update id", id)
         dispatch(getOneRole(id))
         dispatch(showRoleModalReducer(true))
     }
 
     useEffect(() => {
         dispatch(getAllRoles())
-    }, [ ])
+    }, [])
 
-console.log("allRolesData",allRolesData)
     return <>
 
         {showModal ? <AddRoleModal /> : <><div className="flex items-center flex-row justify-between  flex-wrap w-[99%]">
 
             <h1 className="font-semibold md:text-md
     lg:text-xl">Available Roles</h1>
-            {/* <div className="w-[13%]">
 
-                {isAdmin && <Button text="Add New Role" onClick={showModalFunction} />}
-            </div> */}
         </div>
-            {/* <Table headers={headers} tableData={allRolesData} onClick={deleteRoleFunction} onUpdateClick={updateRoleFunction} /> */}
-            <TableWithoutAction headers={headers} tableData={allRolesData}   />
+            <TableWithoutAction headers={headers} tableData={allRolesData} />
 
-            {/* <Pagination
-totalPages={totalPages}
-currentPage={currentPage}
-dataLimit={dataLimit}
-tableData={availableRoleData?.tableData}
-onchange={onPageChange} // Pass onPageChange as onchange prop
-/> */}
 
         </>}
 

@@ -1,74 +1,3 @@
-// import React, { useState } from 'react';
-// import { Controller } from 'react-hook-form';
-
-// interface FormatedIndexInputFieldProps {
-//     name: string;
-//     control: any;
-//     label: string;
-//     error?: any;
-//     placeholder?: string;
-// }
-
-// const FormatedIndexInputField: React.FC<FormatedIndexInputFieldProps> = ({
-//     name,
-//     control,
-//     label,
-//     error,
-//     placeholder,
-// }) => {
-//     const currentYear = new Date().getFullYear().toString().slice(-2);
-//     const [inputValue, setInputValue] = useState('');
-
-//     const handleChange = (event) => {
-//         const value = event.target.value;
-
-//         // Allow only letters and numbers, limit to 6 characters before the year
-//         if (/^[a-zA-Z0-9]*$/.test(value) && value.length <= 6) {
-//             setInputValue(value);
-//         } else if (value.length < 7) {
-//             setInputValue(value);
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <label htmlFor={name}>{label}</label>
-//             <Controller
-//                 name={name}
-//                 control={control}
-//                 render={({ field }) => (
-//                     <div
-//                         className={`w-full border-[1px] flex border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor`}
-
-//                     >
-//                         <input
-//                             {...field}
-//                             type="text"
-//                             id={name}
-//                             className="focus:outline-none bg-grayColorLight/50  w-[50px]"
-//                             // value={inputValue + (inputValue ? `/${currentYear}` : '')}
-//                             value={inputValue}
-
-//                             onChange={(e) => {
-//                                 handleChange(e);
-//                                 field.onChange(inputValue); // Update form value in react-hook-form
-//                             }}
-//                             placeholder={placeholder}
-//                         />
-//                         {inputValue &&
-//                             <p>/{currentYear}</p>
-
-//                         }
-//                     </div>
-
-//                 )}
-//             />
-//             {error && <p style={{ color: 'red' }}>{error.message}</p>}
-//         </div>
-//     );
-// };
-
-// export default FormatedIndexInputField;
 import React, { useState, forwardRef, useEffect } from 'react';
 
 interface FormatedIndexInputFieldProps {
@@ -122,7 +51,6 @@ const FormatedIndexInputField = forwardRef<HTMLInputElement, FormatedIndexInputF
     };
 
     useEffect(() => {
-        console.log("oltIndexValue", oltIndexValue)
         if (oltIndexValue) {
             const newIndex = oltIndexValue.split('/')[0];
             const year = oltIndexValue.split('/')[1];
@@ -137,7 +65,6 @@ const FormatedIndexInputField = forwardRef<HTMLInputElement, FormatedIndexInputF
         setCurrentYear(new Date().getFullYear().toString().slice(-2))
     }, []);
 
-    console.log(currentYear)
     return (
         <div>
             <label htmlFor={name}>{label}</label>

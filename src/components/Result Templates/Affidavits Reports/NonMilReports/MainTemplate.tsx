@@ -12,7 +12,6 @@ const NonMilReport = () => {
     const NonMilReportPrintRef = useRef<HTMLButtonElement | null>(null);
     const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData)
     const [resultData, setResultData] = useState([]);
-    console.log("data", resultData[5]?.oLTIndexNo)
     const [header, setHeader] = useState({
         index: "",
         petitioner: "",
@@ -39,53 +38,6 @@ const NonMilReport = () => {
     useEffect(() => {
         setResultData(legalDeliveryDataa?.data)
 
-        // if (legalDeliveryDataa?.searchResult === "service" || legalDeliveryDataa?.searchResult === "standard") {
-        //     setHeader(prev => ({
-        //         ...prev,
-        //         index: legalDeliveryDataa?.data?.oLTIndexNo,
-
-        //     }))
-        //     setBodyData(prev => ({
-        //         ...prev,
-        //         dateOfService: legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfService,
-        //         sex: legalDeliveryDataa?.data?.resultFormId?.serviceResultSex,
-        //         skinColor: legalDeliveryDataa?.data?.resultFormId?.serviceResultSkinColor,
-        //         age: legalDeliveryDataa?.data?.resultFormId?.serviceResultAge,
-        //         height: legalDeliveryDataa?.data?.resultFormId?.serviceResultHeight,
-        //         weight: legalDeliveryDataa?.data?.resultFormId?.serviceResultWeight,
-        //         hair: legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
-        //         serverName: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.firstName,
-        //         serverAddress: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1,
-        //         serverLicense: legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
-        //         mailingAddressDate: legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
-        //         name: legalDeliveryDataa?.data?.lTSFirstName,
-        //         address: legalDeliveryDataa?.data?.lTSAddress,
-
-
-        //     }))
-        // } else if (legalDeliveryDataa?.searchResult === "result") {
-        //     setHeader(prev => ({
-        //         ...prev,
-        //         index: legalDeliveryDataa?.data?.serviceFormId?.oLTIndexNo,
-
-        //     }))
-        //     setBodyData(prev => ({
-        //         ...prev,
-        //         dateOfService: legalDeliveryDataa?.data?.serviceResultDateOfService,
-        //         sex: legalDeliveryDataa?.data?.serviceResultSex,
-        //         skinColor: legalDeliveryDataa?.data?.serviceResultSkinColor,
-        //         age: legalDeliveryDataa?.data?.serviceResultAge,
-        //         height: legalDeliveryDataa?.data?.serviceResultHeight,
-        //         weight: legalDeliveryDataa?.data?.serviceResultWeight,
-        //         hair: legalDeliveryDataa?.data?.serviceResultHair,
-        //         serverName: legalDeliveryDataa?.data?.serviceResultServerId?.firstName,
-        //         serverAddress: legalDeliveryDataa?.data?.serviceResultServerId?.address1,
-        //         serverLicense: legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
-        //         mailingAddressDate: legalDeliveryDataa?.data?.serviceResultDateOfMailing,
-        //         name: legalDeliveryDataa?.data?.serviceFormId?.lTSFirstName,
-        //         address: legalDeliveryDataa?.data?.serviceFormId?.lTSAddress,
-        //     }))
-        // }
     }, [])
 
 

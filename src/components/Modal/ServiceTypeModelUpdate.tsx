@@ -9,7 +9,7 @@ import { addServiceResultApi, updateServiceResultApi } from "../../apiservices/s
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "react-toastify"
 import { useGetAllData } from "../../hooks/getAllDataHook/useGetAllData"
-import {  serviceTypeType } from "../../type/serviceResultType/serviceResultType"
+import { serviceTypeType } from "../../type/serviceResultType/serviceResultType"
 import { serviceTypeSchema } from "../../schemas/serviceTypeSchema"
 import { updateServiceTypeApi } from "../../apiservices/serviceTypeApi/serviceTypeApi"
 import { showSpinnerReducer } from "../../redux/slice/spinner"
@@ -21,50 +21,47 @@ type Props = {
 
 const ServiceTypeModalUpdate: React.FC<Props> = ({ singledata }) => {
     const disptach = useDispatch()
-const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-types")
-    const {register,handleSubmit,formState:{errors,isSubmitting},setValue}=useForm({resolver:zodResolver(serviceTypeSchema)})
+    const { isLoading, error, data, refetch } = useGetAllData("/service-type/all-service-types")
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm({ resolver: zodResolver(serviceTypeSchema) })
     const modalBody = <form className="mb-6">
-        <TextField onKeyDown={handleEnterKeyPress}  label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required/>
-<div className="mt-4" >
+        <TextField onKeyDown={handleEnterKeyPress} label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required />
+        <div className="mt-4" >
 
-        <TextArea required label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
-</div>
+            <TextArea required label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription" />
+        </div>
     </form>
     const updateServiceResultFunction = async (data) => {
-        // console.log(data)
-        // disptach(showModalReducer(false))
+
         disptach(showSpinnerReducer(true))
 
-        const updateData={...data,serviceTypeId:singledata?._id}
-console.log(updateData)
+        const updateData = { ...data, serviceTypeId: singledata?._id }
         try {
-            const res=await updateServiceTypeApi(updateData)
+            const res = await updateServiceTypeApi(updateData)
             toast.success(`${res?.data?.message}`)
             refetch()
-        disptach(showUpdateModalReducer(false))
+            disptach(showUpdateModalReducer(false))
         } catch (error) {
-        disptach(showUpdateModalReducer(false))
+            disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
-        } finally{
+        } finally {
             disptach(showSpinnerReducer(false))
 
         }
     }
 
-useEffect(()=>{
+    useEffect(() => {
 
-    setValue("serviceTypeCode",singledata?.serviceTypeCode)
-    setValue("serviceTypeDescription",singledata?.serviceTypeDescription)
+        setValue("serviceTypeCode", singledata?.serviceTypeCode)
+        setValue("serviceTypeDescription", singledata?.serviceTypeDescription)
 
-},[])
+    }, [])
 
     return <Modal
         modalHeading="Service Result"
         borderButtonText="cancel"
         filledButtonText="update"
         disabled={isSubmitting}
-        // filledButtonText={isSubmitting?"updating":"update"}
-        onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}   
+        onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}
         modalBody={modalBody}
     />

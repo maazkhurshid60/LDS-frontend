@@ -6,7 +6,7 @@ export interface HeaderProps {
     licNo?: string | number
 }
 const Header: React.FC<HeaderProps> = (item) => {
-    console.log("headerlicno", item?.licNo)
+
     return <div className="w-full flex items-center justify-between flex-wrap text-sm">
         <div className="capitalize flex items-center gap-x-2">
             <p>index #</p>
@@ -17,10 +17,7 @@ const Header: React.FC<HeaderProps> = (item) => {
             <p>{item?.affidavitName}</p>
             <p>service</p>
         </div>
-        {/* <div className=" font-medium flex items-center gap-x-2 text-xl uppercase">
-            <p>service</p>
-            <p>{item?.serviceName}</p>
-        </div> */}
+
         <div className=" flex items-center gap-x-2 text-base">
             <p>Lic#</p>
             <p className="font-medium ">{item?.licNo ? item?.licNo : "_________"}</p>

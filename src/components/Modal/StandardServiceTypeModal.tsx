@@ -21,36 +21,34 @@ import { addStandardServiceTypeApi } from "../../apiservices/StandardServiceType
 const StandardServiceTypeModal = () => {
     const disptach = useDispatch()
     const { isLoading, error, data, refetch } = useGetAllData("/standard-service-type/all-standard-service-types")
-    const { register, handleSubmit, formState: { errors,isSubmitting }} = useForm({ resolver: zodResolver(ltServiceTypeSchema) })
-    console.log(isSubmitting)
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(ltServiceTypeSchema) })
     const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="Name" register={register} error={errors.name} name="name" required/>
+            <TextField onKeyDown={handleEnterKeyPress} label="Name" register={register} error={errors.name} name="name" required />
         </div>
-          
-        
+
+
     </form>
-    const addLtServiceTypeFunction =async (data) => {
-       const addedData= {name:data?.name,isActive:false}
+    const addLtServiceTypeFunction = async (data) => {
+        const addedData = { name: data?.name, isActive: false }
 
         disptach(showSpinnerReducer(true))
         try {
-            const response=await addStandardServiceTypeApi(addedData)
+            const response = await addStandardServiceTypeApi(addedData)
             refetch()
             toast.success(`${response?.data?.message}`)
             disptach(showModalReducer(false))
         } catch (error) {
             toast.error("something went wrong. Try Later")
             disptach(showModalReducer(false))
-        }finally{
+        } finally {
             disptach(showSpinnerReducer(false))
         }
     }
     return <Modal
         modalHeading="Standard Service Type"
         borderButtonText="cancel"
-        // filledButtonText="add"
-        filledButtonText={isSubmitting?"adding":"add"}
+        filledButtonText={isSubmitting ? "adding" : "add"}
         onBorderButtonClick={() => disptach(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addLtServiceTypeFunction)}
         modalBody={modalBody}

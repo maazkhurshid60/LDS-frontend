@@ -23,7 +23,6 @@ const ShowAllAddMailingAddress: React.FC<AddMailingProps> = ({ data, id }) => {
     const dispatch = useDispatch()
     const isAddMail = useSelector((state: RootState) => state.mailingAdress.isAddingMailAddress)
 
-    console.log(">>>>>data in mailing address<<<<<<<<<<", data)
     // ADD MAILING DATA FUNCTION STARTS
     const AddMailingFunction = async (data) => {
         const zip = parseInt(data?.zip)
@@ -49,71 +48,48 @@ const ShowAllAddMailingAddress: React.FC<AddMailingProps> = ({ data, id }) => {
     const UpdateMailingFunction = async (newData) => {
         const zip = parseInt(newData?.zip)
         const updatedData = { ...newData, mailingAddressId: data?._id, zip: zip }
-        console.log("updated data mailingdata", newData)
-
-        // dispatch(updateMailAddressIntoForm({updatedData,id}))
 
         dispatch(updateMailingAddressThunk(updatedData))
     }
 
-    // // GET UPDATE MAILING DATA FUNCTION WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
-    // useEffect(() => {
-    //     const handleKeyDown = (event) => {
-    //         if (event.ctrlKey && event.key === 's') {
-    //             event.preventDefault();
-    //             handleSubmit(UpdateMailingFunction)();
-    //         }
-    //     };
-    //     window.addEventListener('keydown', handleKeyDown);
-    //     return () => {
-    //         window.removeEventListener('keydown', handleKeyDown);
-    //     };
-    // }, [handleSubmit, UpdateMailingFunction]);
 
     const deleteMailingData = (data, id) => {
-        console.log(data)
         dispatch(deleteMailingAddressThunk(data?._id))
         dispatch(getMailAddressAfterDeletion(id))
     }
-    
+
     return <div>
         <h1 className="font-semibold text-md mb-4 capitalize">All Mailing Addresss {id && id}</h1>
         <form className="flex flex-col items-end">
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    {/* <TextField
-                        register={register} label="full Name" error={errors.firstName} name="firstName" /> */}
+
                     <label className=" font-normal sm:font-medium text-sm capitalize">Full Name</label>
                     <label className=" font-normal text-sm capitalize ml-10">{data?.firstName}</label>
 
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    {/* <TextField
-                        register={register} label="address" error={errors.address} name="address" /> */}
+
                     <label className=" font-normal sm:font-medium text-sm capitalize">Address</label>
                     <label className=" font-normal text-sm capitalize ml-10">{data?.address}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    {/* <TextField
-                        register={register} label="city" error={errors.city} name="city" /> */}
+
                     <label className=" font-normal sm:font-medium text-sm capitalize">City</label>
                     <label className=" font-normal text-sm capitalize ml-10">{data?.city}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    {/* <TextField
-                        register={register} label="state" error={errors.state} name="state" /> */}
+
                     <label className=" font-normal sm:font-medium text-sm capitalize">state</label>
                     <label className=" font-normal text-sm capitalize ml-10">{data?.state}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    {/* <TextField
-                        register={register} label="apt" error={errors.apt} name="apt" /> */}
+
                     <label className=" font-normal sm:font-medium text-sm capitalize">Apt</label>
                     <label className=" font-normal text-sm capitalize ml-10">{data?.apt}</label>
                 </div>
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    {/* <TextField
-                        register={register} label="zip" error={errors.zip} name="zip" /> */}
+
                     <label className=" font-normal sm:font-medium text-sm capitalize">zip</label>
                     <label className=" font-normal text-sm capitalize ml-10">{data?.zip}</label>
                 </div>

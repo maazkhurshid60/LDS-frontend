@@ -14,7 +14,6 @@ const LTExtraNameReport = () => {
     const [resultData, setResultData] = useState([]);
     const [extraltName, setExtraltName] = useState([]);
 
-    console.log("legalDeliveryDataa", resultData?.map(data => data?.serviceResultDateOfMailing))
     const [dataTable, setDataTable] = useState({
         caseNo: "",
         index: "",
@@ -24,23 +23,11 @@ const LTExtraNameReport = () => {
         extraname: []
 
     })
-    console.log("legalDeliveryDataa", resultData[0]?.caseNo)
     useEffect(() => {
 
         setResultData(legalDeliveryDataa?.data)
 
 
-        // if (legalDeliveryDataa?.searchResult === "service") {
-        //     setDataTable(prev => ({
-        //         ...prev,
-        //         caseNo: legalDeliveryDataa?.data?.caseNo,
-        //         index: legalDeliveryDataa?.data?.oSSTIndexNo,
-        //         address: legalDeliveryDataa?.data?.lTSAddress,
-        //         apt: legalDeliveryDataa?.data?.lTSApt,
-        //         ltnames: legalDeliveryDataa?.data?.lTSFirstName,
-        //         extraname: extraltName
-        //     }))
-        // }
     }, [])
     return <>
         <div className="absolute h-[83.5vh] overflow-y-scroll relative">

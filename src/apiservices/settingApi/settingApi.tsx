@@ -4,7 +4,6 @@ import api from "../axiosInstance";
 //  ADD SETTING RESULT API
 export const addSettingApi = async (data: any) => {
     try {
-        console.log(data)
         const accessToken = localStorage.getItem("accessToken");
         const response = await axios.post(`${baseUrl}/setting/create`, data, {
             headers: {
@@ -13,7 +12,6 @@ export const addSettingApi = async (data: any) => {
         })
         return response
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 }
@@ -22,20 +20,12 @@ export const addSettingApi = async (data: any) => {
 export const updateSettingApi = async (updatedData: any) => {
     const accessToken = localStorage.getItem("accessToken");
     try {
-        // const response = await axios.patch(`${baseUrl}/setting/update`,{
-        //     settings: updatedData
-        // },  {
-        //     headers: {
-        //         "Authorization": `Bearer ${accessToken}`
-        //     },
 
-        // })
         const response = await api.patch(`/setting/update`, {
             settings: updatedData
         })
         return response
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 }

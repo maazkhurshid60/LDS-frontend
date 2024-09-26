@@ -25,52 +25,12 @@ const LegalDelivery = () => {
     const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData?.searchResult)
 
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: filteredData?.length > 0 && filteredData || [] })
-    // const agencyLicRef = useRef<HTMLButtonElement | null>(null);
-    // const LiNonReportsRef = useRef<HTMLButtonElement | null>(null);
-    // const ltExtraNameReportRef = useRef<HTMLButtonElement | null>(null);
-    // const MarshalReportRef = useRef<HTMLButtonElement | null>(null);
-    // const nonMilRef = useRef<HTMLButtonElement | null>(null);
-    // const standardRef = useRef<HTMLButtonElement | null>(null);
-    // const transPerSlipRef = useRef<HTMLButtonElement | null>(null);
-    // const agencyLicPrintRef = useRef<HTMLDivElement | null>(null);
-    // const LiNonReportsPrintRef = useRef<HTMLButtonElement | null>(null);
-    // const ltExtraNameReportPrintRef = useRef<HTMLButtonElement | null>(null);
-    // const MarshalReportPrintRef = useRef<HTMLButtonElement | null>(null);
-    // const nonMilPrintRef = useRef<HTMLButtonElement | null>(null);
-    // const standardPrintRef = useRef<HTMLButtonElement | null>(null);
-    // const transPerSlipPrintRef = useRef<HTMLButtonElement | null>(null);
+
 
     const handlePrint = () => {
 
         setShowDropDown(false);
-        //     if (reportName === "agencyLicense") {
-        //         agencyLicRef?.current?.click();
-        //          setShowDropDown(false);
-        //     }
-        //     else if (reportName === "liNonReports") {
-        //         LiNonReportsRef?.current.click()
-        //         setShowDropDown(false);
-        //     }
-        //     else if (reportName === "lTExtraNameReports") {
-        //         ltExtraNameReportRef?.current.click()
-        //         setShowDropDown(false);
-        //     }
-        //     else if (reportName === "marshalReports") {
-        //         MarshalReportRef?.current.click()
-        //         setShowDropDown(false);
-        //     }
-        //     else if (reportName === "nonMilReports") {
-        //         nonMilRef?.current.click()
-        //         setShowDropDown(false);
-        //     }
-        //     else if (reportName === "standardReports") {
-        //         standardRef?.current.click()
-        //         setShowDropDown(false);
-        //     }
-        //     else if (reportName === "transPerSlipReports") {
-        //         transPerSlipRef?.current.click()
-        //         setShowDropDown(false);
-        //     }
+
     }
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -80,7 +40,6 @@ const LegalDelivery = () => {
     };
     const getUserIdFunction = (userId: string, index) => {
         const selectedData = filteredData?.filter((data, id) => data?._id === userId)
-        console.log(selectedData)
         dispatch(getSingleLegalDeliveryReducer(selectedData))
     }
     useEffect(() => {
@@ -90,11 +49,6 @@ const LegalDelivery = () => {
         };
     }, [])
 
-    // useEffect(() => {
-    //     dispatch(emptyLegalDeliveryReducer())
-
-    // }, [])
-    console.log("filteredData", filteredData)
     const serviceTableHeader = ["Job", "Client Code", "Input Date", "Server Code", "Full Name", "Case Paper Type", "Bussiness Name", "Address", "Caption", "City", "Zip", "Serv City", "Case No"]
     const serviceDataTable = Array.isArray(filteredData) ? filteredData?.map(item => ({
         _id: item?._id,
@@ -141,11 +95,7 @@ const LegalDelivery = () => {
 
     const selectAllRecords = () => {
         if (filteredData?.length > 0) {
-            console.log("all data", filteredData)
 
-            // filteredData.forEach((data) => {
-            //     dispatch(getSingleLegalDeliveryReducer(data));
-            // });
             dispatch(getSingleLegalDeliveryReducer(filteredData));
 
             toast.success("All Data has been selected. Generate any report.")
@@ -164,7 +114,6 @@ const LegalDelivery = () => {
     }, [filteredData]);
 
     return <div className="w-[95%] m-auto">
-        {/* <GPSReport/> */}
         <div className="relative bg-whiteColor ">
             {/* <div className={`absolute -top-4 sm:-top-6 md:-top-24  flex items-start transition-all duration-500 z-50  ${showFilterMenu ? "-right-5 xl:-right-[52px]" : "-right-5 xl:-right-[52px]"}`} > */}
             <div className={`fixed top-[65px] md:top-[20px]   flex items-start transition-all duration-500 z-50 rounded-tl-full rounded-bl-full  ${showFilterMenu ? "-right-2 lg:-right-0" : "-right-0 lg:right-[0px]"}`} >
@@ -180,11 +129,7 @@ const LegalDelivery = () => {
         <OutletLayout>
             <OutletLayoutHeader heading="Legal Delivery">
             </OutletLayoutHeader>
-            {/* <div className="mt-4 flex flex-col  gap-4
-            sm:flex-row sm:items-center">
-                <Searchbar />
-                <Filter onClick={() => setShowFilterMenu(!showFilterMenu)} />
-            </div> */}
+
             {filteredData?.length > 0 &&
                 <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                     <div ref={dropdownRef}>
@@ -213,12 +158,8 @@ const LegalDelivery = () => {
                     <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
                     <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
-                    {/* <p className="cursor-pointer">Column Layout</p>
-                <p className="cursor-pointer">Enable Actions</p>
-                <p className="cursor-pointer">Generate Geo Code</p>
-                <p className="cursor-pointer">Sort Records</p> */}
+
                 </div>}
-            {/* <Table headers={headers} tableData={currentTableData} getRowData={getUserIdFunction} /> */}
             {filteredData?.length > 0 ?
                 <>
                     <TableWithoutAction
@@ -230,11 +171,7 @@ const LegalDelivery = () => {
                                     : serviceTableHeader
                         }
                         tableData={currentTableData}
-                        // tableData={searchDataName === "result"
-                        //     ? resultDataTable
-                        //     : searchDataName === "standard"
-                        //         ? serviceDataTable
-                        //         : serviceDataTable}
+
                         getRowData={getUserIdFunction}
                     />
 
@@ -253,62 +190,10 @@ const LegalDelivery = () => {
                 </div>
             }
 
-            {/* <StandardReport/> */}
 
 
         </OutletLayout>
-        {/* PDF TEMPLATES STARTS */}
-        {/* <div style={{ display: "none" }}>
-            <ReactToPrint
-                trigger={() => <button ref={agencyLicRef}>Hidden Print Button</button>}
-                content={() => agencyLicPrintRef.current}
-            />
-            <AgencyLic ref={agencyLicPrintRef} />
-        </div>
-        <div style={{ display: "none" }}>
-            <ReactToPrint
-                trigger={() => <button ref={LiNonReportsRef}>Hidden Print Button</button>}
-                content={() => LiNonReportsPrintRef.current}
-            />
-            <LiNonReports ref={LiNonReportsPrintRef} />
-        </div>
-        <div style={{ display: "none" }}>
-            <ReactToPrint
-                trigger={() => <button ref={ltExtraNameReportRef}>Hidden Print Button</button>}
-                content={() => ltExtraNameReportPrintRef.current}
-            />
-            <LTExtraNameReport ref={ltExtraNameReportPrintRef} />
-        </div>
-        <div style={{ display: "none" }}>
-            <ReactToPrint
-                trigger={() => <button ref={MarshalReportRef}>Hidden Print Button</button>}
-                content={() => MarshalReportPrintRef.current}
-            />
-            <MarshalReport ref={MarshalReportPrintRef} />
-        </div>
-        <div style={{ display: "none" }}>
-            <ReactToPrint
-                trigger={() => <button ref={nonMilRef}>Hidden Print Button</button>}
-                content={() => nonMilPrintRef.current}
-            />
-            <NonMilReport ref={nonMilPrintRef} />
-        </div>
-        <div style={{ display: "none" }}>
-            <ReactToPrint
-                trigger={() => <button ref={standardRef}>Hidden Print Button</button>}
-                content={() => standardPrintRef.current}
-            />
-            <StandardReport ref={standardPrintRef} />
-        </div>
-        <div style={{ display: "none" }}>
-            <ReactToPrint
-                trigger={() => <button ref={transPerSlipRef}>Hidden Print Button</button>}
-                content={() => transPerSlipPrintRef.current}
-            />
-            <TransPerSlipReport ref={transPerSlipPrintRef} />
-        </div> */}
-        {/* PDF TEMPLATES ENDS */}
-        {/* PDF TEMPLATES ENDS */}
+
     </div>
 }
 export default LegalDelivery

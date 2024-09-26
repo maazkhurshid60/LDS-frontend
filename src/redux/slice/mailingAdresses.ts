@@ -35,7 +35,6 @@ const mailingAdresses = createSlice({
     initialState: initialState,
     reducers: {
         addMailAddress: (state, action) => {
-            // console.log("new mailing address",action.payload)
             state.mailingAddressData.push(action.payload)
         },
         isAddingMailAddressReducer: (state, action) => {
@@ -72,23 +71,13 @@ const mailingAdresses = createSlice({
             const allMailingData = JSON.stringify(state.mailingAddressData)
             const allMailDataArray = JSON.parse(allMailingData)
             const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
-            console.log(onemail)
             state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
         },
-        // THIS WILL UPDATE DATA OF EXISTING MAIL ADDRESS ARRAY ON THE BASIS OF INDEX
-        //  updateMailAddressIntoForm: (state, action) => {
-        //      const {updatedData,id}=action.payload
-        //      const allMailingData = JSON.stringify(state.mailingAddressData)
-        //      const allMailDataArray = JSON.parse(allMailingData)
-        //      const onemail = allMailDataArray?.find((mail, index) => index === id && updatedData)
-        //      console.log("updated data",updatedData,id,allMailDataArray)
-        //     //  state.serviceFormMailingAdress.mailingAdresses.push(onemail)
-        // },
+
         getFormMailAddressAfterDeletion: (state, action) => {
             const allMailingData = JSON.stringify(state.serviceFormMailingAdress.mailingAdresses)
             const allMailDataArray = JSON.parse(allMailingData)
             const mailAddressAfterDeletion = allMailDataArray?.filter((mail, id) => id !== action.payload)
-            console.log("<><><>", mailAddressAfterDeletion)
             state.serviceFormMailingAdress.mailingAdresses = mailAddressAfterDeletion
         },
     },
@@ -98,12 +87,10 @@ const mailingAdresses = createSlice({
             state.status = "loading"
         })
         builder.addCase(getAllMailingAddressThunk.fulfilled, (state, action) => {
-            // console.log(">>>>>>>allmailing address data", action.payload)
             state.mailingAddressData = action.payload
             state.status = "success"
         })
         builder.addCase(getAllMailingAddressThunk.rejected, (state, action) => {
-            console.error("Error fetching all maillingaddress:", action.error);
             state.status = "error"
         })
         // EXTRA REDUCER FOR GET ALL MAILING ADDRESS ENDS
@@ -155,7 +142,6 @@ export default mailingAdresses.reducer
 // API FOR GET ALL MAILING ADDRESS STARTS
 export const getAllMailingAddressThunk = createAsyncThunk("getAllMailingAddress", async () => {
     try {
-        // console.log(data)
         const response = await axios.get(`${baseUrl}/mailing-address/all-mailing-address`, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
@@ -163,7 +149,6 @@ export const getAllMailingAddressThunk = createAsyncThunk("getAllMailingAddress"
         })
         return response?.data?.data
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 })
@@ -171,7 +156,6 @@ export const getAllMailingAddressThunk = createAsyncThunk("getAllMailingAddress"
 // API FOR CREATE MAILING ADDRESS STARTS
 export const createMailingAddressThunk = createAsyncThunk("createAllMailingAddress", async (data: maillingType[], { dispatch }) => {
     try {
-        // console.log(data)
         const response = await axios.post(`${baseUrl}/mailing-address/create`, data, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
@@ -182,7 +166,6 @@ export const createMailingAddressThunk = createAsyncThunk("createAllMailingAddre
 
         return response?.data?.data
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 })
@@ -190,7 +173,6 @@ export const createMailingAddressThunk = createAsyncThunk("createAllMailingAddre
 // API FOR UPDATE MAILING ADDRESS STARTS
 export const updateMailingAddressThunk = createAsyncThunk("updateAllMailingAddress", async (data: maillingType[], { dispatch }) => {
     try {
-        // console.log(data)
         const response = await axios.patch(`${baseUrl}/mailing-address/update`, data, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
@@ -202,7 +184,6 @@ export const updateMailingAddressThunk = createAsyncThunk("updateAllMailingAddre
 
         return response?.data?.data
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 })
@@ -222,7 +203,6 @@ export const deleteMailingAddressThunk = createAsyncThunk("deleteAllMailingAddre
         toast.success(`${response?.data?.message}`)
         return response?.data?.data
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
 })

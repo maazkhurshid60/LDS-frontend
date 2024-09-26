@@ -14,9 +14,8 @@ const MyMapComponent: React.FC<MyMapComponentProps> = ({ previousForm, currentAd
             const totalMinutes = convertDurationToMinutes(duration);
 
             toast.success(`Distance: ${distance}, Duration: ${duration}`);
-            console.log("Total Time in Minutes:", totalMinutes);
         } else {
-            console.error("Distance Matrix API request failed or returned an error.");
+            toast.error("Distance Matrix API request failed or returned an error.");
         }
     };
 

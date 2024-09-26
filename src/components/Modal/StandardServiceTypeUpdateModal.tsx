@@ -37,20 +37,14 @@ const StandardServiceTypeUpdateModal: React.FC<Props> = ({ singledata }) => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(ltServiceTypeSchema) })
     const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="name" register={register} error={errors.name} name="name" required/>
+            <TextField onKeyDown={handleEnterKeyPress} label="name" register={register} error={errors.name} name="name" required />
         </div>
-          
-        
+
+
     </form>
     const updateDeviceFunction = async (data) => {
-        // const updateData = { ...data, lTServiceTypeId: singledata?._id }
-       const updateData= {name:data?.name,isActive:false,standardServiceTypeId: singledata?._id}
+        const updateData = { name: data?.name, isActive: false, standardServiceTypeId: singledata?._id }
 
-        // const holidayYear=parseInt(data?.holidayYear)
-       
-       
-        // if(updateData?.holidayYear!==updateData?.holidayDate.slice(0,4)){return alert("Holiday Year and Holiday Date's Year should be Same")}
-          console.log("updaetjgsgfg",updateData)
         disptach(showSpinnerReducer(true))
 
         try {
@@ -61,7 +55,7 @@ const StandardServiceTypeUpdateModal: React.FC<Props> = ({ singledata }) => {
         } catch (error) {
             disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
-        }finally{
+        } finally {
             disptach(showSpinnerReducer(false))
 
         }
@@ -73,7 +67,6 @@ const StandardServiceTypeUpdateModal: React.FC<Props> = ({ singledata }) => {
     return <Modal
         modalHeading="Update Standard Service Type"
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting ? "updating" : "update"}
         disabled={isSubmitting}
         filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}

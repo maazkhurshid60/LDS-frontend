@@ -9,7 +9,7 @@ export interface BodyProps {
     secondTimeAttempt?: string;
     secondDateAttempt?: string;
     dateOfMailing?: string;
-    dateOfService?:string
+    dateOfService?: string
     sex?: string;
     skinColor?: string;
     age?: string | number;
@@ -17,25 +17,24 @@ export interface BodyProps {
     weight?: string | number
     hair?: string
     otherFeatures?: string
-    lic?:string|number
-//SERVICES
-inputDate?:string
-time?:string
-address?:string
-firstNames?:string
-serverName?:string
-serverAddress?:string
+    lic?: string | number
+    //SERVICES
+    inputDate?: string
+    time?: string
+    address?: string
+    firstNames?: string
+    serverName?: string
+    serverAddress?: string
 
 }
 const Body: React.FC<BodyProps> = (item) => {
-    const timeString=item?.time
+    const timeString = item?.time
     const date = new Date(timeString);
     const time = date.toLocaleTimeString('en-US', { hour12: false });
-    console.log(":inputDAta",item?.serverName)
     return <div className="flex flex-col items-start gap-y-2 text-sm">
         <p>State of New York, country of <span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span> ss:</p>
-        <p>I, <span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span> being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in 
-        &nbsp; <span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>, New York  that on <span className="font-semibold">{item?.dateOfService ? item?.dateOfService : "______________________________"}</span>.</p>
+        <p>I, <span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span> being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
+            &nbsp; <span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>, New York  that on <span className="font-semibold">{item?.dateOfService ? item?.dateOfService : "______________________________"}</span>.</p>
         <p>At the property sought to be recovered at <span className="font-semibold">{item?.address ? item?.address : "______________________________"}</span> Apt# <span className="font-semibold">{item?.apt ? item?.apt : "______________________________"}</span></p>
         <p>The <span className="font-semibold">{item?.firstNames ? item?.firstNames : "______________________________"}</span> was served on</p>
         <p className="flex justify-start gap-x-4"><GrCheckbox size={18} /> Personal service on individual: individually served the within-named person with true copy(ies) of the paper(s) aforementioned.</p>
@@ -70,14 +69,14 @@ const Body: React.FC<BodyProps> = (item) => {
         <p>Additional copies mailed regular and certified to:</p>
         <div className="font-semibold flex items-center justify-between w-full">
             <div>
-            <p>Sworn to before me on</p>
-            <p>{item?.dateOfMailing? item?.dateOfMailing:"______________________________"}</p>
+                <p>Sworn to before me on</p>
+                <p>{item?.dateOfMailing ? item?.dateOfMailing : "______________________________"}</p>
             </div>
             <div>
-            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>
-            <p>Lic#{item?.lic? item?.lic:"______________________________"}</p>
-            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>
-            </p>
+                <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>
+                <p>Lic#{item?.lic ? item?.lic : "______________________________"}</p>
+                <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>
+                </p>
 
             </div>
 

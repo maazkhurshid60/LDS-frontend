@@ -29,44 +29,17 @@ export interface serviceFormType {
     stateServe?: string,
     aptServe?: string,
     zipServe?: string
-     // otherLTServiceTypeData,
-     oLTIndexNo?:any,
-     oLTDescription?:string,
-     // lTServiceDetail?:string,
-     lTSFirstName?:string,
-     lTSBusinessName?:string,
-     lTSZip?:string,
-     lTSState?:string,
-     lTSCity?:string,
-     lTSApt?:string,
-     lTSAddress?:string,
-     lTSDescription?:string,
+    // otherLTServiceTypeData,
+    oLTIndexNo?: any,
+    oLTDescription?: string,
+    // lTServiceDetail?:string,
+    lTSFirstName?: string,
+    lTSBusinessName?: string,
+    lTSZip?: string,
+    lTSState?: string,
+    lTSCity?: string,
+    lTSApt?: string,
+    lTSAddress?: string,
+    lTSDescription?: string,
 }
 
-// export interface lTServiceDetailtype {
-//     fullName?: string
-//     businessName?: string
-//     address?: string
-//     apt?: string
-//     city?: string
-//     state?: string
-//     zip?: string
-//     description?: string
-// }
-
-// export interface standardServiceDetailType {
-//     court?: string
-//     defendants?: string
-//     plaintiff?: string
-//     country?: string
-//     serveTo?: serveToType
-// }
-
-// export interface serveToType {
-//     firstName?: string
-//     address?: string
-//     city?: string
-//     state?: string
-//     apt?: string
-//     zip?: string
-// }

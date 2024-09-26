@@ -21,28 +21,28 @@ export type FormFields = z.infer<typeof settingSchema>
 
 const SettingModal = () => {
     const disptach = useDispatch()
-    const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm<FormFields>({ resolver: zodResolver(settingSchema) })
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormFields>({ resolver: zodResolver(settingSchema) })
     const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
-          <div className="w-full md:w-[38%] xl:w-[30%]">
+        <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField label="Label" register={register} error={errors.label} name="label" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <CheckBox label="Active" register={register} error={errors.value?.message} name="value" />
         </div>
-       
-        
+
+
     </form>
-    const addSettingFunction =async (data) => {
+    const addSettingFunction = async (data) => {
         disptach(showSpinnerReducer(true))
-        
+
         try {
-            const response=await addSettingApi(data)
+            const response = await addSettingApi(data)
             toast.success(`${response?.data?.message}`)
             disptach(showModalReducer(false))
         } catch (error) {
             disptach(showModalReducer(false))
             toast.error("something went wrong. Try Later")
-        }finally{
+        } finally {
             disptach(showSpinnerReducer(false))
 
         }
@@ -51,7 +51,6 @@ const SettingModal = () => {
         modalHeading="Setting"
         borderButtonText="cancel"
         disabled={isSubmitting}
-        // filledButtonText={isSubmitting?"adding":"add"}
         filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addSettingFunction)}

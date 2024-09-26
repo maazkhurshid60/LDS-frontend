@@ -38,21 +38,18 @@ const ServiceResult = () => {
         dispatch(showSpinnerReducer(true))
         try {
             const response = await deleteServiceResultApi(id)
-            console.log(response)
             toast.success(`${response?.data?.message}`)
             refetch()
             checkLastRecord()
         } catch (error) {
-            // console.log(error)
             toast.error("something went wrong")
-        }finally{
-        dispatch(showSpinnerReducer(false))
+        } finally {
+            dispatch(showSpinnerReducer(false))
         }
     }
 
     // UPDATE DATA FUNCTION
     const resultUpdateFunction = (id: string) => {
-        console.log(id)
         setGetSingleResultData(data?.find((data, index) => data?._id === id))
         dispatch(showUpdateModalReducer(true))
     }
@@ -64,7 +61,7 @@ const ServiceResult = () => {
                 value?.toString().toLowerCase().includes(searchValue.toLowerCase())
             )
         ))
-    }, [searchValue,data])
+    }, [searchValue, data])
 
     if (isLoading) return <DataLoader text="Service result" />
 
@@ -80,15 +77,13 @@ const ServiceResult = () => {
                             {userInfo?.roles[0]?.name === "Admin" && (
                                 <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />
                             )}
-                            {/* <BorderButton buttonText="filter" disabled /> */}
                         </OutletLayoutHeader>
                         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
                             <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                            {/* <Filter /> */}
                         </div>
                         <Table headers={headers} tableData={searchValue.length > 0 ? searchedData : currentTableData}
                             onClick={deleteData} onUpdateClick={resultUpdateFunction} />
-                        {searchValue?.length===0&&<Pagination
+                        {searchValue?.length === 0 && <Pagination
                             totalPages={totalPages}
                             currentPage={currentPage}
                             dataLimit={dataLimit}

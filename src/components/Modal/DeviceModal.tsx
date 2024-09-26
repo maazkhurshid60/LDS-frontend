@@ -52,12 +52,10 @@ const DeviceModal = () => {
         } finally {
             dispatch(showSpinnerReducer(false))
         }
-        // dispatch(showModalReducer(false))
     }
     return <Modal
         modalBody={modalBody}
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting?"Adding":"Add"}
         filledButtonText="Add"
         onBorderButtonClick={() => dispatch(showModalReducer(false))}
         onFilledButtonClick={handleSubmit(addDeviceFunction)}

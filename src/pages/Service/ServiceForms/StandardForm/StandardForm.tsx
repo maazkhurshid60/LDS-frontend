@@ -50,7 +50,6 @@ const StandardForm = () => {
     const getSelectedServiceTypeOption = serviceTypeOptions?.find((data, index) => data?.value === LTData?.serviceType && { value: data?._id, label: data?.fullName })
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
     const [jobNo, setJobNo] = useState<any>()
-    console.log("LTDATA", LTData)
     const dispatch = useDispatch()
 
     // SEARCH SERVICE FORM STARTS
@@ -59,12 +58,10 @@ const StandardForm = () => {
     const selectedSearchServiceFormData = useSelector((state: RootState) => state.serviceForm.selectedSearchServicetData)
     const getSearchExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const getSearchExistingSelectedServiceType = serviceTypeOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.serviceType?._id && { value: data?._id, label: data?.fullName })
-    console.log("selectedSearchServiceFormData", selectedSearchServiceFormData, jobNo)
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'F4') {
                 event.preventDefault();
-                // handleSubmit(searchResultFormFunction)();
                 dispatch(getIsSearchServiceForm(true))
 
             }
@@ -90,14 +87,12 @@ const StandardForm = () => {
             caseNo: parseInt(data?.caseNo),
             caption: data?.caption,
         }
-        console.log("standardServiceType:checkedName", updatedLTDATA)
         if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: oSTIndex + "/" + currentYear, oSSTDescription: data?.oSSTDescription,
             firstNameServe: data?.firstNameServe, addressServe: data?.addressServe, cityServe: data?.cityServe, stateServe: data?.stateServe, aptServe: data?.aptServe, zipServe: data?.zipServe
         }
-        // const finalData = { ...serviceFormData, standardServiceDetail };
 
         const LTDataa = {
             jobNo: allServiceFormData[serviceFormIndex]?.jobNo,
@@ -122,25 +117,15 @@ const StandardForm = () => {
         }
         if (isNewFormAdding === true) {
             const LTDataaaaa: any = LTData
-            // const updatedData = { ...LTDataaaaa,...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id,standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
             const updatedData = { ...LTDataaaaa, ...standardServiceDetail, standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
 
-            // console.log("adding data to add api", updatedData);
             dispatch(addServiceFormThunk(updatedData))
 
         } else if (!isNewFormAdding && selectedSearchServiceFormData?.length > 0) {
-            // const sendDataToUpdateApi = {
-            //     ...updatedData, // Spreads all data from the object
-            //     serviceFormId: selectedSearchServiceFormData[0]?._id // Adds serviceFormId field
-            // };
 
-            // console.log("sendDataToAddApi", sendDataToUpdateApi)
             if (LTData === null) {
 
                 const updatedData = { ...LTDataa, ...updatedLTDATA, ...standardServiceDetail, serviceFormId: selectedSearchServiceFormData[0]?._id, standardServiceType: checkedName }
-                // dispatch(updateServiceFormThunk(updatedData))
-                // window.location.reload();
-
                 dispatch(updateServiceFormThunk(updatedData))
 
 
@@ -148,14 +133,11 @@ const StandardForm = () => {
             } else {
                 const UpdatedLTData: any = LTData
                 const updatedData = { ...UpdatedLTData, ...updatedLTDATA, ...standardServiceDetail, serviceFormId: selectedSearchServiceFormData[0]?._id, standardServiceType: checkedName }
-                console.log("updating data to update api", LTData, updatedData);
 
                 dispatch(updateServiceFormThunk(updatedData))
 
             }
-            // dispatch(updateServiceFormThunk(sendDataToUpdateApi))
 
-            // toast.success("called")
         } else {
             if (LTData === null) {
 
@@ -164,7 +146,6 @@ const StandardForm = () => {
             } else {
                 const UpdatedLTData: any = LTData
                 const updatedData = { ...UpdatedLTData, ...updatedLTDATA, ...standardServiceDetail, serviceFormId: allServiceFormData[serviceFormIndex]?._id, standardServiceType: checkedName }
-                console.log("updating data to update api", LTData, updatedData);
 
                 dispatch(updateServiceFormThunk(updatedData))
 
@@ -176,29 +157,13 @@ const StandardForm = () => {
     // USE EFFECT TO SET VALUES OF INDEX 0 SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
         if (selectedSearchServiceFormData?.length > 0) {
-            // setValue(
-            //     "oSSTIndexNo",
-            //     selectedSearchServiceFormData[0]?.oSSTIndexNo
-            //         ? JSON.stringify(selectedSearchServiceFormData[0].oSSTIndexNo)
-            //         : ""
-            // )
-            // setValue(
-            //     "oSSTIndexNo",
-            //     selectedSearchServiceFormData[0]?.oSSTIndexNo
-            //         ? selectedSearchServiceFormData[0].oSSTIndexNo
-            //         : ""
-            // )
+
             if (selectedSearchServiceFormData[0]?.oSSTIndexNo === null) setOStIndex("");
             else setOStIndex(selectedSearchServiceFormData[0].oSSTIndexNo)
                 ,
                 setValue("oSSTDescription", selectedSearchServiceFormData[0]?.oSSTDescription),
 
-                //     setValue("zipServe", selectedSearchServiceFormData[0]?.zipServe)
-                // setValue("aptServe", selectedSearchServiceFormData[0]?.aptServe)
-                // setValue("stateServe", selectedSearchServiceFormData[0]?.stateServe)
-                // setValue("cityServe", selectedSearchServiceFormData[0]?.cityServe)
-                // setValue("addressServe", selectedSearchServiceFormData[0]?.addressServe)
-                // setValue("firstNameServe", selectedSearchServiceFormData[0]?.firstNameServe)
+
                 setValue("sSDCountry", selectedSearchServiceFormData[0]?.sSDCountry)
             setValue("sSDPlaintiff", selectedSearchServiceFormData[0]?.sSDPlaintiff)
             setValue("sSDDefendants", selectedSearchServiceFormData[0]?.sSDDefendants)
@@ -209,32 +174,15 @@ const StandardForm = () => {
             setValue("caption", selectedSearchServiceFormData[0]?.caption)
             setValue("clientId", getSearchExistingSelectedClientoption?.value);
             setValue("serviceType", getSearchExistingSelectedServiceType?.value);
-            // setValue("caseNo", selectedSearchServiceFormData[0]?.caseNo) 
             setValue("caseNo", JSON.stringify(selectedSearchServiceFormData[0]?.caseNo));
         }
         else if (!isNewFormAdding) {
-            // setValue(
-            //     "oSSTIndexNo",
-            //     allServiceFormData[serviceFormIndex]?.oSSTIndexNo
-            //         ? JSON.stringify(allServiceFormData[serviceFormIndex].oSSTIndexNo)
-            //         : ""
-            // )
-            // setValue(
-            //     "oSSTIndexNo",
-            //     allServiceFormData[serviceFormIndex]?.oSSTIndexNo
-            //         ? allServiceFormData[serviceFormIndex].oSSTIndexNo
-            //         : ""
-            // )
+
             if (allServiceFormData[serviceFormIndex]?.oSSTIndexNo === null) setOStIndex("");
             else setOStIndex(allServiceFormData[serviceFormIndex].oSSTIndexNo)
 
             setValue("oSSTDescription", allServiceFormData[serviceFormIndex]?.oSSTDescription),
-                //     setValue("zipServe", allServiceFormData[serviceFormIndex]?.zipServe)
-                // setValue("aptServe", allServiceFormData[serviceFormIndex]?.aptServe)
-                // setValue("stateServe", allServiceFormData[serviceFormIndex]?.stateServe)
-                // setValue("cityServe", allServiceFormData[serviceFormIndex]?.cityServe)
-                // setValue("addressServe", allServiceFormData[serviceFormIndex]?.addressServe)
-                // setValue("firstNameServe", allServiceFormData[serviceFormIndex]?.firstNameServe)
+
                 setValue("sSDCountry", allServiceFormData[serviceFormIndex]?.sSDCountry)
             setValue("sSDPlaintiff", allServiceFormData[serviceFormIndex]?.sSDPlaintiff)
             setValue("sSDDefendants", allServiceFormData[serviceFormIndex]?.sSDDefendants)
@@ -245,7 +193,6 @@ const StandardForm = () => {
             setValue("caption", allServiceFormData[serviceFormIndex]?.caption)
             setValue("clientId", getExistingSelectedClientoption?.value);
             setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
-            // setValue("caseNo", allServiceFormData[serviceFormIndex]?.caseNo) 
             setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));
         }
         else {
@@ -280,7 +227,6 @@ const StandardForm = () => {
     // USE EFFECT TO GET ALL SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
     useEffect(() => {
         dispatch(getAllServiceFormThunk())
-        // setValue("jobNo",allServiceFormData[0]?.jobNo)
     }, [])
 
     // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
@@ -327,12 +273,6 @@ const StandardForm = () => {
     const createdAtLocal12hr = createdAtUtc ? convertUtcToLocal12HourFormat(createdAtUtc) : '';
     const updatedAtLocal12hr = updatedAtUtc ? convertUtcToLocal12HourFormat(updatedAtUtc) : '';
 
-    console.log('Created At (Local 12-Hour):', createdAtLocal12hr);
-    console.log('Updated At (Local 12-Hour):', updatedAtLocal12hr);
-
-
-
-
     // USE EFFECT TO CLEAR THE INPUT FIELDS ON NEW DATA ENTRY
     useEffect(() => {
         reset()
@@ -355,28 +295,7 @@ const StandardForm = () => {
         }
     }, [isNewFormAdding])
     // ADD DUPLICATE SERVICE FORM
-    // const addDuplicateServiceForm = () => {
-    //     const sendDataToAddApi = {
 
-
-    //         lTServiceType: selectedSearchServiceFormData[0]?.lTServiceType,
-    //         oLTIndexNo: selectedSearchServiceFormData[0]?.oLTIndexNo,
-    //         lTSFirstName: selectedSearchServiceFormData[0]?.lTSFirstName,
-    //         lTSBusinessName: selectedSearchServiceFormData[0]?.lTSBusinessName,
-    //         lTSZip: selectedSearchServiceFormData[0]?.lTSZip,
-    //         lTSState: selectedSearchServiceFormData[0]?.lTSState,
-    //         lTSCity: selectedSearchServiceFormData[0]?.lTSCity,
-    //         lTSApt: selectedSearchServiceFormData[0]?.lTSApt,
-    //         lTSDescription: selectedSearchServiceFormData[0]?.lTSDescription,
-    //         noOfAddLMailings: selectedSearchServiceFormData[0]?.noOfAddLMailings,
-    //         mailingAddresses: selectedSearchServiceFormData[0]?.mailingAddresses,
-    //         lTSAddress: selectedSearchServiceFormData[0]?.lTSAddress,
-    //         standardServiceType: selectedSearchServiceFormData[0]?.standardServiceType,
-    //     }
-    //     console.log("sendDataToAddApi", sendDataToAddApi)
-    //     // toast.success("called")
-    //     dispatch(addServiceFormThunk(sendDataToAddApi))
-    // }
 
     const addDuplicateServiceForm = (event) => {
         event.preventDefault();
@@ -393,7 +312,6 @@ const StandardForm = () => {
             sSDPlaintiff,
 
         } = getValues();
-        // caseNo: parseInt(caseNo),
 
         const sendDataToAddApi = {
             jobNo: allServiceFormData[allServiceFormData?.length - 1]?.jobNo + 1,
@@ -421,8 +339,7 @@ const StandardForm = () => {
             standardServiceType: selectedSearchServiceFormData[0]?.standardServiceType,
 
         }
-        // toast.success(`${caption}`)
-        // console.log("sendDataToAddApi", sendDataToAddApi)
+
         dispatch(addServiceFormThunk(sendDataToAddApi))
     }
 
@@ -446,12 +363,8 @@ const StandardForm = () => {
                 if (currentCheckbox?.checked) {
                     // If checked, move to the next input based on selected service type
 
-                    // if (selectedServiceType === "residential") {
                     handleEnterKeyPress(event, "checkbox", allIndex)// Move to the Index Number input
 
-                    // } else {
-                    //     bussinessnameRef.current?.focus(); // Move to the Discretion input
-                    // }
                 } else {
                     // If not checked, focus the next checkbox
                     const nextCheckbox = checkboxRefs.current[currentCheckboxIndex + 1];
@@ -483,9 +396,7 @@ const StandardForm = () => {
             <div className="w-[100%]">
                 <div className="w-full">
                     <form className="w-full">
-                        {/* <div className="w-full flex justify-end">
-                <Hints label="To Save / Update Data" keyName="Ctrl + S / ESC" />
-            </div> */}
+
                         <div className="flex items-center justify-between flex-row-reverse	">
                             <div className="flex items-center gap-x-2">
 
@@ -523,25 +434,7 @@ const StandardForm = () => {
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress} ref={caseNoRefs} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
                             </div>
-                            {/* <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <Controller name="serviceType" control={control} render={({ field }) => (
-                        <Dropdown
-                            options={serviceTypeOptions}
-                            // singleOption={getSelectedServiceTypeOption}
-                            value={field.value}
-                            onChange={field.onChange}
-                            label="service type"
-                            error={errors.serviceType?.message as string}
-                            // onValueChange={(value) => handleMoveToStandardForm(value)} // Update state
-                            required
 
-                        />
-                    )} />
-                </div>
-
-                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                    <TextField onKeyDown={handleEnterKeyPress} register={register} label="caption" error={errors.caption} name="caption" />
-                </div> */}
                         </div>
                         {/* STANDARD SERVICE TYPE STARTS */}
                         <div className="w-full mt-6" >
@@ -555,14 +448,7 @@ const StandardForm = () => {
                             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                                 {standardServiceTypesData?.map((data, index) => {
                                     return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
-                                        {/* <CheckBox
-                                            onKeyDown={handleEnterKeyPress}
-                                            register={register}
-                                            name={data?.name}
-                                            label={data?.name?.replace(/[^a-zA-Z0-9]/g, " ")}
-                                            checked={checkedName === data?._id}
-                                            onChange={() => handleCheckboxChange(data?._id)}
-                                        /> */}
+
                                         <CustomCheckBox
                                             onKeyDown={handleEnterKeyPressCheckboxFocus}
                                             ref={el => (checkboxRefs.current[index] = el)} // Store the checkbox refs
@@ -585,7 +471,6 @@ const StandardForm = () => {
                                 <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other Standard Description" error={errors.oSSTDescription} name="oSSTDescription" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSSTIndexNo" /> */}
                                 <FormatedIndexInputField
                                     onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oLTIndexNo" oltIndexValue={oSTIndex}
                                     onChange={setOStIndex} year={currentYear}
@@ -605,36 +490,11 @@ const StandardForm = () => {
                                 <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
                                     <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.sSDPlaintiff} name="sSDPlaintiff" label="Plaintiff" />
                                 </div>
-                                {/* <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.sSDCountry} name="ssDCountry" label="Country" />
-                    </div> */}
+
                             </div>
                         </div>
                         {/* STANDARD SERVICE DETAIL ENDS */}
-                        {/* SERVE TO STARTS */}
-                        {/*<div className="mt-6"><h1 className="font-semibold text-xl mb-4 ">Serve To</h1>
-                <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start">
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.firstNameServe} name="firstNameServe" label="first name" required />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.addressServe} name="addressServe" label="address" required />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.cityServe} name="cityServe" label="city" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.stateServe} name="stateServe" label="state" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.aptServe} name="aptServe" label="Apt#/Desc" />
-                    </div>
-                    <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
-                        <TextField onKeyDown={handleEnterKeyPress} register={register} error={errors.zipServe} name="zipServe" label="zip" />
-                    </div>
-                </div>
-            </div>*/}
-                        {/*SERVE TO ENDS */}
+
                         {/* END OF FORM STARTS */}
                         <div className="mt-6">
                             <h1 className="font-semibold text-xl mb-4 ">End of Form</h1>

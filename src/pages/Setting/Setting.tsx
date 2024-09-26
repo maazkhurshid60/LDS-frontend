@@ -40,7 +40,6 @@ const Setting = () => {
 
     const settingFunction = async () => {
         dispatch(showSpinnerReducer(true))
-        // const updatedData=mergeData
         // You can now process the mergedData for further actions like saving them
         try {
             const response = await updateSettingApi(mergedData)
@@ -103,7 +102,6 @@ const Setting = () => {
                             })}
                         </form>
                     </div>
-                    {/* <GPSReport/> */}
                 </OutletLayout>}
         </>
     );

@@ -20,48 +20,46 @@ import Button from "../../components/Buttons/Button/Button";
 import AddUserModal from "../../components/Modal/AddUserModal";
 import { showModalReducer } from "../../redux/slice/showModal";
 const User = () => {
-  const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+  const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
   const isAdmin = userInfo?.roles?.some((data) => data?.name === "Admin");
 
   const userId = useSelector((state: RootState) => state.userId)
-  const showModal=useSelector((state:RootState)=>state.showModal.isShowModal)
+  const showModal = useSelector((state: RootState) => state.showModal.isShowModal)
   const disptach = useDispatch()
-  // console.log(userId?.singleUser[0]?._id)
   // DELETE USER
   const deleteUserFunction = () => {
     disptach(deleteUserApi(userId?.singleUser[0]?._id))
   }
-    // GET PREVIOUS USER
+  // GET PREVIOUS USER
   const previousUserFunction = () => {
     disptach(getPreviousUser())
   }
-    // GET NEXt USER
+  // GET NEXt USER
   const nextUserFunction = () => {
     disptach(getNextUser())
   }
-    // GET FIRST USER
+  // GET FIRST USER
   const firstUserFunction = () => {
     disptach(getFirstUser())
   }
-    // GET LAST USER
+  // GET LAST USER
   const lastUserFunction = () => {
     disptach(getLastUser())
   }
- 
+
   return <>
-  {showModal? <AddUserModal/>:<OutletLayout>
+    {showModal ? <AddUserModal /> : <OutletLayout>
       <div className="">
         <OutletLayoutHeader heading="User">
           <div className="w-full flex flex-wrap items-center gap-2">
-            {isAdmin && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16}/>} isIcon onClick={()=>disptach(showModalReducer(true))} />}
-            
-            {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit size={16}/>} isIcon /> */}
-            {/* <BorderButton buttonText="submit" icon={<MdOutlineDone size={16}/>} isIcon /> */}
-            {isAdmin &&<BorderButton buttonText="delete" icon={<MdDeleteOutline size={16}/>} isIcon onClick={deleteUserFunction} />}
-           <BorderButton buttonText="previous" icon={<MdArrowBackIos size={13}/>} isIcon onClick={previousUserFunction} />
-           <BorderButton buttonText="next" icon={<MdArrowForwardIos size={13}/>} isRightIcon onClick={nextUserFunction} />
-           <BorderButton buttonText="first" icon={<MdFirstPage size={18}/>} isIcon onClick={firstUserFunction} />
-           <BorderButton buttonText="last" icon={<MdLastPage size={18}/>} isRightIcon onClick={lastUserFunction} />
+            {isAdmin && <BorderButton buttonText="add" icon={<MdOutlineAdd size={16} />} isIcon onClick={() => disptach(showModalReducer(true))} />}
+
+
+            {isAdmin && <BorderButton buttonText="delete" icon={<MdDeleteOutline size={16} />} isIcon onClick={deleteUserFunction} />}
+            <BorderButton buttonText="previous" icon={<MdArrowBackIos size={13} />} isIcon onClick={previousUserFunction} />
+            <BorderButton buttonText="next" icon={<MdArrowForwardIos size={13} />} isRightIcon onClick={nextUserFunction} />
+            <BorderButton buttonText="first" icon={<MdFirstPage size={18} />} isIcon onClick={firstUserFunction} />
+            <BorderButton buttonText="last" icon={<MdLastPage size={18} />} isRightIcon onClick={lastUserFunction} />
           </div>
         </OutletLayoutHeader>
         {/* USER INPUT FIELDS SECTION AND ROLES PER USER SECTION STARTS */}
@@ -83,9 +81,9 @@ const User = () => {
         {/* DISPLAY ALL USERS SECTION ENDS */}
       </div>
     </OutletLayout>}
-   
-    
-    </>
+
+
+  </>
 }
 
 export default User

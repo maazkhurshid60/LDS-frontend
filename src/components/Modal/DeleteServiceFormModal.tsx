@@ -13,23 +13,22 @@ export interface DeleteServiceFormModalProps {
 const DeleteServiceFormModal: React.FC<DeleteServiceFormModalProps> = ({ id }) => {
     const dispatch = useDispatch()
     const deleteServiceFunction = () => {
-        console.log(id)
         dispatch(deleteServiceFormThunk(id))
     }
 
 
     // MODALFOOTER STARTS
     const body = <p className="flex  gap-4 mb-4  items-center justify-start gap-x-8 gap-y-4 flex-wrap">
-       Are you sure to delete this service form?
+        Are you sure to delete this service form?
     </p>
     // MODALFOOTER ENDS
-    return <Modal 
-    modalHeading="Delete Service Form"
-     borderButtonText="cancel" 
-     filledButtonText={"delete"} 
-     modalBody={body} 
-     onFilledButtonClick={deleteServiceFunction}
-        onBorderButtonClick={()=>dispatch(showModalReducer(false))} />
+    return <Modal
+        modalHeading="Delete Service Form"
+        borderButtonText="cancel"
+        filledButtonText={"delete"}
+        modalBody={body}
+        onFilledButtonClick={deleteServiceFunction}
+        onBorderButtonClick={() => dispatch(showModalReducer(false))} />
 }
 
 export default DeleteServiceFormModal

@@ -23,15 +23,13 @@ const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { isLoading, error, data, refetch } = useGetAllData("/service-result/all-service-results")
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm({ resolver: zodResolver(serviceResultSchema) })
     const modalBody = <form className="mb-6">
-        <TextField onKeyDown={handleEnterKeyPress}  label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode" required/>
+        <TextField onKeyDown={handleEnterKeyPress} label="Service Results Code" register={register} error={errors.serviceResultCode} name="serviceResultCode" required />
         <div className="mt-4" >
 
             <TextArea required label="Service Results Description" register={register} error={errors.serviceResultDescription} name="serviceResultDescription" />
         </div>
     </form>
     const updateServiceResultFunction = async (data) => {
-        // console.log(data)
-        // disptach(showModalReducer(false))
 
         const updateData = { ...data, serviceResultId: singledata?._id }
         disptach(showSpinnerReducer(true))
@@ -44,7 +42,7 @@ const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
         } catch (error) {
             disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
-        }finally{
+        } finally {
             disptach(showSpinnerReducer(false))
 
         }
@@ -58,7 +56,6 @@ const ServiceResultModalUpdate: React.FC<Props> = ({ singledata }) => {
     return <Modal
         modalHeading="Service Result"
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting?"updating":"update"}
         filledButtonText="update"
         disabled={isSubmitting}
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}

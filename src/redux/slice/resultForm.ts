@@ -32,8 +32,7 @@ const resultForm = createSlice({
         }),
         addDatePairModalReducer: ((state, action) => {
             const { firstAttepmtDate, secondAttepmtDate } = action.payload
-            console.log(firstAttepmtDate,
-                secondAttepmtDate)
+
             state.datepairs.firstAttemptDate = firstAttepmtDate;
             state.datepairs.secondAttemptDate = secondAttepmtDate;
 
@@ -54,7 +53,6 @@ const resultForm = createSlice({
             state.searchResultFormData = []
         }),
         getNextResultFormReducer: ((state) => {
-            console.log(state.resultFormIndex)
             if (state.resultFormIndex < state.allResultFormData?.length - 1) {
                 state.resultFormIndex++
             }
@@ -155,8 +153,7 @@ export const getAllResultFormThunk = createAsyncThunk("getAllResultForm", async 
         })
         return response?.data?.data
     } catch (error) {
-        // alert(`${error?.response?.data?.message}`)
-        console.log(error)
+        toast.error("Fetching Failed. Try Later")
     } finally { dispatch(showSpinnerReducer(false)); }
 })
 // GET ALL RESULT FORM ENDS
@@ -173,7 +170,6 @@ export const addResultFormThunk = createAsyncThunk("addResultForm", async (data:
         toast.success(`${response?.data?.message}`)
         dispatch(getAllResultFormThunk())
     } catch (error) {
-        console.log(error)
         toast.error(`${error?.response?.data?.message}`)
     } finally {
         dispatch(showSpinnerReducer(false))
@@ -184,7 +180,6 @@ export const addResultFormThunk = createAsyncThunk("addResultForm", async (data:
 // UPDATE RESULT FORM STARTS
 export const updateResultFormThunk = createAsyncThunk("updateResultForm", async (data: resultFormType, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
-    console.log("sending updating data>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data?.resultFormId)
     try {
         const response = await axios.patch(`${baseUrl}/result-form/update`, data, {
             headers: {
@@ -229,7 +224,6 @@ export const deleteResultFormThunk = createAsyncThunk("deleteResultForm", async 
 
 // SEARCH RESULT FORM STARTS
 export const searchResultFormThunk = createAsyncThunk("searchResultForm", async (data: any) => {
-    console.log(data)
     try {
         const response = await axios.post(`${baseUrl}/result-form/search-result-forms`, data, {
             headers: {
@@ -239,7 +233,6 @@ export const searchResultFormThunk = createAsyncThunk("searchResultForm", async 
 
         return response?.data
     } catch (error) {
-        // alert(`${error?.response?.data?.message}`)
         toast.error(`${error?.response?.data?.message}`)
 
 

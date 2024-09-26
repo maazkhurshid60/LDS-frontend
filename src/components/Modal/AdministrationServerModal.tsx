@@ -24,7 +24,6 @@ const AdministrationServerModal = () => {
     const { refetch } = useGetAllData("/server/all-servers")
 
     const options = data?.map((options, index: number) => { return { label: options?.deviceCode, value: options?._id } })
-    console.log(":data", data, "options", options)
     const handleZipChange = (event) => {
         const { value } = event.target;
         const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
@@ -68,9 +67,6 @@ const AdministrationServerModal = () => {
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="state" register={register} error={errors.state} name="state" placeholder="Enter State" />
         </div>
-        {/* <div className="w-full md:w-[38%] xl:w-[30%]">
-        <TextField onKeyDown={handleEnterKeyPress}  label="city" register={register} error={errors.city} name="city" placeholder="Enter City"/>
-        </div> */}
 
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" required maxLength={7} onChange={handleZipChange} />
@@ -94,11 +90,8 @@ const AdministrationServerModal = () => {
 
     // ADD ADMINISTRATION FUNCTION
     const administrationFunction = async (data) => {
-        console.log(typeof parseInt(data?.zip))
-        // const zip = parseInt(data?.zip)
         const licenseNo = parseInt(data?.licenseNo)
         const postData = { ...data, licenseNo }
-        // console.log(postData)
         dispatch(showSpinnerReducer(true))
         try {
             const response = await addServerApi(postData)
@@ -107,7 +100,6 @@ const AdministrationServerModal = () => {
             dispatch(showModalReducer(false))
 
         } catch (error) {
-            console.log(error)
             dispatch(showModalReducer(false))
             toast.error("Some thing went wrong or already server code exist")
         } finally {
@@ -119,7 +111,6 @@ const AdministrationServerModal = () => {
             modalHeading="Server"
             onBorderButtonClick={() => dispatch(showModalReducer(false))}
             onFilledButtonClick={handleSubmit(administrationFunction)}
-            // filledButtonText={isSubmitting?"adding":"Add"}
             filledButtonText="Add"
             borderButtonText="cancel"
             disabled={isSubmitting}

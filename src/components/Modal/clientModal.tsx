@@ -92,7 +92,6 @@ const ClientModal = () => {
     return <Modal
         modalBody={modalBody}
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting?"adding":"add"}
         filledButtonText="add"
         onBorderButtonClick={() => dispatch(showModalReducer(false))}
         disabled={isSubmitting}

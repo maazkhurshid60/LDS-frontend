@@ -19,11 +19,9 @@ const Login = () => {
     const navigate = useNavigate()
     // LOGIN FUNCTION STARTS
     const loginFunction = async (data) => {
-        // alert(",mcxznv,mcxznv")
 
         try {
             const response = await loginApi(data)
-            console.log(response?.data?.data)
             dispatch(loginUser(response?.data?.data))
             const accessToken = response?.data?.data?.accessToken;
             localStorage.setItem("accessToken", accessToken);
@@ -32,13 +30,8 @@ const Login = () => {
             navigate("/")
         } catch (error) {
             toast.error(`Incorrect Name or Password`)
-            console.log(error)
         }
-        // const role="admin"
-        // const userData={name:data?.userName,role}
-        // console.log(userData)
-        //    dispatch(loginUser(userData))
-        //    navigate("/")
+
     }
     // LOGIN FUNCTION ENDS
     return <div className="w-full bg-whiteColor flex items-center justify-center h-[100vh] ">

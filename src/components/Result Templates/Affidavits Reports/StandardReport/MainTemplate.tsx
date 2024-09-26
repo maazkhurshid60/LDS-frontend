@@ -41,67 +41,9 @@ const StandardReport = () => {
 
 
     })
-    console.log("legalDeliveryDataa", legalDeliveryDataa?.data)
     useEffect(() => {
         setResultData(legalDeliveryDataa?.data)
 
-        //     if (legalDeliveryDataa?.searchResult === "result") {
-        //         setHeader(prev => ({
-        //             ...prev,
-        //             index: legalDeliveryDataa?.data?.queryInformationLTIndexNo,
-        //         }))
-        //         setBodyData(prev => ({
-        //             ...prev,
-        //             dateOfService: legalDeliveryDataa?.data?.serviceResultDateOfService,
-        //             firstAttemptDate: legalDeliveryDataa?.data?.serviceResultFirstAttemptDate,
-        //             firstAttemptTime: legalDeliveryDataa?.data?.serviceResultFirstTimeOfService,
-        //             secondAttemptDate: legalDeliveryDataa?.data?.serviceResultSecondAttemptDate,
-        //             secondAttemptTime: legalDeliveryDataa?.data?.serviceResultSecondTimeOfService,
-        //             recipientTitle:legalDeliveryDataa?.data?.serviceResultRecipientTitle,
-        //             dateOfMailing:legalDeliveryDataa?.data?.serviceResultDateOfMailing,
-        //             lic:legalDeliveryDataa?.data?.serviceResultServerId?.licenseNo,
-        //             serverAddress:legalDeliveryDataa?.data?.serviceResultServerId?.address1,
-        //             serverName:legalDeliveryDataa?.data?.serviceResultServerId?.firstName,
-        //             apt:legalDeliveryDataa?.data?.serviceResultServerId?.apt,
-        //             sex:legalDeliveryDataa?.data?.serviceResultSex,
-        //             skinColor:legalDeliveryDataa?.data?.serviceResultSkinColor,
-        //             age:legalDeliveryDataa?.data?.serviceResultAge,
-        //             height:legalDeliveryDataa?.data?.serviceResultHeight,
-        //             weight:legalDeliveryDataa?.data?.serviceResultWeight,
-        //             hair:legalDeliveryDataa?.data?.serviceResultHair,
-        //             otherFeature:legalDeliveryDataa?.data?.serviceResultOtherDescription,
-
-
-        //         }))
-        //     }
-        //    else if (legalDeliveryDataa?.searchResult === "service" || legalDeliveryDataa?.searchResult ==="standard") {
-        //         setHeader(prev => ({
-        //             ...prev,
-        //             index: legalDeliveryDataa?.data?.resultFormId?.queryInformationLTIndexNo,
-        //         }))
-        //         setBodyData(prev => ({
-        //             ...prev,
-        //             dateOfService: legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfService,
-        //             firstAttemptDate: legalDeliveryDataa?.data?.resultFormId?.serviceResultFirstAttemptDate,
-        //             firstAttemptTime: legalDeliveryDataa?.data?.resultFormId?.serviceResultFirstTimeOfService,
-        //             secondAttemptDate: legalDeliveryDataa?.data?.resultFormId?.serviceResultSecondAttemptDate,
-        //             secondAttemptTime: legalDeliveryDataa?.data?.resultFormId?.serviceResultSecondTimeOfService,
-        //             apt:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.apt,
-        //             recipientTitle:legalDeliveryDataa?.data?.resultFormId?.serviceResultRecipientTitle,
-        //             dateOfMailing:legalDeliveryDataa?.data?.resultFormId?.serviceResultDateOfMailing,
-        //             lic:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.licenseNo,
-        //             serverAddress:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.address1,
-        //             serverName:legalDeliveryDataa?.data?.resultFormId?.serviceResultServerId?.firstName,
-        //             sex:legalDeliveryDataa?.data?.resultFormId?.serviceResultSex,
-        //             skinColor:legalDeliveryDataa?.data?.resultFormId?.serviceResultSkinColor,
-        //             age:legalDeliveryDataa?.data?.resultFormId?.serviceResultAge,
-        //             height:legalDeliveryDataa?.data?.resultFormId?.serviceResultHeight,
-        //             weight:legalDeliveryDataa?.data?.resultFormId?.serviceResultWeight,
-        //             hair:legalDeliveryDataa?.data?.resultFormId?.serviceResultHair,
-        //             otherFeature:legalDeliveryDataa?.data?.resultFormId?.serviceResultOtherDescription,
-
-        //         }))
-        //     }
     }, [])
     return (
         <>

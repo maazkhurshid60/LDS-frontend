@@ -37,7 +37,6 @@ const Server = () => {
 
     const dispatch = useDispatch()
     const deleteData = async (id: string) => {
-        // const response =deleteServerApi(id)
         dispatch(showSpinnerReducer(true))
         try {
             const response = await deleteServerApi(id)
@@ -45,7 +44,6 @@ const Server = () => {
             refetch()
             checkLastRecord()
         } catch (error) {
-            // console.log(error)
             toast.error("something went wrong")
         } finally {
             dispatch(showSpinnerReducer(false))
@@ -55,9 +53,7 @@ const Server = () => {
     const serverUpdateFunction = (id: string) => {
         setGetSingleServerData(data?.find((data: serverType, index: number) => data?._id === id))
         dispatch(showUpdateModalReducer(true))
-        console.log(id)
-        // updateServerApi(data?.find((data,index:number)=>data?._id === id))
-        // updateServerApi
+
     }
 
     // USE EFFECT TO SEARCH DATA
@@ -73,7 +69,6 @@ const Server = () => {
     if (isLoading) return <DataLoader text="Server" />
 
     if (error) return <div>An error has occurred: {error.message}</div>;
-    console.log("server data", data)
     return <>
         {showModal ? <AdministrationServerModal /> : showUpdateModal ? <AdministrationServerUpdateModal singledata={getSingleServerData} />
             :
@@ -81,14 +76,11 @@ const Server = () => {
                 <div className="">
                     <OutletLayoutHeader heading="Servers">
                         {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
-                        {/* <BorderButton buttonText="filter" disabled /> */}
                     </OutletLayoutHeader>
                     <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
                         <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                        {/* <Filter /> */}
                     </div>
-                    {/* <div className={`${widthSmall ? "w-[1310px]" : "w-[1150px]"}`} > */}
                     <Table headers={headers} tableData={searchValue?.length > 0 ? searchedData : currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction} />
                     {searchValue?.length === 0 && <Pagination
                         totalPages={totalPages}
@@ -98,17 +90,6 @@ const Server = () => {
                         onchange={onPageChange} // Pass onPageChange as onchange prop
 
                     />}
-                    {/* </div> */}
-                    {/*                                
-                    <Table headers={headers} tableData={currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction}/>
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            dataLimit={dataLimit}
-                            tableData={tableData?.tableData}
-                            onchange={onPageChange} // Pass onPageChange as onchange prop
-
-                        /> */}
 
 
                 </div>

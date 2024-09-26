@@ -34,30 +34,27 @@ const Devices = () => {
     const headers = ["Device Id", "Device Code", "device name", "product type", ...(isAdmin ? ["Action"] : [])];
     const [searchValue, setSearchValue] = useState("")
     const [searchedData, setSearchedData] = useState()
-   
+
     const dispatch = useDispatch()
 
     const deleteData = async (id: string) => {
         dispatch(showSpinnerReducer(true))
-        // console.log("<id>", id)
         try {
             const response = await deleteDeviceApi(id)
             refetch()
             checkLastRecord()
             toast.success(`${response?.data?.message}`)
         } catch (error) {
-            console.log(error)
 
             toast.error("something went wrong")
         }
-        finally{
+        finally {
             dispatch(showSpinnerReducer(false))
         }
     }
     // UPDATE DATA FUNCTION
     const clientUpdateFunction = (id: string) => {
         setGetSingleData(data?.find((data, index) => data?._id === id))
-        // console.log(id)
         dispatch(showUpdateModalReducer(true))
     }
     // USE EFFECT TO SEARCH DATA
@@ -68,8 +65,7 @@ const Devices = () => {
                 value?.toString().toLowerCase().includes(searchValue.toLowerCase())
             )
         ))
-    }, [searchValue,data])
-    // console.log(searchValue)
+    }, [searchValue, data])
 
     if (isLoading) return <DataLoader text="device" />
 
@@ -78,15 +74,13 @@ const Devices = () => {
 
         {showModal ? <DeviceModal /> : showUpdateModal ? <DeviceModalUpdate singledata={getSingleData} /> : <OutletLayout>
             <div className="relative">
-                
+
                 <OutletLayoutHeader heading="Devices">
                     {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
-                    {/* <BorderButton buttonText="filter" disabled /> */}
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
                     <Searchbar value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} />
-                    {/* <Filter /> */}
                 </div>
                 <Table headers={headers} tableData={searchValue?.length > 0 ? searchedData : currentTableData} onClick={deleteData} onUpdateClick={clientUpdateFunction} />
                 {searchValue?.length === 0 && <Pagination

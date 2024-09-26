@@ -34,26 +34,22 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(holidaySchema) })
     const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear" required/>
+            <TextField onKeyDown={handleEnterKeyPress} label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear" required />
         </div>
-          <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date"  required/>
+        <div className="w-full md:w-[38%] xl:w-[30%]">
+            <TextField onKeyDown={handleEnterKeyPress} label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date" required />
         </div>
         <div className="w-full ">
-            <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription"  required/>
+            <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription" required />
         </div>
-        
+
     </form>
     const updateDeviceFunction = async (data) => {
         const updateData = { ...data, holidayId: singledata?._id }
-        // const holidayYear=parseInt(data?.holidayYear)
-       
-        console.log(JSON.stringify(updateData?.holidayYear),updateData?.holidayDate.slice(0,4))
-        // if(updateData?.holidayYear!==updateData?.holidayDate.slice(0,4)){return alert("Holiday Year and Holiday Date's Year should be Same")}
-            if (JSON.stringify(updateData?.holidayYear)>updateData?.holidayDate.slice(0,4))
-            {
+
+        if (JSON.stringify(updateData?.holidayYear) > updateData?.holidayDate.slice(0, 4)) {
             return alert("Holiday Date's Year should be smaller than Holiday Year");
-          }
+        }
         disptach(showSpinnerReducer(true))
 
         try {
@@ -64,7 +60,7 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
         } catch (error) {
             disptach(showUpdateModalReducer(false))
             toast.error(`something went wrong`)
-        }finally{
+        } finally {
             disptach(showSpinnerReducer(false))
 
         }
@@ -77,7 +73,6 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     return <Modal
         modalHeading="Update Holiday"
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting ? "updating" : "update"}
         disabled={isSubmitting}
         filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}

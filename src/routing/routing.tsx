@@ -32,8 +32,8 @@ const Routing = () => {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route element={<Layout />}>
-                        {/* Place the /service route at the top */}
-                        <Route path="/" element={<Navigate to="/operations/service" />} />
+                    {/* Place the /service route at the top */}
+                    <Route path="/" element={<Navigate to="/operations/service" />} />
                     <Route path="/administration/service-results" element={<ServiceResult />} />
                     <Route path="/administration/service-type" element={<ServiceType />} />
                     <Route path="/administration/user" element={<User />} />
@@ -57,15 +57,6 @@ const Routing = () => {
                     <Route path="/operations/legal-delivery/standard-reports" element={<StandardReport />} />
                     <Route path="/operations/legal-delivery/trans-per-slip-reports" element={<TransPerSlipReport />} />
                     <Route path="/operations/legal-delivery/gps-report" element={<GPSReport />} />
-
-
-                    
-                    
-                    
-                    
-                   
-                    {/* <Route path="/all-users" element={<AllUsers />} />
-                    <Route path="/all-roles" element={<AllRoles />} /> */}
 
 
                 </Route>

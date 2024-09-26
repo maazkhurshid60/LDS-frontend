@@ -51,9 +51,6 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="address2" register={register} error={errors.address2} name="address2" placeholder="Enter Address" />
         </div>
-        {/* <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="country" register={register} error={errors.country} name="country" placeholder="Enter Country" />
-        </div> */}
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="state" register={register} error={errors.state} name="state" placeholder="Enter State" />
         </div>
@@ -78,9 +75,7 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
     </form>
     const updateServiceResultFunction = async (data) => {
         const updateData = { ...data, clientId: singledata?._id }
-        // console.log("<<<<<<<<<<<<<<<<<<<<<",updateData,singledata?._id)
         disptach(showSpinnerReducer(true))
-
         try {
             const res = await updateClientApi(updateData)
             toast.success(`${res?.data?.message}`)
@@ -114,7 +109,6 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
     return <Modal
         modalHeading="Update Client"
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting?"updating":"update"}
         filledButtonText="update"
         onBorderButtonClick={() => disptach(showUpdateModalReducer(false))}
         onFilledButtonClick={handleSubmit(updateServiceResultFunction)}

@@ -14,30 +14,30 @@ import { showSpinnerReducer } from "../../redux/slice/spinner"
 import { handleEnterKeyPress } from "../../utils/moveToNextFieldOnEnter"
 const ServiceTypeModal = () => {
     const disptach = useDispatch()
-    const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm({resolver:zodResolver(serviceTypeSchema)})
-    const {isLoading,error,data,refetch}=useGetAllData("/service-type/all-service-types")
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(serviceTypeSchema) })
+    const { isLoading, error, data, refetch } = useGetAllData("/service-type/all-service-types")
 
     const modalBody = <form className="mb-6">
-        <TextField onKeyDown={handleEnterKeyPress}  label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required/>
-<div className="mt-4" >
+        <TextField onKeyDown={handleEnterKeyPress} label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required />
+        <div className="mt-4" >
 
-        <TextArea required label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription"/>
-</div>
+            <TextArea required label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription" />
+        </div>
     </form>
-    const addServiceResultFunction = async(data) => {
+    const addServiceResultFunction = async (data) => {
         disptach(showSpinnerReducer(true))
 
         try {
-            const res=await addServiceTypeApi(data)
+            const res = await addServiceTypeApi(data)
             toast.success(`${res?.data?.message}`)
             refetch()
-        disptach(showModalReducer(false))
+            disptach(showModalReducer(false))
 
         } catch (error) {
-        toast.error(`something went wrong`)
-        disptach(showModalReducer(false))
+            toast.error(`something went wrong`)
+            disptach(showModalReducer(false))
 
-        }finally{
+        } finally {
             disptach(showSpinnerReducer(false))
 
         }
@@ -45,7 +45,6 @@ const ServiceTypeModal = () => {
     return <Modal
         modalHeading="Service Type"
         borderButtonText="cancel"
-        // filledButtonText={isSubmitting?"adding":"add"}
         disabled={isSubmitting}
         filledButtonText="add"
         onBorderButtonClick={() => disptach(showModalReducer(false))}

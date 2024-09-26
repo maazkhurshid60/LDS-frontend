@@ -1,14 +1,11 @@
 export interface resultFormType {
-    // queryInformationLT: any,
     queryInformationLTFullName: string,
     queryInformationLTIndexNo: number,
     queryInformationLTAddress: string,
     queryInformationLTBusinessName: string,
     queryInformationLTInputDate: string,
-    // queryInformationStandard: any,
     queryInformationStandardServeTo: string,
     queryInformationStandardDefendants: string,
-    // serviceResults: any
     serviceResultInputDate: string,
     serviceResultScvType: string,
     serviceResultClientId: string,
@@ -40,5 +37,6 @@ export interface resultFormType {
     serviceResultWeight: number,
     serviceResultOtherFeatures: string,
     serviceResultDateOfMailing: string,
-    serviceResultDateOfNotary: string,}
+    serviceResultDateOfNotary: string,
+}
 

@@ -1,11 +1,9 @@
 import axios from "axios";
 import { baseUrl } from "../baseUrl/baseUrl";
-import { toast } from "react-toastify";
 import api from "../axiosInstance";
 
 const accessToken = localStorage.getItem("accessToken");
 
-console.log(accessToken)
 
 // GET ALL ROLE API
 export const getAllRoleApi = async () => {
@@ -15,13 +13,8 @@ export const getAllRoleApi = async () => {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
         })
-        // toast.success("role called")
-        // console.log('Result: ',response);
-
         return response
     } catch (error) {
-        // toast.error("role doesnot called")
-
         throw Error(error)
     }
 }
@@ -46,7 +39,6 @@ export const deleteRoleApi = async (id: any) => {
     const roleIdData = { roleId: id }
 
     try {
-        console.log(accessToken, roleIdData)
 
         const response = await axios.delete(`${baseUrl}/role/delete`, {
             headers: {
@@ -54,7 +46,6 @@ export const deleteRoleApi = async (id: any) => {
             },
             data: roleIdData  // Assuming 'data' contains any parameters for the delete request
         });
-        console.log(response)
         return response;
     } catch (error) {
         throw Error(error)
@@ -64,9 +55,7 @@ export const deleteRoleApi = async (id: any) => {
 // UPDATE ROLE API
 export const updateRoleApi = async (data) => {
     try {
-        // const response= await axios.patch (`${baseUrl}/role/update`,data,{ headers: {
-        //     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-        // } })
+
         const response = await api.patch(`/role/update`, data, {
 
         })

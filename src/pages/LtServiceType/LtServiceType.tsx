@@ -34,13 +34,10 @@ const LtServiceType = () => {
     const [getSingleData, setGetSingleData] = useState<holidayType>()
     const [searchValue, setSearchValue] = useState("")
     const [searchedData, setSearchedData] = useState()
-    // console.log(searchValue, currentTableData?.filter(data => Object.values(data).some(value =>
-    //     typeof value === 'string' && value.toLowerCase().includes(searchValue.toLowerCase())
-    // )
-    // ))
+
     // Conditionally include "Action" in the headers array if the user is an admin
     const headers = [
-        "Lt Service Type",,
+        "Lt Service Type", ,
         ...(isAdmin ? ["Action"] : [])  // Add "Action" if isAdmin is true
     ];
 
@@ -52,7 +49,6 @@ const LtServiceType = () => {
             toast.success(`${response?.data?.message}`)
             checkLastRecord()
         } catch (error) {
-            // console.log(error)
             toast.error("something went wrong")
         }
         finally {
@@ -72,7 +68,7 @@ const LtServiceType = () => {
                 value?.toString().toLowerCase().includes(searchValue.toLowerCase())
             )
         ))
-    }, [searchValue,data])
+    }, [searchValue, data])
 
     if (isLoading) return <DataLoader text="holiday" />
 
@@ -84,12 +80,10 @@ const LtServiceType = () => {
             <div className="">
                 <OutletLayoutHeader heading="Lt Service Types">
                     {userInfo?.roles[0]?.name === "Admin" && <BorderButton buttonText="add" icon={<MdOutlineAdd />} isIcon onClick={() => dispatch(showModalReducer(true))} />}
-                    {/* <BorderButton buttonText="filter" disabled /> */}
                 </OutletLayoutHeader>
                 <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
                     <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                    {/* <Filter /> */}
                 </div>
                 <Table headers={headers} tableData={searchValue.length > 0 ? searchedData : currentTableData} onClick={deleteData} onUpdateClick={holidayUpdateFunction} />
                 {searchValue.length === 0 && <Pagination

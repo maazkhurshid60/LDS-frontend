@@ -20,31 +20,26 @@ export type FormFields = z.infer<typeof userInputSectionRolesSchema>
 const RolePerUserSection = () => {
     const { register, formState: { errors, isSubmitting }, handleSubmit, setValue, control } = useForm<FormFields>({ resolver: zodResolver(userInputSectionRolesSchema) })
     const alluserDetail = useSelector((state: RootState) => state.userId)
-    // console.log("alluser detail",alluserDetail?.singleUser[0]?.roles)
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
     const allRolesdata = useSelector((state: RootState) => state?.roles?.allRoles?.tableData)
     const options = allRolesdata?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const oneUser = useSelector((state: RootState) => state.userId.singleUser)
     const userId = useSelector((state: RootState) => state.userId.userId)
     const alluserData = useSelector((state: RootState) => state.userId.allUser.tableData)
-  const userInfo =  useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
+    const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
 
-   const filteredRoles= allSelectedRoles.filter((obj1, i, arr) => 
+    const filteredRoles = allSelectedRoles.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
-      )
+    )
     const dispatch = useDispatch()
     // GET SELECTED ROLES
     const getSelectedRoles = (optionValue) => {
-        // console.log("getselectedfunciton", optionValue)
         const selected = allRolesdata?.find((options, index: number) => { return options?._id === optionValue })
-        // console.log(selected)
         setAllSelectedRoles([...allSelectedRoles, selected])
-        // dispatch(getMailAddress(optionValue))
     }
     // DELETE ROLE
     const deleteRole = (id: string) => {
         const filterUser = allSelectedRoles?.filter((data, index: number) => data?._id !== id)
-        // console.log(filterUser)
         setAllSelectedRoles(filterUser)
     }
 
@@ -90,43 +85,42 @@ const RolePerUserSection = () => {
                 md:text-md
                 lg:text-xl capitalize">Role per users </h1>
             <TableWithoutAction headers={headers} tableData={alluserDetail.singleUser ? alluserDetail.singleUser[0]?.roles : []} />
-            {userInfo?.roles?.find((data)=>data?.name === "Admin") &&
-            <form className="mt-6 w-[100%] m-auto" onSubmit={handleSubmit(updateUserRoleFunction)}>
-                <h1 className="font-semibold
+            {userInfo?.roles?.find((data) => data?.name === "Admin") &&
+                <form className="mt-6 w-[100%] m-auto" onSubmit={handleSubmit(updateUserRoleFunction)}>
+                    <h1 className="font-semibold
                 md:text-md
                 lg:text-base">Update User Role</h1>
-                <div className="w-full md:w-[100%] flex flex-col items-start gap-x-10 mb-4">
+                    <div className="w-full md:w-[100%] flex flex-col items-start gap-x-10 mb-4">
 
-                    {/* SELECTED ROLES FOR USER WILL BE DISPLAYED*/}
-                    {allSelectedRoles?.length > 0 && <div className="w-[100%] mt-2">
-                        {/* <h1 className="font-semibold capitalize text-sm">User Role</h1> */}
-                        <div className="flex items-center justify-start  gap-x-14 gap-y-1 flex-wrap w-full">
-                            {filteredRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
-                                <p className="text-sm font-normal capitalize" key={index}>{data?.name}</p>
-                                <CrossIcon onClick={() => deleteRole(data?._id)} />
+                        {/* SELECTED ROLES FOR USER WILL BE DISPLAYED*/}
+                        {allSelectedRoles?.length > 0 && <div className="w-[100%] mt-2">
+                            <div className="flex items-center justify-start  gap-x-14 gap-y-1 flex-wrap w-full">
+                                {filteredRoles?.map((data, index: any) => <div className="flex items-center gap-x-6">
+                                    <p className="text-sm font-normal capitalize" key={index}>{data?.name}</p>
+                                    <CrossIcon onClick={() => deleteRole(data?._id)} />
+                                </div>
+                                )}
+
                             </div>
-                            )}
-
                         </div>
-                    </div>
-                    }
-                    <div className="w-[40%] mt-2 ">
-                        <Controller name="roles" control={control} render={({ field }) => (
-                            <SelectMultipleDropdown
-                                options={options}
-                                value={field.value}
-                                onChange={field.onChange}
-                                label="Roles"
-                                error={errors.roles?.message as string}
-                                getMailFunction={getSelectedRoles}
-                            />)} />
-                    </div>
+                        }
+                        <div className="w-[40%] mt-2 ">
+                            <Controller name="roles" control={control} render={({ field }) => (
+                                <SelectMultipleDropdown
+                                    options={options}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    label="Roles"
+                                    error={errors.roles?.message as string}
+                                    getMailFunction={getSelectedRoles}
+                                />)} />
+                        </div>
 
-                </div>
-                <div className="w-[30%] mt-5 ">
-                    <Button text={isSubmitting ? "Updating" : "Update User Role"} />
-                </div>
-            </form>}
+                    </div>
+                    <div className="w-[30%] mt-5 ">
+                        <Button text={isSubmitting ? "Updating" : "Update User Role"} />
+                    </div>
+                </form>}
         </div>
     );
 }

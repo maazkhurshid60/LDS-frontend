@@ -8,7 +8,6 @@ import { baseUrl } from "../../apiservices/baseUrl/baseUrl";
 import { showSpinnerReducer } from "./spinner";
 import api from "../../apiservices/axiosInstance";
 const accessToken = localStorage.getItem("accessToken");
-// const dispatch=useDispatch()
 export type User = {
     userName: string;
     firstName: string;
@@ -87,12 +86,10 @@ const userId = createSlice({
         builder.addCase(getAllUsers.fulfilled, (state, action) => {
             // Update state with the fetched data
             state.allUser.tableData = action.payload;
-            // console.log("action..pakod",action.payload);
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(getAllUsers.rejected, (state, action) => {
             // Handle error state if needed
-            console.error("Error fetching all users:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
         /////////////////UPDATE USER API EXRTA REDUCERS
@@ -101,13 +98,11 @@ const userId = createSlice({
         });
         builder.addCase(updateUser.fulfilled, (state, action) => {
             // Update state with the fetched data
-            // state.allUser.tableData = action.payload;
-            // console.log("action..pakod",action.payload);
+
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(updateUser.rejected, (state, action) => {
             // Handle error state if needed
-            console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
         /////////////////UPDATE USER ROLE API EXRTA REDUCERS
@@ -116,13 +111,10 @@ const userId = createSlice({
         });
         builder.addCase(updateUserRole.fulfilled, (state, action) => {
             // Update state with the fetched data
-            // state.allUser.tableData = action.payload;
-            // console.log("action..pakod",action.payload);
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(updateUserRole.rejected, (state, action) => {
             // Handle error state if needed
-            console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
         /////////////////DELETE USER ROLE API EXRTA REDUCERS
@@ -191,12 +183,7 @@ export const deleteUserApi = createAsyncThunk<any>(
         dispatch(showSpinnerReducer(true))
 
         try {
-            // const response = await axios.delete(`${baseUrl}/user/delete-user`, {
-            //     headers: {
-            //         "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-            //     }
-            //     , data: { userId: data }
-            // })
+
             const response = await api.delete(`/user/delete-user`, {
                 data: { userId: data }
             })
@@ -205,7 +192,6 @@ export const deleteUserApi = createAsyncThunk<any>(
             dispatch(getAllUsers());
 
         } catch (error) {
-            console.log(error)
             toast.error("notupdated yet")
         } finally {
             dispatch(showSpinnerReducer(false))
@@ -213,20 +199,7 @@ export const deleteUserApi = createAsyncThunk<any>(
         }
     }
 );
-// export const deleteUserApi=async(id)=>{
-//     console.log("",id)
-//     try {
-//         const response= await axios.delete(`${baseUrl}/user/delete-user`,{ headers: {
-//             "Authorization": `Bearer ${accessToken}`
-//         } 
-//         ,data:{userId:id}
-//     })
-//         return response
-//     } catch (error) {
-//         console.log(error)
-//         throw Error (error)
-//     }
-//     }
+
 
 // UPDATE USER ROLE API
 export const updateUserRole = createAsyncThunk<any>(

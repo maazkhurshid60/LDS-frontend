@@ -19,13 +19,11 @@ export type FormFields = z.infer<typeof LTFormSchema>
 
 const Service = () => {
     const { register, formState: { errors }, handleSubmit, control } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
-    // const serviceTypeOptions = [{ value: "service1", label: "service 1" }, { value: "service2", label: "service 2" }, { value: "service3", label: "service 3" }]
     const { data: clientData } = useGetAllData("/client/all-clients");
     const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
     const { data: serviceTypeData } = useGetAllData("/service-type/all-service-types");
     const serviceTypeOptions = serviceTypeData?.map((data, id) => { return { value: data?._id, label: data?.serviceTypeCode } })
-    console.log("clientIdOptionsclientIdOptionsclientIdOptions", clientIdOptions)
 
     const dispatch = useDispatch()
     // function to get data for service filter
@@ -35,14 +33,12 @@ const Service = () => {
             const caseNo = isNaN(parseInt(searchData?.caseNo)) ? "" : parseInt(searchData?.caseNo);
             const clientId = searchData?.clientId === undefined && " "
             const serviceType = searchData?.serviceType === undefined && ""
-            console.log("<<<<<<<<<", searchData)
             const data = {
                 ...searchData, jobNo, caseNo, clientId, serviceType
             }
             const sendingData = { searchIn: "service", data }
 
             dispatch(getAllFilteredDataThunk(searchData))
-            // dispatch(getSearchNameReducer("service"))
 
         } catch (error) {
 
@@ -54,7 +50,6 @@ const Service = () => {
         <Controller name="clientId" control={control} render={({ field }) => (
             <Dropdown
                 options={clientIdOptions}
-                // singleOption={getSelectedClientoption}
                 value={field.value}
                 onChange={field.onChange}
                 label="Client id" error={errors.clientId?.message as string}
@@ -75,7 +70,6 @@ const Service = () => {
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt " error={errors.lTSApt} name="lTSApt" />
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="city " error={errors.lTSCity} name="lTSCity" />
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip " error={errors.lTSZip} name="lTSZip" maxLength={6} />
-        {/* <TextField onKeyDown={handleEnterKeyPress} register={register} label="commercial Description " error={errors.commercialDescription} name="commercialDescription" /> */}
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other L&T Description " error={errors.oLTDescription} name="oLTDescription" />
 
         <Button text="filter" onClick={handleSubmit(serviceFilterFunction)} />

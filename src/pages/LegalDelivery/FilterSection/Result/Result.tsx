@@ -19,7 +19,6 @@ const Result = () => {
     // function to get data for service filter
     const serviceFilterFunction = (data) => {
         const sendingData = { searchIn: "result", data }
-        console.log(sendingData)
         dispatch(getAllFilteredDataThunk(data))
         dispatch(getSearchNameReducer("result"))
 
@@ -27,14 +26,7 @@ const Result = () => {
 
     }
     return <form className="flex flex-col items-start gap-y-3 overflow-y-auto h-[80vh]" onSubmit={handleSubmit(serviceFilterFunction)}>
-        {/* <Controller name="resultOptions" control={control} render={({ field }) => (
-            <Dropdown
-                options={result}
-                value={field.value}
-                onChange={field.onChange}
-                label="Service result" error={errors.resultOptions?.message as string}
-            />
-        )} /> */}
+
         <Controller name="serviceType" control={control} render={({ field }) => (
             <Dropdown
                 options={serviceTypeOptions}

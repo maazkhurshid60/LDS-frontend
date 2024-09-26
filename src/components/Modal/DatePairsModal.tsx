@@ -27,7 +27,6 @@ const DatePairsModal = () => {
     const [selectPreviousIndexPair, setSelectPrevioustIndexPair] = useState<any>()
     const [selectCurentIndexPair, setSelectCurrentIndexPair] = useState<any>()
     const datepairs = useSelector((state: RootState) => state.serviceForm.datepairs)
-    console.log("datepairs", datepairs)
     const dispatch = useDispatch()
     // Function to get the start of last week
     const getLastWeekStartDate = () => {
@@ -87,7 +86,6 @@ const DatePairsModal = () => {
                 // Special case: Sunday from last week and Monday from current week
                 const sundayLastWeek = getDateForDay(lastWeekStartDate, "sunday");
                 const mondayCurrentWeek = getDateForDay(currentWeekStartDate, "monday");
-                // console.log(`1st Attepmt Date: ${sundayLastWeek} - 2nd Attepmt Date: ${mondayCurrentWeek}`);
                 const data = {
                     firstAttepmtDate: sundayLastWeek,
                     secondAttepmtDate: mondayCurrentWeek,
@@ -98,8 +96,6 @@ const DatePairsModal = () => {
                 // Normal case: Both days are from last week
                 const firstDayDate = getDateForDay(lastWeekStartDate, selectedPair.firstDay);
                 const secondDayDate = getDateForDay(lastWeekStartDate, selectedPair.secondDay);
-                // console.log(`Last Week Pair: ${selectedPair.firstDay}-${selectedPair.secondDay}`);
-                // console.log(`1st Attepmt Date: ${firstDayDate} - 2nd Attepmt Date ${secondDayDate}`);
                 const data = {
                     firstAttepmtDate: firstDayDate,
                     secondAttepmtDate: secondDayDate,
@@ -114,8 +110,6 @@ const DatePairsModal = () => {
     const selectCurrentWeekDatePairs = (index) => {
         setSelectCurrentIndexPair(index)
         setSelectPrevioustIndexPair(null)
-
-
         const selectedPair = currentWeekPairs?.find((_, id) => id === index);
         const currentWeekStartDate = getCurrentWeekStartDate();
         const nextWeekStartDate = getNextWeekStartDate();
@@ -125,7 +119,6 @@ const DatePairsModal = () => {
                 // Special case: Sunday from current week and Monday from next week
                 const sundayCurrentWeek = getDateForDay(currentWeekStartDate, "sunday");
                 const mondayNextWeek = getDateForDay(nextWeekStartDate, "monday");
-                // console.log(`1st Attepmt Date: ${sundayCurrentWeek} - 2nd Attepmt Date: ${mondayNextWeek}`);
                 const data = {
                     firstAttepmtDate: sundayCurrentWeek,
                     secondAttepmtDate: mondayNextWeek,
@@ -136,8 +129,6 @@ const DatePairsModal = () => {
                 // Normal case: Both days are from the current week
                 const firstDayDate = getDateForDay(currentWeekStartDate, selectedPair.firstDay);
                 const secondDayDate = getDateForDay(currentWeekStartDate, selectedPair.secondDay);
-                // console.log(`Current Week Pair: ${selectedPair.firstDay}-${selectedPair.secondDay}`);
-                // console.log(`1st Attempt Date: ${firstDayDate} -2nd Attepmt Date ${secondDayDate}`);
                 const data = {
                     firstAttepmtDate: firstDayDate,
                     secondAttepmtDate: secondDayDate,
@@ -181,15 +172,7 @@ const DatePairsModal = () => {
     const getDayName = (date) => {
         return date.toLocaleDateString('en-US', { weekday: 'long' });
     };
-    console.log("<><>", firstDate, secondDate)
 
-    // console.log(getDayName(firstDate), selectedPair.firstAttemptDate, "-", getDayName(secondDate), selectedPair.secondAttemptDate)
-    console.log("Current Week Start Date:", getCurrentWeekStartDate());
-    console.log("Next Week Start Date:", getNextWeekStartDate());
-    console.log("First Date:", firstDate);
-    console.log("Second Date:", secondDate);
-    console.log("lastweek", showInCurrentWeek, showInCurrentWeek ? (getDayName(firstDate), ",", selectedPair.firstAttemptDate, "-", getDayName(secondDate), selectedPair.secondAttemptDate)
-        : null)
 
     const modalBody = (
         <div className="mb-4">
@@ -218,7 +201,6 @@ const DatePairsModal = () => {
                         <div className="px-4 py-1 bg-primaryColor text-whiteColor rounded-lg">
                             <p>Selected Date Pairs</p>
                             <div className="flex items-center gap-x-2 ">
-                                {/* <p>{selectedPair.firstAttemptDate}</p> - <p>{selectedPair.secondAttemptDate}</p> */}
                                 <p>
                                     {`${getDayName(firstDate)}, ${selectedPair.firstAttemptDate}`} - {`${getDayName(secondDate)}, ${selectedPair.secondAttemptDate}`}
                                 </p>
@@ -252,7 +234,6 @@ const DatePairsModal = () => {
 
                                 {`${getDayName(firstDate)}, ${selectedPair.firstAttemptDate}`} - {`${getDayName(secondDate)}, ${selectedPair.secondAttemptDate}`}
 
-                                {/* <p>{selectedPair.firstAttemptDate}</p> - <p>{selectedPair.secondAttemptDate}</p> */}
                             </div>
                         </div>
                     ) : <div className="px-4 py-8 text-whiteColor rounded-lg"></div>}
@@ -268,7 +249,6 @@ const DatePairsModal = () => {
             modalBody={modalBody}
             borderButtonText="cancel"
             onBorderButtonClick={() => { dispatch(isDatePairModalReducer(false)) }}
-        // filledButtonText="add"
         />
     );
 };

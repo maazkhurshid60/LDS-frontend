@@ -8,7 +8,6 @@ import { serviceFormType } from "../../type/serviceFormType/serviceFormType";
 import api from "../../apiservices/axiosInstance";
 import { selectedSearchResultDataReducer } from "./resultForm";
 const accessToken = localStorage.getItem("accessToken");
-console.log("access tokenin service form");
 
 const initialState = {
     allServiceFormData: [] as serviceFormType[],
@@ -37,8 +36,6 @@ const serviceForm = createSlice({
         }),
         addDatePairModalReducer: ((state, action) => {
             const { firstAttepmtDate, secondAttepmtDate } = action.payload
-            console.log(firstAttepmtDate,
-                secondAttepmtDate)
             state.datepairs.firstAttemptDate = firstAttepmtDate;
             state.datepairs.secondAttemptDate = secondAttepmtDate;
 
@@ -50,7 +47,6 @@ const serviceForm = createSlice({
             state.isDataSaved = action.payload
         }),
         savedLTFormDataReducer: ((state, action) => {
-            console.log("action.payload", action.payload)
             state.savedLTFormData = action.payload
         }),
         getNextServiceForm: (state) => {
@@ -61,7 +57,6 @@ const serviceForm = createSlice({
         getPreviousServiceForm: (state) => {
             if (state.serviceFormIndex > 0) {
                 state.serviceFormIndex--;
-                // state.singleUser = [state.allUser.tableData[state.serviceFormIndex]]; // Wrap in array if accessing a single user
             }
         },
         moveToStandardFormReducer: (state, action) => {
@@ -69,11 +64,9 @@ const serviceForm = createSlice({
         },
         getFirstServiceForm: (state) => {
             state.serviceFormIndex = 0;
-            // state.singleUser = [state.allUser.tableData[state.userId]]; // Wrap in array if accessing a single user
         },
         getLastServiceForm: (state) => {
             state.serviceFormIndex = state.allServiceFormData.length - 1;
-            // state.singleUser = [state.allUser.tableData[state.userId]]; // Wrap in array if accessing a single user
         },
         getSelectedSearchServicetData: (state, action) => {
             state.selectedSearchServicetData = action.payload
@@ -149,20 +142,12 @@ export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", asyn
     if (!accessToken) {
         localStorage.getItem("accessToken")
     }
-    // toast.success("called all service form data")
     try {
-        // console.log("accessToken<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>", accessToken)
         const response = await api.get(`/service-form/all-service-forms`
-            // , {
-            //     headers: {
-            //         "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-            //     }
-            // }
+
         )
-        console.log(response?.data?.data)
         return response?.data?.data
     } catch (error) {
-        console.log(error)
         throw new Error(error)
     }
     finally {
@@ -174,19 +159,9 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
     dispatch(showSpinnerReducer(true))
 
     try {
-        // console.log(data)
-        // const response = await axios.delete(`${baseUrl}/service-form/delete`, {
-        //     headers: {
-        //         "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-        //     },
-        //     data: {
-        //         serviceFormId: id
-        //     }
-        // })
+
         const response = await api.delete(`/service-form/delete`, {
-            // headers: {
-            //     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-            // },
+
             data: {
                 serviceFormId: id
             }
@@ -196,7 +171,6 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
         dispatch(showModalReducer(false))
         return response?.data?.data
     } catch (error) {
-        // console.log(error)
         throw new Error(error)
     }
     finally {
@@ -206,10 +180,8 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
 })
 // UPDATE SERVICE FORM
 export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", async (data: any, { dispatch }) => {
-    console.log("sending data to update api", data)
     dispatch(showSpinnerReducer(true))
     try {
-        // console.log(data)
         const response = await axios.patch(`${baseUrl}/service-form/update`, data, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
@@ -219,9 +191,7 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
         dispatch(getAllServiceFormThunk())
         toast.success(`${response?.data?.message}`)
         dispatch(showModalReducer(false))
-        console.log(response)
     } catch (error) {
-        console.log(">>>>>", error)
         toast.error("Something went wrong. Try Later")
     } finally {
         dispatch(showSpinnerReducer(false))
@@ -231,11 +201,9 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
 })
 // ADD SERVICE FORM
 export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (data: any, { dispatch }) => {
-    console.log(data)
     dispatch(showSpinnerReducer(true))
 
     try {
-        // console.log(data)
         const response = await axios.post(`${baseUrl}/service-form/create`, data, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
@@ -247,7 +215,6 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
         dispatch(showModalReducer(false))
 
     } catch (error) {
-        console.log("EOROR ADD FORM???????????????????", error)
         toast.error(`${error?.response?.data?.message}`)
     } finally {
         dispatch(showSpinnerReducer(false))
@@ -258,11 +225,9 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
 
 // SEARCH SERVICE FORM BY DATES
 export const searchServiceFormThunk = createAsyncThunk("addServiceForm", async (data: any, { dispatch }) => {
-    console.log("search form data from result form data", data)
     dispatch(showSpinnerReducer(true))
 
     try {
-        console.log(data)
         const response = await axios.post(`${baseUrl}/service-form/all-service-forms-range`, data, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
@@ -270,10 +235,8 @@ export const searchServiceFormThunk = createAsyncThunk("addServiceForm", async (
 
         })
         toast.success(`${response?.data?.message}`)
-        console.log("response?.data?.data", response?.data?.data)
         return response?.data?.data
     } catch (error) {
-        console.log(error)
         toast.error(`${error?.response?.data?.message}`)
     }
     finally {

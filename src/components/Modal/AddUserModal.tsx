@@ -25,21 +25,18 @@ const AddUserModal = () => {
     const filteredRoles = allSelectedRoles.filter((obj1, i, arr) =>
         arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
     )
-    console.log(allSelectedRoles)
     const dispatch = useDispatch()
     // ADD USER
     const addUserFunction = async (data: any) => {
         dispatch(showSpinnerReducer(true))
         const onlyName = filteredRoles?.map(data => data?.name)
         const allData = { ...data, roles: onlyName }
-        // console.log(">>>>>>>>>>>>",allData)
-        // dispatch(showModalReducer(false))
+
         try {
             const res = await registerUserApi(allData)
-            // toast.success(`${res?.data?.message}`)
             dispatch(showModalReducer(false))
         } catch (error) {
-          
+
             dispatch(showModalReducer(false))
         } finally {
             dispatch(showSpinnerReducer(false))
@@ -51,29 +48,25 @@ const AddUserModal = () => {
     }
     // GET SELECTED ROLES
     const getSelectedRoles = (optionValue) => {
-        // console.log("getselectedfunciton", optionValue)
         const selected = data?.find((options, index: number) => { return options?._id === optionValue })
-        // console.log(selected)
         setAllSelectedRoles([...allSelectedRoles, selected])
-        // dispatch(getMailAddress(optionValue))
     }
     // DELETE ROLE
     const deleteRole = (id: string) => {
         const filterUser = allSelectedRoles?.filter((data, index: number) => data?._id !== id)
-        // console.log(filterUser)
         setAllSelectedRoles(filterUser)
     }
 
     // MODALFOOTER STARTS
     const body = <form className="flex  gap-4 mb-4  items-center justify-start gap-x-8 gap-y-4 flex-wrap">
         <div className="w-full md:w-[38%] xl:w-[30%] ">
-            <TextField onKeyDown={handleEnterKeyPress}  label="email" register={register} name="email" error={errors?.email} required/></div>
+            <TextField onKeyDown={handleEnterKeyPress} label="email" register={register} name="email" error={errors?.email} required /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="user name" register={register} name="userName" error={errors?.userName} required/></div>
+            <TextField onKeyDown={handleEnterKeyPress} label="user name" register={register} name="userName" error={errors?.userName} required /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="first name" register={register} name="firstName" error={errors?.firstName} /></div>
+            <TextField onKeyDown={handleEnterKeyPress} label="first name" register={register} name="firstName" error={errors?.firstName} /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="last name" register={register} name="lastName" error={errors?.lastName} /></div>
+            <TextField onKeyDown={handleEnterKeyPress} label="last name" register={register} name="lastName" error={errors?.lastName} /></div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <PasswordField label="password" register={register} name="password" error={errors?.password} required
             /></div>
@@ -106,7 +99,6 @@ const AddUserModal = () => {
     </form>
     // MODALFOOTER ENDS
     return <Modal modalHeading="Add user" borderButtonText="cancel"
-        // filledButtonText={isSubmitting?"adding":"add"}
         filledButtonText="add"
         modalBody={body}
         onFilledButtonClick={handleSubmit(addUserFunction)}

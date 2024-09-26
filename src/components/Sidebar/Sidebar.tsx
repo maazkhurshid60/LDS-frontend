@@ -9,21 +9,19 @@ import { openMenuFunction } from "../../redux/slice/menuOpen";
 import { RootState } from "../../redux/store";
 
 const Sidebar = () => {
-    // const [widthSmall, setWidthSmall] = useState(false)
-    // const [menuOpen, setMenuOpen] = useState(false)
+
     const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
-    // const menu = useSelector(state => state.menuOpen.menuOpenStatus);
     const userData = useSelector((state: RootState) => state?.userDetail)
     const dispatch = useDispatch()
 
     return <>
 
-<div
-      className={`w-full sticky top-0  
+        <div
+            className={`w-full sticky top-0  
         md:inline-block transition-all duration-300 
         py-4 border-r-[1px] border-r-borderColor     
         ${widthSmall ? "pl-[14px]" : "pl-6"}`}
-    >
+        >
             {/* BACK ICON USED TO REDUCE WIDTH OF SIDEBAR STARTS */}
             <div className={`hidden 
         md:flex md:items-center md:justify-center

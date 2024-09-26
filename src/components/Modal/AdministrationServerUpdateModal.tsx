@@ -26,8 +26,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
     const { refetch } = useGetAllData("/server/all-servers")
 
     const options = data?.map((options) => ({ label: options?.deviceCode, value: options?._id }));
-    console.log(":data", data, "options", options)
-    console.log("singledata>>>>>>", singledata)
+
     const handleZipChange = (event) => {
         const { value } = event.target;
         const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
@@ -80,9 +79,6 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="state" register={register} error={errors.state} name="state" placeholder="Enter State" />
         </div>
-        {/* <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress}  label="city" register={register} error={errors.city} name="city" placeholder="Enter City"/>
-            </div> */}
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" required maxLength={7} onChange={handleZipChange} />
         </div>
@@ -107,12 +103,8 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
     const updateServerFunction = async (data) => {
         dispatch(showSpinnerReducer(true))
         try {
-
-            console.log(typeof parseInt(data?.zip))
-            // const zip = data?.zip
             const licenseNo = parseInt(data?.licenseNo)
             const postData = { ...data, licenseNo, serverId: singledata?._id }
-            console.log("postdata", postData)
             await updateServerApi(postData)
             dispatch(showUpdateModalReducer(false))
             refetch()

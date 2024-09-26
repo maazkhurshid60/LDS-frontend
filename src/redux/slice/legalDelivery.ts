@@ -30,7 +30,6 @@ const legalDelivery = createSlice({
     initialState: initialState,
     reducers: {
         getSingleLegalDeliveryReducer: (state, action) => {
-            console.log("all filtered dataa", action.payload)
             state.selectedLegalDeliveryData.data = action?.payload
         },
         getSearchNameReducer: (state, action) => {
@@ -45,18 +44,14 @@ const legalDelivery = createSlice({
     },
     extraReducers: (builders) => {
         builders.addCase(getAllFilteredDataThunk.pending, (state) => {
-            console.log(">>>>>>>>>>>>>>>>>>>>>", state.status)
 
             state.status = "loading"
         })
         builders.addCase(getAllFilteredDataThunk.fulfilled, (state, action) => {
-            console.log(">>>>>>>>>>>>>>>>>>>>>", action.payload)
             state.legalDeliveryData = action.payload;
             state.status = "success"
         })
         builders.addCase(getAllFilteredDataThunk.rejected, (state) => {
-            console.log(">>>>>>>>>>>>>>>>>>>>>", state.status)
-
             state.status = "failed"
 
         })
@@ -74,14 +69,10 @@ export const getAllFilteredDataThunk = createAsyncThunk("getAllFilterData", asyn
         data: searchdata?.data,
     }
 
-
-    // dispatch(showSpinnerReducer(true))
-
     try {
         const response = await axios.post(`${baseUrl}/service-form/all-service-forms-range`, searchdata, {
-            headers: { "Authorization": `Bearer ${accessToken}`, },
+            headers: { "Authorization": `Bearer ${localStorage.getItem("accessToken")}`, },
         })
-        console.log("sending data", searchdata)
         toast.success(`${response?.data?.message}`)
         return response?.data?.data
     } catch (error) {

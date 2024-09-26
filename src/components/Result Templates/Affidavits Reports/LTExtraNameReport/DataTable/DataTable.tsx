@@ -8,9 +8,7 @@ export interface DataTableProps {
     extraname: any
 }
 const DataTable: React.FC<DataTableProps> = (item) => {
-    console.log("item?.extraname?.length", item?.extraname)
     const extraa = item?.extraname.slice(1);
-    console.log("extra?????????", extraa)
     return <div>
 
         <div className="relative overflow-x-auto">

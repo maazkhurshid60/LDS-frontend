@@ -9,7 +9,6 @@ const Navbar = () => {
     let navbarTrackingData = useSelector((state: RootState) => state.navbarTracking)
     const menu = useSelector((state: RootState) => state.menuOpen.menuOpenStatus);
 
-    console.log(navbarTrackingData)
     const dispatch = useDispatch()
     return <div className="w-full border-b-[1px] border-b-borderColor h-[10vh] px-8 py-8 bg-whiteColor flex items-center
     sticky top-0 right-0 z-50" >
@@ -19,7 +18,7 @@ const Navbar = () => {
         <div className="flex items-center gap-x-3 font-semibold capitalize text-grayColor 
                         md:text-base">
             {navbarTrackingData?.mainMenu && <> <p className="">{navbarTrackingData?.mainMenu}</p>
-                < IoIosArrowForward size={16}  className="mt-[2px]"/>
+                < IoIosArrowForward size={16} className="mt-[2px]" />
                 <p className="text-primaryColorLight">{navbarTrackingData?.subMenu}</p></>}
 
         </div>

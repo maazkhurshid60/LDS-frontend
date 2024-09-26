@@ -39,7 +39,6 @@ const userId = createSlice({
             const allRoleData = JSON.stringify(state.allRoles.tableData)
             const allRoleDataArray = JSON.parse(allRoleData)
             const oneUser = allRoleDataArray?.find((data, id) => data?._id === action.payload);
-            console.log("get single role", action.payload, oneUser)
             state.singleRole = oneUser;
         },
         emptyOneRole: (state) => {
@@ -53,57 +52,46 @@ const userId = createSlice({
         builder.addCase(getAllRoles.fulfilled, (state, action) => {
             // Update state with the fetched data
             state.allRoles.tableData = action.payload;
-            // console.log("action..pakod", action.payload);
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(getAllRoles.rejected, (state, action) => {
             // Handle error state if needed
-            console.error("Error fetching all users:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
-        /////////////////
+
         builder.addCase(addRole.pending, (state) => {
             state.status = "loading"; // Set status to "loading" while fetching
         });
         builder.addCase(addRole.fulfilled, (state, action) => {
             // Update state with the fetched data
             state.allRoles.tableData.push = action.payload;
-            // console.log("action..pakod",action.payload);
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(addRole.rejected, (state, action) => {
             // Handle error state if needed
-            console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
-        ///////////////////
         builder.addCase(deleteRole.pending, (state) => {
             state.status = "loading"; // Set status to "loading" while fetching
         });
         builder.addCase(deleteRole.fulfilled, (state, action) => {
             // Update state with the fetched data
-            // state.allRoles.tableData = action.payload;
-
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(deleteRole.rejected, (state, action) => {
             // Handle error state if needed
-            console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
-        ///////////////////
         builder.addCase(updateRole.pending, (state) => {
             state.status = "loading"; // Set status to "loading" while fetching
         });
         builder.addCase(updateRole.fulfilled, (state, action) => {
             // Update state with the fetched data
-            // state.allRoles.tableData = action.payload;
 
             state.status = "success"; // Set status to "success" on successful fetch
         });
         builder.addCase(updateRole.rejected, (state, action) => {
             // Handle error state if needed
-            console.error("update use failed:", action.error);
             state.status = "error"; // Set status to "error" on fetch failure
         });
     },
@@ -119,15 +107,13 @@ export const getAllRoles = createAsyncThunk<User[]>(
     "userId/getAllRoles",
     async (_, thunkAPI) => {
         const { dispatch } = thunkAPI;
-            dispatch(showSpinnerReducer(true));
+        dispatch(showSpinnerReducer(true));
         try {
             const res = await getAllRoleApi();
-            // toast.success("role called")
             return res?.data?.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
-            // toast.error("role doesnot called")
             throw new Error("Failed to fetch all roles");
-        }finally{
+        } finally {
             dispatch(showSpinnerReducer(false));
         }
     }
@@ -138,17 +124,17 @@ export const getAllRoles = createAsyncThunk<User[]>(
 // ADD ROLE API
 export const addRole = createAsyncThunk<any>(
     "userId/addRole",
-    async (data,{dispatch}) => {
+    async (data, { dispatch }) => {
         dispatch(showSpinnerReducer(true))
-        
+
         try {
             const res = await addRoleApi(data);
             toast.success(`${res?.data?.message}`)
             return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
             throw new Error("Failed to fetch all users");
-        }finally{
-        dispatch(showSpinnerReducer(false))
+        } finally {
+            dispatch(showSpinnerReducer(false))
 
         }
     }
@@ -178,7 +164,7 @@ export const deleteRole = createAsyncThunk<any>(
 // // GET ALL USERS API
 export const updateRole = createAsyncThunk<any>(
     "userId/updateRole",
-    async (data,{dispatch}) => {
+    async (data, { dispatch }) => {
         dispatch(showSpinnerReducer(true))
         try {
             const res = await updateRoleApi(data);
@@ -186,8 +172,8 @@ export const updateRole = createAsyncThunk<any>(
             return res.data.data; // Assuming data is in res.data.data, adjust as per your API response structure
         } catch (error) {
             throw new Error("Failed to fetch all users");
-        }finally{
-        dispatch(showSpinnerReducer(false))
+        } finally {
+            dispatch(showSpinnerReducer(false))
 
         }
     }

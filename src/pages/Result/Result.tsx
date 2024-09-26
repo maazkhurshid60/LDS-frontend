@@ -40,7 +40,6 @@ const Result = () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [cancelSearchFormFunction])
-    console.log("isSearchResultForm", isSearchResultForm)
     return <div className=" bg-whiteColor p-2 sm:p-8 w-[95%] m-auto border-[1px] border-borderColor border-solid rounded-xl shadow-smShadow">
         <OutletLayoutHeader heading="Result Form">
             {isNewResultFormAdding ? <BorderButton buttonText="cancel" onClick={cancelAddingFormFunction} />
@@ -49,8 +48,7 @@ const Result = () => {
                     (<BorderButton buttonText="cancel" onClick={cancelSearchFormFunction} />)
                     :
                     <>
-                        {/* <BorderButton buttonText="edit" icon={<MdOutlineEdit />} isIcon />
-            <BorderButton buttonText="submit" icon={<MdOutlineDone />} isIcon /> */}
+
                         <BorderButton buttonText="delete" icon={<MdDeleteOutline />} isIcon onClick={() => dispatch(deleteServiceFormThunk(allResultForm[resultFormIndex]?._id))} />
                         <BorderButton buttonText="previous" icon={<MdArrowBackIos />} isIcon onClick={() => { dispatch(getPreviousServiceForm()), dispatch(emptySelectedSearchResultFormAddReducer()), dispatch(emptySearchResultFormDataAddReducer()) }} />
                         <BorderButton buttonText="next" icon={<MdArrowForwardIos />} isRightIcon onClick={() => { dispatch(getNextServiceForm()), dispatch(emptySelectedSearchResultFormAddReducer()), dispatch(emptySearchResultFormDataAddReducer()) }} />

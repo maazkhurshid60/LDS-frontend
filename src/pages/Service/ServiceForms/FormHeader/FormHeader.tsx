@@ -30,7 +30,6 @@ const FormHeader = () => {
     const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
     const dispatch = useDispatch()
     const [jobNo, setJobNo] = useState<any>()
-    // LTServiceData?.find((data) => data?.isActive)?._id || null
     const getExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const getExistingSelectedServiceTypeoption = serviceTypeOptions?.find((data, index) => data?.value === allServiceFormData[serviceFormIndex]?.serviceType?._id && { value: data?._id, label: data?.fullName })
 
@@ -39,7 +38,6 @@ const FormHeader = () => {
 
     const submitFormHeaderFunction = (data) => {
         const headerFormData = {
-            // serviceFormId,
             jobNo: parseInt(jobNo),
             inputDate: data?.inputDate,
             clientId: data?.clientId,
@@ -47,17 +45,13 @@ const FormHeader = () => {
             caseNo: data?.caseNo,
             caption: data?.caption,
         }
-        if (!isNewFormAdding ) {
-            toast.success("Form Header has called");
+        if (!isNewFormAdding) {
 
-            // dispatch(updateServiceFormThunk(updatedData))
             dispatch(savedFormHeaderDataReducer(headerFormData))
-            // dispatch(moveToStandardFormReducer("Standard"))
 
         } else {
 
             dispatch(savedLTFormDataReducer(headerFormData))
-            // toast.success("Your data is saved temporarily. For a permanent save, navigate to the Standard form and save your data.")
             dispatch(moveToStandardFormReducer("Standard"))
 
         }
@@ -70,20 +64,19 @@ const FormHeader = () => {
                 handleSubmit(submitFormHeaderFunction)(); // Call handleSubmit to pass form data
             }
         };
-    
+
         window.addEventListener('keydown', handleKeyDown);
-    
+
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [handleSubmit]);
-    
+
 
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
-        const { clientId, inputDate, caseNo ,caption,serviceType} = getValues();
-const headerData={jobNo,inputDate,clientData, caseNo,caption,serviceType}
-        // || !checkedName
+        const { clientId, inputDate, caseNo, caption, serviceType } = getValues();
+        const headerData = { jobNo, inputDate, clientData, caseNo, caption, serviceType }
         if (!inputDate || !caseNo || !clientId) {
             // Show error message if either field is empty
             setValue("serviceType", "");
@@ -108,14 +101,9 @@ const headerData={jobNo,inputDate,clientData, caseNo,caption,serviceType}
             const currentData = allServiceFormData[serviceFormIndex];
             const data = allServiceFormData[serviceFormIndex]?.mailingAddresses
             const id = allServiceFormData[serviceFormIndex]?._id
-            // console.log(data, id)
             dispatch(getFormMailAddress({ data, id }))
 
             if (currentData) {
-
-                console.log("new form is not adding****************************************", allServiceFormData[serviceFormIndex]?.inputDate);
-                //    toast.success("current****************************************");
-
                 // Set form values
                 setValue("clientId", getExistingSelectedClientoption?.value);
                 setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
@@ -126,7 +114,7 @@ const headerData={jobNo,inputDate,clientData, caseNo,caption,serviceType}
                 setValue("caseNo", JSON.stringify(currentData?.caseNo));
 
             } else {
-                console.log("No current data found for the form index.");
+                toast.warning("No current data found for the form index.");
             }
         }
         else {
@@ -142,7 +130,6 @@ const headerData={jobNo,inputDate,clientData, caseNo,caption,serviceType}
 
             setValue("clientId", getSelectedClientoption?.value);
             setValue("serviceType", getSelectedServiceTypeOption?.value);
-            // setValue("inputDate", savedLTData?.inputDate);
             setValue("caseNo", JSON.stringify(savedLTData?.caseNo));
 
             setValue("caseNo", savedLTData?.caseNo);
@@ -183,15 +170,15 @@ const headerData={jobNo,inputDate,clientData, caseNo,caption,serviceType}
         <>
             <form action="" onSubmit={handleSubmit(submitFormHeaderFunction)}>
                 <div className="flex items-center justify-between flex-row-reverse	">
-                        <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {jobNo &&
-                                <div className="flex flex-col w-full items-start gap-1">
-                                    <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
-                                </div>
-                            }
-                        </div>
+                    <Hints label="To Save / Update L&T Data" keyName="Ctrl + S / ESC" />
+                    <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                        {jobNo &&
+                            <div className="flex flex-col w-full items-start gap-1">
+                                <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
+                            </div>
+                        }
                     </div>
+                </div>
                 <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-2 justify-start">
 
                     <div className="w-[100%] md:w-[46%] lg:w-[30%]">
@@ -201,7 +188,6 @@ const headerData={jobNo,inputDate,clientData, caseNo,caption,serviceType}
                         <Controller name="clientId" control={control} render={({ field }) => (
                             <Dropdown
                                 options={clientIdOptions}
-                                // singleOption={getSelectedClientoption}
                                 value={field.value}
                                 onChange={field.onChange}
                                 label="Client id" error={errors.clientId?.message as string}
@@ -216,7 +202,6 @@ const headerData={jobNo,inputDate,clientData, caseNo,caption,serviceType}
                         <Controller name="serviceType" control={control} render={({ field }) => (
                             <Dropdown
                                 options={serviceTypeOptions}
-                                // singleOption={getSelectedServiceTypeOption}
                                 value={field.value}
                                 onChange={field.onChange}
                                 label="service type"

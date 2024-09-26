@@ -36,7 +36,6 @@ const ResultForm = () => {
     const clientIdOptions = clientFilteredOptions?.map((data, id) => { return { value: data?._id, label: data?.code } })
     const { data: serverIdData } = useGetAllData("/server/all-servers");
     const serverIdOptions = serverIdData?.map((data, id) => { return { value: data?._id, label: data?.serverCode } })
-    // console.log("clientIdOptionsclientIdOptionsclientIdOptions", serverIdOptions, clientIdOptions)
     const substituteDeliveredToOptions = [{ value: "jandoe", label: "Jan Doe" }, { value: "johndoe", label: "John Doe" }]
     const corporateReciepientOptions = [{ value: "jandoe", label: "Jan Doe" }, { value: "johndoe", label: "John Doe" }]
 
@@ -45,7 +44,6 @@ const ResultForm = () => {
     const allServiceForm = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
     const serviceFormIndex = useSelector((state: RootState) => state.serviceForm.serviceFormIndex)
     const previousForm = allServiceForm[serviceFormIndex - 1]
-    console.log("previousForm", previousForm?.serviceResultServerId?._id, allServiceForm[serviceFormIndex]?.serviceResultServerId?._id, previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id && previousForm?.lTSAddress)
     const isSearchResultForm = useSelector((state: RootState) => state.serviceForm.isSearchServiceForm)
     const [isConspicuous, setIsConspicuous] = useState()
     const selectedSearchResultData = useSelector((state: RootState) => state.serviceForm.selectedSearchServicetData)
@@ -65,18 +63,16 @@ const ResultForm = () => {
         },
         { value: "substitute", label: "Substitute" },
         { value: "conspicuous", label: "Conspicuous" }
-    ];    // debugger;
+    ];
     const [lTSServed, setLTSServed] = useState<string[]>([])
     const [lTSNotServed, setLTSNotServed] = useState<string[]>([])
     const [suggestedTimeTrip, setSuggestedTimeTrip] = useState<any>()
     const currentYear = new Date().getFullYear().toString().slice(-2);
     const [oLTIndex, setOltIndex] = useState("")
-    console.log("selectedResultFormData>>>>>>>>>>>>>>>>>>>>>>>>>>>.", lTSFirstNameArray?.length)
     const [currentServerId, setCurrentServerId] = useState<string>()
     const [resultId, setResultId] = useState<string>(undefined)
 
     const addMinutesToTime = (timeString, minutesToAdd) => {
-        console.log("timestring", timeString);
 
         // Add a fallback for when AM/PM is missing (assuming 12-hour format)
         let amPmFallback = "";
@@ -118,17 +114,11 @@ const ResultForm = () => {
         return `${formattedHours}:${formattedMinutes}`;
     };
     const updatedTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
-    console.log("selectedResultFormData>>>>>>>>>>>>>>>>>>>>>>>>>>>.", updatedTime, previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
-
-
     // USEEFFECT FOR SELECTION OF DATE PAIRS STARTS
     useEffect(() => {
         if (datepairsData?.firstAttemptDate) {
             const firstAttemptDate = new Date(datepairsData.firstAttemptDate);
             const formattedFirstAttemptDate = `${firstAttemptDate.getFullYear()}-${(firstAttemptDate.getMonth() + 1).toString().padStart(2, '0')}-${firstAttemptDate.getDate().toString().padStart(2, '0')}`;
-
-            console.log("FirstAttemptDate", datepairsData?.firstAttemptDate);
-            console.log("serviceResultFirstAttemptDate", formattedFirstAttemptDate);
 
             setValue("serviceResultFirstAttemptDate", formattedFirstAttemptDate);
         }
@@ -137,8 +127,6 @@ const ResultForm = () => {
             const secondAttemptDate = new Date(datepairsData.secondAttemptDate);
             const formattedSecondAttemptDate = `${secondAttemptDate.getFullYear()}-${(secondAttemptDate.getMonth() + 1).toString().padStart(2, '0')}-${secondAttemptDate.getDate().toString().padStart(2, '0')}`;
 
-            console.log("SecondAttemptDate", datepairsData?.secondAttemptDate);
-            console.log("serviceResultSecondAttemptDate", formattedSecondAttemptDate);
 
             setValue("serviceResultSecondAttemptDate", formattedSecondAttemptDate);
             setValue("serviceResultDateOfService", formattedSecondAttemptDate);
@@ -147,15 +135,8 @@ const ResultForm = () => {
 
     // USEEFFECT FOR SELECTION OF DATE PAIRS ENDS
 
-    // console.log("add new form set true", isConspicuous)
-    // console.log(allResultForm[resultFormIndex], resultFormIndex)
     // submitResultFormFunction
     const submitResultFormFunction = (data) => {
-        // debugger
-        console.log("selected search rsultdata==================================================================", data?.serviceResultTimeOfService,
-            data?.serviceResultFirstTimeOfService,
-            data?.serviceResultSecondTimeOfService)
-
 
         const addingData = {
             lTSFirstName: data?.lTSFirstName,
@@ -166,8 +147,6 @@ const ResultForm = () => {
             lTSCity: data?.lTSCity,
             lTSZip: data?.lTSZip,
             lTSDescription: data?.lTSDescription,
-
-
             lTSBusinessName: data?.lTSBusinessName,
             inputDate: data?.inputDate,
             sSDDefendants: data?.sSDDefendants,
@@ -184,7 +163,6 @@ const ResultForm = () => {
             queryInformationStandardPlaintiff: data?.queryInformationStandardPlaintiff,
             serviceResultInputDate: data?.serviceResultInputDate,
             serviceResultScvType: data?.serviceResultScvType,
-            // serviceResultClientId: data?.clientId,
             serviceResultJobNo: parseInt(data?.serviceResultJobNo),
             serviceResultServerId: data?.serviceResultServerId === "" ? null : data?.serviceResultServerId,
             serviceResultResults: data?.serviceResultResults,
@@ -196,10 +174,8 @@ const ResultForm = () => {
             serviceResultSecondAttemptDate: data?.serviceResultSecondAttemptDate,
             serviceResultThirdTimeOfService: data?.serviceResultThirdTimeOfService === null ? "" : data?.serviceResultThirdTimeOfService,
             serviceResultThirdAttemptDate: data?.serviceResultThirdAttemptDate,
-            // serviceResultlTServed: data?.serviceResultlTServed,
             serviceResultlTServed: lTSServed?.join(","),
             serviceResultlTNotServed: lTSNotServed && lTSNotServed?.join(","),
-            // serviceResultlTNotServed: data?.serviceResultlTNotServed,
             serviceResultRecipientTitle: data?.serviceResultRecipientTitle,
             serviceResultDoor: (data?.serviceResultDoor === undefined || data?.serviceResultDoor === "" || isNaN(data?.serviceResultDoor)) ? null : parseInt(data?.serviceResultDoor),
             serviceResultDoorLocks: (data?.serviceResultDoorLocks === undefined || data?.serviceResultDoorLocks === "" || isNaN(data?.serviceResultDoorLocks)) ? null : parseInt(data?.serviceResultDoorLocks),
@@ -222,11 +198,7 @@ const ResultForm = () => {
             corporateRecipient: data?.corporateRecipient,
             substituteDeliveredTo: data?.substituteDeliveredTo,
         }
-        console.log("adding data", addingData)
-        // const addingData = { queryInformationLT, queryInformationStandard, serviceResults }
         if (isSearchResultForm === true) {
-            // const formatedStartDate = startDate !== null ? new Date(startDate) : null;
-            // const formatedEndDate = endDate !== null ? new Date(endDate) : null;
             const formatedStartDate = startDate !== null ? new Date(startDate) : null;
             const formatedEndDate = endDate !== null ? new Date(endDate) : null;
             const formattedDateStart = formatedStartDate?.toLocaleDateString('en-US', {
@@ -247,97 +219,24 @@ const ResultForm = () => {
                 endDate: formattedDateEnd,
                 lTSAddress: data?.lTSAddress, lTSApt: data?.lTSApt, lTSBusinessName: data?.lTSBusinessName, lTSCity: data?.lTSCity,
                 lTSDescription: data?.lTSDescription, lTSFirstName: data?.lTSFirstName, oLTIndexNo: oLTIndex !== "" ? oLTIndex + "/" + currentYear : "", lTSZip: data?.lTSZip, lTSState: data?.lTSState
-                // queryInformationLTAddress: data?.queryInformationLTAddress,
-                //     // queryInformationLTBusinessName: data?.queryInformationLTBusinessName,
-                //     // queryInformationLTFullName: data?.queryInformationLTFullName,
-                //     // queryInformationLTIndexNo: parseInt(data?.queryInformationLTIndexNo),
-                //     // queryInformationLTInputDate: data?.queryInformationLTInputDate,
+
             }
 
-            console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<search>>>>>>>>>>>>>>>>>>>>>>>>>>>", searchData
-            )
-            // dispatch(searchResultFormThunk(searchData))
             dispatch(searchServiceFormThunk(searchData))
-            // dispatch(searchResultFormAddReducer(false))
-            // toast.success("Search Result Form will be applied")
         } else {
             if (selectedSearchResultData && selectedSearchResultData?.length > 0) {
-                // const addingData = {
-                //     lTSFirstName: selectedSearchResultData[0]?.lTSFirstName,
-                //     oLTIndexNo: parseInt(selectedSearchResultData[0]?.oLTIndexNo),
-                //     lTSAddress: selectedSearchResultData[0]?.lTSAddress,
-                //     lTSBusinessName: selectedSearchResultData[0]?.lTSBusinessName,
-                //     inputDate: selectedSearchResultData[0]?.inputDate,
-                //     sSDDefendants: selectedSearchResultData[0]?.sSDDefendants,
-                //     sSDPlaintiff: selectedSearchResultData[0]?.sSDPlaintiff,
-                //     clientId: selectedSearchResultData[0]?.clientId,
-                //     jobNo: parseInt(selectedSearchResultData[0]?.jobNo),
-                //     queryInformationLTFullName: selectedSearchResultData[0]?.queryInformationLTFullName,
-                //     queryInformationLTIndexNo: parseInt(selectedSearchResultData[0]?.queryInformationLTIndexNo),
-                //     queryInformationLTAddress: selectedSearchResultData[0]?.queryInformationLTAddress,
-                //     queryInformationLTBusinessName: selectedSearchResultData[0]?.queryInformationLTBusinessName,
-                //     queryInformationLTInputDate: selectedSearchResultData[0]?.queryInformationLTInputDate,
-                //     queryInformationStandardServeTo: selectedSearchResultData[0]?.queryInformationStandardServeTo,
-                //     queryInformationStandardDefendants: selectedSearchResultData[0]?.queryInformationStandardDefendants,
-                //     queryInformationStandardPlaintiff: selectedSearchResultData[0]?.queryInformationStandardPlaintiff,
-                //     serviceResultInputDate: selectedSearchResultData[0]?.serviceResultInputDate,
-                //     serviceResultScvType: selectedSearchResultData[0]?.serviceResultScvType,
-                //     // serviceResultClientId: selectedSearchResultData[0]?.clientId,
-                //     serviceResultJobNo: parseInt(selectedSearchResultData[0]?.serviceResultJobNo),
-                //     serviceResultServerId: selectedSearchResultData[0]?.serviceResultServerId === "" ? null : selectedSearchResultData[0]?.serviceResultServerId,
-                //     serviceResultResults: selectedSearchResultData[0]?.serviceResultResults,
-                //     serviceResultDateOfService: selectedSearchResultData[0]?.serviceResultDateOfService,
-                //     serviceResultTimeOfService: selectedSearchResultData[0]?.serviceResultTimeOfService,
-                //     serviceResultFirstTimeOfService: selectedSearchResultData[0]?.serviceResultFirstTimeOfService,
-                //     serviceResultFirstAttemptDate: selectedSearchResultData[0]?.serviceResultFirstAttemptDate,
-                //     serviceResultSecondTimeOfService: selectedSearchResultData[0]?.serviceResultSecondTimeOfService,
-                //     serviceResultSecondAttemptDate: selectedSearchResultData[0]?.serviceResultSecondAttemptDate,
-                //     serviceResultThirdTimeOfService: selectedSearchResultData[0]?.serviceResultThirdTimeOfService,
-                //     serviceResultThirdAttemptDate: selectedSearchResultData[0]?.serviceResultThirdAttemptDate,
-                //     // serviceResultlTServed: selectedSearchResultData[0]?.serviceResultlTServed,
-                //     serviceResultlTServed: lTSServed?.join(","),
-                //     serviceResultlTNotServed: lTSNotServed?.join(","),
-                //     // serviceResultlTNotServed: selectedSearchResultData[0]?.serviceResultlTNotServed,
-                //     serviceResultRecipientTitle: selectedSearchResultData[0]?.serviceResultRecipientTitle,
-                //     serviceResultDoor: (selectedSearchResultData[0]?.serviceResultDoor === undefined || selectedSearchResultData[0]?.serviceResultDoor === "" || isNaN(selectedSearchResultData[0]?.serviceResultDoor)) ? null : parseInt(selectedSearchResultData[0]?.serviceResultDoor),
-                //     serviceResultDoorLocks: (selectedSearchResultData[0]?.serviceResultDoorLocks === undefined || selectedSearchResultData[0]?.serviceResultDoorLocks === "" || isNaN(selectedSearchResultData[0]?.serviceResultDoorLocks)) ? null : parseInt(selectedSearchResultData[0]?.serviceResultDoorLocks),
-                //     serviceResultEntry: (selectedSearchResultData[0]?.serviceResultEntry === undefined || selectedSearchResultData[0]?.serviceResultEntry === "" || isNaN(selectedSearchResultData[0]?.serviceResultEntry)) ? null : parseInt(selectedSearchResultData[0]?.serviceResultEntry),
-                //     serviceResultWall: (selectedSearchResultData[0]?.serviceResultWall === undefined || selectedSearchResultData[0]?.serviceResultWall === "" || isNaN(selectedSearchResultData[0]?.serviceResultWall)) ? null : parseInt(selectedSearchResultData[0]?.serviceResultWall),
-                //     serviceResultFloor: (selectedSearchResultData[0]?.serviceResultFloor === undefined || selectedSearchResultData[0]?.serviceResultFloor === "" || isNaN(selectedSearchResultData[0]?.serviceResultFloor)) ? null : parseInt(selectedSearchResultData[0]?.serviceResultFloor),
-                //     serviceResultLock: (selectedSearchResultData[0]?.serviceResultLock === undefined || selectedSearchResultData[0]?.serviceResultLock === "" || isNaN(selectedSearchResultData[0]?.serviceResultLock))
-                //         ? null
-                //         : parseInt(selectedSearchResultData[0]?.serviceResultLock),
-                //     serviceResultOtherDescription: selectedSearchResultData[0]?.serviceResultOtherDescription,
-                //     serviceResultSex: selectedSearchResultData[0]?.serviceResultSex,
-                //     serviceResultSkinColor: selectedSearchResultData[0]?.serviceResultSkinColor,
-                //     serviceResultHair: selectedSearchResultData[0]?.serviceResultHair,
-                //     serviceResultAge: (selectedSearchResultData[0]?.serviceResultAge === undefined || selectedSearchResultData[0]?.serviceResultAge === "" || isNaN(selectedSearchResultData[0]?.serviceResultAge)) ? null : parseInt(selectedSearchResultData[0]?.serviceResultAge),
-                //     serviceResultHeight: (selectedSearchResultData[0]?.serviceResultHeight === undefined || selectedSearchResultData[0]?.serviceResultHeight === "" || isNaN(selectedSearchResultData[0]?.serviceResultHeight)) ? null : parseFloat(selectedSearchResultData[0]?.serviceResultHeight),
-                //     serviceResultWeight: (selectedSearchResultData[0]?.serviceResultWeight === undefined || selectedSearchResultData[0]?.serviceResultWeight === "" || isNaN(selectedSearchResultData[0]?.serviceResultWeight)) ? null : parseFloat(selectedSearchResultData[0]?.serviceResultWeight),
-                //     serviceResultOtherFeatures: selectedSearchResultData[0]?.serviceResultOtherFeatures,
-                //     serviceResultDateOfMailing: selectedSearchResultData[0]?.serviceResultDateOfMailing,
-                //     serviceResultDateOfNotary: selectedSearchResultData[0]?.serviceResultDateOfNotary,
-                //     corporateRecipient: selectedSearchResultData[0]?.corporateRecipient,
-                //     substituteDeliveredTo: selectedSearchResultData[0]?.substituteDeliveredTo,
 
-                // }
                 const updatingData = { ...addingData, serviceFormId: selectedSearchResultData[0]?._id }
-
-                console.log("selected search rsultdata", updatingData)
                 // HERE UPDATE SERVICE FORM API WILL BE CALLED
                 dispatch(updateServiceFormThunk(updatingData))
             }
             else {
                 const updatingData = { ...addingData, serviceFormId: allServiceForm[serviceFormIndex]?._id }
-
-                console.log("selected search rsultdata==================================================================", updatingData)
-
                 // HERE UPDATE SERVICE FORM API WILL BE CALLED
                 dispatch(updateServiceFormThunk(updatingData))
 
             }
 
-            // dispatch(updateResultFormThunk(updatingData))
         }
     }
     // SEARCH RESULT FORM
@@ -353,7 +252,6 @@ const ResultForm = () => {
             setValue("lTSState", ""),
             setValue("lTSDescription", ""),
             setValue("lTSZip", ""),
-            // dispatch(searchResultFormThunk(true))
             dispatch(searchResultFormAddReducer(true))
 
     }
@@ -380,7 +278,6 @@ const ResultForm = () => {
         const handleKeyDown = (event) => {
             if (event.key === 'F7') {
                 event.preventDefault();
-                // handleSubmit(searchResultFormFunction)();
                 dispatch(getIsSearchServiceForm(true))
                 searchResultFormFunction()
                 reset()
@@ -400,15 +297,10 @@ const ResultForm = () => {
     useEffect(() => {
         if (selectedSearchResultData && selectedSearchResultData?.length > 0) {
             setValue("clientId", getSearchExistingSelectedClientoption?.value);
-            // setValue("serviceType", getSearchExistingSelectedServiceType?.value);
-            console.log("inputDate", selectedSearchResultData[0]?.inputDate)
             setValue("lTSFirstName", selectedSearchResultData[0]?.lTSFirstName)
-            // setValue("oLTIndexNo", selectedSearchResultData[0]?.oLTIndexNo);
 
             if (selectedSearchResultData[0]?.oLTIndexNo === null) setOltIndex("")
             else setOltIndex(selectedSearchResultData[0]?.oLTIndexNo)
-
-            console.log('SPLIT: ', selectedSearchResultData[0]?.serviceResultlTServed?.split(","));
 
             setValue("lTSDescription", selectedSearchResultData[0]?.lTSDescription),
                 setValue("lTSCity", selectedSearchResultData[0]?.lTSCity),
@@ -425,16 +317,13 @@ const ResultForm = () => {
                 setValue("sSDPlaintiff", selectedSearchResultData[0]?.sSDPlaintiff)
             setValue("serviceResultInputDate", selectedSearchResultData[0]?.serviceResultInputDate ?? "")
             setValue("serviceResultScvType", selectedSearchResultData[0]?.serviceResultScvType ?? "")
-            // setValue("clientId", selectedSearchResultData[0]?.clientId ?? "")
             setValue("jobNo", JSON.stringify(selectedSearchResultData[0]?.jobNo ?? ""))
             setValue("serviceResultServerId", getSearchExistingSelectedServeroption?.value)
             setValue("serviceResultResults", selectedSearchResultData[0]?.serviceResultResults ?? "")
             setResultId(selectedSearchResultData[0]?.serviceResultResults ?? "")
             setValue("serviceResultDateOfService", selectedSearchResultData[0]?.serviceResultDateOfService)
-            // setValue("serviceResultTimeService", selectedSearchResultData[0]?.serviceResultTimeService)
             setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
             setValue("serviceResultFirstAttemptDate", selectedSearchResultData[0]?.serviceResultFirstAttemptDate)
-            // setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
             setValue("serviceResultSecondAttemptDate", selectedSearchResultData[0]?.serviceResultSecondAttemptDate)
             setValue("serviceResultThirdTimeOfService", selectedSearchResultData[0]?.serviceResultThirdTimeOfService)
             setValue("serviceResultThirdAttemptDate", selectedSearchResultData[0]?.serviceResultThirdAttemptDate)
@@ -454,8 +343,6 @@ const ResultForm = () => {
             if (previousForm?.serviceResultServerId?.serverCode === selectedSearchResultData[0]?.serviceResultServerId?.serverCode) {
                 const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
                 const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
-
-                console.log("seond time", secondTime)
                 setValue("serviceResultSecondTimeOfService", secondTime)
                 setValue("serviceResultFirstTimeOfService", firstTime)
                 setValue("serviceResultTimeOfService", secondTime)
@@ -467,8 +354,6 @@ const ResultForm = () => {
                 setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
 
             }
-
-            // if (resultId === "personal" || resultId === "personalplus") {
             // Convert lTSFirstName to an array
             const lTSFirstNames = allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") || [];
 
@@ -491,13 +376,12 @@ const ResultForm = () => {
             const filteredNotServed = currentNotServed?.filter(name => lTSFirstNames?.includes(name));
 
             // Combine both arrays
-            // const finalServed = [...filteredServed, ...updatedServed];
             const finalServed = [...filteredServed];
 
             // Update state
             setLTSServed(finalServed);
             setLTSNotServed(filteredNotServed);
-            // }
+
             setValue("serviceResultHair", selectedSearchResultData[0]?.serviceResultHair)
             setValue("serviceResultAge", JSON.stringify(selectedSearchResultData[0]?.serviceResultAge))
             setValue("serviceResultHeight", JSON.stringify(selectedSearchResultData[0]?.serviceResultHeight))
@@ -517,7 +401,6 @@ const ResultForm = () => {
                 nextDay.setDate(serviceDate.getDate() + 1);
 
                 const formattedNextDay = format(nextDay, 'yyyy-MM-dd');
-                console.log("result input date", formattedNextDay)
                 const currentServiceResultInputDate = allServiceForm[serviceFormIndex]?.serviceResultInputDate;
                 setValue("serviceResultInputDate", currentServiceResultInputDate ? currentServiceResultInputDate : formattedNextDay, {
                     shouldValidate: true,
@@ -528,17 +411,13 @@ const ResultForm = () => {
 
 
             if (allServiceForm && Array.isArray(allServiceForm) && serviceFormIndex >= 0 && serviceFormIndex < allServiceForm.length) {
-                // alert("called")
 
                 const data = {
                     firstAttepmtDate: allServiceForm[serviceFormIndex]?.serviceResultFirstAttemptDate,
                     secondAttepmtDate: allServiceForm[serviceFormIndex]?.serviceResultSecondAttemptDate,
                 }
                 dispatch(addDatePairModalReducer(data))
-                console.log("queryInformationLTInputDate", allServiceForm[serviceFormIndex]?.lTSFirstName)
                 setValue("lTSFirstName", allServiceForm[serviceFormIndex]?.lTSFirstName)
-                // setValue("queryInformationLTIndexNo", JSON.stringify(allServiceForm[serviceFormIndex]?.queryInformationLTIndexNo, 10));
-                // setValue("oLTIndexNo", allServiceForm[serviceFormIndex]?.oLTIndexNo);
                 if (allServiceForm[serviceFormIndex]?.oLTIndexNo === null) setOltIndex("")
                 else setOltIndex(allServiceForm[serviceFormIndex]?.oLTIndexNo)
 
@@ -557,7 +436,6 @@ const ResultForm = () => {
                 setValue("queryInformationStandardServeTo", allServiceForm[serviceFormIndex]?.queryInformationStandardServeTo),
                     setValue("sSDDefendants", allServiceForm[serviceFormIndex]?.sSDDefendants),
                     setValue("sSDPlaintiff", allServiceForm[serviceFormIndex]?.sSDPlaintiff)
-                // setValue("serviceResultInputDate", allServiceForm[serviceFormIndex]?.serviceResultInputDate ?? "")
                 setValue("serviceResultScvType", allServiceForm[serviceFormIndex]?.serviceResultScvType ?? "")
                 setValue("clientId", allServiceForm[serviceFormIndex]?.clientId?._id)
                 setValue("jobNo", JSON.stringify(allServiceForm[serviceFormIndex]?.jobNo ?? ""))
@@ -570,14 +448,11 @@ const ResultForm = () => {
                 setValue("serviceResultResults", allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
                 setResultId(allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
                 setValue("serviceResultDateOfService", allServiceForm[serviceFormIndex]?.serviceResultDateOfService)
-                // const updatedTime = addMinutesToTime(previousForm?.serviceResultTimeOfService, 50);
-                // setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
 
                 if (previousForm?.serviceResultServerId?.serverCode === allServiceForm[serviceFormIndex]?.serviceResultServerId?.serverCode) {
                     const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
                     const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
 
-                    console.log("seond time", secondTime)
                     setValue("serviceResultSecondTimeOfService", secondTime)
                     setValue("serviceResultFirstTimeOfService", firstTime)
                     setValue("serviceResultTimeOfService", secondTime)
@@ -594,13 +469,10 @@ const ResultForm = () => {
                 setValue("serviceResultThirdTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultThirdTimeOfService)
                 setValue("serviceResultThirdAttemptDate", allServiceForm[serviceFormIndex]?.serviceResultThirdAttemptDate)
 
-                // setLTSServed(allServiceForm[serviceFormIndex]?.serviceResultlTServed === undefined || allServiceForm[serviceFormIndex]?.serviceResultlTServed === "" ?
-                //      allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") 
-                //      : allServiceForm[serviceFormIndex]?.serviceResultlTServed?.split(","))
+
 
                 // Convert lTSFirstName to an array
                 const lTSFirstNames = allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") || [];
-                console.log('LT FIRST NAMES: ', lTSFirstNames);
 
 
                 // Get the current served and not served arrays
@@ -621,29 +493,16 @@ const ResultForm = () => {
                 // Remove names from currentNotServed that are not in lTSFirstNames
                 const filteredNotServed = currentNotServed?.filter(name => lTSFirstNames?.includes(name));
 
-                // // Combine both arrays
-                // const finalServed = [...filteredServed, ...updatedServed];
-
-                // // const finalServed = [...filteredServed];
-
-
-                // // Update state
-                // setLTSServed(finalServed);
-                // setLTSNotServed(filteredNotServed);
                 // Filter out names that are in filteredNotServed from filteredServed and updatedServed
                 const finalServed = [
                     ...filteredServed?.filter(name => !filteredNotServed?.includes(name)),
                     ...updatedServed?.filter(name => !filteredNotServed?.includes(name))
                 ];
 
-                console.log('FINAL SERVED: ', finalServed);
-
 
                 // Set the states
                 setLTSServed(finalServed);
                 setLTSNotServed(filteredNotServed);
-                // console.log("allServiceForm[serviceFormIndex]?.serviceResultlTServed?.split", allServiceForm[serviceFormIndex]?.serviceResultlTServed === undefined || allServiceForm[serviceFormIndex]?.serviceResultlTServed === "" ? allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") : allServiceForm[serviceFormIndex]?.serviceResultlTServed?.split(","))
-
 
                 setValue("serviceResultlTNotServed", allServiceForm[serviceFormIndex]?.serviceResultlTNotServed)
                 setValue("serviceResultRecipientTitle", allServiceForm[serviceFormIndex]?.serviceResultRecipientTitle)
@@ -664,10 +523,6 @@ const ResultForm = () => {
                 setValue("serviceResultDateOfNotary", allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary)
                 setValue("substituteDeliveredTo", allServiceForm[serviceFormIndex]?.substituteDeliveredTo)
                 setValue("corporateRecipient", allServiceForm[serviceFormIndex]?.corporateRecipient)
-
-
-
-                // setValue("height", allServiceForm[serviceFormIndex]?.serviceResults?.description?.height)
 
                 setIsConspicuous(allServiceForm[serviceFormIndex]?.serviceResultResults)
                 setResultId(allServiceForm[serviceFormIndex]?.serviceResultResults)
@@ -692,33 +547,6 @@ const ResultForm = () => {
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC ENDS 
 
 
-    // INPUT DATE THE NEXT DATE STORE IN RESULT INPUT DATE LOGIC STARTS 
-    // Watch the inputDate field
-    // const resultInputDate = watch("inputDate");
-
-    // useEffect(() => {
-    //     if (resultInputDate) {
-    //         const serviceDate = new Date(resultInputDate);
-    //         const nextDay = new Date(serviceDate);
-    //         nextDay.setDate(serviceDate.getDate() + 1);
-
-    //         const formattedNextDay = format(nextDay, 'yyyy-MM-dd');
-    //         console.log("result input date", formattedNextDay)
-    //         // Set the value of serviceResultInputDate to the next day
-    //         setValue("serviceResultInputDate", formattedNextDay);
-    //     }
-    // }, [resultInputDate, setValue]);
-    // INPUT DATE THE NEXT DATE STORE IN RESULT INPUT DATE LOGIC ENDS 
-
-    // const handleEnterKeyPress = (event) => {
-    //     if (event.key === 'Enter') {
-    //         event.preventDefault(); // Prevent the form from submitting
-    //         const formElements = Array.from(event.target.form.elements);
-    //         const index = formElements.indexOf(event.target);
-    //         formElements[index + 1]?.focus(); // Focus the next input
-    //     }
-    // };
-
 
     // Manually set the values for startDate and endDate in the form
     const handleStartDateChange = (date) => {
@@ -730,22 +558,6 @@ const ResultForm = () => {
         setEndDate(date);
         setValue("endDate", date ? date.toISOString() : "");
     };
-
-    // const handleDistanceMatrixResponse = (response) => {
-    //     toast.success("called")
-    //     if (response && response.rows[0].elements[0].status === "OK") {
-    //         const distance = response.rows[0].elements[0].distance;
-    //         const duration = response.rows[0].elements[0].duration?.text; // e.g., "2hr 40mins"
-    //         const totalMinutes = convertDurationToMinutes(duration);
-    //         // const totalMinutes = convertDurationToMinutes(duration);
-    //         setValue("timeTrip", JSON.stringify(totalMinutes));
-    //         setSuggestedTimeTrip(totalMinutes)
-    //         toast?.success(`${totalMinutes}`)
-    //         console.log("Total Time in Minutes:{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", duration, totalMinutes); // Output total minutes
-    //     }
-
-
-    // };
 
     const convertDurationToMinutes = (duration) => {
         let totalMinutes = 0;
@@ -781,20 +593,7 @@ const ResultForm = () => {
         setLTSNotServed((prevNotServed) => prevNotServed.filter((serve) => serve !== data));
     };
 
-    // const updateTimes = (timeTripValue) => {
-    //     const totalMinutes = parseInt(timeTripValue, 10);
 
-    //     // Only run if totalMinutes is a valid number
-    //     if (!isNaN(totalMinutes) && timeTripValue !== '') {
-    //         const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, totalMinutes);
-    //         const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, totalMinutes);
-
-    //         console.log("Second time:", secondTime);
-    //         setValue("serviceResultSecondTimeOfService", secondTime);
-    //         setValue("serviceResultFirstTimeOfService", firstTime);
-    //         setValue("serviceResultTimeOfService", secondTime);
-    //     }
-    // };
     const handleDistanceMatrixResponse = (response) => {
         if (response && response?.rows[0]?.elements[0].status === "OK") {
             const distance = response?.rows[0]?.elements[0]?.distance;
@@ -802,12 +601,9 @@ const ResultForm = () => {
             const totalMinutes = convertDurationToMinutes(duration);
             setValue("timeTrip", JSON.stringify(totalMinutes));
             setSuggestedTimeTrip(totalMinutes);
-            // toast.success("called")
-            console.log("Total Time in Minutes:", duration, totalMinutes); // Output total minutes
-            // toast.success("called");
+
         }
     };
-    // useEffect(() => { handleDistanceMatrixResponse(response) }, [])
     const updateTimes = (timeTripValue) => {
         const totalMinutes = parseInt(timeTripValue, 10);
         // Only run if totalMinutes is a valid number
@@ -817,13 +613,11 @@ const ResultForm = () => {
             // Confirm update for the first time
             const confirmFirstTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 1st Time Attempt?`);
             if (confirmFirstTime) {
-                console.log("First time:", firstTime);
                 setValue("serviceResultFirstTimeOfService", firstTime);
             }
             // Confirm update for the second time
             const confirmSecondTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 2nd Time Attempt?`);
             if (confirmSecondTime) {
-                console.log("Second time:", secondTime);
                 setValue("serviceResultSecondTimeOfService", secondTime);
                 setValue("serviceResultTimeOfService", secondTime);
 
@@ -836,7 +630,6 @@ const ResultForm = () => {
     const handleTimeTripChange = (event) => {
         const newValue = event.target.value;
         setValue("timeTrip", newValue); // Update the form state
-        // updateTimes(newValue); // Call the function to update times
         // Check if Enter key is pressed
         if (event.key === 'Enter') {
             const totalMinutes = parseInt(newValue, 10);
@@ -849,49 +642,12 @@ const ResultForm = () => {
     const serverId = watch("serviceResultServerId");
     const { serviceResultServerId } = getValues()
     const [previousAddress, setPreviousAddress] = useState<string | undefined>("")
-    // useEffect(() => {
-    //     // toast.success("called")
-    //     // setValue("serviceResultServerId", serviceResultServerId)
-    //     // setValue("")
-    //     // handleDistanceMatrixResponse()
-    //     setPreviousAddress(serviceResultServerId)
-    //     // Fetch the Distance Matrix
-    //     const fetchDistanceMatrix = () => {
-    //         const origins = [previousForm?.lTSAddress || ''];
-    //         const destinations = [allServiceForm[serviceFormIndex]?.lTSAddress || ''];
-    //         // toast.success(`${origins[0]} && ${destinations[0]}`)
-    //         if (origins[0] && destinations[0]) {
-    //             // toast.success("cll")
-    //             // Here, you can either set up the DistanceMatrixService again or trigger it
-    //             return (
-    //                 <DistanceMatrixService
-    //                     options={{
-    //                         origins,
-    //                         destinations,
-    //                         travelMode: "DRIVING",
-    //                     }}
-    //                     callback={handleDistanceMatrixResponse}
-    //                 />
-    //             );
-    //         }
-    //     };
 
-    //     fetchDistanceMatrix();
-    //     // setValue("serviceResultServerId", serviceResultServerId)
-    //     console.log("previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id", previousForm?.serviceResultServerId?._id, serviceResultServerId, previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id)
-
-    //     // toast.success("Distance matrix fetched");
-    //     // toast.success("cll")
-    // }, [serverId, previousForm, allServiceForm])
 
     const handleServerIdChange = (selectedValue) => {
         // This function is called when the server ID changes
-        console.log("Selected Server ID:", selectedValue);
-        // You can perform any additional actions here
         setValue("serviceResultServerId", selectedValue);
         setCurrentServerId(selectedValue);
-
-        console.log("Updated Server ID:", selectedValue === previousForm?.serviceResultServerId?._id);
 
     };
     useEffect(() => {
@@ -900,9 +656,7 @@ const ResultForm = () => {
         const fetchDistanceMatrix = () => {
             const origins = [previousForm?.lTSAddress || ''];
             const destinations = [allServiceForm[serviceFormIndex]?.lTSAddress || ''];
-            // toast.success(`${origins[0]} && ${destinations[0]}`)
             if (origins[0] && destinations[0]) {
-                // toast.success("cll")
                 // Here, you can either set up the DistanceMatrixService again or trigger it
                 return (
                     <DistanceMatrixService
@@ -918,19 +672,14 @@ const ResultForm = () => {
         };
 
         fetchDistanceMatrix();
-        // setValue("serviceResultServerId", serviceResultServerId)
-        // console.log("previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id", previousForm?.serviceResultServerId?._id, allServiceForm[serviceFormIndex]?.serviceResultServerId?._id, previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id)
-        // Update the value in the form
-        console.log("Updated Server ID:", allServiceForm[serviceFormIndex]?.serviceResultServerId?._id, previousForm?.serviceResultServerId?._id);
+
     }, [allServiceForm, serviceFormIndex, serverId]);
     const [googleLoaded, setGoogleLoaded] = useState(false);
     const onLoad = useCallback(() => {
         // This will be called once the library has fully loaded
-        console.log("Google Maps Loaded", window.google); // Log the google object
         setGoogleLoaded(true);
 
     }, []);
-    // const serverId = watch("serviceResultServerId")
     const handleZipChange = (event) => {
         const { value } = event.target;
         const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
@@ -945,15 +694,12 @@ const ResultForm = () => {
     };
     const handleResultIdChange = (selectedValue) => {
         // This function is called when the server ID changes
-        console.log("Selected Server ID:", selectedValue);
-        // You can perform any additional actions here
         setValue("serviceResultResults", selectedValue);
         setResultId(selectedValue);
 
 
     };
 
-    console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", lTSServed)
     return <>
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
             <DatePairsModal /> :
@@ -970,8 +716,7 @@ const ResultForm = () => {
                             />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {/* <TextField register={register} label="index no" error={errors.oLTIndexNo} name="oLTIndexNo" onKeyDown={handleEnterKeyPress}
-                            /> */}
+
                             <FormatedIndexInputField
                                 onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" oltIndexValue={oLTIndex}
                                 onChange={setOltIndex} year={currentYear}
@@ -1008,7 +753,6 @@ const ResultForm = () => {
                                         <label className="w-[180px]">Start Date</label>
                                         <DatePicker
                                             selected={startDate}
-                                            // onChange={(date) => setStartDate(date)}
                                             selectsStart
                                             startDate={startDate}
                                             endDate={endDate}
@@ -1023,7 +767,6 @@ const ResultForm = () => {
                                         <label className="w-[180px]">End Date</label>
                                         <DatePicker
                                             selected={endDate}
-                                            // onChange={(date) => setEndDate(date)}
                                             selectsEnd
                                             startDate={startDate}
                                             endDate={endDate}
@@ -1089,7 +832,6 @@ const ResultForm = () => {
 
                 </div>
                 {/* SERVICE RESULT SECTION STAENDRTS */}
-                {/* allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary */}
                 {/* SHOW RESULT  FORM STARTS */}
                 <div className="mt-6">
                     <div>
@@ -1100,7 +842,6 @@ const ResultForm = () => {
                             <Hints keyName="Esc" label="Cancel" />
                             <Hints keyName="f7 " label="Find" />
                             <Hints keyName="f10" label="Save" />
-                            {/* <Hints keyName="f4" label="ditto field" /> */}
                         </div>
 
                     </div>
@@ -1116,95 +857,22 @@ const ResultForm = () => {
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
 
-                            {/* <Controller name="svcType" control={control} render={({ field }) => (
-                    <Dropdown
-                        options={svcData}
-                        value={field.value}
-                        onChange={field.onChange}
-                        label="Svc Type" error={errors.svcType?.message as string}
-                    />
-                )} /> */}
                             <TextField onKeyDown={handleEnterKeyPress}
                                 register={register} label="svc Type" error={errors.serviceType} name="serviceType" defaultValue="L&T Residential"
                                 readOnly />
 
                         </div>
 
-
-
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-
-
                             <Controller name="clientId" control={control} render={({ field }) => (
                                 <Dropdown
                                     options={clientIdOptions}
-                                    // singleOption={getSelectedClientoption}
                                     value={field.value}
                                     onChange={field.onChange}
                                     label="Client id" error={errors.clientId?.message as string}
                                 />
                             )} />
-                            {/* CALCULATING TIME STARTS  */}
-                            {/* {previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id && */}
 
-                            {/* } */}
-                            {/* CALCULATING TIME ENDS  */}
-                            {/* < LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg">
-                                <GoogleMap
-                                    center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
-                                    zoom={8}
-                                >
-                                    <DistanceMatrixService
-                                        options={{
-                                            origins: [previousForm?.lTSAddress],
-                                            destinations: [allServiceForm[serviceFormIndex]?.lTSAddress],
-                                            travelMode: 'DRIVING',  // You can change this to WALKING, BICYCLING, etc.
-                                        }} i
-                                        callback={handleDistanceMatrixResponse}
-                                    />
-                                </GoogleMap>
-
-                            </LoadScript> */}
-
-                            {/* <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg" onLoad={onLoad}
-                            >
-                                <GoogleMap
-                                    center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
-                                    zoom={8}
-                                >
-                                    {googleLoaded && previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
-                                        <DistanceMatrixService
-                                            options={{
-                                                origins: [previousForm?.lTSAddress || ''], // Fallback to empty string if undefined
-                                                destinations: [allServiceForm[serviceFormIndex]?.lTSAddress || ''], // Same fallback
-                                                travelMode: google?.maps?.TravelMode?.DRIVING, // Use the enum value
-                                            }}
-                                            callback={handleDistanceMatrixResponse}
-                                        />
-                                    )}
-                                </GoogleMap>
-                            </LoadScript> */}
-                            {/* <LoadScript
-                                googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg"
-                                loadingElement={<div>Loading...</div>} // Optional loading element
-                                onLoad={onLoad}
-                            >
-                                <GoogleMap
-                                    center={{ lat: -34.397, lng: 150.644 }} // Dummy center
-                                    zoom={8}
-                                >
-                                    {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && (
-                                        <DistanceMatrixService
-                                            options={{
-                                                origins: [previousForm?.lTSAddress || ''],
-                                                destinations: [allServiceForm[serviceFormIndex]?.lTSAddress || ''],
-                                                travelMode: google?.maps?.TravelMode?.DRIVING,
-                                            }}
-                                            callback={handleDistanceMatrixResponse} // Make sure this is correctly assigned
-                                        />
-                                    )}
-                                </GoogleMap>
-                            </LoadScript> */}
                             <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg">
                                 <GoogleMap
                                     center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
@@ -1221,31 +889,9 @@ const ResultForm = () => {
                                 </GoogleMap>
 
                             </LoadScript>
-                            {/* <TextField onKeyDown={handleTimeTripChange} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" /> */}
-
-                            {/* {previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress && */}
                             {previousForm?.serviceResultServerId?._id === currentServerId &&
                                 <TextField onKeyDown={handleTimeTripChange} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
-
-                                // <div className="flex flex-col w-full items-start gap-1">
-                                //     <label className="font-normal sm:font-medium text-sm capitalize">
-                                //         Suggested Time Trip (mins)
-                                //     </label>
-                                //     <input
-                                //         // ref={ref}
-                                //         type="text"
-                                //         className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor"
-
-                                //         {...register?.("timeTrip")}
-                                //         // defaultValue={defaultValue}
-                                //         onKeyDown={handleEnterKeyPress}
-
-                                //         onChange={handleTimeTripChange}
-                                //     />
-                                // </div>
-
                             }
-                            {/* <TextField onKeyDown={handleTimeTripChange} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" /> */}
 
 
                         </div>
@@ -1259,9 +905,7 @@ const ResultForm = () => {
                                 <Dropdown
                                     options={serverIdOptions}
                                     value={field.value}
-                                    // onChange={field.onChange}
                                     onChange={(option) => {
-                                        console.log(option);
                                         field.onChange(option); // Call the function to update form state
                                         handleServerIdChange(option); // Call your additional logic
                                     }}
@@ -1284,9 +928,7 @@ const ResultForm = () => {
                                 <Dropdown
                                     options={resultOptions}
                                     value={field.value}
-                                    // onChange={field.onChange}
                                     onChange={(option) => {
-                                        console.log(option);
                                         field.onChange(option); // Call the function to update form state
                                         handleResultIdChange(option); // Call your additional logic
                                     }}
@@ -1344,20 +986,15 @@ const ResultForm = () => {
 
 
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {/* <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="L&T Served" error={errors.serviceResultlTServed} name="serviceResultlTServed" /> */}
                             <label>LT Served</label>
                             <div className="flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1">
                                 {(resultId === "personal" || resultId === "personalplus") &&
                                     lTSServed?.map(data => { return <div className="flex items-center gap-x-2 "><p>{data}</p> <IoMdAdd onClick={() => { removeLTSName(data) }} className="p-[2px] cursor-pointer  rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor" size={20} />  </div> })
 
                                 }
-                                {/* {lTSServed?.map(data => { return <div className="flex items-center gap-x-2"><p>{data}</p> <IoMdAdd onClick={() => { removeLTSName(data) }} className="p-[2px] cursor-pointer  rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor" size={20} />  </div> })} */}
                             </div>
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {/* <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="L&T Not Served" error={errors.serviceResultlTNotServed} name="serviceResultlTNotServed" /> */}
                             <label>LT Not Served</label>
                             <div className="flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg ">
                                 {(resultId === "personal" || resultId === "personalplus") &&
@@ -1379,48 +1016,19 @@ const ResultForm = () => {
                                     ))
                                 }
 
-                                {/* {lTSNotServed?.length === 0 ? (
-                                    <div className="h-8">
-                                    </div>
-                                ) : (
-                                    Array.isArray(lTSNotServed) &&
-                                    lTSNotServed.map((data) => (
-                                        <div key={data} className="flex items-center gap-x-2 px-2 py-1">
-                                            <p>{data}</p>
-                                            <IoMdAdd
-                                                onClick={() => removeLTSNotName(data)}
-                                                className="p-[2px] cursor-pointer rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor"
-                                                size={20}
-                                            />
-                                        </div>
-                                    ))
-                                )} */}
+
                             </div>
 
 
                         </div>
 
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {/* <Controller name="substituteDeliveredTo" control={control} render={({ field }) => (
-                                <Dropdown
-                                    options={delivery}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    label="substitute delivered To" error={errors.substituteDeliveredTo?.message as string}
-                                />
-                            )} /> */}
+
                             <TextField onKeyDown={handleEnterKeyPress}
                                 register={register} label="substitute delivered To" error={errors.substituteDeliveredTo} name="substituteDeliveredTo" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {/* <Controller name="corporateRecipient" control={control} render={({ field }) => (
-                                <Dropdown
-                                    options={corporateReciepientOptions}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    label="Corporate Recipient" error={errors.corporateRecipient?.message as string}
-                                />
-                            )} /> */}
+
                             <TextField onKeyDown={handleEnterKeyPress}
                                 register={register} label="corporate Recipient" error={errors.corporateRecipient} name="corporateRecipient" />
                         </div>
@@ -1428,8 +1036,7 @@ const ResultForm = () => {
                             <TextField onKeyDown={handleEnterKeyPress}
                                 register={register} label="recipient Title" error={errors.serviceResultRecipientTitle} name="serviceResultRecipientTitle" />
                         </div>
-                        {/* {isConspicuous === "substitute" && allResultForm[resultFormIndex]?.serviceResults?.results === "substitute" &&
-         */}
+
                         {isConspicuous === "substitute" &&
 
                             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
