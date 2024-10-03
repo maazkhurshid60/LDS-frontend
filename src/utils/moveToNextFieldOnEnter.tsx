@@ -55,7 +55,7 @@ export const resultHandleEnterKeyPress = (event, selectedServiceType, nameIndex)
 
         formElements[28]?.focus();
     }
-    if (nameIndex === 17 && selectedServiceType === "suggested") {
+    if (nameIndex === 20 && selectedServiceType === "suggested") {
         const formElements = Array?.from(event?.target?.form?.elements);
         formElements[17]?.focus();
     }
