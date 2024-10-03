@@ -7,6 +7,7 @@ export const LTFormSchema = z.object({
     oLTIndexNo: z.any(),
     inputDate: z.any(),
     jobNo: z.any(),
+    datePairs: z.any().optional(),
     clientId: z.string().optional(),
     serviceType: z.string().optional(),
     timeTrip: z.string().optional(),

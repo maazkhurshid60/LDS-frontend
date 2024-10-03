@@ -27,6 +27,7 @@ export const deleteServiceResultApi = async (id: string) => {
         });
         return response;
     } catch (error) {
+
         throw Error(error)
     }
 }
@@ -34,10 +35,11 @@ export const deleteServiceResultApi = async (id: string) => {
 
 // UPDATE SERVICE RESULT API
 export const updateServiceResultApi = async (data: serviceResultType) => {
+    console.log(data)
     try {
         const accessToken = localStorage.getItem("accessToken");
 
-        const response = await axios.patch(`/service-result/update`, data)
+        const response = await api.patch(`/service-result/update`, data)
         return response
     } catch (error) {
         throw Error(error)

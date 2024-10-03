@@ -34,13 +34,13 @@ const HolidayModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(holidaySchema) })
     const modalBody = <form className=" flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear" required />
+            <TextField onKeyDown={handleEnterKeyPress} label="Holiday Year" register={register} error={errors.holidayYear} name="holidayYear" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date" required />
+            <TextField onKeyDown={handleEnterKeyPress} label="Holiday Date" register={register} error={errors.holidayDate} name="holidayDate" type="date" />
         </div>
         <div className="w-full ">
-            <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription" required />
+            <TextArea label="Holiday Description" register={register} error={errors.holidayDescription} name="holidayDescription" />
         </div>
 
     </form>

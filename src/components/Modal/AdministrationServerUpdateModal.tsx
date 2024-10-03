@@ -29,18 +29,21 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
 
     const handleZipChange = (event) => {
         const { value } = event.target;
-        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
+        const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, ''); // Allow only letters and numbers
 
-        let formattedValue = sanitizedValue;
-        if (sanitizedValue.length > 3) {
-            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        // Limit to a maximum of 9 characters
+        const limitedValue = sanitizedValue.slice(0, 9);
+
+        let formattedValue = limitedValue;
+        if (limitedValue.length > 5) {
+            formattedValue = `${limitedValue.slice(0, 5)}-${limitedValue.slice(5)}`;
         }
 
         setValue("zip", formattedValue); // Update the form state
     };
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" required />
+            <TextField onKeyDown={handleEnterKeyPress} label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" />
         </div>
         <div className="w-[30%]">
             {options ? (
@@ -62,7 +65,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
             )}
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="firstName" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name" required />
+            <TextField onKeyDown={handleEnterKeyPress} label="firstName" register={register} error={errors.firstName} name="firstName" placeholder="Enter First Name" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="lastName" register={register} error={errors.lastName} name="lastName" placeholder="Enter Last Name" />
@@ -80,10 +83,10 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
             <TextField onKeyDown={handleEnterKeyPress} label="state" register={register} error={errors.state} name="state" placeholder="Enter State" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" required maxLength={7} onChange={handleZipChange} />
+            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" maxLength={12} onChange={handleZipChange} />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" required />
+            <TextField onKeyDown={handleEnterKeyPress} label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="fax" register={register} error={errors.fax} name="fax" placeholder="Enter fax" />

@@ -26,31 +26,39 @@ const GPSReport = () => {
 
 
     const getLatiLongi = (allAddresses) => {
-
         if (isLoaded && allAddresses.length > 0) {
             const geoCoder = new window.google.maps.Geocoder();
-            setAddress([]); // Clear previous addresses
+            const allResults = []; // Array to hold all address results
 
-            const geocodePromises = allAddresses.map((address) => {
-                return new Promise((resolve, reject) => {
-                    geoCoder.geocode({ address }, (results, status) => {
-                        if (status === "OK" && results.length > 0) {
-                            const location = results[0].geometry.location;
-                            resolve({ lat: location.lat(), lng: location.lng() });
-                        } else {
-                            resolve(null); // Resolve with null for unsuccessful geocodes
-                        }
+            // Step 1: Process each address
+            allAddresses.forEach(address => {
+                if (!address || address.trim() === "") {
+                    // If the address is empty, store it with valid: false
+                    allResults.push({ address: "Empty address", valid: false });
+                } else {
+                    // For valid addresses, geocode them
+                    const geocodePromise = new Promise((resolve) => {
+                        geoCoder.geocode({ address }, (results, status) => {
+                            if (status === "OK" && results.length > 0) {
+                                const location = results[0].geometry.location;
+                                resolve({ lat: location.lat(), lng: location.lng(), address, valid: true });
+                            } else {
+                                resolve({ address, valid: false }); // Store the invalid address
+                            }
+                        });
                     });
-                });
+
+                    allResults.push(geocodePromise);
+                }
             });
 
-            Promise.all(geocodePromises).then((results) => {
-                // Filter out null results and update the state
-                const filteredResults = results.filter(result => result !== null);
-                setAddress(filteredResults);
+            // Step 2: Handle the results
+            Promise.all(allResults).then((results) => {
+                setAddress(results); // Set all results, valid and invalid
             });
         }
     };
+    console.log("<<<<<<", address)
 
     // Populate data based on `legalDeliveryDataa`
     useEffect(() => {
@@ -76,6 +84,16 @@ const GPSReport = () => {
     const mapCenter = address.length > 0 && address[0]
     return (
         <>
+            <div className="flex justify-end mt-5 mb-5 mr-5">
+                <ReactToPrint
+                    trigger={() => (
+                        <div className="w-[10%]">
+                            <Button text="Print" />
+                        </div>
+                    )}
+                    content={() => TransPerSlipReportPrintRef.current}
+                />
+            </div>
             <div ref={TransPerSlipReportPrintRef} className="p-6 bg-whiteColor capitalize">
                 <div className="flex ">
                     <div className="w-[60%] ">
@@ -134,23 +152,27 @@ const GPSReport = () => {
                             </div>
                         ))}</div>
                     <div className="w-[35%] ">
-                        {address?.map((item, idx) => (
-                            <div className="mt-2  h-[100vh]">
-
-                                <GoogleMap
-                                    center={item}
-                                    zoom={15}
-                                    mapContainerStyle={{ height: "60vh" }}
-                                >
-
-                                    <MarkerF
-                                        key={idx}
-                                        position={item}
-                                        label={`Location ${idx}`} // Use dynamic label or fallback
-                                    />
-                                </GoogleMap>
+                        {address.length > 0 ? address.map((item, idx) => (
+                            <div className="mt-2 h-[100vh]" key={idx}>
+                                {item.valid ? (
+                                    <GoogleMap
+                                        center={{ lat: item.lat, lng: item.lng }}
+                                        zoom={15}
+                                        mapContainerStyle={{ height: "60vh" }}
+                                    >
+                                        <MarkerF
+                                            position={{ lat: item.lat, lng: item.lng }}
+                                            label={`Location ${idx}`} // Use dynamic label
+                                        />
+                                    </GoogleMap>
+                                ) : (
+                                    <div className="text-center border-dashed border-grayColor border-[1px] px-4 py-6 h-[65vh] flex items-center justify-center">{item.address || "No address found"}</div> // Display message
+                                )}
                             </div>
-                        ))}</div>
+                        )) : (
+                            <div className="text-center  border-dashed border-grayColor border-[1px] px-4 py-6 h-[65vh]">No addresses available</div>
+                        )}
+                    </div>
                 </div>
             </div>
 

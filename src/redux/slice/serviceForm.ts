@@ -171,7 +171,8 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
         dispatch(showModalReducer(false))
         return response?.data?.data
     } catch (error) {
-        throw new Error(error)
+        // throw new Error(error)
+        // toast.error("Cannot Delete Form. Try Later")
     }
     finally {
         dispatch(showSpinnerReducer(false))

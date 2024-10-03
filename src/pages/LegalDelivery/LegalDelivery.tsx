@@ -16,6 +16,7 @@ import TableWithoutAction from "../../components/Tables/TableWithoutAction";
 import { RootState } from "../../redux/store";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 import { toast } from "react-toastify";
+import Hints from "../Result/Hints/Hints";
 const LegalDelivery = () => {
     const [showFilterMenu, setShowFilterMenu] = useState(false)
     const [showDropDown, setShowDropDown] = useState(false)
@@ -50,7 +51,7 @@ const LegalDelivery = () => {
     }, [])
 
     const serviceTableHeader = ["Job", "Client Code", "Input Date", "Server Code", "Full Name", "Case Paper Type", "Bussiness Name", "Address", "Caption", "City", "Zip", "Serv City", "Case No"]
-    const serviceDataTable = Array.isArray(filteredData) ? filteredData?.map(item => ({
+    const serviceDataTable = Array.isArray(currentTableData) ? currentTableData?.map(item => ({
         _id: item?._id,
         jobNo: item?.jobNo,
         clientCode: item?.clientId?.code,
@@ -158,6 +159,8 @@ const LegalDelivery = () => {
                     <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
                     <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
+                    <Hints keyName="Ctrl + A " label="Select All Record" />
+
 
                 </div>}
             {filteredData?.length > 0 ?
@@ -170,7 +173,7 @@ const LegalDelivery = () => {
                                     ? serviceTableHeader
                                     : serviceTableHeader
                         }
-                        tableData={currentTableData}
+                        tableData={serviceDataTable}
 
                         getRowData={getUserIdFunction}
                     />

@@ -87,7 +87,7 @@ const StandardForm = () => {
             caseNo: parseInt(data?.caseNo),
             caption: data?.caption,
         }
-        if (checkedName === null) return setCheckedName("empty")
+        // if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
             sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: oSTIndex + "/" + currentYear, oSSTDescription: data?.oSSTDescription,
@@ -117,8 +117,8 @@ const StandardForm = () => {
         }
         if (isNewFormAdding === true) {
             const LTDataaaaa: any = LTData
-            const updatedData = { ...LTDataaaaa, ...standardServiceDetail, standardServiceType: checkedName, jobNo: parseInt(LTData?.jobNo), caseNo: parseInt(LTData?.caseNo) }
-
+            const updatedData = { ...LTDataaaaa, ...updatedLTDATA, ...standardServiceDetail, standardServiceType: checkedName, jobNo: parseInt(jobNo), caseNo: parseInt(LTData?.caseNo) }
+            console.log(updatedLTDATA)
             dispatch(addServiceFormThunk(updatedData))
 
         } else if (!isNewFormAdding && selectedSearchServiceFormData?.length > 0) {
@@ -174,12 +174,12 @@ const StandardForm = () => {
             setValue("caption", selectedSearchServiceFormData[0]?.caption)
             setValue("clientId", getSearchExistingSelectedClientoption?.value);
             setValue("serviceType", getSearchExistingSelectedServiceType?.value);
-            setValue("caseNo", JSON.stringify(selectedSearchServiceFormData[0]?.caseNo));
+            setValue("caseNo", JSON.stringify(selectedSearchServiceFormData[0]?.caseNo) === null || selectedSearchServiceFormData[0]?.caseNo == null ? "" : JSON.stringify(selectedSearchServiceFormData[0]?.caseNo));
         }
         else if (!isNewFormAdding) {
 
             if (allServiceFormData[serviceFormIndex]?.oSSTIndexNo === null) setOStIndex("");
-            else setOStIndex(allServiceFormData[serviceFormIndex].oSSTIndexNo)
+            else setOStIndex(allServiceFormData[serviceFormIndex]?.oSSTIndexNo)
 
             setValue("oSSTDescription", allServiceFormData[serviceFormIndex]?.oSSTDescription),
 
@@ -193,7 +193,7 @@ const StandardForm = () => {
             setValue("caption", allServiceFormData[serviceFormIndex]?.caption)
             setValue("clientId", getExistingSelectedClientoption?.value);
             setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
-            setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));
+            setValue("caseNo", JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo) === null || allServiceFormData[serviceFormIndex]?.caseNo === null ? "" : JSON.stringify(allServiceFormData[serviceFormIndex]?.caseNo));
         }
         else {
             if (LTData?.inputDate) {
@@ -432,7 +432,7 @@ const StandardForm = () => {
                                 )} />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} ref={caseNoRefs} register={register} label="case No" error={errors.caseNo} name="caseNo" required />
+                                <TextField onKeyDown={handleEnterKeyPress} ref={caseNoRefs} register={register} label="case No" error={errors.caseNo} name="caseNo" />
                             </div>
 
                         </div>
@@ -441,7 +441,7 @@ const StandardForm = () => {
                             <div className="flex items-center gap-x-2  mb-4">
                                 <h1 className="font-semibold   mb-4 text-base
             md:text-md
-            lg:text-xl">Standard Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>                    {checkedName === "empty" && <p className="text-redColor text-sm">required</p>}
+            lg:text-xl">Standard Service Type <span className="text-xs font-normal capitalize">(Select only one)</span></h1>
                             </div>
 
 
@@ -462,6 +462,8 @@ const StandardForm = () => {
                                 })}
 
                             </div>
+
+
 
                         </div>
                         {/* STANDARD SERVICE TYPE ENDS */}

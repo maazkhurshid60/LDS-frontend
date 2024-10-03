@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const serviceResultSchema = z.object({
-    
-    serviceResultCode: z.string().min(1, { message: "service Result Code is required" }),
+
+    serviceResultCode: z.string().optional(),
     serviceResultDescription: z.string().optional(),
 
 })

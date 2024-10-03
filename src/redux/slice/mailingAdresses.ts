@@ -48,10 +48,18 @@ const mailingAdresses = createSlice({
             state.isUpdatingMailAddress = action.payload
         },
         getMailAddress: (state, action) => {
-            const allMailingData = JSON.stringify(state.mailingAddressData)
-            const allMailDataArray = JSON.parse(allMailingData)
-            const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
-            state.getSelectMail.push(onemail)
+            if (action.payload?.firstName) {
+                const onemail = action.payload
+                state.getSelectMail.push(onemail)
+            }
+            else {
+
+                const allMailingData = JSON.stringify(state.mailingAddressData)
+                const allMailDataArray = JSON.parse(allMailingData)
+                const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
+
+                state.getSelectMail.push(onemail)
+            }
         },
         getMailAddressAfterDeletion: (state, action) => {
             const allMailingData = JSON.stringify(state.getSelectMail)
@@ -68,10 +76,21 @@ const mailingAdresses = createSlice({
         },
         // THIS WILL ADD NEW MAIL ADDRESS INTO EXISTING FORM MAIL ADDRESS ARRAY
         addMailAddressIntoFormL: (state, action) => {
-            const allMailingData = JSON.stringify(state.mailingAddressData)
-            const allMailDataArray = JSON.parse(allMailingData)
-            const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
-            state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
+            // const allMailingData = JSON.stringify(state.mailingAddressData)
+            // const allMailDataArray = JSON.parse(allMailingData)
+            // const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
+            // state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
+            if (action.payload?.firstName) {
+                const onemail = action.payload
+                state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
+            }
+            else {
+
+                const allMailingData = JSON.stringify(state.mailingAddressData)
+                const allMailDataArray = JSON.parse(allMailingData)
+                const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
+                state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
+            }
         },
 
         getFormMailAddressAfterDeletion: (state, action) => {
@@ -166,6 +185,7 @@ export const createMailingAddressThunk = createAsyncThunk("createAllMailingAddre
 
         return response?.data?.data
     } catch (error) {
+        console.log(error)
         throw new Error(error)
     }
 })

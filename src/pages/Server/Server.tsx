@@ -29,12 +29,18 @@ const Server = () => {
     const widthSmall = useSelector((state: RootState) => state.sidebar.sideBar);
 
     const { isLoading, error, data, refetch } = useGetAllData("/server/all-servers")
+
     const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: data || [] })
     const [getSingleServerData, setGetSingleServerData] = useState<serverType>()
-    const headers = ["Server Code", "First Name", "Last name", "Device Code", "License No.", "address 1", "Country", "state", "zip", "phone", "apt", ...(isAdmin ? ["Action"] : [])];
+    const headers = ["Server Code", "First Name", "Last name", "Device Code", "License No", "address 1", "Country", "state", "zip", "phone", "apt", ...(isAdmin ? ["Action"] : [])];
+    // const headers = ["Server Code", "First Name", "Last name", "License No", "address 1", "Country", "state", "zip", "phone", "apt", "device Code", ...(isAdmin ? ["Action"] : [])];
+
     const [searchedData, setSearchedData] = useState()
     const [searchValue, setSearchValue] = useState("")
-
+    const modifiedData = currentTableData?.map(item => ({
+        ...item,
+        deviceCode: item?.deviceCode?.deviceCode, // Access the nested deviceCode string
+    }));
     const dispatch = useDispatch()
     const deleteData = async (id: string) => {
         dispatch(showSpinnerReducer(true))
@@ -56,6 +62,7 @@ const Server = () => {
 
     }
 
+    console.log(modifiedData)
     // USE EFFECT TO SEARCH DATA
     useEffect(() => {
         setSearchedData(data?.filter(data => Object.entries(data)
@@ -81,7 +88,7 @@ const Server = () => {
                             sm:flex-row sm:items-center">
                         <Searchbar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                     </div>
-                    <Table headers={headers} tableData={searchValue?.length > 0 ? searchedData : currentTableData} onClick={deleteData} onUpdateClick={serverUpdateFunction} />
+                    <Table headers={headers} tableData={searchValue?.length > 0 ? searchedData : modifiedData} onClick={deleteData} onUpdateClick={serverUpdateFunction} />
                     {searchValue?.length === 0 && <Pagination
                         totalPages={totalPages}
                         currentPage={currentPage}

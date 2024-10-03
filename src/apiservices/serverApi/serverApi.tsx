@@ -7,7 +7,7 @@ const accessToken = localStorage.getItem("accessToken");
 export const addServerApi = async (data: any) => {
     try {
 
-        const response = await axios.post(`${baseUrl}/server/create`, data, {
+        const response = await api.post(`${baseUrl}/server/create`, data, {
             headers: {
                 "Authorization": `Bearer ${accessToken}`
             }

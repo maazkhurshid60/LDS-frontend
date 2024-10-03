@@ -25,11 +25,14 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
     const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<FormFields>({ resolver: zodResolver(clientSchema) })
     const handleZipChange = (event) => {
         const { value } = event.target;
-        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
+        const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, ''); // Allow only letters and numbers
 
-        let formattedValue = sanitizedValue;
-        if (sanitizedValue.length > 3) {
-            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        // Limit to a maximum of 9 characters
+        const limitedValue = sanitizedValue.slice(0, 9);
+
+        let formattedValue = limitedValue;
+        if (limitedValue.length > 5) {
+            formattedValue = `${limitedValue.slice(0, 5)}-${limitedValue.slice(5)}`;
         }
 
         setValue("zip", formattedValue); // Update the form state
@@ -58,7 +61,7 @@ const ClientModalUpdate: React.FC<Props> = ({ singledata }) => {
             <TextField onKeyDown={handleEnterKeyPress} label="city" register={register} error={errors.city} name="city" placeholder="Enter City" />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
-            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" maxLength={7} onChange={handleZipChange} />
+            <TextField onKeyDown={handleEnterKeyPress} label="zip" register={register} error={errors.zip} name="zip" placeholder="Enter zip" maxLength={12} onChange={handleZipChange} />
         </div>
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="phone" register={register} error={errors.phone} name="phone" placeholder="000011111110000" required />

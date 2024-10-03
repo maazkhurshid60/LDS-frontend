@@ -38,9 +38,14 @@ const StandardTypeForm = () => {
     const loadingSpinner = useSelector((state: RootState) => state.showSpinner?.isShowSpinner)
     const isNewFormAdding = useSelector((state: RootState) => state.serviceForm?.isNewFormAdd)
     const getMailingAddressDataOnFormAdding = useSelector((state: RootState) => state.mailingAdress?.getSelectMail)
-    const filterMailingAddressDataOnFormAdding = getMailingAddressDataOnFormAdding?.filter((obj1, i, arr) =>
-        arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
-    )
+
+    const filterMailingAddressDataOnFormAdding = Array.from(
+        new Set(getMailingAddressDataOnFormAdding?.map(obj => JSON.stringify({
+            _id: obj?._id,
+            firstName: obj?.firstName
+        })))
+    ).map(item => JSON.parse(item));
+    // console.log("getMailingAddressDataOnFormAdding", getMailingAddressDataOnFormAdding)
     const savedLTData = useSelector((state: RootState) => state.serviceForm?.savedLTFormData)
     // GET ALL MAILING ADDRESSES THAT COMMING INSIDE THE FORMS 
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress?.serviceFormMailingAdress?.mailingAdresses)
@@ -174,7 +179,7 @@ const StandardTypeForm = () => {
                     lng: location.lng,
                 });
             } else {
-                toast.warn("No results found for the given city name.");
+                // toast.warn("No results found for the given city name.");
             }
         } catch (error) {
             toast.error("Error fetching the coordinates:");
@@ -197,7 +202,7 @@ const StandardTypeForm = () => {
 
     // GET SELECTED VALUES FROM ADD MAILING DROPDOWN
     const GetSelectedMailingFunction = (optionValue: string) => {
-
+        // console.log("optionValue", optionValue)
         isNewFormAdding ? dispatch(getMailAddress(optionValue)) : dispatch(addMailAddressIntoFormL(optionValue))
     }
     // USE EFFECT TO GET ALL SERVICE FORM DATA FROM API WHICH IS STORED IN SLICE
@@ -263,7 +268,7 @@ const StandardTypeForm = () => {
                 setValue("serviceType", getExistingSelectedServiceTypeoption?.value);
                 setJobNo(JSON.stringify(currentData?.jobNo));
                 setValue("inputDate", currentData?.inputDate);
-                setValue("caseNo", JSON.stringify(currentData?.caseNo));
+                setValue("caseNo", JSON.stringify(currentData?.caseNo) === null || currentData?.caseNo === null ? "" : JSON.stringify(currentData?.caseNo));
 
                 if (currentData?.oLTIndexNo === null) setOltIndex("");
                 else setOltIndex(currentData?.oLTIndexNo);
@@ -286,7 +291,7 @@ const StandardTypeForm = () => {
                 setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
 
             } else {
-                toast.error("No current data found for the form index.");
+                // toast.error("No current data found for the form index.");
             }
         }
         else {
@@ -304,7 +309,7 @@ const StandardTypeForm = () => {
             setValue("serviceType", getSelectedServiceTypeOption?.value);
             setValue("oLTIndexNo", savedLTData?.oLTIndexNo);
 
-            setValue("caseNo", savedLTData?.caseNo);
+            setValue("caseNo", savedLTData?.caseNo === null ? "" : savedLTData?.caseNo);
             setValue("caption", savedLTData?.caption);
             setValue("lTSBusinessName", savedLTData?.lTSBusinessName);
             setValue("lTSAddress", savedLTData?.address);
@@ -404,20 +409,20 @@ const StandardTypeForm = () => {
             lTSZip: data?.lTSZip,
 
             lTSDescription: data?.lTSDescription,
-            oLTIndexNo: oLTIndex + "/" + currentYear,
+            oLTIndexNo: oLTIndex === "" ? null : oLTIndex + "/" + currentYear,
             oLTDescription: data?.oLTDescription,
             lTSCityLongitude: "",
             lTSCityLatitude: ""
         }
 
-
+        console.log(LTData)
 
         //    DATA FOR L&T FORM ENDS
 
         const updatedData = { ...LTData, standardServiceDetail, serviceFormId, standardServiceType: allServiceFormData[serviceFormIndex]?.standardServiceType?._id }
 
 
-        if (checkedName === null) setCheckedName("empty")
+        // if (checkedName === null) setCheckedName("empty")
         // IF SEARCH FORM TRUE
         if (isSearchServiceForm === true) {
             const formatedStartDate = startDate !== null ? new Date(startDate) : null;
@@ -649,11 +654,13 @@ const StandardTypeForm = () => {
 
     useEffect(() => { setOpenServiceType(false) }, [isNewFormAdding])
 
-    const handleClientSelect = (event, ref, id) => {
-        if (id === "serviceType") {
+    const handleClientSelect = (event) => {
+
+
+        if (event.key === 'Enter' || event.key === 'Tab') {
             setOpenServiceType(true);
         }
-        else if (id === "caption") { }
+
 
     };
 
@@ -662,15 +669,19 @@ const StandardTypeForm = () => {
     // Function to handle zip code formatting
     const handleZipChange = (event) => {
         const { value } = event.target;
-        const sanitizedValue = value.replace(/\D/g, ''); // Remove non-digit characters
+        const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, ''); // Allow only letters and numbers
 
-        let formattedValue = sanitizedValue;
-        if (sanitizedValue.length > 3) {
-            formattedValue = `${sanitizedValue.slice(0, 3)}-${sanitizedValue.slice(3, 6)}`;
+        // Limit to a maximum of 9 characters
+        const limitedValue = sanitizedValue.slice(0, 9);
+
+        let formattedValue = limitedValue;
+        if (limitedValue.length > 5) {
+            formattedValue = `${limitedValue.slice(0, 5)}-${limitedValue.slice(5)}`;
         }
 
         setValue("lTSZip", formattedValue); // Update the form state
     };
+
     return <>
         {allSeacrhServiceFormData?.length > 0 && isSearchServiceForm ? <SearchResultData /> :
             <div className="w-[100%]">
@@ -748,7 +759,7 @@ const StandardTypeForm = () => {
                                         onChange={(value) => {
                                             field.onChange(value);
                                         }}
-                                        onKeyDown={() => handleClientSelect("a", "serviceType", "serviceType")}
+                                        onKeyDown={handleClientSelect}
                                         id="clientId"
 
                                     />
@@ -806,7 +817,8 @@ const StandardTypeForm = () => {
                         <div className="mt-6">
                             <h1 className="font-semibold   mb-4 text-base
             md:text-md
-            lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span> <span className="text-redColor text-sm">*</span></h1>
+            lg:text-xl">L&T Service Type <span className="text-xs font-normal capitalize">(Select only one)</span>
+                            </h1>
                             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
                                 {LTServiceData?.map((data, index) => {
                                     return <div className="w-[100%] md:w-[46%] lg:w-[30%]" key={index}>
@@ -890,7 +902,7 @@ const StandardTypeForm = () => {
                                     <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
                                 </div>
                                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                    <TextField maxLength={7}
+                                    <TextField maxLength={12}
                                         onChange={handleZipChange}
                                         onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
                                 </div>

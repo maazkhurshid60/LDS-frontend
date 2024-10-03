@@ -1,10 +1,10 @@
 import { z } from "zod";
 export const addingMailingSchema = z.object({
-    firstName: z.string().min(1, "first name is required."),
-    address: z.string().min(1, "address is required."),
-    city: z.string().min(1, "city is required."),
-    state: z.string().min(1, "state is required."),
-    apt: z.string().min(1, "apt is required."),
+    firstName: z.string().optional(),
+    address: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    apt: z.string().optional(),
     zip: z.string().optional(),
     rRR: z.boolean().optional(),
 })

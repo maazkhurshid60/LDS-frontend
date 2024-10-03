@@ -18,10 +18,10 @@ const ServiceTypeModal = () => {
     const { isLoading, error, data, refetch } = useGetAllData("/service-type/all-service-types")
 
     const modalBody = <form className="mb-6">
-        <TextField onKeyDown={handleEnterKeyPress} label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" required />
+        <TextField onKeyDown={handleEnterKeyPress} label="Service Type Code" register={register} error={errors.serviceTypeCode} name="serviceTypeCode" />
         <div className="mt-4" >
 
-            <TextArea required label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription" />
+            <TextArea label="Service Type Description" register={register} error={errors.serviceTypeDescription} name="serviceTypeDescription" />
         </div>
     </form>
     const addServiceResultFunction = async (data) => {

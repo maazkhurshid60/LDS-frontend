@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const serviceTypeSchema = z.object({
-    
-    serviceTypeCode: z.string().min(1, { message: "service Type Code is required" }),
+
+    serviceTypeCode: z.string().optional(),
     serviceTypeDescription: z.string().optional(),
 
 })
