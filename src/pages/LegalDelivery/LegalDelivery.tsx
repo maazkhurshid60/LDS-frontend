@@ -17,6 +17,7 @@ import { RootState } from "../../redux/store";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 import { toast } from "react-toastify";
 import Hints from "../Result/Hints/Hints";
+import { getAllServiceFormThunk } from "../../redux/slice/serviceForm";
 const LegalDelivery = () => {
     const [showFilterMenu, setShowFilterMenu] = useState(false)
     const [showDropDown, setShowDropDown] = useState(false)
@@ -24,8 +25,8 @@ const LegalDelivery = () => {
     const dispatch = useDispatch()
     const filteredData = useSelector((state: RootState) => state?.legalDelivery?.legalDeliveryData || [])
     const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData?.searchResult)
+    const serviceForm = useSelector((state: RootState) => state?.serviceForm)
 
-    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: filteredData?.length > 0 && filteredData || [] })
 
 
     const handlePrint = () => {
@@ -50,8 +51,8 @@ const LegalDelivery = () => {
         };
     }, [])
 
-    const serviceTableHeader = ["Job", "Client Code", "Input Date", "Server Code", "Full Name", "Case Paper Type", "Bussiness Name", "Address", "Caption", "City", "Zip", "Serv City", "Case No"]
-    const serviceDataTable = Array.isArray(currentTableData) ? currentTableData?.map(item => ({
+    const serviceTableHeader = ["Job", "Client Code", "Input Date", "Server Code", "Full Name", "Case Paper Type", "Bussiness Name", "Address", "Caption", "City", "Zip", "Serv City", "Case No", "Service Type"]
+    const serviceDataTable = Array.isArray(filteredData) ? filteredData?.map(item => ({
         _id: item?._id,
         jobNo: item?.jobNo,
         clientCode: item?.clientId?.code,
@@ -65,8 +66,11 @@ const LegalDelivery = () => {
         city: item?.lTSCity,
         zip: item?.lTSZip,
         servCity: item?.cityServe,
-        caseNo: item?.caseNo
+        caseNo: item?.caseNo,
+        serviceType: item?.serviceType?.serviceTypeDescription
+
     })) : [];
+    console.log(filteredData)
     const resultDataTable = Array.isArray(filteredData) ? filteredData?.map(item => ({
         _id: item?._id,
         jobNo: item?.jobNo,
@@ -113,6 +117,38 @@ const LegalDelivery = () => {
             document.removeEventListener('keydown', handleCtrlA);
         };
     }, [filteredData]);
+    const allResultForm = useSelector((state: RootState) => state?.resultForm?.allResultFormData)
+    const allServiceForm = useSelector((state: RootState) => state?.serviceForm?.allServiceFormData)
+
+    const currentDate = new Date().toISOString().split('T')[0];
+    const todayServiceForm = serviceForm?.allServiceFormData?.filter(
+        (data: any, id: number) => {
+            // return data?.createdAt
+            const createdDate = new Date(data?.createdAt).toISOString().split('T')[0]; // Extract the date part
+            return createdDate === currentDate; // Compare dates as strings
+        }
+    )
+    const todayResultFormDataTable = Array.isArray(todayServiceForm) ? todayServiceForm?.map(item => ({
+        _id: item?._id,
+        jobNo: item?.jobNo,
+        clientCode: item?.serviceResultClientId?.code,
+        inputDate: item?.queryInformationLTInputDate,
+        serverCode: item?.serviceResultServerId?.serverCode,
+        fullName: item?.lTSFirstName,
+        casePaperType: "",  // Static value
+        bussinessName: item?.queryInformationLTBusinessName,
+        address: item?.queryInformationLTAddress,
+        caption: item?.caption,
+        city: item?.lTSCity,
+        zip: item?.lTSZip,
+        servCity: item?.cityServe,
+        caseNo: item?.caseNo
+    })) : [];
+    console.log("allResultForm>>>>>>>>>>>>>>>>>>>>>>>>>>>>", todayServiceForm, serviceDataTable
+    )
+
+    useEffect(() => { dispatch(getAllServiceFormThunk()) }, [])
+    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: serviceDataTable?.length > 0 && serviceDataTable || [] })
 
     return <div className="w-[95%] m-auto">
         <div className="relative bg-whiteColor ">
@@ -131,67 +167,70 @@ const LegalDelivery = () => {
             <OutletLayoutHeader heading="Legal Delivery">
             </OutletLayoutHeader>
 
-            {filteredData?.length > 0 &&
-                <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
-                    <div ref={dropdownRef}>
-                        <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
+            {/* {filteredData?.length > 0 && */}
+            <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
+                <div ref={dropdownRef}>
+                    <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
 
-                            <p className="" >Affidavits Reports
+                        <p className="" >Affidavits Reports
 
-                            </p>
-                            <IoIosArrowDown
-                                size={12}
-                                className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
-                            />
-                        </div>
-                        {showDropDown &&
-                            <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
-                                <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
-                                <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
-                                <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
-                                <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
-                                <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
-                                <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
-                                <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
-                            </div>
-                        }
+                        </p>
+                        <IoIosArrowDown
+                            size={12}
+                            className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
+                        />
                     </div>
-                    <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
+                    {showDropDown &&
+                        <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
+                            <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
+                            <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
+                            <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
+                            <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
+                            <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
+                            <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
+                            <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
+                        </div>
+                    }
+                </div>
+                <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
-                    <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
-                    <Hints keyName="Ctrl + A " label="Select All Record" />
+                <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
+                <Hints keyName="Ctrl + A " label="Select All Record" />
 
 
-                </div>}
-            {filteredData?.length > 0 ?
-                <>
-                    <TableWithoutAction
-                        headers={
-                            searchDataName === "result"
-                                ? serviceTableHeader
-                                : searchDataName === "standard"
-                                    ? serviceTableHeader
-                                    : serviceTableHeader
-                        }
-                        tableData={serviceDataTable}
+            </div>
+            {/* } */}
+            {/* {filteredData?.length > 0 ?
+                <> */}
+            <TableWithoutAction
+                headers={
+                    searchDataName === "result"
+                        ? serviceTableHeader
+                        : searchDataName === "standard"
+                            ? serviceTableHeader
+                            : serviceTableHeader
+                }
+                // tableData={serviceDataTable?.length > 0 ? serviceDataTable : todayServiceForm}
+                tableData={serviceDataTable?.length > 0 ? serviceDataTable : todayResultFormDataTable}
 
-                        getRowData={getUserIdFunction}
-                    />
 
-                    <Pagination
-                        totalPages={totalPages}
-                        currentPage={currentPage}
-                        dataLimit={dataLimit}
-                        tableData={tableData?.tableData}
-                        onchange={onPageChange} // Pass onPageChange as onchange prop
+                getRowData={getUserIdFunction}
+            />
 
-                    />
-                </> : <div className="h-[57vh] w-[100%] flex items-center justify-center ">
+            {/* <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                dataLimit={dataLimit}
+                tableData={tableData?.tableData}
+                onchange={onPageChange} // Pass onPageChange as onchange prop
+
+            /> */}
+            {/* </> : <div className="h-[57vh] w-[100%] flex items-center justify-center ">
                     <div className="">
                         <p className="text-sm capitalize">No data to show. <span className=" cursor-pointer underline text-primaryColor font-semibold" onClick={() => setShowFilterMenu(!showFilterMenu)}> FILTER DATA</span></p>
                     </div>
                 </div>
-            }
+            } */}
 
 
 
