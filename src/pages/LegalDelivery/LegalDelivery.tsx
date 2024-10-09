@@ -347,15 +347,15 @@ const LegalDelivery = () => {
                             <div ref={dropdownRef}>
                                 <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
 
-                                    <p className="" >Affidavits Reports
-                                        <p className="" >Affidavits Reports
 
-                                        </p>
-                                        <IoIosArrowDown
-                                            size={12}
-                                            className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
-                                        />
+                                    <p className="" >Affidavits Reports
+
                                     </p>
+                                    <IoIosArrowDown
+                                        size={12}
+                                        className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
+                                    />
+
                                 </div>
                                 {showDropDown &&
                                     <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
@@ -369,31 +369,19 @@ const LegalDelivery = () => {
                                     </div>
                                 }
                             </div>
-                            <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
                         </div>
                         <IoIosArrowDown
                             size={12}
                             className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
                         />
                     </div>
-                    {showDropDown &&
-                        <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
-                            <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
-                            <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
-                            <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
-                            <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
-                            <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
-                            <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
-                            <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
-                        </div>
-                    }
-                </div>
-                <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
+                    <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
-                <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
-                <Hints keyName="Ctrl + A " label="Select All Record" />
-                <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
-                <Hints keyName="Ctrl + A " label="Select All Record" />
+                    <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
+                    <Hints keyName="Ctrl + A " label="Select All Record" />
+                </div>
+
+
 
 
             </div>
