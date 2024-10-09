@@ -369,16 +369,14 @@ const LegalDelivery = () => {
                                     </div>
                                 }
                             </div>
-                        </div>
-                        <IoIosArrowDown
-                            size={12}
-                            className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
-                        />
-                    </div>
-                    <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
+                            <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
-                    <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
-                    <Hints keyName="Ctrl + A " label="Select All Record" />
+                            <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
+                            <Hints keyName="Ctrl + A " label="Select All Record" />
+                        </div>
+
+                    </div>
+
                 </div>
 
 
