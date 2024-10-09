@@ -27,15 +27,16 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
 
     // ADD MAILING DATA FUNCTION STARTS
     const AddMailingFunction = async (data) => {
-        const zip = parseInt(data?.zip)
-        const mailAddres = { ...data, zip: zip }
-        dispatch(createMailingAddressThunk(mailAddres))
+
+
+        dispatch(createMailingAddressThunk(data))
         reset()
 
     }
     // ADD MAILING DATA FUNCTION ENDS
-    const GetSelectedMailingFunction = (data: any) => {
 
+    const GetSelectedMailingFunction = (data: any) => {
+        console.log(data)
         // isNewFormAdding && dispatch(getMailAddress(data))
         isNewFormAdding ? dispatch(getMailAddress(data)) : dispatch(addMailAddressIntoFormL(data))
 
@@ -78,7 +79,7 @@ const AddMailing: React.FC<AddMailingProps> = ({ data, id }) => {
                 />
             </div>
         </div>
-        <form className="flex flex-col items-end" onSubmit={handleSubmit(GetSelectedMailingFunction)}>
+        <form className="flex flex-col items-end" >
             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between">
                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <TextField onKeyDown={handleEnterKeyPress}

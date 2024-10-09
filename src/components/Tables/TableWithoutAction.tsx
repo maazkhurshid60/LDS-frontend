@@ -72,7 +72,7 @@ const TableWithoutAction: React.FC<TableWithoutActionProps> = ({ headers, tableD
                     </tr>
                 </thead>
                 <tbody>
-                    {tableData.map((rowData, rowIndex) => {
+                    {tableData?.map((rowData, rowIndex) => {
                         const filteredData = filterOutIdKeys(rowData);
                         return (
                             <tr

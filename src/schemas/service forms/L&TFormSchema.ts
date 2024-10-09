@@ -79,6 +79,6 @@ export const LTFormSchema = z.object({
     serviceResultOtherFeatures: z.string().optional(),
     serviceResultDateOfMailing: z.string().optional(),
     serviceResultDateOfNotary: z.string().optional(),
-    substituteDeliveredTo: z.string().optional(),
+    serviceResultSubstitudeDeliveredTo: z.string().optional(),
     corporateRecipient: z.string().optional(),
 })

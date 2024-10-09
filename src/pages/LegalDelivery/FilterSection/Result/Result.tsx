@@ -42,12 +42,13 @@ const Result = () => {
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Date of 2nd Attempt" error={errors.serviceResultSecondAttemptDate} name="serviceResultSecondAttemptDate" type="date" />
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Date of 3rd Attempt" error={errors.serviceResultThirdAttemptDate} name="serviceResultThirdAttemptDate" type="date" />
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Date of Mailing" error={errors.serviceResultDateOfMailing} name="serviceResultDateOfMailing" type="date" />
-        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Corp Recipient" error={errors.corporateRecipient} name="corporateRecipient" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="Corp Recipient" error={errors.serviceResultRecipient} name="corporateRecipient" />
         <TextField onKeyDown={handleEnterKeyPress} register={register} label="Corp Recipient Title" error={errors.serviceResultRecipientTitle} name="serviceResultRecipientTitle" />
-        <TextField onKeyDown={handleEnterKeyPress} register={register} label="substitute Delivered To" error={errors.substituteDeliveredTo} name="substituteDeliveredTo" />
+        <TextField onKeyDown={handleEnterKeyPress} register={register} label="substitute Delivered To" error={errors.serviceResultSubstitudeDeliveredTo} name="substituteDeliveredTo" />
 
         <Button text="filter" />
     </form>
 }
+
 
 export default Result

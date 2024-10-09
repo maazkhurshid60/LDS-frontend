@@ -11,7 +11,7 @@ import FilterMenu from "./FilterSection/FilterMenu/FilterMenu";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { emptyLegalDeliveryReducer, getSingleLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
+import { emptyLegalDeliveryReducer, getAllServiceFormThunk, getSingleLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
 import TableWithoutAction from "../../components/Tables/TableWithoutAction";
 import { RootState } from "../../redux/store";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
@@ -22,11 +22,15 @@ const LegalDelivery = () => {
     const [showDropDown, setShowDropDown] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch()
-    const filteredData = useSelector((state: RootState) => state?.legalDelivery?.legalDeliveryData || [])
+    const filteredData = useSelector((state: RootState) => state?.legalDelivery?.filteredLegalData || [])
+    const todayAllLegalData = useSelector((state: RootState) => state?.legalDelivery?.legalDeliveryData || [])
+    // console.log("search data<<<<<<<<<<<", filteredData)
+
     const searchDataName = useSelector((state: RootState) => state?.legalDelivery?.selectedLegalDeliveryData?.searchResult)
-
-    const { totalPages, currentPage, currentTableData, dataLimit, onPageChange, checkLastRecord } = usePaginationCalc({ tableData: filteredData?.length > 0 && filteredData || [] })
-
+    let searchLegalData
+    const [isSearchData, setIsSearchData] = useState<any>([])
+    const [searchQuery, setSearchQuery] = useState("");
+    const [isTodaySearchData, setIsTodaySearchData] = useState<any>([])
 
     const handlePrint = () => {
 
@@ -39,10 +43,7 @@ const LegalDelivery = () => {
             setShowDropDown(false);
         }
     };
-    const getUserIdFunction = (userId: string, index) => {
-        const selectedData = filteredData?.filter((data, id) => data?._id === userId)
-        dispatch(getSingleLegalDeliveryReducer(selectedData))
-    }
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
@@ -50,59 +51,12 @@ const LegalDelivery = () => {
         };
     }, [])
 
-    const serviceTableHeader = ["Job", "Client Code", "Input Date", "Server Code", "Full Name", "Case Paper Type", "Bussiness Name", "Address", "Caption", "City", "Zip", "Serv City", "Case No"]
-    const serviceDataTable = Array.isArray(currentTableData) ? currentTableData?.map(item => ({
-        _id: item?._id,
-        jobNo: item?.jobNo,
-        clientCode: item?.clientId?.code,
-        inputDate: item?.inputDate,
-        serverCode: item?.serviceResultServerId?.serverCode,
-        fullName: item?.lTSFirstName,
-        casePaperType: "",  // Static value
-        bussinessName: item?.lTSBusinessName,
-        address: item?.lTSAddress,
-        caption: item?.caption,
-        city: item?.lTSCity,
-        zip: item?.lTSZip,
-        servCity: item?.cityServe,
-        caseNo: item?.caseNo
-    })) : [];
-    const resultDataTable = Array.isArray(filteredData) ? filteredData?.map(item => ({
-        _id: item?._id,
-        jobNo: item?.jobNo,
-        clientCode: item?.clientId?.code,
-        inputDate: item?.inputDate,
-        serverCode: item?.serviceResultServerId?.serverCode,
-        fullName: item?.lTSFirstName,
-        casePaperType: "",  // Static value
-        bussinessName: item?.lTSBusinessName,
-        address: item?.lTSAddress,
-        caption: item?.caption,
-        city: item?.lTSCity,
-        zip: item?.lTSZip,
-        servCity: item?.cityServe,
-        caseNo: item?.caseNo
-    })) : [];
+    const serviceTableHeader = ["Job", "Client Code", "Input Date", "Server Code", "Full Name", "Case Paper Type", "Bussiness Name", "Address", "Caption", "City", "Zip", "Serv City", "Case No", "Service Type"]
 
 
-    const handleCtrlA = (event: KeyboardEvent) => {
-        if (event.ctrlKey && event.key === 'a') {
 
 
-            event.preventDefault(); // Prevent default Ctrl+A browser action (selecting text)
-            selectAllRecords();
-        }
-    };
 
-    const selectAllRecords = () => {
-        if (filteredData?.length > 0) {
-
-            dispatch(getSingleLegalDeliveryReducer(filteredData));
-
-            toast.success("All Data has been selected. Generate any report.")
-        }
-
-    };
 
     useEffect(() => {
         // Add event listener for keydown to detect Ctrl+A
@@ -112,7 +66,260 @@ const LegalDelivery = () => {
         return () => {
             document.removeEventListener('keydown', handleCtrlA);
         };
-    }, [filteredData]);
+    }, [isSearchData, isTodaySearchData]);
+    // useEffect(() => {
+    //     // Add event listener for keydown to detect Ctrl+A
+    //     document.addEventListener('keydown', handleCtrlA);
+
+    //     // Cleanup event listener on unmount
+    //     return () => {
+    //         document.removeEventListener('keydown', handleCtrlA);
+    //     };
+    // }, [isTodaySearchData]);
+
+
+    const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+    const todayServiceForm = todayAllLegalData
+        ?.filter((data: any) => {
+            // First, filter by today's date
+            const createdDate = new Date(data?.createdAt).toISOString().split('T')[0]; // Extract the date part (YYYY-MM-DD)
+
+
+
+            return createdDate === currentDate; // Compare dates as strings
+        })
+        ?.filter((data: any) => {
+            // Then, filter based on the search query
+            const searchLower = searchQuery?.toLowerCase(); // Convert search query to lowercase for case-insensitive search
+
+            return (
+                data?.jobNo?.toString()?.toLowerCase()?.includes(searchLower) ||
+                data?.inputDate?.toLowerCase()?.includes(searchLower) ||
+                data?.clientId?.code?.toLowerCase()?.includes(searchLower) ||
+                data?.serviceType?.serviceTypeCode?.toLowerCase()?.includes(searchLower) ||
+                data?.caseNo?.toString()?.toLowerCase()?.includes(searchLower) ||
+                data?.caption?.toLowerCase()?.includes(searchLower) ||
+                data?.lTServiceType?.name?.toLowerCase()?.includes(searchLower) ||
+                data?.oLTIndexNo?.toString()?.toLowerCase()?.includes(searchLower) ||
+                data?.oLTDescription?.toLowerCase().includes(searchLower) ||
+                data?.lTSFirstName?.toLowerCase().includes(searchLower) ||
+                data?.lTSBusinessName?.toLowerCase().includes(searchLower) ||
+                data?.lTSZip?.toString().toLowerCase().includes(searchLower) ||
+                data?.lTSState?.toLowerCase().includes(searchLower) ||
+                data?.lTSCity?.toLowerCase().includes(searchLower) ||
+                data?.lTSApt?.toLowerCase().includes(searchLower) ||
+                data?.lTSAddress?.toLowerCase().includes(searchLower) ||
+                data?.lTSDescription?.toLowerCase().includes(searchLower)
+            );
+        })
+        .map((item: any) => ({
+            _id: item?._id,
+            jobNo: item?.jobNo,
+            clientCode: item?.clientId?.code,
+            inputDate: item?.inputDate,
+            serverCode: item?.serviceResultServerId?.serverCode,
+            fullName: item?.lTSFirstName,
+            casePaperType: "",  // Static value
+            bussinessName: item?.lTSBusinessName,
+            address: item?.lTSAddress,
+            caption: item?.caption,
+            city: item?.lTSCity,
+            zip: item?.lTSZip,
+            servCity: item?.cityServe,
+            caseNo: item?.caseNo,
+            serviceType: item?.serviceType?.serviceTypeDescription
+        }));
+
+
+
+
+
+
+    useEffect(() => {
+        dispatch(getAllServiceFormThunk())
+    }, [])
+
+
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+    // console.log("sadjkgfdsgf idsa iugfdsa gff", isSearchData)
+    const getUserIdFunction = (userId: string, index) => {
+
+        if (todayAllLegalData?.length > 0) {
+            const selectedData = todayAllLegalData?.filter((data, id) => data?._id === userId)
+            dispatch(getSingleLegalDeliveryReducer(selectedData))
+        }
+        if (filteredData?.length > 0) {
+            const selectedData = filteredData?.filter((data, id) => data?._id === userId)
+            dispatch(getSingleLegalDeliveryReducer(selectedData))
+        }
+
+
+    }
+
+
+
+    const handleCtrlA = (event: KeyboardEvent) => {
+        if (event.ctrlKey && event.key === 'a') {
+
+            console.log("<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>", isSearchData);
+
+            event.preventDefault(); // Prevent default Ctrl+A browser action (selecting text)
+            selectAllRecords();
+        }
+    };
+    console.log("isSearchData<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>isSearchData", isSearchData);
+
+    const selectAllRecords = () => {
+
+        // Check if filteredData is not empty
+        if (filteredData?.length > 0) {
+
+            const commonData = filteredData?.filter(item =>
+                isSearchData?.some(newItem => newItem?._id === item?._id)
+            );
+            dispatch(getSingleLegalDeliveryReducer(commonData));
+            console.log("commonData", commonData)
+
+
+            toast.success("All Data has been selected. Generate any reportttt.")
+        } else if (todayAllLegalData?.length > 0) {
+            // const todayServiceForm = todayAllLegalData?.filter((data) => {
+            //     // Filter today's data by date
+            //     const createdDate = new Date(data?.createdAt).toISOString().split('T')[0]; // Extract the date part (YYYY-MM-DD)
+            //     return createdDate === currentDate; // Compare dates as strings
+            // });
+            const commonData = todayAllLegalData?.filter(item =>
+                isTodaySearchData?.some(newItem => newItem?._id === item?._id)
+            );
+            dispatch(getSingleLegalDeliveryReducer(commonData));
+            console.log("commonData....", isTodaySearchData, commonData)
+
+            toast.success("All Data has been selected..... Generate any report.");
+        }
+    };
+
+    useEffect(() => {
+        setIsSearchData(Array.isArray(filteredData)
+            && filteredData
+                .filter((data) => {
+                    const searchLower = searchQuery.toLowerCase(); // Convert search query to lowercase for case-insensitive search
+                    return (
+                        data?.jobNo?.toString().toLowerCase().includes(searchLower) ||
+                        data?.inputDate?.toLowerCase().includes(searchLower) ||
+                        data?.clientId?.code?.toLowerCase().includes(searchLower) ||
+                        data?.serviceType?.serviceTypeCode?.toLowerCase().includes(searchLower) ||
+                        data?.caseNo?.toString().toLowerCase().includes(searchLower) ||
+                        data?.caption?.toLowerCase().includes(searchLower) ||
+                        data?.lTServiceType?.name?.toLowerCase().includes(searchLower) ||
+                        data?.oLTIndexNo?.toString().toLowerCase().includes(searchLower) ||
+                        data?.oLTDescription?.toLowerCase().includes(searchLower) ||
+                        data?.lTSFirstName?.toLowerCase().includes(searchLower) ||
+                        data?.lTSBusinessName?.toLowerCase().includes(searchLower) ||
+                        data?.lTSZip?.toString().toLowerCase().includes(searchLower) ||
+                        data?.lTSState?.toLowerCase().includes(searchLower) ||
+                        data?.lTSCity?.toLowerCase().includes(searchLower) ||
+                        data?.lTSApt?.toLowerCase().includes(searchLower) ||
+                        data?.lTSAddress?.toLowerCase().includes(searchLower) ||
+                        data?.lTSDescription?.toLowerCase().includes(searchLower)
+                    );
+                })
+                .map(item => ({
+                    _id: item?._id,
+                    jobNo: item?.jobNo,
+                    clientCode: item?.clientId?.code,
+                    inputDate: item?.inputDate,
+                    serverCode: item?.serviceResultServerId?.serverCode,
+                    fullName: item?.lTSFirstName,
+                    casePaperType: "",  // Static value
+                    bussinessName: item?.lTSBusinessName,
+                    address: item?.lTSAddress,
+                    caption: item?.caption,
+                    city: item?.lTSCity,
+                    zip: item?.lTSZip,
+                    servCity: item?.cityServe,
+                    caseNo: item?.caseNo,
+                    serviceType: item?.serviceType?.serviceTypeDescription
+                }))
+        )
+
+
+    }, [searchQuery])
+
+
+
+    useEffect(() => { setIsSearchData(filteredData) }, [filteredData])
+    useEffect(() => {
+        setIsTodaySearchData(
+
+
+            todayAllLegalData
+                ?.filter((data: any) => {
+                    // First, filter by today's date
+                    const createdDate = new Date(data?.createdAt).toISOString().split('T')[0]; // Extract the date part (YYYY-MM-DD)
+
+
+
+                    return createdDate === currentDate; // Compare dates as strings
+                })
+                ?.filter((data: any) => {
+                    // Then, filter based on the search query
+                    const searchLower = searchQuery?.toLowerCase(); // Convert search query to lowercase for case-insensitive search
+
+                    return (
+                        data?.jobNo?.toString()?.toLowerCase()?.includes(searchLower) ||
+                        data?.inputDate?.toLowerCase()?.includes(searchLower) ||
+                        data?.clientId?.code?.toLowerCase()?.includes(searchLower) ||
+                        data?.serviceType?.serviceTypeCode?.toLowerCase()?.includes(searchLower) ||
+                        data?.caseNo?.toString()?.toLowerCase()?.includes(searchLower) ||
+                        data?.caption?.toLowerCase()?.includes(searchLower) ||
+                        data?.lTServiceType?.name?.toLowerCase()?.includes(searchLower) ||
+                        data?.oLTIndexNo?.toString()?.toLowerCase()?.includes(searchLower) ||
+                        data?.oLTDescription?.toLowerCase().includes(searchLower) ||
+                        data?.lTSFirstName?.toLowerCase().includes(searchLower) ||
+                        data?.lTSBusinessName?.toLowerCase().includes(searchLower) ||
+                        data?.lTSZip?.toString().toLowerCase().includes(searchLower) ||
+                        data?.lTSState?.toLowerCase().includes(searchLower) ||
+                        data?.lTSCity?.toLowerCase().includes(searchLower) ||
+                        data?.lTSApt?.toLowerCase().includes(searchLower) ||
+                        data?.lTSAddress?.toLowerCase().includes(searchLower) ||
+                        data?.lTSDescription?.toLowerCase().includes(searchLower)
+                    );
+                })
+                .map((item: any) => ({
+                    _id: item?._id,
+                    jobNo: item?.jobNo,
+                    clientCode: item?.clientId?.code,
+                    inputDate: item?.inputDate,
+                    serverCode: item?.serviceResultServerId?.serverCode,
+                    fullName: item?.lTSFirstName,
+                    casePaperType: "",  // Static value
+                    bussinessName: item?.lTSBusinessName,
+                    address: item?.lTSAddress,
+                    caption: item?.caption,
+                    city: item?.lTSCity,
+                    zip: item?.lTSZip,
+                    servCity: item?.cityServe,
+                    caseNo: item?.caseNo,
+                    serviceType: item?.serviceType?.serviceTypeDescription
+                }))
+
+
+
+
+        )
+
+
+
+
+    }, [searchQuery])
+
+
+
+
 
     return <div className="w-[95%] m-auto">
         <div className="relative bg-whiteColor ">
@@ -131,67 +338,58 @@ const LegalDelivery = () => {
             <OutletLayoutHeader heading="Legal Delivery">
             </OutletLayoutHeader>
 
-            {filteredData?.length > 0 &&
-                <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
-                    <div ref={dropdownRef}>
-                        <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
+            {/* {filteredData?.length > 0 && */}
+            <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
+                <div ref={dropdownRef}>
+                    <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
 
-                            <p className="" >Affidavits Reports
+                        <p className="" >Affidavits Reports
 
-                            </p>
-                            <IoIosArrowDown
-                                size={12}
-                                className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
-                            />
+                        </p>
+                        <IoIosArrowDown
+                            size={12}
+                            className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
+                        />
+                    </div>
+                    {showDropDown &&
+                        <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
+                            <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
+                            <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
+                            <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
+                            <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
+                            <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
+                            <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
+                            <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
                         </div>
-                        {showDropDown &&
-                            <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
-                                <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
-                                <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
-                                <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
-                                <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
-                                <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
-                                <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
-                                <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
-                            </div>
-                        }
-                    </div>
-                    <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
-
-                    <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
-                    <Hints keyName="Ctrl + A " label="Select All Record" />
-
-
-                </div>}
-            {filteredData?.length > 0 ?
-                <>
-                    <TableWithoutAction
-                        headers={
-                            searchDataName === "result"
-                                ? serviceTableHeader
-                                : searchDataName === "standard"
-                                    ? serviceTableHeader
-                                    : serviceTableHeader
-                        }
-                        tableData={serviceDataTable}
-
-                        getRowData={getUserIdFunction}
-                    />
-
-                    <Pagination
-                        totalPages={totalPages}
-                        currentPage={currentPage}
-                        dataLimit={dataLimit}
-                        tableData={tableData?.tableData}
-                        onchange={onPageChange} // Pass onPageChange as onchange prop
-
-                    />
-                </> : <div className="h-[57vh] w-[100%] flex items-center justify-center ">
-                    <div className="">
-                        <p className="text-sm capitalize">No data to show. <span className=" cursor-pointer underline text-primaryColor font-semibold" onClick={() => setShowFilterMenu(!showFilterMenu)}> FILTER DATA</span></p>
-                    </div>
+                    }
                 </div>
-            }
+                <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
+
+                <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
+                <Hints keyName="Ctrl + A " label="Select All Record" />
+
+
+            </div>
+            <div className="mt-4 flex flex-col  gap-4
+                            sm:flex-row sm:items-center">
+                <Searchbar value={searchQuery} onChange={handleSearchChange} />
+            </div>
+            {/* } */}
+            {/* {filteredData?.length > 0 ?
+                <> */}
+            <TableWithoutAction
+                headers={
+                    searchDataName === "result"
+                        ? serviceTableHeader
+                        : searchDataName === "standard"
+                            ? serviceTableHeader
+                            : serviceTableHeader
+                }
+                tableData={isSearchData?.length > 0 ? isSearchData : isTodaySearchData}
+
+
+                getRowData={getUserIdFunction}
+            />
 
 
 
@@ -200,3 +398,19 @@ const LegalDelivery = () => {
     </div>
 }
 export default LegalDelivery
+
+
+{/* <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                dataLimit={dataLimit}
+                tableData={tableData?.tableData}
+                onchange={onPageChange} // Pass onPageChange as onchange prop
+
+            /> */}
+{/* </> : <div className="h-[57vh] w-[100%] flex items-center justify-center ">
+                    <div className="">
+                        <p className="text-sm capitalize">No data to show. <span className=" cursor-pointer underline text-primaryColor font-semibold" onClick={() => setShowFilterMenu(!showFilterMenu)}> FILTER DATA</span></p>
+                    </div>
+                </div>
+            } */}

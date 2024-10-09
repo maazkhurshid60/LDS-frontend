@@ -93,10 +93,10 @@ const ShowAllAddMailingAddress: React.FC<AddMailingProps> = ({ data, id }) => {
                     <label className=" font-normal sm:font-medium text-sm capitalize">zip</label>
                     <label className=" font-normal text-sm capitalize ml-10">{data?.zip}</label>
                 </div>
-                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                {/* <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                     <CheckBox
                         register={register} label="RRR" error={errors.rRR?.message} name="rRR" />
-                </div>
+                </div> */}
             </div>
         </form>
     </div>

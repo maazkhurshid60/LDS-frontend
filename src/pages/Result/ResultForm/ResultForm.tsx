@@ -197,8 +197,10 @@ const ResultForm = () => {
             serviceResultOtherFeatures: data?.serviceResultOtherFeatures,
             serviceResultDateOfMailing: data?.serviceResultDateOfMailing,
             serviceResultDateOfNotary: data?.serviceResultDateOfNotary,
-            corporateRecipient: data?.corporateRecipient,
-            substituteDeliveredTo: data?.substituteDeliveredTo,
+            serviceResultRecipient: data?.corporateRecipient,
+            serviceResultSubstitudeDeliveredTo: data?.substituteDeliveredTo,
+
+
         }
         if (isSearchResultForm === true) {
             const formatedStartDate = startDate !== null ? new Date(startDate) : null;
@@ -235,6 +237,7 @@ const ResultForm = () => {
             else {
                 const updatingData = { ...addingData, serviceFormId: allServiceForm[serviceFormIndex]?._id }
                 // HERE UPDATE SERVICE FORM API WILL BE CALLED
+                console.log(updatingData)
                 dispatch(updateServiceFormThunk(updatingData))
 
             }
@@ -358,7 +361,6 @@ const ResultForm = () => {
             }
             // Convert lTSFirstName to an array
             const lTSFirstNames = selectedSearchResultData[0]?.lTSFirstName?.split(",") || [];
-
             // Get the current served and not served arrays
             const currentServed = selectedSearchResultData[0]?.serviceResultlTServed === undefined || selectedSearchResultData[0]?.serviceResultlTServed === ""
                 ? []
@@ -373,6 +375,7 @@ const ResultForm = () => {
 
             // Remove names from currentServed that are not in lTSFirstNames
             const filteredServed = currentServed?.filter(name => lTSFirstNames?.includes(name));
+            console.log(currentServed, lTSFirstNames)
 
             // Remove names from currentNotServed that are not in lTSFirstNames
             const filteredNotServed = currentNotServed?.filter(name => lTSFirstNames?.includes(name));
@@ -391,9 +394,11 @@ const ResultForm = () => {
             setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.serviceResultOtherFeatures)
             setValue("serviceResultDateOfMailing", selectedSearchResultData[0]?.serviceResultDateOfMailing)
             setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
-            setValue("substituteDeliveredTo", selectedSearchResultData[0]?.substituteDeliveredTo)
-            setValue("corporateRecipient", selectedSearchResultData[0]?.corporateRecipient)
+            setValue("substituteDeliveredTo", selectedSearchResultData[0]?.serviceResultSubstitudeDeliveredTo)
+            setValue("corporateRecipient", selectedSearchResultData[0]?.serviceResultRecipient)
         }
+
+
         else {
             // STORE Current DATE OF THE INPUT DATE IN RESULT INPUT DATE STARTS ON NEWREULST FORM
 
@@ -528,8 +533,9 @@ const ResultForm = () => {
                 setValue("serviceResultOtherFeatures", allServiceForm[serviceFormIndex]?.serviceResultOtherFeatures)
                 setValue("serviceResultDateOfMailing", allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === "" || allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === undefined ? previousForm?.serviceResultDateOfMailing : allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing)
                 setValue("serviceResultDateOfNotary", allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === "" || allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === undefined ? previousForm?.serviceResultDateOfNotary : allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary)
-                setValue("substituteDeliveredTo", allServiceForm[serviceFormIndex]?.substituteDeliveredTo)
-                setValue("corporateRecipient", allServiceForm[serviceFormIndex]?.corporateRecipient)
+                setValue("serviceResultSubstitudeDeliveredTo", allServiceForm[serviceFormIndex]?.serviceResultSubstitudeDeliveredTo)
+                setValue("serviceResultRecipient", allServiceForm[serviceFormIndex]?.serviceResultRecipient)
+
 
                 setIsConspicuous(allServiceForm[serviceFormIndex]?.serviceResultResults)
                 setResultId(allServiceForm[serviceFormIndex]?.serviceResultResults)
@@ -736,7 +742,7 @@ const ResultForm = () => {
 
     const [isOpenResult, setIsOpenResult] = useState(false)
     const handleServerSelect = (event) => {
-
+        toast.success("l")
 
         if (event.key === 'Enter' || event.key === 'Tab') {
             setIsOpenResult(true);
@@ -751,31 +757,34 @@ const ResultForm = () => {
     const [isHightLIghtedLTNotServed, setIsHightLIghtedLTNotServed] = useState(false)
 
 
-    const moveToNextField = () => {
+    const moveToNextField = (event) => {
         const { serviceResultResults } = getValues()
+        if (event.key === 'Enter') {
 
-        if (serviceResultResults === "substitute") {
-            resultHandleEnterKeyPress(event, "_", 24)
+            if (serviceResultResults === "substitute") {
+                resultHandleEnterKeyPress(event, "_", 24)
+            }
+
+            else if (serviceResultResults === "conspicuous") {
+                resultHandleEnterKeyPress(event, "conspicuous", 28)
+
+            } else if (serviceResultResults === "personal" || serviceResultResults === "personalplus") {
+                resultHandleEnterKeyPress(event, "personal", 27)
+                // ltServedRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // setIsHightLIghtedLTServed(true)
+
+            }
+            // else if (serviceResultResults !== "substitute" && serviceResultResults !== "conspicuous") {
+            //     toast.success("s")
+            //     ltServedRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            //     setIsHightLIghtedLTServed(true)
+
+            // }
         }
 
-        else if (serviceResultResults === "conspicuous") {
-            resultHandleEnterKeyPress(event, "conspicuous", 28)
-
-        } else if (serviceResultResults === "personal" || serviceResultResults === "personalplus") {
-            resultHandleEnterKeyPress(event, "personal", 27)
-            // ltServedRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // setIsHightLIghtedLTServed(true)
-
-        }
-        // else if (serviceResultResults !== "substitute" && serviceResultResults !== "conspicuous") {
-        //     toast.success("s")
-        //     ltServedRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        //     setIsHightLIghtedLTServed(true)
-
-        // }
     }
     const moveToNotServed = (event) => {
-        alert('called');
+
         if (event.key === 'Enter') {
             ltNotServedRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -791,7 +800,7 @@ const ResultForm = () => {
     }
 
     const moveFromLtNotServed = (event) => {
-        alert('called2');
+
         if (event.key === "Enter") {
 
         }
@@ -1011,6 +1020,7 @@ const ResultForm = () => {
                                             field.onChange(option); // Call the function to update form state
                                             handleServerIdChange(option); // Call your additional logic
                                             setIsGotToServiceForm(false)
+                                            setIsOpenResult(true);
 
                                         }}
                                         label="server Id" error={errors.serviceResultServerId?.message as string}
@@ -1092,7 +1102,8 @@ const ResultForm = () => {
                                     <TextField onKeyDown={moveToNextFieldFromTimeTrip} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
                                     :
                                     // THIS INPUT IS EXTRA TO HANDLE NAVIGATION WHEN TIME TRIP FIELD IS VISIBLE 
-                                    <input className="opacity-0" />
+                                    <input className="opacity-0" onKeyDown={moveToNextFieldFromTimeTrip} />
+
                                 }
 
 

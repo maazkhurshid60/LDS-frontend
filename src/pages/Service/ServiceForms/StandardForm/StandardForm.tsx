@@ -158,7 +158,7 @@ const StandardForm = () => {
     useEffect(() => {
         if (selectedSearchServiceFormData?.length > 0) {
 
-            if (selectedSearchServiceFormData[0]?.oSSTIndexNo === null) setOStIndex("");
+            if (selectedSearchServiceFormData[0]?.oSSTIndexNo === null || selectedSearchServiceFormData[0]?.oSSTIndexNo === undefined) setOStIndex("");
             else setOStIndex(selectedSearchServiceFormData[0].oSSTIndexNo)
                 ,
                 setValue("oSSTDescription", selectedSearchServiceFormData[0]?.oSSTDescription),
@@ -178,7 +178,7 @@ const StandardForm = () => {
         }
         else if (!isNewFormAdding) {
 
-            if (allServiceFormData[serviceFormIndex]?.oSSTIndexNo === null) setOStIndex("");
+            if (allServiceFormData[serviceFormIndex]?.oSSTIndexNo === null || allServiceFormData[serviceFormIndex]?.oSSTIndexNo === undefined) setOStIndex("");
             else setOStIndex(allServiceFormData[serviceFormIndex]?.oSSTIndexNo)
 
             setValue("oSSTDescription", allServiceFormData[serviceFormIndex]?.oSSTDescription),
@@ -320,7 +320,7 @@ const StandardForm = () => {
             clientId,
             inputDate,
             oSSTDescription,
-            oSSTIndexNo: oSTIndex + "/" + currentYear,
+            oSSTIndexNo: oSTIndex === "" ? null : oSTIndex + "/" + currentYear,
             sSDCourt,
             sSDDefendants,
             sSDPlaintiff,

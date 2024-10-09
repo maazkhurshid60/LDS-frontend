@@ -42,7 +42,12 @@ const StandardTypeForm = () => {
     const filterMailingAddressDataOnFormAdding = Array.from(
         new Set(getMailingAddressDataOnFormAdding?.map(obj => JSON.stringify({
             _id: obj?._id,
-            firstName: obj?.firstName
+            firstName: obj?.firstName,
+            address: obj?.address,
+            apt: obj?.apt,
+            city: obj?.city,
+            zip: obj?.zip,
+            state: obj?.state,
         })))
     ).map(item => JSON.parse(item));
     // console.log("getMailingAddressDataOnFormAdding", getMailingAddressDataOnFormAdding)
@@ -50,8 +55,17 @@ const StandardTypeForm = () => {
     // GET ALL MAILING ADDRESSES THAT COMMING INSIDE THE FORMS 
     const getFormMailingAdress = useSelector((state: RootState) => state.mailingAdress?.serviceFormMailingAdress?.mailingAdresses)
     const filterExistingFormMailingAdress = getFormMailingAdress?.filter((obj1, i, arr) =>
-        arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
-    )
+        arr.findIndex(obj2 => {
+            // If _id exists, compare by _id
+            if (obj1?._id && obj2?._id) {
+                return obj2._id === obj1._id;
+            }
+            // If _id doesn't exist, compare by firstName
+            return obj2?.firstName === obj1?.firstName;
+        }) === i
+    );
+
+    console.log("filterExistingFormMailingAdress", getFormMailingAdress, filterExistingFormMailingAdress)
     const [checkedName, setCheckedName] = useState<string | null>()
 
     const allServiceFormData = useSelector((state: RootState) => state.serviceForm.allServiceFormData)
@@ -245,16 +259,18 @@ const StandardTypeForm = () => {
             setValue("lTSState", selectedSearchServiceFormData[0]?.lTSState);
             setValue("lTSZip", selectedSearchServiceFormData[0]?.lTSZip);
             setValue("lTSDescription", selectedSearchServiceFormData[0]?.lTSDescription);
+            setValue("lTSFirstName", selectedSearchServiceFormData[0]?.lTSFirstName);
+
             setCheckedName(selectedSearchServiceFormData[0]?.lTServiceType?._id);
             const data = selectedSearchServiceFormData[0]?.mailingAddresses
             const id = selectedSearchServiceFormData[0]?._id
             dispatch(getFormMailAddress({ data, id }))
-            if (selectedSearchServiceFormData[0]?.lTSFirstName) {
-                setMultipleFullname(selectedSearchServiceFormData[0]?.lTSFirstName.split(','));
-            }
-            else {
-                setMultipleFullname([]);
-            }
+            // if (selectedSearchServiceFormData[0]?.lTSFirstName) {
+            //     setMultipleFullname(selectedSearchServiceFormData[0]?.lTSFirstName.split(','));
+            // }
+            // else {
+            //     setMultipleFullname([]);
+            // }
         }
         else if (!isNewFormAdding) {
             const currentData = allServiceFormData[serviceFormIndex];
@@ -281,13 +297,15 @@ const StandardTypeForm = () => {
                 setValue("lTSState", currentData?.lTSState);
                 setValue("lTSZip", currentData?.lTSZip);
                 setValue("lTSDescription", currentData?.lTSDescription);
-                if (currentData?.lTSFirstName) {
-                    setMultipleFullname(currentData.lTSFirstName.split(','));
-                }
-                else {
-                    setMultipleFullname([]);
-                    setJoinedFullname(currentData?.lTSFirstName)
-                }
+                setValue("lTSFirstName", currentData?.lTSFirstName);
+
+                // if (currentData?.lTSFirstName) {
+                //     setMultipleFullname(currentData.lTSFirstName.split(','));
+                // }
+                // else {
+                //     setMultipleFullname([]);
+                //     setJoinedFullname(currentData?.lTSFirstName)
+                // }
                 setCheckedName(allServiceFormData[serviceFormIndex]?.lTServiceType?._id);
 
             } else {
@@ -318,7 +336,9 @@ const StandardTypeForm = () => {
             setValue("lTSState", savedLTData?.lTSState);
             setValue("lTSZip", savedLTData?.lTSZip);
             setValue("lTSDescription", savedLTData?.lTSDescription);
-            { savedLTData?.lTSFirstName && setMultipleFullname(savedLTData?.lTSFirstName.split(',')); }
+            setValue("lTSFirstName", savedLTData?.lTSFirstName);
+
+            // { savedLTData?.lTSFirstName && setMultipleFullname(savedLTData?.lTSFirstName.split(',')); }
             setCheckedName(savedLTData?.lTServiceType?._id);
             setCheckedName(savedLTData?.lTServiceType)
         }
@@ -399,7 +419,9 @@ const StandardTypeForm = () => {
             lTServiceType: checkedName,
             noOfAddLMailings: isNewFormAdding ? getMailingAddressDataOnFormAdding?.length : getFormMailingAdress?.length,
             mailingAddresses: isNewFormAdding ? getMailingAddressDataOnFormAdding : getFormMailingAdress,
-            lTSFirstName: joinedFullname === "" ? allServiceFormData[serviceFormIndex]?.lTSFirstName : joinedFullname,
+            // lTSFirstName: joinedFullname === "" ? allServiceFormData[serviceFormIndex]?.lTSFirstName : joinedFullname,
+            lTSFirstName: data?.lTSFirstName,
+
             lTSBusinessName: data?.lTSBusinessName,
 
             lTSAddress: data?.lTSAddress,
@@ -415,7 +437,6 @@ const StandardTypeForm = () => {
             lTSCityLatitude: ""
         }
 
-        console.log(LTData)
 
         //    DATA FOR L&T FORM ENDS
 
@@ -479,25 +500,25 @@ const StandardTypeForm = () => {
         };
     }, [handleSubmit, StandardTypeFormSubmitFunciton]);
     const onKeyPressForAnotherName = (e) => {
-        if (e.key === "Tab") {
+        if (e.key === "Enter") {
             e.preventDefault()
             handleEnterKeyPress(event, "residential", allIndex)
         }
-        if (e.key === 'Enter') {
-            e.preventDefault();
+        // if (e.key === 'Enter') {
+        //     e.preventDefault();
 
-            if (multipleFullname.includes(e.target.value)) {
-                toast.error("Duplicate data can't be entered");
-            } else {
-                const updatedFullname = [...multipleFullname, e.target.value];
-                setMultipleFullname(updatedFullname);
+        //     if (multipleFullname.includes(e.target.value)) {
+        //         toast.error("Duplicate data can't be entered");
+        //     } else {
+        //         const updatedFullname = [...multipleFullname, e.target.value];
+        //         setMultipleFullname(updatedFullname);
 
-                const joinedNames = updatedFullname.join(',');
-                setJoinedFullname(joinedNames);
-            }
+        //         const joinedNames = updatedFullname.join(',');
+        //         setJoinedFullname(joinedNames);
+        //     }
 
-            setInputFullname("");
-        }
+        //     setInputFullname("");
+        // }
 
 
     }
@@ -514,7 +535,6 @@ const StandardTypeForm = () => {
         event.preventDefault();
         const { caption, caseNo,
             clientId,
-            inputDate,
             lTSAddress,
             lTSBusinessName,
             lTSZip,
@@ -524,26 +544,30 @@ const StandardTypeForm = () => {
             lTSFirstName,
 
             lTSDescription,
-
+            oLTIndexNo,
+            oLTDescription,
             serviceType,
             lTServiceType
         } = getValues();
         const caseNooo = parseInt(caseNo ?? '0')
         setJoinedFullname(multipleFullname.join(","))
-
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().split('T')[0];
         const sendDataToAddApi = {
             jobNo: allServiceFormData[allServiceFormData?.length - 1]?.jobNo + 1,
             caption,
             caseNo: parseInt(caseNo ?? '0'),
             clientId,
-            inputDate,
-            lTSFirstName: joinedFullname,
+            inputDate: formattedDate,
+            lTSFirstName: lTSFirstName,
             oSSTDescription: selectedSearchServiceFormData[0]?.oSSTDescription,
             oSSTIndexNo: selectedSearchServiceFormData[0]?.oSSTIndexNo,
             sSDCourt: selectedSearchServiceFormData[0]?.sSDCourt,
             sSDDefendants: selectedSearchServiceFormData[0]?.sSDDefendants,
             sSDPlaintiff: selectedSearchServiceFormData[0]?.sSDPlaintiff,
             lTSAddress,
+            oLTIndexNo: oLTIndex === "" ? null : oLTIndex + "/" + currentYear,
+            oLTDescription,
             standardServiceType: selectedSearchServiceFormData[0]?.standardServiceType,
             lTSBusinessName,
             lTSZip,
@@ -556,7 +580,7 @@ const StandardTypeForm = () => {
             mailingAddresses: filterExistingFormMailingAdress,
             noOfMailingAddres: filterExistingFormMailingAdress?.length
         }
-
+        console.log("oLTIndexNo", oLTIndex)
         dispatch(addServiceFormThunk(sendDataToAddApi))
     }
 
@@ -654,9 +678,25 @@ const StandardTypeForm = () => {
 
     useEffect(() => { setOpenServiceType(false) }, [isNewFormAdding])
 
+    // const handleClientSelect = (event: React.KeyboardEvent) => {
+    //     if (event.key === 'Enter' || event.key === 'Tab') {
+    //         // Handle Enter or Tab key press
+    //         event.preventDefault(); // Prevent default behavior for Enter or Tab key
+    //         toast.success("cal"); // Show toast when Enter or Tab is pressed
+
+    //         // Focus and open the service type dropdown
+    //         if (serviceTypeRef.current) {
+    //             serviceTypeRef.current.focus(); // Focus the service type dropdown
+    //             setOpenServiceType(true); // Open the service type options
+    //         }
+    //     }
+    // };
+
+
     const handleClientSelect = (event) => {
 
 
+        toast.success("cal")
         if (event.key === 'Enter' || event.key === 'Tab') {
             setOpenServiceType(true);
         }
@@ -756,8 +796,20 @@ const StandardTypeForm = () => {
                                         label="Client id" error={errors.clientId?.message as string}
                                         required
                                         isOpenOption={isNewFormAdding}
+                                        // onChange={(value) => {
+                                        //     field.onChange(value);
+                                        // }}
                                         onChange={(value) => {
-                                            field.onChange(value);
+                                            field.onChange(value); // Update the field value
+                                            // You can call handleEnterKeyPress with default or context values
+                                            const simulatedEvent = {
+                                                target: {
+                                                    form: document.querySelector("form"), // Assuming the dropdown is in a form
+                                                },
+                                            };
+                                            setOpenServiceType(true);
+
+                                            handleEnterKeyPress(simulatedEvent, value, 0); // Call your function with simulated event
                                         }}
                                         onKeyDown={handleClientSelect}
                                         id="clientId"
@@ -789,7 +841,7 @@ const StandardTypeForm = () => {
                                         required
 
                                         ref={serviceTypeRef}
-                                        onKeyDown={handleClientSelect}
+                                        // onKeyDown={handleClientSelect}
                                         id="serviceType"
                                         isOpenOption={openServiceTypeOptions}
                                     />
@@ -861,7 +913,7 @@ const StandardTypeForm = () => {
             lg:text-xl">L&T Service Detail</h1>
                             <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-between ">
 
-                                <div className="w-[100%] md:w-[46%] lg:w-[30%]" >
+                                {/* <div className="w-[100%] md:w-[46%] lg:w-[30%]" >
                                     <div className="flex flex-col w-full items-start gap-1 flex-wrap">
                                         <label className=" font-normal sm:font-medium text-sm capitalize">Full Name</label>
                                         <div className="flex items-center flex-wrap gap-x-2 w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1 text-wrap">
@@ -885,6 +937,9 @@ const StandardTypeForm = () => {
                                             />
                                         </div>
                                     </div>
+                                </div> */}
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField ref={businessNameRef} onKeyDown={(e) => onKeyPressForAnotherName(e)} register={register} label="Name" error={errors.lTSFirstName} name="lTSFirstName" />
                                 </div>
                                 <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                     <TextField ref={businessNameRef} onKeyDown={handleEnterKeyPress} register={register} label="bussiness Name" error={errors.lTSBusinessName} name="lTSBusinessName" />

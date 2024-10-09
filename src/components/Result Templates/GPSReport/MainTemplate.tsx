@@ -18,7 +18,7 @@ const GPSReport = () => {
     const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData);
     const [resultData, setResultData] = useState([]);
     const mapKey = "AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg"
-
+    console.log("<<<<<<<<<<", resultData)
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg",
         libraries: libraries
@@ -26,7 +26,7 @@ const GPSReport = () => {
 
 
     const getLatiLongi = (allAddresses) => {
-        if (isLoaded && allAddresses.length > 0) {
+        if (isLoaded && allAddresses?.length > 0) {
             const geoCoder = new window.google.maps.Geocoder();
             const allResults = []; // Array to hold all address results
 
@@ -39,9 +39,9 @@ const GPSReport = () => {
                     // For valid addresses, geocode them
                     const geocodePromise = new Promise((resolve) => {
                         geoCoder.geocode({ address }, (results, status) => {
-                            if (status === "OK" && results.length > 0) {
-                                const location = results[0].geometry.location;
-                                resolve({ lat: location.lat(), lng: location.lng(), address, valid: true });
+                            if (status === "OK" && results?.length > 0) {
+                                const location = results[0]?.geometry?.location;
+                                resolve({ lat: location?.lat(), lng: location?.lng(), address, valid: true });
                             } else {
                                 resolve({ address, valid: false }); // Store the invalid address
                             }
@@ -58,12 +58,11 @@ const GPSReport = () => {
             });
         }
     };
-    console.log("<<<<<<", address)
 
     // Populate data based on `legalDeliveryDataa`
     useEffect(() => {
-        if (legalDeliveryDataa?.data && Array.isArray(legalDeliveryDataa.data)) {
-            setResultData(legalDeliveryDataa.data);
+        if (legalDeliveryDataa?.data && Array?.isArray(legalDeliveryDataa?.data)) {
+            setResultData(legalDeliveryDataa?.data);
         }
     }, [legalDeliveryDataa]);
 
@@ -97,8 +96,9 @@ const GPSReport = () => {
             <div ref={TransPerSlipReportPrintRef} className="p-6 bg-whiteColor capitalize">
                 <div className="flex ">
                     <div className="w-[60%] ">
-                        {resultData.map((item, index) => (
+                        {resultData?.map((item, index) => (
                             <div key={index} className="mb-6 w-[100%] mt-2  h-[100vh]">
+                                {console.log("<><><>", item?.address)}
                                 <h2 className="font-bold">Record #{index + 1}</h2>
                                 <div className="flex items-start justify-center gap-y-6 w-[100%] h-[60vh] ">
                                     {/* LEFT PART STARTS */}
@@ -152,16 +152,16 @@ const GPSReport = () => {
                             </div>
                         ))}</div>
                     <div className="w-[35%] ">
-                        {address.length > 0 ? address.map((item, idx) => (
+                        {address?.length > 0 ? address?.map((item, idx) => (
                             <div className="mt-2 h-[100vh]" key={idx}>
                                 {item.valid ? (
                                     <GoogleMap
-                                        center={{ lat: item.lat, lng: item.lng }}
+                                        center={{ lat: item?.lat, lng: item?.lng }}
                                         zoom={15}
                                         mapContainerStyle={{ height: "60vh" }}
                                     >
                                         <MarkerF
-                                            position={{ lat: item.lat, lng: item.lng }}
+                                            position={{ lat: item?.lat, lng: item?.lng }}
                                             label={`Location ${idx}`} // Use dynamic label
                                         />
                                     </GoogleMap>

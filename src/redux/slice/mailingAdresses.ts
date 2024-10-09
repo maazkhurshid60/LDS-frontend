@@ -50,13 +50,17 @@ const mailingAdresses = createSlice({
         getMailAddress: (state, action) => {
             if (action.payload?.firstName) {
                 const onemail = action.payload
+                console.log("getMailAddress if", onemail)
                 state.getSelectMail.push(onemail)
+
             }
             else {
 
                 const allMailingData = JSON.stringify(state.mailingAddressData)
                 const allMailDataArray = JSON.parse(allMailingData)
                 const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
+                console.log("getMailAddress else", onemail)
+
 
                 state.getSelectMail.push(onemail)
             }
@@ -83,6 +87,7 @@ const mailingAdresses = createSlice({
             if (action.payload?.firstName) {
                 const onemail = action.payload
                 state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
+                console.log("state?.servuce", state?.serviceFormMailingAdress)
             }
             else {
 
@@ -91,7 +96,8 @@ const mailingAdresses = createSlice({
                 const onemail = allMailDataArray?.find((mail, id) => mail._id === action.payload)
                 state?.serviceFormMailingAdress?.mailingAdresses?.push(onemail)
             }
-        },
+        }
+        ,
 
         getFormMailAddressAfterDeletion: (state, action) => {
             const allMailingData = JSON.stringify(state.serviceFormMailingAdress.mailingAdresses)
@@ -174,6 +180,8 @@ export const getAllMailingAddressThunk = createAsyncThunk("getAllMailingAddress"
 // API FOR GET ALL MAILING ADDRESS ENDS
 // API FOR CREATE MAILING ADDRESS STARTS
 export const createMailingAddressThunk = createAsyncThunk("createAllMailingAddress", async (data: maillingType[], { dispatch }) => {
+
+    console.log("data", data)
     try {
         const response = await axios.post(`${baseUrl}/mailing-address/create`, data, {
             headers: {
