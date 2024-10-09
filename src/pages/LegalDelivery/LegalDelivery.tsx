@@ -17,7 +17,6 @@ import { RootState } from "../../redux/store";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 import { toast } from "react-toastify";
 import Hints from "../Result/Hints/Hints";
-import { getAllServiceFormThunk } from "../../redux/slice/serviceForm";
 const LegalDelivery = () => {
     const [showFilterMenu, setShowFilterMenu] = useState(false)
     const [showDropDown, setShowDropDown] = useState(false)
@@ -356,6 +355,7 @@ const LegalDelivery = () => {
                                             size={12}
                                             className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
                                         />
+                                    </p>
                                 </div>
                                 {showDropDown &&
                                     <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
@@ -370,7 +370,7 @@ const LegalDelivery = () => {
                                 }
                             </div>
                             <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
-                        </p>
+                        </div>
                         <IoIosArrowDown
                             size={12}
                             className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
@@ -417,8 +417,7 @@ const LegalDelivery = () => {
 
                 getRowData={getUserIdFunction}
             />
-            getRowData={getUserIdFunction}
-            />
+
 
 
 
@@ -429,17 +428,3 @@ const LegalDelivery = () => {
 export default LegalDelivery
 
 
-{/* <Pagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                dataLimit={dataLimit}
-                tableData={tableData?.tableData}
-                onchange={onPageChange} // Pass onPageChange as onchange prop
-
-            /> */}
-{/* </> : <div className="h-[57vh] w-[100%] flex items-center justify-center ">
-                    <div className="">
-                        <p className="text-sm capitalize">No data to show. <span className=" cursor-pointer underline text-primaryColor font-semibold" onClick={() => setShowFilterMenu(!showFilterMenu)}> FILTER DATA</span></p>
-                    </div>
-                </div>
-            } */}
