@@ -17,6 +17,7 @@ import { RootState } from "../../redux/store";
 import { usePaginationCalc } from "../../hooks/paginationCalc/usePaginationCalc";
 import { toast } from "react-toastify";
 import Hints from "../Result/Hints/Hints";
+import { getAllServiceFormThunk } from "../../redux/slice/serviceForm";
 const LegalDelivery = () => {
     const [showFilterMenu, setShowFilterMenu] = useState(false)
     const [showDropDown, setShowDropDown] = useState(false)
@@ -342,9 +343,33 @@ const LegalDelivery = () => {
             <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                 <div ref={dropdownRef}>
                     <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
+                        {/* {filteredData?.length > 0 && */}
+                        <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
+                            <div ref={dropdownRef}>
+                                <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
 
-                        <p className="" >Affidavits Reports
+                                    <p className="" >Affidavits Reports
+                                        <p className="" >Affidavits Reports
 
+                                        </p>
+                                        <IoIosArrowDown
+                                            size={12}
+                                            className={`${showDropDown ? "rotate-[180deg]" : "rotate-[0deg]"}`}
+                                        />
+                                </div>
+                                {showDropDown &&
+                                    <div className="absolute bg-whiteColor rounded-md border-solid border-[1px] border-borderColor mt-2 font-normal text-xs flex flex-col gap-y-1  p-2 z-50">
+                                        <Link to="/operations/legal-delivery/agency-license" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Agency License</Link>
+                                        <Link to="/operations/legal-delivery/li-non-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Li Non Reports</Link>
+                                        <Link to="/operations/legal-delivery/lT-extra-name-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >L&T Extra Name Reports</Link>
+                                        <Link to="/operations/legal-delivery/marshal-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Marshal Reports</Link>
+                                        <Link to="/operations/legal-delivery/non-mil-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Non Mil Reports</Link>
+                                        <Link to="/operations/legal-delivery/standard-reports" target="_blank" className="cursor-pointer" onClick={handlePrint}  >Standard Reports</Link>
+                                        <Link to="/operations/legal-delivery/trans-per-slip-reports" target="_blank" className="cursor-pointer" onClick={handlePrint} >Trans Per Slip Reports</Link>
+                                    </div>
+                                }
+                            </div>
+                            <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
                         </p>
                         <IoIosArrowDown
                             size={12}
@@ -365,6 +390,8 @@ const LegalDelivery = () => {
                 </div>
                 <Link to="/operations/legal-delivery/gps-report" target="_blank" className="cursor-pointer"  >GPS Report</Link>
 
+                <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
+                <Hints keyName="Ctrl + A " label="Select All Record" />
                 <p className="cursor-pointer" onClick={() => dispatch(emptyLegalDeliveryReducer())}>clear filter</p>
                 <Hints keyName="Ctrl + A " label="Select All Record" />
 
@@ -389,6 +416,8 @@ const LegalDelivery = () => {
 
 
                 getRowData={getUserIdFunction}
+            />
+            getRowData={getUserIdFunction}
             />
 
 
