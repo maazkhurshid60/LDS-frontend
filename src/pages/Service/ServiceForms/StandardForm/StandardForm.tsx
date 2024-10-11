@@ -58,6 +58,7 @@ const StandardForm = () => {
     const selectedSearchServiceFormData = useSelector((state: RootState) => state.serviceForm.selectedSearchServicetData)
     const getSearchExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const getSearchExistingSelectedServiceType = serviceTypeOptions?.find((data, index) => data?.value === selectedSearchServiceFormData[0]?.serviceType?._id && { value: data?._id, label: data?.fullName })
+    const [openClientId, setOpenClient] = useState(false)
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'F4') {
@@ -90,7 +91,7 @@ const StandardForm = () => {
         // if (checkedName === null) return setCheckedName("empty")
         const serviceFormData: any = allServiceFormData[0];
         const standardServiceDetail = {
-            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: oSTIndex + "/" + currentYear, oSSTDescription: data?.oSSTDescription,
+            sSDCourt: data?.sSDCourt, sSDDefendants: data?.sSDDefendants, sSDPlaintiff: data?.sSDPlaintiff, sSDCountry: data?.sSDCountry, oSSTIndexNo: oSTIndex, oSSTDescription: data?.oSSTDescription,
             firstNameServe: data?.firstNameServe, addressServe: data?.addressServe, cityServe: data?.cityServe, stateServe: data?.stateServe, aptServe: data?.aptServe, zipServe: data?.zipServe
         }
 
@@ -349,22 +350,21 @@ const StandardForm = () => {
     const checkboxRefs = useRef<(HTMLInputElement | null)[]>([]);
     const [allIndex, setAllIndex] = useState()
     useEffect(() => { setAllIndex(standardServiceTypesData?.length + 2) }, [standardServiceTypesData])
-
     const handleEnterKeyPressCheckboxFocus = (event: React.KeyboardEvent) => {
-
-        if (event.key === 'Enter' || event.key === 'Tab') {
+        const { serviceType } = getValues(); // Assuming this gets the form values
+        if (event.key === 'Enter') {
             event.preventDefault(); // Prevent default form submission
+
             const currentFocusedElement = document.activeElement;
-            const currentCheckboxIndex = checkboxRefs?.current?.findIndex(ref => ref === currentFocusedElement);
+            const currentCheckboxIndex = checkboxRefs.current.findIndex(ref => ref === currentFocusedElement);
+
             if (currentCheckboxIndex >= 0) {
-                const currentCheckbox = checkboxRefs?.current[currentCheckboxIndex] as HTMLInputElement;
+                const currentCheckbox = checkboxRefs.current[currentCheckboxIndex] as HTMLInputElement;
 
                 // Check if the current checkbox is checked
-                if (currentCheckbox?.checked) {
+                if (currentCheckbox.checked) {
                     // If checked, move to the next input based on selected service type
-
                     handleEnterKeyPress(event, "checkbox", allIndex)// Move to the Index Number input
-
                 } else {
                     // If not checked, focus the next checkbox
                     const nextCheckbox = checkboxRefs.current[currentCheckboxIndex + 1];
@@ -372,7 +372,7 @@ const StandardForm = () => {
                         nextCheckbox.focus();
                     } else {
                         // If no more checkboxes, focus on the first checkbox or another input as needed
-                        checkboxRefs.current[0]?.focus(); // Fallback to first checkbox
+                        handleEnterKeyPress(event, "checkbox", allIndex); // Fallback to first checkbox
                     }
                 }
             } else {
@@ -383,8 +383,45 @@ const StandardForm = () => {
                     checkboxRefs.current[0]?.focus();
                 }
             }
+        } else if (event.key === 'Tab' && event.shiftKey) {
+            handleEnterKeyPress("", "", 1)
         }
     };
+    // const handleEnterKeyPressCheckboxFocus = (event: React.KeyboardEvent) => {
+
+    //     if (event.key === 'Enter' || event.key === 'Tab') {
+    //         event.preventDefault(); // Prevent default form submission
+    //         const currentFocusedElement = document.activeElement;
+    //         const currentCheckboxIndex = checkboxRefs?.current?.findIndex(ref => ref === currentFocusedElement);
+    //         if (currentCheckboxIndex >= 0) {
+    //             const currentCheckbox = checkboxRefs?.current[currentCheckboxIndex] as HTMLInputElement;
+
+    //             // Check if the current checkbox is checked
+    //             if (currentCheckbox?.checked) {
+    //                 // If checked, move to the next input based on selected service type
+
+    //                 handleEnterKeyPress(event, "checkbox", allIndex)// Move to the Index Number input
+
+    //             } else {
+    //                 // If not checked, focus the next checkbox
+    //                 const nextCheckbox = checkboxRefs.current[currentCheckboxIndex + 1];
+    //                 if (nextCheckbox) {
+    //                     nextCheckbox.focus();
+    //                 } else {
+    //                     // If no more checkboxes, focus on the first checkbox or another input as needed
+    //                     checkboxRefs.current[0]?.focus(); // Fallback to first checkbox
+    //                 }
+    //             }
+    //         } else {
+    //             // If focused on caption or any other input, focus the first checkbox
+    //             if (currentFocusedElement === caseNoRefs?.current) {
+    //                 checkboxRefs.current[0]?.focus();
+    //             } else {
+    //                 checkboxRefs.current[0]?.focus();
+    //             }
+    //         }
+    //     }
+    // };
     useEffect(() => {
         // Focus the TextField when the component mounts
         if (caseNoRefs.current) {
@@ -425,9 +462,22 @@ const StandardForm = () => {
                                         options={clientIdOptions}
                                         // singleOption={getSelectedClientoption}
                                         value={field.value}
-                                        onChange={field.onChange}
+                                        // onChange={field.onChange}
+                                        onChange={(value) => {
+                                            field.onChange(value); // Update the field value
+                                            // You can call handleEnterKeyPress with default or context values
+                                            const simulatedEvent = {
+                                                target: {
+                                                    form: document.querySelector("form"), // Assuming the dropdown is in a form
+                                                },
+                                            };
+                                            setOpenClient(false);
+
+                                            handleEnterKeyPress(simulatedEvent, value, 2); // Call your function with simulated event
+                                        }}
                                         label="Client id" error={errors.clientId?.message as string}
                                         required
+                                        isOpenOption={isNewFormAdding || openClientId}
                                     />
                                 )} />
                             </div>
@@ -473,9 +523,20 @@ const StandardForm = () => {
                                 <TextField onKeyDown={handleEnterKeyPress} register={register} label="Other Standard Description" error={errors.oSSTDescription} name="oSSTDescription" />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <FormatedIndexInputField
-                                    onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oLTIndexNo" oltIndexValue={oSTIndex}
+                                {/* <FormatedIndexInputField
+                                    onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oSSTIndexNo} name="oSTIndex" oltIndexValue={oSTIndex}
                                     onChange={setOStIndex} year={currentYear}
+                                /> */}
+
+                                <FormatedIndexInputField
+                                    onKeyDown={handleEnterKeyPress}
+                                    register={register}
+                                    label="Index Number"
+                                    error={errors.oSSTIndexNo}
+                                    name="oSTIndex"
+                                    oltIndexValue={oSTIndex} // Provide the value to split
+                                    onChange={setOStIndex}
+                                    year={currentYear} // Pass current year
                                 />
                             </div>
                         </div>

@@ -28,6 +28,9 @@ const Standard = () => {
             ...searchData, oSSTIndexNo
         }
         const sendingData = { searchIn: "standard", data }
+        console.log(searchData)
+        dispatch(getAllFilteredDataThunk(searchData))
+
     }
     useEffect(() => {
         const handleKeyPress = (event) => {

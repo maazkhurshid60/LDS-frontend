@@ -196,7 +196,7 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
         toast.error("Something went wrong. Try Later")
     } finally {
         dispatch(showSpinnerReducer(false))
-        // window.location.reload();
+        window.location.reload();
 
     }
 })

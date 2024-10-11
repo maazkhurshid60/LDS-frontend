@@ -251,7 +251,50 @@ const LegalDelivery = () => {
 
 
 
-    useEffect(() => { setIsSearchData(filteredData) }, [filteredData])
+    useEffect(() => {
+        setIsSearchData(Array.isArray(filteredData)
+            && filteredData
+                .filter((data) => {
+                    const searchLower = searchQuery.toLowerCase(); // Convert search query to lowercase for case-insensitive search
+                    return (
+                        data?.jobNo?.toString().toLowerCase().includes(searchLower) ||
+                        data?.inputDate?.toLowerCase().includes(searchLower) ||
+                        data?.clientId?.code?.toLowerCase().includes(searchLower) ||
+                        data?.serviceType?.serviceTypeCode?.toLowerCase().includes(searchLower) ||
+                        data?.caseNo?.toString().toLowerCase().includes(searchLower) ||
+                        data?.caption?.toLowerCase().includes(searchLower) ||
+                        data?.lTServiceType?.name?.toLowerCase().includes(searchLower) ||
+                        data?.oLTIndexNo?.toString().toLowerCase().includes(searchLower) ||
+                        data?.oLTDescription?.toLowerCase().includes(searchLower) ||
+                        data?.lTSFirstName?.toLowerCase().includes(searchLower) ||
+                        data?.lTSBusinessName?.toLowerCase().includes(searchLower) ||
+                        data?.lTSZip?.toString().toLowerCase().includes(searchLower) ||
+                        data?.lTSState?.toLowerCase().includes(searchLower) ||
+                        data?.lTSCity?.toLowerCase().includes(searchLower) ||
+                        data?.lTSApt?.toLowerCase().includes(searchLower) ||
+                        data?.lTSAddress?.toLowerCase().includes(searchLower) ||
+                        data?.lTSDescription?.toLowerCase().includes(searchLower)
+                    );
+                })
+                .map(item => ({
+                    _id: item?._id,
+                    jobNo: item?.jobNo,
+                    clientCode: item?.clientId?.code,
+                    inputDate: item?.inputDate,
+                    serverCode: item?.serviceResultServerId?.serverCode,
+                    fullName: item?.lTSFirstName,
+                    casePaperType: "",  // Static value
+                    bussinessName: item?.lTSBusinessName,
+                    address: item?.lTSAddress,
+                    caption: item?.caption,
+                    city: item?.lTSCity,
+                    zip: item?.lTSZip,
+                    servCity: item?.cityServe,
+                    caseNo: item?.caseNo,
+                    serviceType: item?.serviceType?.serviceTypeDescription
+                }))
+        )
+    }, [filteredData])
     useEffect(() => {
         setIsTodaySearchData(
 
@@ -306,21 +349,8 @@ const LegalDelivery = () => {
                     caseNo: item?.caseNo,
                     serviceType: item?.serviceType?.serviceTypeDescription
                 }))
-
-
-
-
         )
-
-
-
-
     }, [searchQuery])
-
-
-
-
-
     return <div className="w-[95%] m-auto">
         <div className="relative bg-whiteColor ">
             {/* <div className={`absolute -top-4 sm:-top-6 md:-top-24  flex items-start transition-all duration-500 z-50  ${showFilterMenu ? "-right-5 xl:-right-[52px]" : "-right-5 xl:-right-[52px]"}`} > */}
@@ -341,7 +371,7 @@ const LegalDelivery = () => {
             {/* {filteredData?.length > 0 && */}
             <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                 <div ref={dropdownRef}>
-                    <div className="flex flex-row items-center gap-x-1 cursor-pointer" onClick={() => setShowDropDown(!showDropDown)}>
+                    <div className="flex flex-row items-center gap-x-1 cursor-pointer" >
                         {/* {filteredData?.length > 0 && */}
                         <div className="flex flex-wrap items-center gap-x-8 justify-start font-medium text-sm mt-4 capitalize">
                             <div ref={dropdownRef}>

@@ -17,7 +17,7 @@ import { IoMdClose } from "react-icons/io";
 import { LTFormSchema } from "../../../../schemas/service forms/L&TFormSchema";
 import { useGetAllData } from "../../../../hooks/getAllDataHook/useGetAllData";
 import Button from "../../../../components/Buttons/Button/Button";
-import { addServiceFormThunk, getAllServiceFormThunk, getIsSearchServiceForm, isDataSaveReducer, moveToStandardFormReducer, savedLTFormDataReducer, searchServiceFormThunk, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
+import { addNewFormAddReducer, addServiceFormThunk, getAllServiceFormThunk, getIsSearchServiceForm, isDataSaveReducer, moveToStandardFormReducer, savedLTFormDataReducer, searchServiceFormThunk, updateServiceFormThunk } from "../../../../redux/slice/serviceForm";
 import Hints from "../../../Result/Hints/Hints";
 import ShowAllAddMailingAddress from "./ShowAllMailingAddress";
 import { toast } from "react-toastify";
@@ -138,7 +138,6 @@ const StandardTypeForm = () => {
 
     // SEARCH SERVICE FORM ENDS
 
-
     // handleMoveToStandardForm
     const handleMoveToStandardForm = (value) => {
         // Destructure the required values from the form
@@ -209,9 +208,9 @@ const StandardTypeForm = () => {
     // const [isAddMail, dispatch(isAddingMailAddressReducer] = us)eState(false)
     const handleCheckboxChange = (data: any) => {
         setCheckedName(data?._id);
-        if (data?.name === 'Other L&T') {
-            detailSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }
+        // if (data?.name === 'Other L&T') {
+        //     detailSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+        // }
     };
 
     // GET SELECTED VALUES FROM ADD MAILING DROPDOWN
@@ -367,7 +366,6 @@ const StandardTypeForm = () => {
                 setJobNo(1)
             }
 
-
         }
     }, [isNewFormAdding])
     // THIS WILL SEND DATA OF MAILING ADDRESS INSIDE EXISTING FORM TO getFormMailAddress
@@ -388,7 +386,6 @@ const StandardTypeForm = () => {
         const [day, month, year] = parts;
         return `${year}-${month}-${day}`;
     };
-
 
     const StandardTypeFormSubmitFunciton = (data) => {
         //    DATA FOR STANDARD FORM STARTS
@@ -431,17 +428,17 @@ const StandardTypeForm = () => {
             lTSZip: data?.lTSZip,
 
             lTSDescription: data?.lTSDescription,
-            oLTIndexNo: oLTIndex === "" ? null : oLTIndex + "/" + currentYear,
+            // oLTIndexNo: oLTIndex === "" ? null : oLTIndex + "/" + currentYear,
+            oLTIndexNo: oLTIndex === "" ? null : oLTIndex,
+
             oLTDescription: data?.oLTDescription,
             lTSCityLongitude: "",
             lTSCityLatitude: ""
         }
 
-
         //    DATA FOR L&T FORM ENDS
 
         const updatedData = { ...LTData, standardServiceDetail, serviceFormId, standardServiceType: allServiceFormData[serviceFormIndex]?.standardServiceType?._id }
-
 
         // if (checkedName === null) setCheckedName("empty")
         // IF SEARCH FORM TRUE
@@ -520,7 +517,6 @@ const StandardTypeForm = () => {
         //     setInputFullname("");
         // }
 
-
     }
     const deleteName = (data) => {
         const freshData = multipleFullname?.filter(multipleFullname => multipleFullname !== data)
@@ -529,7 +525,6 @@ const StandardTypeForm = () => {
     }
 
     // ADD DUPLICATE SERVICE FORM
-
 
     const addDuplicateServiceForm = (event) => {
         event.preventDefault();
@@ -566,7 +561,9 @@ const StandardTypeForm = () => {
             sSDDefendants: selectedSearchServiceFormData[0]?.sSDDefendants,
             sSDPlaintiff: selectedSearchServiceFormData[0]?.sSDPlaintiff,
             lTSAddress,
-            oLTIndexNo: oLTIndex === "" ? null : oLTIndex + "/" + currentYear,
+            // oLTIndexNo: oLTIndex === "" ? null : oLTIndex + "/" + currentYear,
+            oLTIndexNo: oLTIndex === "" ? null : oLTIndex,
+
             oLTDescription,
             standardServiceType: selectedSearchServiceFormData[0]?.standardServiceType,
             lTSBusinessName,
@@ -583,7 +580,6 @@ const StandardTypeForm = () => {
         console.log("oLTIndexNo", oLTIndex)
         dispatch(addServiceFormThunk(sendDataToAddApi))
     }
-
 
 
 
@@ -633,6 +629,10 @@ const StandardTypeForm = () => {
     const checkboxRefs = useRef<(HTMLInputElement | null)[]>([]);
     const serviceTypeRef = useRef<any>(null);
     const [openServiceTypeOptions, setOpenServiceType] = useState(false)
+    const [openClientTypeOptions, setOpenClientType] = useState(false)
+    const [openMailingAddressOptions, setOpenMailingAddressOptions] = useState(false)
+
+
     const [shouldFocusCaption, setShouldFocusCaption] = useState("");
     const [allIndex, setAllIndex] = useState()
     useEffect(() => { setAllIndex(LTServiceData?.length + 2) }, [LTServiceData])
@@ -640,9 +640,60 @@ const StandardTypeForm = () => {
     const bussinessnameRef = useRef<HTMLInputElement>(null);
     const desRef = useRef<HTMLInputElement>(null);
 
+    // const handleEnterKeyPressCheckboxFocus = (event: React.KeyboardEvent) => {
+    //     const { serviceType } = getValues(); // Assuming this gets the form values
+    //     const currentFocusedElement = document.activeElement;
+    //     const currentCheckboxIndex = checkboxRefs.current.findIndex(ref => ref === currentFocusedElement);
+    //     event.preventDefault();
+    //     if (event.key === 'Enter') {
+    //         event.preventDefault(); // Prevent default form submission
+
+    //         if (currentCheckboxIndex >= 0) {
+    //             const currentCheckbox = checkboxRefs.current[currentCheckboxIndex] as HTMLInputElement;
+
+    //             // Check if the current checkbox is checked
+    //             if (currentCheckbox.checked) {
+    //                 // If checked, move to the next input based on selected service type
+    //                 handleEnterKeyPress(event, "checkbox", allIndex); // Move to the Index Number input
+    //             } else {
+    //                 // If not checked, focus the next checkbox
+    //                 const nextCheckbox = checkboxRefs.current[currentCheckboxIndex + 1];
+    //                 if (nextCheckbox) {
+    //                     nextCheckbox.focus();
+    //                 } else {
+    //                     // If no more checkboxes, focus on the first checkbox or another input as needed
+    //                     handleEnterKeyPress(event, "checkbox", allIndex); // Fallback to first checkbox
+    //                 }
+    //             }
+    //         } else {
+    //             // If focused on caption or any other input, focus the first checkbox
+    //             if (currentFocusedElement === captionRef.current) {
+    //                 checkboxRefs.current[0]?.focus();
+    //             } else {
+    //                 checkboxRefs.current[0]?.focus();
+    //             }
+    //         }
+    //     } else if (event.key === 'Tab' && event.shiftKey) {
+    //         // Handle Shift + Tab to move focus backward through checkboxes
+    //         event.preventDefault(); // Prevent the default tab behavior
+
+    //         if (currentCheckboxIndex > 0) {
+    //             // If not on the first checkbox, move focus to the previous checkbox
+    //             const prevCheckbox = checkboxRefs.current[currentCheckboxIndex - 1];
+    //             if (prevCheckbox) {
+    //                 prevCheckbox.focus();
+    //             }
+    //         } else {
+
+    //             // If already at the first checkbox, call handleEnterKeyPress to handle the form
+    //             handleEnterKeyPress("", "", 2); // Call your logic when Shift + Tab reaches the first checkbox
+    //         }
+    //     }
+    // };
+
     const handleEnterKeyPressCheckboxFocus = (event: React.KeyboardEvent) => {
         const { serviceType } = getValues(); // Assuming this gets the form values
-        if (event.key === 'Enter' || event.key === 'Tab') {
+        if (event.key === 'Enter') {
             event.preventDefault(); // Prevent default form submission
 
             const currentFocusedElement = document.activeElement;
@@ -662,7 +713,7 @@ const StandardTypeForm = () => {
                         nextCheckbox.focus();
                     } else {
                         // If no more checkboxes, focus on the first checkbox or another input as needed
-                        checkboxRefs.current[0]?.focus(); // Fallback to first checkbox
+                        handleEnterKeyPress(event, "checkbox", allIndex); // Fallback to first checkbox
                     }
                 }
             } else {
@@ -673,6 +724,8 @@ const StandardTypeForm = () => {
                     checkboxRefs.current[0]?.focus();
                 }
             }
+        } else if (event.key === 'Tab' && event.shiftKey) {
+            handleEnterKeyPress("", "", 2)
         }
     };
 
@@ -692,18 +745,22 @@ const StandardTypeForm = () => {
     //     }
     // };
 
-
     const handleClientSelect = (event) => {
-
 
         toast.success("cal")
         if (event.key === 'Enter' || event.key === 'Tab') {
             setOpenServiceType(true);
         }
 
-
     };
 
+    const backToClientField = (event: React.KeyboardEvent) => {
+        toast.success("Shift + Tab detected");
+        // Check for Shift + Tab key combination
+        if (event.key === 'Tab' && event.shiftKey) {
+            setOpenClientType(true);
+        }
+    };
     // NAVIGATION ENDS
 
     // Function to handle zip code formatting
@@ -722,16 +779,31 @@ const StandardTypeForm = () => {
         setValue("lTSZip", formattedValue); // Update the form state
     };
 
+    const backToPreviousField = (event, index) => {
+        event.preventDefault()
+
+        if (event.key !== 'Tab') {
+            event.preventDefault()
+            handleEnterKeyPress(event.key, "_", index)
+
+
+        } else {
+
+
+            handleEnterKeyPress(event, "", index)
+        }
+    }
+
     return <>
         {allSeacrhServiceFormData?.length > 0 && isSearchServiceForm ? <SearchResultData /> :
             <div className="w-[100%]">
                 <div className="w-full">
                     <form onSubmit={handleSubmit(StandardTypeFormSubmitFunciton)}>
-                        <div className="flex items-center justify-between flex-row-reverse	">
+                        <div className="flex items-center justify-between flex-row-reverse  ">
                             <div className="flex items-center gap-x-2">
 
-                                {selectedSearchServiceFormData?.length > 0 && <BorderButton buttonText="Duplicate Form" icon={<MdAdd />} isIcon onClick={addDuplicateServiceForm} />
-                                }
+                                <BorderButton buttonText="Duplicate Form" icon={<MdAdd />} isIcon onClick={addDuplicateServiceForm} />
+
                                 <Hints keyName="Esc" label="Cancel" />
                                 <Hints keyName="f4 " label="Find" />
                                 <Hints keyName="f10 / Ctrl + S " label="Save" />
@@ -742,7 +814,6 @@ const StandardTypeForm = () => {
                                     <div className="flex flex-col w-full items-start gap-1">
                                         <label className=" font-normal sm:font-semibold text-xl capitalize">Job No <span>{jobNo}</span></label>
                                     </div>
-
 
                                 }
                                 {isSearchServiceForm &&
@@ -788,7 +859,6 @@ const StandardTypeForm = () => {
 
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-
                                 <Controller name="clientId" control={control} render={({ field }) => (
                                     <Dropdown
                                         options={clientIdOptions}
@@ -811,11 +881,34 @@ const StandardTypeForm = () => {
 
                                             handleEnterKeyPress(simulatedEvent, value, 0); // Call your function with simulated event
                                         }}
-                                        onKeyDown={handleClientSelect}
+                                        // onKeyDown={handleClientSelect}
                                         id="clientId"
 
                                     />
                                 )} />
+                                {/* <Controller
+                                    name="clientId"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Dropdown
+                                            options={clientIdOptions}
+                                            value={field.value}
+                                            label="Client id"
+                                            error={errors.clientId?.message as string}
+                                            required
+                                            isOpenOption={isNewFormAdding || openClientTypeOptions}
+                                            onChange={(value) => {
+                                                field.onChange(value); // Update the field value
+                                                setOpenClientType(false);
+                                                setOpenServiceType(true);
+                                                handleEnterKeyPress(simulatedEvent, value, 0); // Call your function with simulated event
+                                            }}
+                                            id="clientId"
+                                        />
+                                    )}
+                                /> */}
+
+
                             </div>
 
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
@@ -831,8 +924,9 @@ const StandardTypeForm = () => {
                                                     form: document.querySelector("form"), // Assuming the dropdown is in a form
                                                 },
                                             };
+                                            setOpenServiceType(false);
 
-                                            handleEnterKeyPress(simulatedEvent, value, 1); // Call your function with simulated event
+                                            handleEnterKeyPress(simulatedEvent, value, 2); // Call your function with simulated event
                                         }}
 
                                         label="service type"
@@ -841,15 +935,41 @@ const StandardTypeForm = () => {
                                         required
 
                                         ref={serviceTypeRef}
-                                        // onKeyDown={handleClientSelect}
+                                        onKeyDown={(event) => {
+                                            if (event.key === "Tab" && event.shiftKey) {
+                                                dispatch(addNewFormAddReducer(true));
+                                                setOpenServiceType(false)
+                                            }
+
+                                        }}
                                         id="serviceType"
                                         isOpenOption={openServiceTypeOptions}
                                     />
                                 )} />
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="case No" error={errors.caseNo} name="caseNo" />
+                                <TextField
+                                    onKeyDown={(event) => {
+                                        if (event.key === "Tab" && event.shiftKey) {
+
+                                            const simulatedEvent = {
+                                                target: {
+                                                    form: document.querySelector("form"), // Assuming the dropdown is in a form
+                                                },
+                                            };
+                                            setOpenServiceType(true);
+
+                                            handleEnterKeyPress(simulatedEvent, "", 0);
+                                        }
+                                        else if (event.key === "Enter") {
+                                            event.preventDefault()
+                                            handleEnterKeyPress(event, "", 1)
+                                        }
+                                    }}
+                                    // onKeyDown={handleEnterKeyPress} 
+                                    register={register} label="case No" error={errors.caseNo} name="caseNo" />
                             </div>
+
 
 
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
@@ -893,16 +1013,38 @@ const StandardTypeForm = () => {
                         {/* OTHER L&T SERVICE TYPE STARTS */}
                         <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 mt-6" >
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress} ref={desRef} register={register} label="Other L&T Description" error={errors.oLTDescription} name="oLTDescription" />
+                                <TextField onKeyDown={(event) => {
+
+                                    if (event.key === "Enter") {
+                                        event.preventDefault(), handleEnterKeyPress(event, "", 12)
+                                    }
+                                }} ref={desRef} register={register} label="Other L&T Description" error={errors.oLTDescription} name="oLTDescription" />
 
                             </div>
+
                             <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <FormatedIndexInputField
-                                    onKeyDown={() => handleEnterKeyPress(event, selectedServiceType, allIndex)} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" oltIndexValue={oLTIndex}
-                                    onChange={setOltIndex} year={currentYear}
-                                />
+                                    // onKeyDown={handleEnterKeyPress}
+                                    onKeyDown={
+                                        (event) => {
+                                            if (event.key === "Enter") {
 
+                                                handleEnterKeyPress(event, selectedServiceType, allIndex)
+                                            } else {
+                                                handleEnterKeyPress
+                                            }
+                                        }}
+
+                                    register={register}
+                                    label="Index Number"
+                                    error={errors.oLTIndexNo}
+                                    name="oLTIndexNo"
+                                    oltIndexValue={oLTIndex} // Provide the value to split
+                                    onChange={setOltIndex}
+                                    year={currentYear} // Pass current year
+                                />
                             </div>
+
                         </div>
                         {/* OTHER L&T SERVICE TYPE ENDS */}
 
@@ -962,7 +1104,10 @@ const StandardTypeForm = () => {
                                         onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" />
                                 </div>
                                 <div className="w-[100%]">
-                                    <TextArea register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
+
+                                    <TextField
+                                        // onKeyDown={handleEnterKeyPress} 
+                                        register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
                                 </div>
                             </div>
 
@@ -971,15 +1116,17 @@ const StandardTypeForm = () => {
                         {/* ADDING MAILING STARTS */}
                         <div className="mt-6  relative">
                             <div className="flex items-start gap-x-4  ">
-                                {mailingAddressData?.length > 0 && <div className="w-[100%] md:w-[46%] mb-4 lg:w-[30%] 	">
+                                {mailingAddressData?.length > 0 && <div className="w-[100%] md:w-[46%] mb-4 lg:w-[30%]  ">
                                     <Controller name="mailingAddress" control={control} render={({ field }) => (
                                         <GetSelectedMailing
                                             options={mailingAddressData}
                                             value={field.value}
-                                            onChange={field.onChange}
+                                            onChange={() => { field.onChange, setOpenMailingAddressOptions(false) }}
                                             label="Client Mailing Addresses"
                                             error={errors.mailingAddress?.message as string}
                                             getMailFunction={GetSelectedMailingFunction}
+                                            isOpenOption={openMailingAddressOptions}
+
                                         />
                                     )} />
                                 </div>}
@@ -1019,7 +1166,6 @@ const StandardTypeForm = () => {
                                             <IoMdClose onClick={() => dispatch(getMailAddressAfterDeletion(id))} size={24} className="text-redColor p-1 bg-redColor/10 rounded-full cursor-pointer absolute top-4 right-4" />
                                             {/* SENDING DATA TO ADDMAILING COMPONENT IF DATA IS SELECTED FORM DROPDOWN */}
                                             <ShowAllAddMailingAddress data={data} id={id} />
-
 
                                         </div>
                                     ))}
@@ -1082,3 +1228,4 @@ const StandardTypeForm = () => {
 }
 
 export default StandardTypeForm
+

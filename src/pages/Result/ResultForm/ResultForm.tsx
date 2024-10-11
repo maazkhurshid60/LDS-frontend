@@ -320,7 +320,25 @@ const ResultForm = () => {
             setValue("queryInformationStandardServeTo", selectedSearchResultData[0]?.queryInformationStandardServeTo),
                 setValue("sSDDefendants", selectedSearchResultData[0]?.sSDDefendants),
                 setValue("sSDPlaintiff", selectedSearchResultData[0]?.sSDPlaintiff)
-            setValue("serviceResultInputDate", selectedSearchResultData[0]?.serviceResultInputDate ?? "")
+            // setValue("serviceResultInputDate", selectedSearchResultData[0]?.serviceResultInputDate ?? "")
+            const resultInputDate = watch("inputDate");
+            if (resultInputDate) {
+                // Get the current date
+                const currentDate = new Date();
+                const formattedCurrentDate = format(currentDate, 'yyyy-MM-dd');
+                const currentServiceResultInputDate = selectedSearchResultData[0]?.serviceResultInputDate;
+
+                // Check if currentServiceResultInputDate is empty or undefined
+                const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
+                    ? formattedCurrentDate
+                    : currentServiceResultInputDate;
+
+
+                setValue("serviceResultInputDate", valueToStore, {
+                    shouldValidate: true,
+                    shouldDirty: true
+                });
+            }
             setValue("serviceResultScvType", selectedSearchResultData[0]?.serviceResultScvType ?? "")
             setValue("jobNo", JSON.stringify(selectedSearchResultData[0]?.jobNo ?? ""))
             setValue("serviceResultServerId", getSearchExistingSelectedServeroption?.value)
@@ -838,10 +856,22 @@ const ResultForm = () => {
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
 
-                            <FormatedIndexInputField
+                            {/* <FormatedIndexInputField
                                 onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" oltIndexValue={oLTIndex}
                                 onChange={setOltIndex} year={currentYear}
+                            /> */}
+
+                            <FormatedIndexInputField
+                                onKeyDown={handleEnterKeyPress}
+                                register={register}
+                                label="Index Number"
+                                error={errors.oLTIndexNo}
+                                name="oLTIndexNo"
+                                oltIndexValue={oLTIndex} // Provide the value to split
+                                onChange={setOltIndex}
+                                year={currentYear} // Pass current year
                             />
+
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             <TextField register={register} label="address" error={errors.lTSAddress} name="lTSAddress" onKeyDown={handleEnterKeyPress}
@@ -1137,7 +1167,7 @@ const ResultForm = () => {
                                 </div> </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[100%]">
                                 <div className="w-[30%]">
-                                    <TextField onKeyDown={() => resultHandleEnterKeyPress(event, "_", 21)}
+                                    <TextField onKeyDown={(event) => event.key === "Tab" && event.shiftKey ? handleEnterKeyPress : resultHandleEnterKeyPress(event, "_", 21)}
                                         register={register} label="1st time Attempt" error={errors.serviceResultFirstTimeOfService} name="serviceResultFirstTimeOfService" type="time" />
 
                                 </div>
