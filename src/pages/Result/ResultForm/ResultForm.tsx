@@ -222,10 +222,10 @@ const ResultForm = () => {
                 startDate: formattedDateStart,
                 endDate: formattedDateEnd,
                 lTSAddress: data?.lTSAddress, lTSApt: data?.lTSApt, lTSBusinessName: data?.lTSBusinessName, lTSCity: data?.lTSCity,
-                lTSDescription: data?.lTSDescription, lTSFirstName: data?.lTSFirstName, oLTIndexNo: oLTIndex !== "" ? oLTIndex + "/" + currentYear : "", lTSZip: data?.lTSZip, lTSState: data?.lTSState
+                lTSDescription: data?.lTSDescription, lTSFirstName: data?.lTSFirstName, oLTIndexNo: oLTIndex !== "" ? oLTIndex + "/" + currentYear : "", lTSZip: data?.lTSZip, lTSState: data?.lTSState, serviceResultServerId: data?.serviceResultServerId
 
             }
-
+            // console.log(":result", data)
             dispatch(searchServiceFormThunk(searchData))
         } else {
             if (selectedSearchResultData && selectedSearchResultData?.length > 0) {
@@ -895,7 +895,10 @@ const ResultForm = () => {
                             <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" maxLength={12} onChange={handleZipChange} />
                         </div>
                         <div className="w-[30%]">
-                            <TextArea row={1} register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
+                            {/* <TextArea row={1} register={register} label="description" error={errors.lTSDescription} name="lTSDescription" /> */}
+                            <TextField
+                                // onKeyDown={handleEnterKeyPress} 
+                                register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
                         </div>
                         <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                             {isSearchResultForm ?

@@ -14,7 +14,7 @@ const SearchResultData = () => {
 
     // Headers for the table
     const headersResult = [
-        "Job No", "Input Date", "Client Id", "Service Type", "Case No", "Caption", "LT Service Type",
+        "Job No", "Input Date", "Client Id", "Server Id", "Service Type", "Case No", "Caption", "LT Service Type",
         "LT Index No", "Other LT Description", "LTS First Name", "LTS Business Name", "LTS Zip", "LTS State",
         "LTS City", "LTS Apt", "LTS Address", "LTS Description"
     ];
@@ -50,6 +50,7 @@ const SearchResultData = () => {
             jobNo: data?.jobNo,
             inputDate: data?.inputDate,
             clientid: data?.clientId?.code,
+            serviceResultServerId: data?.serviceResultServerId?.serverCode,
             serviceType: data?.serviceType?.serviceTypeCode,
             caseno: data?.caseNo,
             caption: data?.caption,
@@ -64,6 +65,7 @@ const SearchResultData = () => {
             lTSApt: data?.lTSApt,
             lTSAddress: data?.lTSAddress,
             lTSDescription: data?.lTSDescription
+
         };
     });
 
