@@ -332,7 +332,7 @@ const ResultForm = () => {
                 const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
                     ? formattedCurrentDate
                     : currentServiceResultInputDate;
-
+                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>selected", valueToStore)
 
                 setValue("serviceResultInputDate", valueToStore, {
                     shouldValidate: true,
@@ -463,6 +463,9 @@ const ResultForm = () => {
                 const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
                     ? formattedCurrentDate
                     : currentServiceResultInputDate;
+
+
+                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", valueToStore)
 
 
                 setValue("serviceResultInputDate", valueToStore, {
