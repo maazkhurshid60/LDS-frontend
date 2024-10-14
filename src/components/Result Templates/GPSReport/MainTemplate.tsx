@@ -133,7 +133,7 @@ const GPSReport = () => {
                                         </div>
                                         <div className="flex items-start gap-x-2 mb-2">
                                             <h1 className="w-[45%]">Person Served:</h1>
-                                            <p className="w-[100%] font-normal">{item?.lTSFirstName || "______________________________"}</p>
+                                            <p className="w-[100%] font-normal">{item?.serviceResultlTServed || "______________________________"}</p>
                                         </div>
                                         <h1>Network Provided</h1>
                                         <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
