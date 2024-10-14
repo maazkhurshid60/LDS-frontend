@@ -17,10 +17,12 @@ const GPSReport = () => {
     const center = { lat: 33.64228, lng: 72.99323 };
     const legalDeliveryDataa = useSelector((state: RootState) => state?.legalDelivery.selectedLegalDeliveryData);
     const [resultData, setResultData] = useState([]);
-    const mapKey = "AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg"
+    const mapKey = "AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY"
     console.log("<<<<<<<<<<", resultData)
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: "AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg",
+        googleMapsApiKey: "AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY",
+
+
         libraries: libraries
     })
 

@@ -377,6 +377,35 @@ const ResultForm = () => {
                 setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
 
             }
+            // // Convert lTSFirstName to an array
+            // const lTSFirstNames = selectedSearchResultData[0]?.lTSFirstName?.split(",") || [];
+            // // Get the current served and not served arrays
+            // const currentServed = selectedSearchResultData[0]?.serviceResultlTServed === undefined || selectedSearchResultData[0]?.serviceResultlTServed === ""
+            //     ? []
+            //     : selectedSearchResultData[0]?.serviceResultlTServed?.split(",");
+
+            // const currentNotServed = selectedSearchResultData[0]?.serviceResultlTNotServed !== ""
+            //     ? selectedSearchResultData[0]?.serviceResultlTNotServed?.split(",")
+            //     : [];
+
+            // // Create a new served array that includes names from lTSFirstNames and adds them if not already in served
+            // const updatedServed = lTSFirstNames?.filter(name => name && !currentServed?.includes(name));
+
+            // // Remove names from currentServed that are not in lTSFirstNames
+            // const filteredServed = currentServed?.filter(name => lTSFirstNames?.includes(name));
+            // console.log("lTSFirstNames", selectedSearchResultData[0]?.lTSFirstName)
+            // console.log("lTSFirstNames served", filteredServed)
+
+
+            // // Remove names from currentNotServed that are not in lTSFirstNames
+            // const filteredNotServed = currentNotServed?.filter(name => lTSFirstNames?.includes(name));
+
+            // // Combine both arrays
+            // const finalServed = [...filteredServed];
+
+            // // Update state
+            // setLTSServed(finalServed);
+            // setLTSNotServed(filteredNotServed);
             // Convert lTSFirstName to an array
             const lTSFirstNames = selectedSearchResultData[0]?.lTSFirstName?.split(",") || [];
             // Get the current served and not served arrays
@@ -393,15 +422,18 @@ const ResultForm = () => {
 
             // Remove names from currentServed that are not in lTSFirstNames
             const filteredServed = currentServed?.filter(name => lTSFirstNames?.includes(name));
-            console.log(currentServed, lTSFirstNames)
 
             // Remove names from currentNotServed that are not in lTSFirstNames
             const filteredNotServed = currentNotServed?.filter(name => lTSFirstNames?.includes(name));
 
-            // Combine both arrays
-            const finalServed = [...filteredServed];
+            // Filter out names that are in filteredNotServed from filteredServed and updatedServed
+            const finalServed = [
+                ...filteredServed?.filter(name => !filteredNotServed?.includes(name)),
+                ...updatedServed?.filter(name => !filteredNotServed?.includes(name))
+            ];
 
-            // Update state
+
+            // Set the states
             setLTSServed(finalServed);
             setLTSNotServed(filteredNotServed);
             setDatePairsDates(allServiceForm[serviceFormIndex]?.datePairs?.firstAttemptDate === "" || allServiceForm[serviceFormIndex]?.datePairs?.secondAttemptDate ? previousForm?.datePairs : allServiceForm[serviceFormIndex]?.datePairs)
@@ -1115,7 +1147,7 @@ const ResultForm = () => {
                                 )} />
                             </div>
                             <div>
-                                <LoadScript googleMapsApiKey="AIzaSyBfvS4dtfUAJ1yTsXYd6VCI39Ktod98rUg">
+                                <LoadScript googleMapsApiKey="AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY">
                                     <GoogleMap
                                         center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
                                         zoom={8}
