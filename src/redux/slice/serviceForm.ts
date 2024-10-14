@@ -176,6 +176,8 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
     }
     finally {
         dispatch(showSpinnerReducer(false))
+        window.location.reload();
+
 
     }
 })
@@ -225,7 +227,7 @@ export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (dat
 })
 
 // SEARCH SERVICE FORM BY DATES
-export const searchServiceFormThunk = createAsyncThunk("addServiceForm", async (data: any, { dispatch }) => {
+export const searchServiceFormThunk = createAsyncThunk("searchServiceForm", async (data: any, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
 
     try {
