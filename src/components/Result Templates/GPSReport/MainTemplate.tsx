@@ -138,8 +138,8 @@ const GPSReport = () => {
                                         <h1>Network Provided</h1>
                                         <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
                                             <div className="flex items-start gap-x-2">
-                                                <h1 className="w-[45%]">Date Of Service:</h1>
-                                                <p className="w-[100%] font-normal">{item?.serviceResultDateOfService || "______________________________"}</p>
+                                                <h1 className="w-[45%]">Date and Time Of Service:</h1>
+                                                <p className="w-[100%] font-normal">{`${item?.serviceResultDateOfService} ${item?.serviceResultTimeOfService} hrs` || "______________________________"}</p>
                                             </div>
                                             {address?.map(data => {
                                                 return <>
