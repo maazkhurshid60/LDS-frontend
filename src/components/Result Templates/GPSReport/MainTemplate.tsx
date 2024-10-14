@@ -101,7 +101,6 @@ const GPSReport = () => {
                     <div className="w-[60%] ">
                         {resultData?.map((item, index) => (
                             <div key={index} className="mb-6 w-[100%] mt-2  h-[100vh]">
-                                {console.log("<><><>", item?.address)}
                                 <h2 className="font-bold">Record #{index + 1}</h2>
                                 <div className="flex items-start justify-center gap-y-6 w-[100%] h-[60vh] ">
                                     {/* LEFT PART STARTS */}
@@ -125,7 +124,7 @@ const GPSReport = () => {
                                             </div>
                                             <div className="flex items-start gap-x-2">
                                                 <h1 className="w-[45%]">Serve To:</h1>
-                                                <p className="w-[100%] font-normal">{item?.serviceFormId?.queryInformationStandardServeTo || "______________________________"}</p>
+                                                <p className="w-[100%] font-normal">{item?.serviceResultlTServed || "______________________________"}</p>
                                             </div>
                                             <div className="flex items-start gap-x-2">
                                                 <h1 className="w-[45%]">Address:</h1>
