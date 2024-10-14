@@ -322,23 +322,23 @@ const ResultForm = () => {
                 setValue("sSDPlaintiff", selectedSearchResultData[0]?.sSDPlaintiff)
             // setValue("serviceResultInputDate", selectedSearchResultData[0]?.serviceResultInputDate ?? "")
             const resultInputDate = watch("serviceResultInputDate");
-            if (resultInputDate) {
-                // Get the current date
-                const currentDate = new Date();
-                const formattedCurrentDate = format(currentDate, 'yyyy-MM-dd');
-                const currentServiceResultInputDate = selectedSearchResultData[0]?.serviceResultInputDate;
+            // if (resultInputDate) {
+            // Get the current date
+            const currentDate = new Date();
+            const formattedCurrentDate = format(currentDate, 'yyyy-MM-dd');
+            const currentServiceResultInputDate = selectedSearchResultData[0]?.serviceResultInputDate;
 
-                // Check if currentServiceResultInputDate is empty or undefined
-                const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
-                    ? formattedCurrentDate
-                    : currentServiceResultInputDate;
-                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>selected", valueToStore)
+            // Check if currentServiceResultInputDate is empty or undefined
+            const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
+                ? formattedCurrentDate
+                : currentServiceResultInputDate;
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>selected", valueToStore)
 
-                setValue("serviceResultInputDate", valueToStore, {
-                    shouldValidate: true,
-                    shouldDirty: true
-                });
-            }
+            setValue("serviceResultInputDate", valueToStore, {
+                shouldValidate: true,
+                shouldDirty: true
+            });
+            // }
             setValue("serviceResultScvType", selectedSearchResultData[0]?.serviceResultScvType ?? "")
             setValue("jobNo", JSON.stringify(selectedSearchResultData[0]?.jobNo ?? ""))
             setValue("serviceResultServerId", getSearchExistingSelectedServeroption?.value)
@@ -453,26 +453,26 @@ const ResultForm = () => {
             // STORE Current DATE OF THE INPUT DATE IN RESULT INPUT DATE STARTS ON NEWREULST FORM
 
             const resultInputDate = watch("serviceResultInputDate");
-            if (resultInputDate) {
-                // Get the current date
-                const currentDate = new Date();
-                const formattedCurrentDate = format(currentDate, 'yyyy-MM-dd');
-                const currentServiceResultInputDate = allServiceForm[serviceFormIndex]?.serviceResultInputDate;
+            // if (resultInputDate) {
+            // Get the current date
+            const currentDate = new Date();
+            const formattedCurrentDate = format(currentDate, 'yyyy-MM-dd');
+            const currentServiceResultInputDate = allServiceForm[serviceFormIndex]?.serviceResultInputDate;
 
-                // Check if currentServiceResultInputDate is empty or undefined
-                const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
-                    ? formattedCurrentDate
-                    : currentServiceResultInputDate;
-
-
-                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", valueToStore)
+            // Check if currentServiceResultInputDate is empty or undefined
+            const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
+                ? formattedCurrentDate
+                : currentServiceResultInputDate;
 
 
-                setValue("serviceResultInputDate", valueToStore, {
-                    shouldValidate: true,
-                    shouldDirty: true
-                });
-            }
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", valueToStore)
+
+
+            setValue("serviceResultInputDate", valueToStore, {
+                shouldValidate: true,
+                shouldDirty: true
+            });
+            // }
             // STORE NEXT DATE OF THE INPUT DATE IN RESULT INPUT DATE ENDS
 
             if (allServiceForm && Array.isArray(allServiceForm) && serviceFormIndex >= 0 && serviceFormIndex < allServiceForm.length) {
