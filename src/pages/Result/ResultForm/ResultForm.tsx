@@ -321,7 +321,7 @@ const ResultForm = () => {
                 setValue("sSDDefendants", selectedSearchResultData[0]?.sSDDefendants),
                 setValue("sSDPlaintiff", selectedSearchResultData[0]?.sSDPlaintiff)
             // setValue("serviceResultInputDate", selectedSearchResultData[0]?.serviceResultInputDate ?? "")
-            const resultInputDate = watch("inputDate");
+            const resultInputDate = watch("serviceResultInputDate");
             if (resultInputDate) {
                 // Get the current date
                 const currentDate = new Date();
@@ -452,7 +452,7 @@ const ResultForm = () => {
         else {
             // STORE Current DATE OF THE INPUT DATE IN RESULT INPUT DATE STARTS ON NEWREULST FORM
 
-            const resultInputDate = watch("inputDate");
+            const resultInputDate = watch("serviceResultInputDate");
             if (resultInputDate) {
                 // Get the current date
                 const currentDate = new Date();
