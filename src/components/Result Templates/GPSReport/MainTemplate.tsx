@@ -83,6 +83,7 @@ const GPSReport = () => {
         lat: 33.5888559, lng: 71.44292860000002
     }
     const mapCenter = address.length > 0 && address[0]
+    console.log(address)
     return (
         <>
             <div className="flex justify-end mt-5 mb-5 mr-5">
@@ -141,10 +142,15 @@ const GPSReport = () => {
                                                 <h1 className="w-[45%]">Date Of Service:</h1>
                                                 <p className="w-[100%] font-normal">{item?.serviceResultDateOfService || "______________________________"}</p>
                                             </div>
-                                            <div className="flex items-start gap-x-2">
-                                                <h1 className="w-[45%]">GPS:</h1>
-                                                <p className="w-[100%] font-normal"><span className="mr-10">{address?.lat}</span> <span>{address?.lng}</span></p>
-                                            </div>
+                                            {address?.map(data => {
+                                                return <>
+                                                    <div className="flex items-start gap-x-2">
+                                                        <h1 className="w-[45%]">GPS:</h1>
+                                                        <p className="w-[100%] font-normal"><span className="mr-10">{data?.lat}</span> <span>{data?.lng}</span></p>
+                                                    </div>
+                                                </>
+                                            })}
+
                                         </div>
                                     </div>
                                     {/* LEFT PART ENDS */}
