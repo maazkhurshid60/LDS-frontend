@@ -1080,22 +1080,15 @@ const ResultForm = () => {
 
     const calculateDistance = async () => {
         const apiKey = 'AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY';
-        const origin = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
-            selectedResultOrigins :
-            [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTState || '']; // San Francisco
-        const destination = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
-            selectedResultDestinations :
-            [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState || '']; // Los Angeles
-
-        // const origins = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+        // const origin = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
         //     selectedResultOrigins :
-        //     [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTState || '']
-
-        // const destinations = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+        //     [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTState || '']; // San Francisco
+        // const destination = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
         //     selectedResultDestinations :
-        //     [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState || ''],
+        //     [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState || '']; // Los Angeles
 
-
+        const origin = "lahore"
+        const destination = "islamabad"
         const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&key=${apiKey}`;
 
         try {
