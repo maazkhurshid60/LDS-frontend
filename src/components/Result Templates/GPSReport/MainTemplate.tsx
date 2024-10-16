@@ -152,6 +152,8 @@ const GPSReport = () => {
                                 </div>
                             </div>
                         ))}
+
+
                     </div>
                     <div className="w-[35%] flex flex-col mt-4">
                         {address?.length > 0 ? address?.map((item, idx) => (

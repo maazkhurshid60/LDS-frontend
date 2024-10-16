@@ -24,14 +24,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import TextArea from "../../../components/InputFields/TextArea/TextArea";
 import DatePairs from "../../../components/Modal/DatePairsModal";
 import DatePairsModal from "../../../components/Modal/DatePairsModal";
-import { GoogleMap, LoadScript, DistanceMatrixService } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, DistanceMatrixService, useJsApiLoader } from '@react-google-maps/api';
 
 import FormatedIndexInputField from "../../../components/InputFields/TextField/FormatedIndexInputField";
 import BorderButton from "../../../components/Buttons/BorderButton/BorderButton";
-import axios from "axios";
 export type FormFields = z.infer<typeof LTFormSchema>
-
+const libraries = ["places"]
 const ResultForm = () => {
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: "AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY",
+
+
+        libraries: libraries
+    })
     const { register, handleSubmit, formState: { errors }, control, setValue, reset, watch, getValues } = useForm<FormFields>({ resolver: zodResolver(LTFormSchema) })
     const { data: clientData } = useGetAllData("/client/all-clients");
     const clientFilteredOptions = clientData?.filter((data, id) => { return data?.isActive })
@@ -55,7 +60,7 @@ const ResultForm = () => {
     const getSearchExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === selectedSearchResultData[0]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const getSearchExistingSelectedServeroption = serverIdOptions?.find((data, index) => data?.value === selectedSearchResultData[0]?.serviceResultServerId?._id && { value: data?._id, label: data?.serverCode })
     const lastestResultFormSaved = JSON.parse(localStorage.getItem("lastResultFormSaved"))
-    console.log("lastestResultFormSaved", lastestResultFormSaved)
+    // console.log("lastestResultFormSaved", lastestResultFormSaved)
     const isDatePairModal = useSelector((state: RootState) => state.serviceForm.isDatePairModal)
     const datepairsData = useSelector((state: RootState) => state.serviceForm.datepairs);
     const lTSFirstNameArray = allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",")
@@ -124,7 +129,7 @@ const ResultForm = () => {
         const seconddatevalue = getValues("serviceResultSecondAttemptDate")
         const firstdatevalue = getValues("serviceResultFirstAttemptDate")
 
-        toast.success(`${seconddatevalue}`)
+        // toast.success(`${seconddatevalue}`)
         if (seconddatevalue !== "") {
             const secondAttemptDate = new Date(seconddatevalue);
             const formattedSecondAttemptDate = `${secondAttemptDate?.getFullYear()}-${(secondAttemptDate?.getMonth() + 1)?.toString()?.padStart(2, '0')}-${secondAttemptDate?.getDate()?.toString()?.padStart(2, '0')}`;
@@ -281,8 +286,11 @@ const ResultForm = () => {
                 // HERE UPDATE SERVICE FORM API WILL BE CALLED
                 // console.log(updatingData)
                 localStorage.setItem("lastResultFormSaved", JSON.stringify(updatingData))
-
-                dispatch(updateServiceFormThunk(updatingData))
+                const sendingToData = {
+                    data: updatingData,
+                    isSearch: false
+                }
+                dispatch(updateServiceFormThunk(sendingToData))
 
             }
 
@@ -376,7 +384,7 @@ const ResultForm = () => {
             const valueToStore = (currentServiceResultInputDate === "" || currentServiceResultInputDate === undefined)
                 ? formattedCurrentDate
                 : currentServiceResultInputDate;
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>selected", valueToStore)
+            // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>selected", valueToStore)
 
             setValue("serviceResultInputDate", valueToStore, {
                 shouldValidate: true,
@@ -413,9 +421,14 @@ const ResultForm = () => {
             // setValue("serviceResultSecondTimeOfService", secondTime)
             // setValue("serviceResultFirstTimeOfService", firstTime)
             // setValue("serviceResultTimeOfService", secondTime)
-            setValue("serviceResultTimeOfService", selectedSearchResultData[0]?.serviceResultTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultTimeOfService === "" || selectedSearchResultData[0]?.serviceResultTimeOfService === undefined ? lastestResultFormSaved?.serviceResultTimeOfService : selectedSearchResultData[0]?.serviceResultTimeOfService)
-            setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultFirstTimeOfService === "" || selectedSearchResultData[0]?.serviceResultFirstTimeOfService === undefined ? lastestResultFormSaved?.serviceResultFirstTimeOfService : selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
-            setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === undefined ? lastestResultFormSaved?.serviceResultSecondTimeOfService : selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
+            // setValue("serviceResultTimeOfService", selectedSearchResultData[0]?.serviceResultTimeOfService)
+            // setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
+            // setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
+            setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService === undefined || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "" ? lastestResultFormSaved?.serviceResultSecondTimeOfService : selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
+
+            setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService === undefined || selectedSearchResultData[0]?.serviceResultFirstTimeOfService === "" ? lastestResultFormSaved?.serviceResultFirstTimeOfService : selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
+            setValue("serviceResultTimeOfService", selectedSearchResultData[0]?.serviceResultTimeOfService === undefined || selectedSearchResultData[0]?.serviceResultTimeOfService === "" ? lastestResultFormSaved?.serviceResultTimeOfService : selectedSearchResultData[0]?.serviceResultTimeOfService)
+
 
             // setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip) : addMinutesToTime(selectedSearchResultData[0]?.serviceResultSecondTimeOfService, suggestedTimeTrip))
 
@@ -525,7 +538,7 @@ const ResultForm = () => {
                 : currentServiceResultInputDate;
 
 
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", valueToStore)
+            // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", valueToStore)
 
 
             setValue("serviceResultInputDate", valueToStore, {
@@ -543,7 +556,7 @@ const ResultForm = () => {
                     firstAttepmtDate: allServiceForm[serviceFormIndex]?.datePairs?.firstAttepmtDate === "" || allServiceForm[serviceFormIndex]?.datePairs?.firstAttepmtDate === undefined || allServiceForm[serviceFormIndex]?.datePairs === undefined ? previousForm?.serviceResultFirstAttemptDate : allServiceForm[serviceFormIndex]?.datePairs?.firstAttepmtDate,
                     secondAttepmtDate: allServiceForm[serviceFormIndex]?.datePairs?.secondAttepmtDate === "" || allServiceForm[serviceFormIndex]?.datePairs?.secondAttepmtDate === undefined || allServiceForm[serviceFormIndex]?.datePairs === undefined ? previousForm?.serviceResultSecondAttemptDate : allServiceForm[serviceFormIndex]?.datePairs?.secondAttepmtDate,
                 }
-                console.log(datepairsData)
+                // console.log(datepairsData)
                 dispatch(addDatePairModalReducer(data))
 
                 setValue("lTSFirstName", allServiceForm[serviceFormIndex]?.lTSFirstName)
@@ -576,24 +589,33 @@ const ResultForm = () => {
                 setValue("serviceResultServerId", allServiceForm[serviceFormIndex]?.serviceResultServerId?._id ?? "")
                 setValue("serviceResultResults", allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
                 setResultId(allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
-                if (lastestResultFormSaved?.serviceResultSecondTimeOfService !== "" || lastestResultFormSaved?.serviceResultSecondTimeOfService !== "NaN") {
-                    const secondTime = addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip)
-                    // const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
-                    console.log("lastestResultFormSaved?.serviceResultSecondTimeOfService !== `` || lastestResultFormSaved?.serviceResultSecondTimeOfService !== `NaN`", secondTime)
+                // setValue("serviceResultSecondTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService)
 
-                    setValue("serviceResultSecondTimeOfService", secondTime)
-                    // setValue("serviceResultFirstTimeOfService", firstTime)
-                    // setValue("serviceResultTimeOfService", secondTime)
+                setValue("serviceResultSecondTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "" ? lastestResultFormSaved?.serviceResultSecondTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService)
+
+                setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "" ? lastestResultFormSaved?.serviceResultFirstTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
+
+                setValue("serviceResultTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === undefined || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "" ? lastestResultFormSaved?.serviceResultTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultTimeOfService)
 
 
-                } else {
-                    console.log("lastestResultFormSaved?.serviceResultSecondTimeOfService !== `` || lastestResultFormSaved?.serviceResultSecondTimeOfService !== `NaN` else")
+                // if (lastestResultFormSaved?.serviceResultSecondTimeOfService !== "" || lastestResultFormSaved?.serviceResultSecondTimeOfService !== "NaN") {
+                //     const secondTime = addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip)
+                //     // const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
+                //     console.log("lastestResultFormSaved?.serviceResultSecondTimeOfService !== `` || lastestResultFormSaved?.serviceResultSecondTimeOfService !== `NaN`", secondTime)
 
-                    // setValue("serviceResultTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === undefined ? previousForm?.serviceResultTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultTimeOfService)
-                    setValue("serviceResultSecondTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined ? lastestResultFormSaved?.serviceResultSecondTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService)
-                    // setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined ? previousForm?.serviceResultFirstTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
+                //     setValue("serviceResultSecondTimeOfService", secondTime)
+                //     // setValue("serviceResultFirstTimeOfService", firstTime)
+                //     // setValue("serviceResultTimeOfService", secondTime)
 
-                }
+
+                // } else {
+                //     console.log("lastestResultFormSaved?.serviceResultSecondTimeOfService !== `` || lastestResultFormSaved?.serviceResultSecondTimeOfService !== `NaN` else")
+
+                //     // setValue("serviceResultTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === undefined ? previousForm?.serviceResultTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultTimeOfService)
+                //     setValue("serviceResultSecondTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined ? lastestResultFormSaved?.serviceResultSecondTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService)
+                //     // setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined ? previousForm?.serviceResultFirstTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
+
+                // }
 
                 // const secondTime = allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip) : addMinutesToTime(allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService, suggestedTimeTrip)
                 // const firstTime = allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultFirstTimeOfService, suggestedTimeTrip) : addMinutesToTime(allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService, suggestedTimeTrip)
@@ -796,17 +818,18 @@ const ResultForm = () => {
             const secondTime = addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, totalMinutes);
             const firstTime = addMinutesToTime(lastestResultFormSaved?.serviceResultFirstTimeOfService, totalMinutes);
             // Confirm update for the first time
-            // const confirmFirstTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 1st Time Attempt?`);
-            // if (confirmFirstTime) {
-            setValue("serviceResultFirstTimeOfService", firstTime);
-            // }
-            // Confirm update for the second time
-            // const confirmSecondTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 2nd Time Attempt?`);
-            // if (confirmSecondTime) {
-            setValue("serviceResultSecondTimeOfService", secondTime);
-            setValue("serviceResultTimeOfService", secondTime);
+            const confirmFirstTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 1st Time Attempt?`);
+            if (confirmFirstTime) {
+                setValue("serviceResultFirstTimeOfService", firstTime);
 
-            // }
+            }
+            // Confirm update for the second time
+            const confirmSecondTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 2nd Time Attempt?`);
+            if (confirmSecondTime) {
+                setValue("serviceResultSecondTimeOfService", secondTime);
+                setValue("serviceResultTimeOfService", secondTime);
+
+            }
         }
     };
 
@@ -815,10 +838,10 @@ const ResultForm = () => {
     const handleTimeTripChange = (event) => {
         const newValue = event.target.value;
         setValue("timeTrip", newValue); // Update the form state
-        const totalMinutes = parseInt(newValue, 10);
-        if (!isNaN(totalMinutes)) {
-            updateTimes(totalMinutes); // Call the function to update times
-        }
+        // const totalMinutes = parseInt(newValue, 10);
+        // if (!isNaN(totalMinutes)) {
+        //     updateTimes(totalMinutes); // Call the function to update times
+        // }
 
     };
     const handleTimeTripServerIdChange = () => {
@@ -831,6 +854,8 @@ const ResultForm = () => {
     const moveToNextFieldFromTimeTrip = (event) => {
         // Check if Enter key is pressed
         if (event.key === 'Enter') {
+            const timeTripValue = event.target.value;
+            updateTimes(timeTripValue);
             resultHandleEnterKeyPress(event, "timetrip", 19);
 
         }
@@ -852,15 +877,15 @@ const ResultForm = () => {
     };
 
     const handleDistanceMatrixResponse = (response) => {
-        console.log("response", response)
+        // console.log("response", response)
 
         if (response && response?.rows[0]?.elements[0].status === "OK") {
-            toast.success("cl")
+            // toast.success("cl")
             const distance = response?.rows[0]?.elements[0]?.distance;
             const duration = response?.rows[0]?.elements[0]?.duration?.text; // e.g., "2hr 40mins"
             const totalMinutes = convertDurationToMinutes(duration);
             setValue("timeTrip", JSON.stringify(totalMinutes));
-            console.log("totalMinutes>>>>", totalMinutes)
+            // console.log("totalMinutes>>>>", totalMinutes)
             setSuggestedTimeTrip(duration);
 
         }
@@ -877,7 +902,7 @@ const ResultForm = () => {
         const newDestinations = [selectedSearchResultData[0]?.lTSAddress || ''];
 
         if (newOrigins[0] && newDestinations[0]) {
-            console.log("selectedSearchResultData[0]?.lTSAddress", newDestinations);
+            // console.log("selectedSearchResultData[0]?.lTSAddress", newDestinations);
             // Update the state with new origins and destinations
             setOrigins(newOrigins);
             setDestinations(newDestinations);
@@ -970,7 +995,7 @@ const ResultForm = () => {
 
     const [isOpenResult, setIsOpenResult] = useState(false)
     const handleServerSelect = (event) => {
-        toast.success("l")
+        // toast.success("l")
 
         if (event.key === 'Enter' || event.key === 'Tab') {
             setIsOpenResult(true);
@@ -1040,7 +1065,7 @@ const ResultForm = () => {
     }
 
     // setDatePairsDates(allServiceForm[serviceFormIndex]?.datePairs?.firstAttemptDate === "" || allServiceForm[serviceFormIndex]?.datePairs?.secondAttemptDate ? previousForm?.datePairs : allServiceForm[serviceFormIndex]?.datePairs)
-    console.log("selectedResultOrigins[0] && selectedResultDestinations[0]", selectedResultOrigins, selectedResultDestinations)
+    // console.log("selectedResultOrigins[0] && selectedResultDestinations[0]", selectedResultOrigins, selectedResultDestinations)
     // allServiceForm[serviceFormIndex]?.datePairs?.firstAttemptDate === "" || allServiceForm[serviceFormIndex]?.datePairs?.secondAttemptDate ? previousForm?.datePairs : allServiceForm[serviceFormIndex]?.datePairs)
 
     const [map, setMap] = useState(null);
@@ -1053,61 +1078,35 @@ const ResultForm = () => {
     const onMount = useCallback(function (map) {
         const bounds = new window.google.maps.LatLngBounds(center);
         map.fitBounds(bounds);
-        console.log('MAP Setting: ', map);
+        // console.log('MAP Setting: ', map);
 
         setMap(map);
     }, []);
 
     const onUnmount = useCallback(() => {
-        console.log('MAP: ', map);
+        // console.log('MAP: ', map);
 
         setMap(null);
     }, [])
 
     useEffect(() => {
         return () => {
-            console.log('/////////////////////////// Cleaned Up');
+            // console.log('/////////////////////////// Cleaned Up');
             onUnmount()
         }
     }, [])
     const [isLoading, setIsLoading] = useState(true);
+    // console.log('/////////////////////////// Cleaned Up', lastestResultFormSaved);
 
     const handleMapLoad = () => {
         setIsLoading(false);
-        console.log("GoogleMap loaded");
+        // console.log("GoogleMap loaded");
     };
-
-
-    const calculateDistance = async () => {
-        const apiKey = 'AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY';
-        // const origin = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
-        //     selectedResultOrigins :
-        //     [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTState || '']; // San Francisco
-        // const destination = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
-        //     selectedResultDestinations :
-        //     [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState || '']; // Los Angeles
-
-        const origin = "lahore"
-        const destination = "islamabad"
-        const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&key=${apiKey}`;
-
-        try {
-            const response = await axios.get(url);
-            const result = response.data;
-            const distanceInMeters = result.rows[0].elements[0].distance.value;
-            console.log("distanve", distanceInMeters)
-            const distanceInMin = distanceInMeters / 60
-            setValue("timeTrip", distanceInMin.toString())
-            // setDistance(distanceInMeters);.
-        } catch (error) {
-            console.error('Error fetching data: ', error);
-        }
+    if (!isLoaded) {
+        return <h1>Loading....</h1>;
     };
-    useEffect(() => {
-        calculateDistance()
-    }, [allServiceForm[serviceFormIndex], searchResultFormData[0]])
     return <>
-        {/* {/* <LoadScript googleMapsApiKey="AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY"> */}
+        {/* <LoadScript googleMapsApiKey="AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY"> */}
         {/* {isLoading && <div>Loading...</div>} */}
 
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
@@ -1393,8 +1392,8 @@ const ResultForm = () => {
                                     )} />
                                 </div>
                                 <div>
-                                    {/* {isLoading && <div>Loading...</div>} */}
-                                    {/* 
+                                    {isLoading && <div>Loading...</div>}
+
                                     <GoogleMap
                                         center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
                                         zoom={8}
@@ -1416,7 +1415,7 @@ const ResultForm = () => {
                                             callback={handleDistanceMatrixResponse}
                                         />
 
-                                    </GoogleMap> */}
+                                    </GoogleMap>
                                     {/* {selectedResultOrigins[0] && selectedResultDestinations[0] && (
                                             <>
                                                 {console.log("run", selectedResultOrigins[0], selectedResultDestinations[0])}

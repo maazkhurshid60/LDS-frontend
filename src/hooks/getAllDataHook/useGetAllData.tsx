@@ -16,7 +16,7 @@ export const useGetAllData = (endPointName: string): UseQueryResult<any, Error> 
             if (!response) {
                 throw new Error('Network response was not ok');
             }
-            return response.data.data; // Adjusted to return the correct data structure
+            return response?.data?.data; // Adjusted to return the correct data structure
         }
     });
 };
