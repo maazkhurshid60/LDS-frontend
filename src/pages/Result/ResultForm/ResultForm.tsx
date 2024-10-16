@@ -17,7 +17,7 @@ import { format } from 'date-fns';
 import { toast } from "react-toastify";
 import { handleEnterKeyPress, resultHandleEnterKeyPress } from "../../../utils/moveToNextFieldOnEnter";
 import SearchResultData from "../../Service/ServiceForms/ServiceTypeForm/SearchResultData";
-import { addDatePairModalReducer, getAllServiceFormThunk, getIsSearchServiceForm, isDatePairModalReducer, searchServiceFormThunk, updateServiceFormThunk } from "../../../redux/slice/serviceForm";
+import { addDatePairModalReducer, getAllResultServiceFormThunk, getAllServiceFormThunk, getIsSearchServiceForm, isDatePairModalReducer, searchServiceFormThunk, updateServiceFormThunk } from "../../../redux/slice/serviceForm";
 import { LTFormSchema } from "../../../schemas/service forms/L&TFormSchema";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -28,6 +28,7 @@ import { GoogleMap, LoadScript, DistanceMatrixService } from '@react-google-maps
 
 import FormatedIndexInputField from "../../../components/InputFields/TextField/FormatedIndexInputField";
 import BorderButton from "../../../components/Buttons/BorderButton/BorderButton";
+import axios from "axios";
 export type FormFields = z.infer<typeof LTFormSchema>
 
 const ResultForm = () => {
@@ -53,7 +54,8 @@ const ResultForm = () => {
     const [endDate, setEndDate] = useState(null);
     const getSearchExistingSelectedClientoption = clientIdOptions?.find((data, index) => data?.value === selectedSearchResultData[0]?.clientId?._id && { value: data?._id, label: data?.fullName })
     const getSearchExistingSelectedServeroption = serverIdOptions?.find((data, index) => data?.value === selectedSearchResultData[0]?.serviceResultServerId?._id && { value: data?._id, label: data?.serverCode })
-
+    const lastestResultFormSaved = JSON.parse(localStorage.getItem("lastResultFormSaved"))
+    console.log("lastestResultFormSaved", lastestResultFormSaved)
     const isDatePairModal = useSelector((state: RootState) => state.serviceForm.isDatePairModal)
     const datepairsData = useSelector((state: RootState) => state.serviceForm.datepairs);
     const lTSFirstNameArray = allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",")
@@ -72,7 +74,8 @@ const ResultForm = () => {
     const [oLTIndex, setOltIndex] = useState("")
     const [currentServerId, setCurrentServerId] = useState<string>()
     const [resultId, setResultId] = useState<string>(undefined)
-    const [datePairsDates, setDatePairsDates] = useState<any>()
+    const [datePairsDates, setDatePairsDates] = useState<any>();
+
     const addMinutesToTime = (timeString, minutesToAdd) => {
 
         // Add a fallback for when AM/PM is missing (assuming 12-hour format)
@@ -116,7 +119,28 @@ const ResultForm = () => {
     };
     const updatedTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
     // USEEFFECT FOR SELECTION OF DATE PAIRS STARTS
+    const secondHanldetimeChange = () => {
+        const watchValuw = watch("serviceResultSecondAttemptDate")
+        const seconddatevalue = getValues("serviceResultSecondAttemptDate")
+        const firstdatevalue = getValues("serviceResultFirstAttemptDate")
+
+        toast.success(`${seconddatevalue}`)
+        if (seconddatevalue !== "") {
+            const secondAttemptDate = new Date(seconddatevalue);
+            const formattedSecondAttemptDate = `${secondAttemptDate?.getFullYear()}-${(secondAttemptDate?.getMonth() + 1)?.toString()?.padStart(2, '0')}-${secondAttemptDate?.getDate()?.toString()?.padStart(2, '0')}`;
+
+            setValue("serviceResultDateOfService", formattedSecondAttemptDate);
+
+        } else {
+            const firstAttemptDate = new Date(firstdatevalue);
+            const formattedFirstAttemptDate = `${firstAttemptDate?.getFullYear()}-${(firstAttemptDate?.getMonth() + 1)?.toString()?.padStart(2, '0')}-${firstAttemptDate?.getDate()?.toString()?.padStart(2, '0')}`;
+            setValue("serviceResultDateOfService", formattedFirstAttemptDate);
+
+        }
+
+    }
     useEffect(() => {
+
         if (datepairsData?.firstAttemptDate) {
             const firstAttemptDate = new Date(datepairsData?.firstAttemptDate);
             const formattedFirstAttemptDate = `${firstAttemptDate?.getFullYear()}-${(firstAttemptDate?.getMonth() + 1)?.toString()?.padStart(2, '0')}-${firstAttemptDate?.getDate()?.toString()?.padStart(2, '0')}`;
@@ -132,6 +156,19 @@ const ResultForm = () => {
             setValue("serviceResultSecondAttemptDate", formattedSecondAttemptDate);
             setValue("serviceResultDateOfService", formattedSecondAttemptDate);
         }
+        // if (seconddatevalue !== "") {
+        //     const secondAttemptDate = new Date(datepairsData?.secondAttemptDate);
+        //     const formattedSecondAttemptDate = `${secondAttemptDate?.getFullYear()}-${(secondAttemptDate?.getMonth() + 1)?.toString()?.padStart(2, '0')}-${secondAttemptDate?.getDate()?.toString()?.padStart(2, '0')}`;
+
+        //     setValue("serviceResultDateOfService", formattedSecondAttemptDate);
+
+        // } else {
+        //     const firstAttemptDate = new Date(datepairsData?.firstAttemptDate);
+        //     const formattedFirstAttemptDate = `${firstAttemptDate?.getFullYear()}-${(firstAttemptDate?.getMonth() + 1)?.toString()?.padStart(2, '0')}-${firstAttemptDate?.getDate()?.toString()?.padStart(2, '0')}`;
+        //     setValue("serviceResultDateOfService", formattedFirstAttemptDate);
+
+        // }
+        // toast.success("call")
     }, [datepairsData, setValue]);
 
     // USEEFFECT FOR SELECTION OF DATE PAIRS ENDS
@@ -232,12 +269,19 @@ const ResultForm = () => {
 
                 const updatingData = { ...addingData, serviceFormId: selectedSearchResultData[0]?._id }
                 // HERE UPDATE SERVICE FORM API WILL BE CALLED
-                dispatch(updateServiceFormThunk(updatingData))
+                localStorage.setItem("lastResultFormSaved", JSON.stringify(updatingData))
+                const sendingToData = {
+                    data: updatingData,
+                    isSearch: true
+                }
+                dispatch(updateServiceFormThunk(sendingToData))
             }
             else {
                 const updatingData = { ...addingData, serviceFormId: allServiceForm[serviceFormIndex]?._id }
                 // HERE UPDATE SERVICE FORM API WILL BE CALLED
-                console.log(updatingData)
+                // console.log(updatingData)
+                localStorage.setItem("lastResultFormSaved", JSON.stringify(updatingData))
+
                 dispatch(updateServiceFormThunk(updatingData))
 
             }
@@ -262,7 +306,7 @@ const ResultForm = () => {
     }
     // USE EFFECT WILL GET ALL RESULT FORM
     useEffect(() => {
-        dispatch(getAllServiceFormThunk())
+        dispatch(getAllResultServiceFormThunk())
     }, [serviceFormIndex])
     // USE EFFECT WILL BE CALLED ON PRESSING F10 KEY
     useEffect(() => {
@@ -344,10 +388,10 @@ const ResultForm = () => {
             setValue("serviceResultServerId", getSearchExistingSelectedServeroption?.value)
             setValue("serviceResultResults", selectedSearchResultData[0]?.serviceResultResults ?? "")
             setResultId(selectedSearchResultData[0]?.serviceResultResults ?? "")
-            setValue("serviceResultDateOfService", selectedSearchResultData[0]?.serviceResultDateOfService)
-            setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
-            setValue("serviceResultFirstAttemptDate", selectedSearchResultData[0]?.serviceResultFirstAttemptDate)
-            setValue("serviceResultSecondAttemptDate", selectedSearchResultData[0]?.serviceResultSecondAttemptDate)
+            // setValue("serviceResultDateOfService", selectedSearchResultData[0]?.serviceResultDateOfService)
+            // setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
+            // setValue("serviceResultFirstAttemptDate", selectedSearchResultData[0]?.serviceResultFirstAttemptDate)
+            // setValue("serviceResultSecondAttemptDate", selectedSearchResultData[0]?.serviceResultSecondAttemptDate)
             setValue("serviceResultThirdTimeOfService", selectedSearchResultData[0]?.serviceResultThirdTimeOfService)
             setValue("serviceResultThirdAttemptDate", selectedSearchResultData[0]?.serviceResultThirdAttemptDate)
             setValue("serviceResultlTServed", selectedSearchResultData[0]?.serviceResultlTServed)
@@ -363,20 +407,36 @@ const ResultForm = () => {
             setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.otherIdentifyingFeatures)
             setValue("serviceResultSex", selectedSearchResultData[0]?.serviceResultSex)
             setValue("serviceResultSkinColor", selectedSearchResultData[0]?.serviceResultSkinColor)
-            if (previousForm?.serviceResultServerId?.serverCode === selectedSearchResultData[0]?.serviceResultServerId?.serverCode) {
-                const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
-                const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
-                setValue("serviceResultSecondTimeOfService", secondTime)
-                setValue("serviceResultFirstTimeOfService", firstTime)
-                setValue("serviceResultTimeOfService", secondTime)
+            // const secondTime = selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip) : addMinutesToTime(selectedSearchResultData[0]?.serviceResultSecondTimeOfService, suggestedTimeTrip)
+            // const firstTime = selectedSearchResultData[0]?.serviceResultFirstTimeOfService === "" || selectedSearchResultData[0]?.serviceResultFirstTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultFirstTimeOfService, suggestedTimeTrip) : addMinutesToTime(selectedSearchResultData[0]?.serviceResultFirstTimeOfService, suggestedTimeTrip)
+
+            // setValue("serviceResultSecondTimeOfService", secondTime)
+            // setValue("serviceResultFirstTimeOfService", firstTime)
+            // setValue("serviceResultTimeOfService", secondTime)
+            setValue("serviceResultTimeOfService", selectedSearchResultData[0]?.serviceResultTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultTimeOfService === "" || selectedSearchResultData[0]?.serviceResultTimeOfService === undefined ? lastestResultFormSaved?.serviceResultTimeOfService : selectedSearchResultData[0]?.serviceResultTimeOfService)
+            setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultFirstTimeOfService === "" || selectedSearchResultData[0]?.serviceResultFirstTimeOfService === undefined ? lastestResultFormSaved?.serviceResultFirstTimeOfService : selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
+            setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === undefined ? lastestResultFormSaved?.serviceResultSecondTimeOfService : selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
+
+            // setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip) : addMinutesToTime(selectedSearchResultData[0]?.serviceResultSecondTimeOfService, suggestedTimeTrip))
 
 
-            } else {
-                setValue("serviceResultTimeOfService", selectedSearchResultData[0]?.serviceResultTimeOfService)
-                setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
-                setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
+            setValue("serviceResultDateOfService", selectedSearchResultData[0]?.serviceResultDateOfService === "" || selectedSearchResultData[0]?.serviceResultDateOfService === undefined ? lastestResultFormSaved?.serviceResultDateOfService : selectedSearchResultData[0]?.serviceResultDateOfService)
+            setValue("serviceResultFirstAttemptDate", selectedSearchResultData[0]?.serviceResultFirstAttemptDate === "" || selectedSearchResultData[0]?.serviceResultFirstAttemptDate === undefined ? lastestResultFormSaved?.serviceResultFirstAttemptDate : selectedSearchResultData[0]?.serviceResultFirstAttemptDate)
+            setValue("serviceResultSecondAttemptDate", selectedSearchResultData[0]?.serviceResultSecondAttemptDate === "" || selectedSearchResultData[0]?.serviceResultSecondAttemptDate === undefined ? lastestResultFormSaved?.serviceResultSecondAttemptDate : selectedSearchResultData[0]?.serviceResultSecondAttemptDate)
+            // if (previousForm?.serviceResultServerId?.serverCode === selectedSearchResultData[0]?.serviceResultServerId?.serverCode) {
+            //     const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
+            //     const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
+            //     setValue("serviceResultSecondTimeOfService", secondTime)
+            //     setValue("serviceResultFirstTimeOfService", firstTime)
+            //     setValue("serviceResultTimeOfService", secondTime)
 
-            }
+
+            // } else {
+            //     setValue("serviceResultTimeOfService", selectedSearchResultData[0]?.serviceResultTimeOfService)
+            //     setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService)
+            //     setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
+
+            // }
             // // Convert lTSFirstName to an array
             // const lTSFirstNames = selectedSearchResultData[0]?.lTSFirstName?.split(",") || [];
             // // Get the current served and not served arrays
@@ -516,27 +576,46 @@ const ResultForm = () => {
                 setValue("serviceResultServerId", allServiceForm[serviceFormIndex]?.serviceResultServerId?._id ?? "")
                 setValue("serviceResultResults", allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
                 setResultId(allServiceForm[serviceFormIndex]?.serviceResultResults ?? "")
-                setValue("serviceResultDateOfService", allServiceForm[serviceFormIndex]?.serviceResultDateOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultDateOfService === undefined ? previousForm?.serviceResultDateOfService : allServiceForm[serviceFormIndex]?.serviceResultDateOfService)
-
-                if (previousForm?.serviceResultServerId?.serverCode === allServiceForm[serviceFormIndex]?.serviceResultServerId?.serverCode) {
-                    const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, suggestedTimeTrip)
-                    const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
+                if (lastestResultFormSaved?.serviceResultSecondTimeOfService !== "" || lastestResultFormSaved?.serviceResultSecondTimeOfService !== "NaN") {
+                    const secondTime = addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip)
+                    // const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, suggestedTimeTrip)
+                    console.log("lastestResultFormSaved?.serviceResultSecondTimeOfService !== `` || lastestResultFormSaved?.serviceResultSecondTimeOfService !== `NaN`", secondTime)
 
                     setValue("serviceResultSecondTimeOfService", secondTime)
-                    setValue("serviceResultFirstTimeOfService", firstTime)
-                    setValue("serviceResultTimeOfService", secondTime)
+                    // setValue("serviceResultFirstTimeOfService", firstTime)
+                    // setValue("serviceResultTimeOfService", secondTime)
 
 
                 } else {
-                    setValue("serviceResultTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === undefined ? previousForm?.serviceResultTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultTimeOfService)
-                    setValue("serviceResultSecondTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined ? previousForm?.serviceResultSecondTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService)
-                    setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined ? previousForm?.serviceResultFirstTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
+                    console.log("lastestResultFormSaved?.serviceResultSecondTimeOfService !== `` || lastestResultFormSaved?.serviceResultSecondTimeOfService !== `NaN` else")
+
+                    // setValue("serviceResultTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === undefined ? previousForm?.serviceResultTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultTimeOfService)
+                    setValue("serviceResultSecondTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined ? lastestResultFormSaved?.serviceResultSecondTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService)
+                    // setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined ? previousForm?.serviceResultFirstTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
 
                 }
-                setValue("serviceResultFirstAttemptDate", allServiceForm[serviceFormIndex]?.serviceResultFirstAttemptDate === undefined || allServiceForm[serviceFormIndex]?.serviceResultFirstAttemptDate === "" ? previousForm?.serviceResultFirstAttemptDate : allServiceForm[serviceFormIndex]?.serviceResultFirstAttemptDate)
-                setValue("serviceResultSecondAttemptDate", allServiceForm[serviceFormIndex]?.serviceResultSecondAttemptDate === undefined || allServiceForm[serviceFormIndex]?.serviceResultSecondAttemptDate === "" ? previousForm?.serviceResultSecondAttemptDate : allServiceForm[serviceFormIndex]?.serviceResultSecondAttemptDate)
-                setValue("serviceResultThirdTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultThirdTimeOfService === undefined ? previousForm?.serviceResultThirdTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultThirdTimeOfService)
-                setValue("serviceResultThirdAttemptDate", allServiceForm[serviceFormIndex]?.serviceResultThirdAttemptDate === undefined || allServiceForm[serviceFormIndex]?.serviceResultThirdAttemptDate === "" ? previousForm?.serviceResultThirdAttemptDate : allServiceForm[serviceFormIndex]?.serviceResultThirdAttemptDate)
+
+                // const secondTime = allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip) : addMinutesToTime(allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService, suggestedTimeTrip)
+                // const firstTime = allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultFirstTimeOfService, suggestedTimeTrip) : addMinutesToTime(allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService, suggestedTimeTrip)
+                // console.log("secondTime", suggestedTimeTrip);
+                // setValue("serviceResultSecondTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip) : addMinutesToTime(allServiceForm[serviceFormIndex]?.serviceResultSecondTimeOfService, suggestedTimeTrip))
+                // setValue("serviceResultTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === undefined ? lastestResultFormSaved?.serviceResultTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultTimeOfService)
+                // setValue("serviceResultFirstTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService === undefined ? lastestResultFormSaved?.serviceResultFirstTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultFirstTimeOfService)
+
+                // console.log(allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "NaN:NaN" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === "" || allServiceForm[serviceFormIndex]?.serviceResultTimeOfService === undefined ? lastestResultFormSaved?.serviceResultTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultTimeOfService, lastestResultFormSaved?.serviceResultTimeOfService)
+                // setValue("serviceResultSecondTimeOfService", secondTime)
+                // setValue("serviceResultFirstTimeOfService", firstTime)
+
+
+
+                setValue("serviceResultDateOfService", allServiceForm[serviceFormIndex]?.serviceResultDateOfService === undefined || allServiceForm[serviceFormIndex]?.serviceResultDateOfService === "" ? lastestResultFormSaved?.serviceResultDateOfService : allServiceForm[serviceFormIndex]?.serviceResultDateOfService)
+                setValue("serviceResultDateOfNotary", allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === undefined || allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === "" ? lastestResultFormSaved?.serviceResultDateOfNotary : allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary)
+                setValue("serviceResultDateOfMailing", allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === undefined || allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === "" ? lastestResultFormSaved?.serviceResultDateOfMailing : allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing)
+
+                setValue("serviceResultFirstAttemptDate", allServiceForm[serviceFormIndex]?.serviceResultFirstAttemptDate === undefined || allServiceForm[serviceFormIndex]?.serviceResultFirstAttemptDate === "" ? lastestResultFormSaved?.serviceResultFirstAttemptDate : allServiceForm[serviceFormIndex]?.serviceResultFirstAttemptDate)
+                setValue("serviceResultSecondAttemptDate", allServiceForm[serviceFormIndex]?.serviceResultSecondAttemptDate === undefined || allServiceForm[serviceFormIndex]?.serviceResultSecondAttemptDate === "" ? lastestResultFormSaved?.serviceResultSecondAttemptDate : allServiceForm[serviceFormIndex]?.serviceResultSecondAttemptDate)
+                setValue("serviceResultThirdTimeOfService", allServiceForm[serviceFormIndex]?.serviceResultThirdTimeOfService === undefined ? lastestResultFormSaved?.serviceResultThirdTimeOfService : allServiceForm[serviceFormIndex]?.serviceResultThirdTimeOfService)
+                setValue("serviceResultThirdAttemptDate", allServiceForm[serviceFormIndex]?.serviceResultThirdAttemptDate === undefined || allServiceForm[serviceFormIndex]?.serviceResultThirdAttemptDate === "" ? lastestResultFormSaved?.serviceResultThirdAttemptDate : allServiceForm[serviceFormIndex]?.serviceResultThirdAttemptDate)
 
                 // Convert lTSFirstName to an array
                 const lTSFirstNames = allServiceForm[serviceFormIndex]?.lTSFirstName?.split(",") || [];
@@ -584,8 +663,8 @@ const ResultForm = () => {
                 setValue("serviceResultHeight", allServiceForm[serviceFormIndex]?.serviceResultHeight === null ? "" : JSON.stringify(allServiceForm[serviceFormIndex]?.serviceResultHeight))
                 setValue("serviceResultWeight", allServiceForm[serviceFormIndex]?.serviceResultWeight === null ? "" : JSON.stringify(allServiceForm[serviceFormIndex]?.serviceResultWeight))
                 setValue("serviceResultOtherFeatures", allServiceForm[serviceFormIndex]?.serviceResultOtherFeatures)
-                setValue("serviceResultDateOfMailing", allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === "" || allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === undefined ? previousForm?.serviceResultDateOfMailing : allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing)
-                setValue("serviceResultDateOfNotary", allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === "" || allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === undefined ? previousForm?.serviceResultDateOfNotary : allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary)
+                // setValue("serviceResultDateOfMailing", allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === "" || allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing === undefined ? previousForm?.serviceResultDateOfMailing : allServiceForm[serviceFormIndex]?.serviceResultDateOfMailing)
+                // setValue("serviceResultDateOfNotary", allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === "" || allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary === undefined ? previousForm?.serviceResultDateOfNotary : allServiceForm[serviceFormIndex]?.serviceResultDateOfNotary)
                 setValue("serviceResultSubstitudeDeliveredTo", allServiceForm[serviceFormIndex]?.serviceResultSubstitudeDeliveredTo)
                 setValue("serviceResultRecipient", allServiceForm[serviceFormIndex]?.serviceResultRecipient)
 
@@ -597,19 +676,68 @@ const ResultForm = () => {
 
     }, [serviceFormIndex, setValue, allServiceForm, selectedSearchResultData])
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC STARTS 
+    // const serviceResultDateOfService = watch("serviceResultDateOfService");
+
+    // useEffect(() => {
+    //     if (serviceResultDateOfService) {
+    //         const serviceDate = new Date(serviceResultDateOfService);
+    //         const nextDay = new Date(serviceDate);
+    //         nextDay.setDate(serviceDate.getDate() + 1);
+
+    //         // const formattedNextDay = format(nextDay, 'yyyy-MM-dd');
+    //         const formattedNextDay = format(nextDay, 'mm-dd-yyyy');
+
+
+    //         setValue("serviceResultDateOfMailing", formattedNextDay);
+    //         setValue("serviceResultDateOfNotary", formattedNextDay);
+    //     }
+    // }, [serviceResultDateOfService, setValue]);
     const serviceResultDateOfService = watch("serviceResultDateOfService");
+
     useEffect(() => {
+        // Only proceed if serviceResultDateOfService has a valid date
         if (serviceResultDateOfService) {
             const serviceDate = new Date(serviceResultDateOfService);
+
+            // Check if the date is valid
+            if (isNaN(serviceDate)) {
+                console.error("Invalid date value: ", serviceResultDateOfService);
+                return;
+            }
+
             const nextDay = new Date(serviceDate);
             nextDay.setDate(serviceDate.getDate() + 1);
 
-            const formattedNextDay = format(nextDay, 'yyyy-MM-dd');
+            // Format the next day
+            const formattedNextDay = format(nextDay, 'yyyy-MM-dd'); // Use correct date format
+            // toast.success(`if ${formattedNextDay}`)
 
+            // Set the other fields
             setValue("serviceResultDateOfMailing", formattedNextDay);
             setValue("serviceResultDateOfNotary", formattedNextDay);
+        } else {
+            // Handle empty value case: If serviceResultDateOfService is empty, fallback to firstResultDateOfService
+            const serviceResultDateOfService = watch("serviceResultDateOfService");
+            if (serviceResultDateOfService) {
+                const serviceDate = new Date(serviceResultDateOfService);
+
+                // Check if serviceResultDateOfService is a valid date
+                if (isNaN(serviceDate)) {
+                    console.error("Invalid serviceResultDateOfService date: ", serviceResultDateOfService);
+                    return;
+                }
+
+                const nextDay = new Date(serviceDate);
+                nextDay.setDate(serviceDate.getDate() + 1);
+
+                const formattedNextDay = format(nextDay, 'MM-dd-yyyy');
+                // toast.success(`else${formattedNextDay}`)
+                setValue("serviceResultDateOfMailing", formattedNextDay);
+                setValue("serviceResultDateOfNotary", formattedNextDay);
+            }
         }
-    }, [serviceResultDateOfService, setValue]);
+    }, [serviceResultDateOfService, setValue, watch]); // Re-run effect when serviceResultDateOfService changes
+
     // WHEN SELECT DATE OF SERVICE THE NEXT DATE STORE IN NOTRAY AND MAILING DATE LOGIC ENDS 
 
 
@@ -660,22 +788,13 @@ const ResultForm = () => {
     };
 
 
-    const handleDistanceMatrixResponse = (response) => {
-        if (response && response?.rows[0]?.elements[0].status === "OK") {
-            const distance = response?.rows[0]?.elements[0]?.distance;
-            const duration = response?.rows[0]?.elements[0]?.duration?.text; // e.g., "2hr 40mins"
-            const totalMinutes = convertDurationToMinutes(duration);
-            setValue("timeTrip", JSON.stringify(totalMinutes));
-            setSuggestedTimeTrip(totalMinutes);
 
-        }
-    };
     const updateTimes = (timeTripValue) => {
         const totalMinutes = parseInt(timeTripValue, 10);
         // Only run if totalMinutes is a valid number
         if (!isNaN(totalMinutes) && timeTripValue !== '') {
-            const secondTime = addMinutesToTime(previousForm?.serviceResultSecondTimeOfService, totalMinutes);
-            const firstTime = addMinutesToTime(previousForm?.serviceResultFirstTimeOfService, totalMinutes);
+            const secondTime = addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, totalMinutes);
+            const firstTime = addMinutesToTime(lastestResultFormSaved?.serviceResultFirstTimeOfService, totalMinutes);
             // Confirm update for the first time
             // const confirmFirstTime = window.confirm(`Do you want to add ${totalMinutes} minutes to 1st Time Attempt?`);
             // if (confirmFirstTime) {
@@ -703,10 +822,10 @@ const ResultForm = () => {
 
     };
     const handleTimeTripServerIdChange = () => {
-        if (previousForm?.serviceResultServerId?._id === currentServerId && currentServerId !== undefined && currentServerId !== "") {
-            const { timeTrip } = getValues()
-            updateTimes(timeTrip);
-        }
+        // if (previousForm?.serviceResultServerId?._id === currentServerId && currentServerId !== undefined && currentServerId !== "") {
+        const { timeTrip } = getValues()
+        updateTimes(timeTrip);
+        // }
     };
 
     const moveToNextFieldFromTimeTrip = (event) => {
@@ -731,31 +850,87 @@ const ResultForm = () => {
 
 
     };
+
+    const handleDistanceMatrixResponse = (response) => {
+        console.log("response", response)
+
+        if (response && response?.rows[0]?.elements[0].status === "OK") {
+            toast.success("cl")
+            const distance = response?.rows[0]?.elements[0]?.distance;
+            const duration = response?.rows[0]?.elements[0]?.duration?.text; // e.g., "2hr 40mins"
+            const totalMinutes = convertDurationToMinutes(duration);
+            setValue("timeTrip", JSON.stringify(totalMinutes));
+            console.log("totalMinutes>>>>", totalMinutes)
+            setSuggestedTimeTrip(duration);
+
+        }
+    };
+    const [selectedResultOrigins, setOrigins] = useState([]);
+    const [selectedResultDestinations, setDestinations] = useState([]);
+    const [mapKey, setMapKey] = useState(0); // Add a key to force re-rendering
+
+    const fetchDistanceMatrix = () => {
+        const newOrigins = [
+            lastestResultFormSaved?.lTSAddress || ''
+        ];
+
+        const newDestinations = [selectedSearchResultData[0]?.lTSAddress || ''];
+
+        if (newOrigins[0] && newDestinations[0]) {
+            console.log("selectedSearchResultData[0]?.lTSAddress", newDestinations);
+            // Update the state with new origins and destinations
+            setOrigins(newOrigins);
+            setDestinations(newDestinations);
+            setMapKey(prevKey => prevKey + 1);
+
+        }
+    };
+
+    // Add this useEffect hook to trigger `fetchDistanceMatrix` when necessary
     useEffect(() => {
-        setPreviousAddress(serviceResultServerId)
-        // Fetch the Distance Matrix
-        const fetchDistanceMatrix = () => {
-            const origins = [previousForm?.lTSAddress || ''];
-            const destinations = [allServiceForm[serviceFormIndex]?.lTSAddress || ''];
-            if (origins[0] && destinations[0]) {
-                // Here, you can either set up the DistanceMatrixService again or trigger it
-                return (
-                    <DistanceMatrixService
-                        options={{
-                            origins,
-                            destinations,
-                            travelMode: "DRIVING",
-                        }}
-                        callback={handleDistanceMatrixResponse}
-                    />
-                );
-            }
-        };
-
         fetchDistanceMatrix();
-        handleTimeTripServerIdChange()
+    }, [selectedSearchResultData[0]]);
+    // // Fetch the Distance Matrix
+    // const fetchDistanceMatrix = () => {
+    //     const origins = [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTSState || ''];
+    //     // const destinations = [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState
+    //     //     || ''];
 
-    }, [allServiceForm, serviceFormIndex, serverId]);
+    //     const destinations = [selectedSearchResultData[0]?.lTSAddress || ''];
+    //     if (origins[0] && destinations[0]) {
+    //         console.log("selectedSearchResultData[0]?.lTSAddress", destinations)
+    //         toast.success("useefect called")
+    //         // Here, you can either set up the DistanceMatrixService again or trigger it
+    //         return (
+    //             <LoadScript googleMapsApiKey="AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY">
+    //                 <GoogleMap
+    //                     center={{ lat: -34.397, lng: 150.644 }}
+    //                     zoom={8}
+    //                     onLoad={(map) => console.log("GoogleMap loaded", map)}
+    //                 >
+    //                     {origins[0] && destinations[0] && (
+
+    //                         <DistanceMatrixService
+    //                             options={{
+    //                                 origins,
+    //                                 destinations,
+    //                                 travelMode: "DRIVING",
+    //                             }}
+    //                             callback={handleDistanceMatrixResponse}
+    //                         />
+    //                     )}
+    //                 </GoogleMap>
+    //             </LoadScript>
+    //         );
+    //     }
+    // };
+    // useEffect(() => {
+    //     setPreviousAddress(serviceResultServerId)
+    //     fetchDistanceMatrix();
+    //     handleTimeTripServerIdChange()
+
+    // }, [selectedSearchResultData[0]]);
+
     const [googleLoaded, setGoogleLoaded] = useState(false);
     const onLoad = useCallback(() => {
         // This will be called once the library has fully loaded
@@ -865,551 +1040,658 @@ const ResultForm = () => {
     }
 
     // setDatePairsDates(allServiceForm[serviceFormIndex]?.datePairs?.firstAttemptDate === "" || allServiceForm[serviceFormIndex]?.datePairs?.secondAttemptDate ? previousForm?.datePairs : allServiceForm[serviceFormIndex]?.datePairs)
-    console.log(datepairsData?.firstAttemptDate)
+    console.log("selectedResultOrigins[0] && selectedResultDestinations[0]", selectedResultOrigins, selectedResultDestinations)
     // allServiceForm[serviceFormIndex]?.datePairs?.firstAttemptDate === "" || allServiceForm[serviceFormIndex]?.datePairs?.secondAttemptDate ? previousForm?.datePairs : allServiceForm[serviceFormIndex]?.datePairs)
 
+    const [map, setMap] = useState(null);
 
+    const center = {
+        lat: -3.745,
+        lng: -3.523
+    }
+
+    const onMount = useCallback(function (map) {
+        const bounds = new window.google.maps.LatLngBounds(center);
+        map.fitBounds(bounds);
+        console.log('MAP Setting: ', map);
+
+        setMap(map);
+    }, []);
+
+    const onUnmount = useCallback(() => {
+        console.log('MAP: ', map);
+
+        setMap(null);
+    }, [])
+
+    useEffect(() => {
+        return () => {
+            console.log('/////////////////////////// Cleaned Up');
+            onUnmount()
+        }
+    }, [])
+    const [isLoading, setIsLoading] = useState(true);
+
+    const handleMapLoad = () => {
+        setIsLoading(false);
+        console.log("GoogleMap loaded");
+    };
+
+
+    const calculateDistance = async () => {
+        const apiKey = 'AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY';
+        const origin = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+            selectedResultOrigins :
+            [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTState || '']; // San Francisco
+        const destination = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+            selectedResultDestinations :
+            [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState || '']; // Los Angeles
+
+        // const origins = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+        //     selectedResultOrigins :
+        //     [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTState || '']
+
+        // const destinations = (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+        //     selectedResultDestinations :
+        //     [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState || ''],
+
+
+        const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&key=${apiKey}`;
+
+        try {
+            const response = await axios.get(url);
+            const result = response.data;
+            const distanceInMeters = result.rows[0].elements[0].distance.value;
+            console.log("distanve", distanceInMeters)
+            const distanceInMin = distanceInMeters / 60
+            setValue("timeTrip", distanceInMin.toString())
+            // setDistance(distanceInMeters);.
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
+    };
+    useEffect(() => {
+        calculateDistance()
+    }, [allServiceForm[serviceFormIndex], searchResultFormData[0]])
     return <>
+        {/* {/* <LoadScript googleMapsApiKey="AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY"> */}
+        {/* {isLoading && <div>Loading...</div>} */}
+
         {searchResultFormData?.length > 0 && isSearchResultForm ? <SearchResultData /> : isDatePairModal ?
             <DatePairsModal /> :
-            <form onSubmit={handleSubmit(submitResultFormFunction)}>
-                {/* QUERY INFORMATION (L&T) FORM STARTS */}
-                <div className="mt-6  ">
-                    <div className="flex items-center flex-wrap gap-x-4 mb-4">
+            <>
 
-                        <h1 className="font-semibold  text-base
+                <form onSubmit={handleSubmit(submitResultFormFunction)}>
+
+                    {/* QUERY INFORMATION (L&T) FORM STARTS */}
+                    <div className="mt-6  ">
+                        <div className="flex items-center flex-wrap gap-x-4 mb-4">
+
+                            <h1 className="font-semibold  text-base
                                     md:text-md 
                                     lg:text-xl">Query Information (L&T)</h1>
-                        <BorderButton buttonText="Go to Service Result" onClick={() => goToServiceResultForm("service result")} />
-                    </div>
-
-
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" onKeyDown={handleEnterKeyPress}
-                            />
+                            <BorderButton buttonText="Go to Service Result" onClick={() => goToServiceResultForm("service result")} />
                         </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
 
-                            {/* <FormatedIndexInputField
+
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField register={register} label="full Name" error={errors.lTSFirstName} name="lTSFirstName" onKeyDown={handleEnterKeyPress}
+                                />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+
+                                {/* <FormatedIndexInputField
                                 onKeyDown={handleEnterKeyPress} register={register} label="Index Number" error={errors.oLTIndexNo} name="oLTIndexNo" oltIndexValue={oLTIndex}
                                 onChange={setOltIndex} year={currentYear}
                             /> */}
 
-                            <FormatedIndexInputField
-                                onKeyDown={handleEnterKeyPress}
-                                register={register}
-                                label="Index Number"
-                                error={errors.oLTIndexNo}
-                                name="oLTIndexNo"
-                                oltIndexValue={oLTIndex} // Provide the value to split
-                                onChange={setOltIndex}
-                                year={currentYear} // Pass current year
-                            />
+                                <FormatedIndexInputField
+                                    onKeyDown={handleEnterKeyPress}
+                                    register={register}
+                                    label="Index Number"
+                                    error={errors.oLTIndexNo}
+                                    name="oLTIndexNo"
+                                    oltIndexValue={oLTIndex} // Provide the value to split
+                                    onChange={setOltIndex}
+                                    year={currentYear} // Pass current year
+                                />
 
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="address" error={errors.lTSAddress} name="lTSAddress" onKeyDown={handleEnterKeyPress}
-                            />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField register={register} label="Business Name" error={errors.lTSBusinessName} name="lTSBusinessName" onKeyDown={handleEnterKeyPress}
-                            />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt" error={errors.lTSApt} name="lTSApt" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="city" error={errors.lTSCity} name="lTSCity" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
-                        </div>
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField register={register} label="address" error={errors.lTSAddress} name="lTSAddress" onKeyDown={handleEnterKeyPress}
+                                />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField register={register} label="Business Name" error={errors.lTSBusinessName} name="lTSBusinessName" onKeyDown={handleEnterKeyPress}
+                                />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="apt" error={errors.lTSApt} name="lTSApt" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="city" error={errors.lTSCity} name="lTSCity" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="state" error={errors.lTSState} name="lTSState" />
+                            </div>
 
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" maxLength={12} onChange={handleZipChange} />
-                        </div>
-                        <div className="w-[30%]">
-                            {/* <TextArea row={1} register={register} label="description" error={errors.lTSDescription} name="lTSDescription" /> */}
-                            <TextField
-                                // onKeyDown={handleEnterKeyPress} 
-                                register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            {isSearchResultForm ?
-                                <div className="flex items-center gap-x-6">
-                                    <div className="w-full flex items-center">
-                                        <label className="w-[180px]">Start Date</label>
-                                        <DatePicker
-                                            selected={startDate}
-                                            selectsStart
-                                            startDate={startDate}
-                                            endDate={endDate}
-                                            onChange={handleStartDateChange}
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress} register={register} label="zip" error={errors.lTSZip} name="lTSZip" maxLength={12} onChange={handleZipChange} />
+                            </div>
+                            <div className="w-[30%]">
+                                {/* <TextArea row={1} register={register} label="description" error={errors.lTSDescription} name="lTSDescription" /> */}
+                                <TextField
+                                    // onKeyDown={handleEnterKeyPress} 
+                                    register={register} label="description" error={errors.lTSDescription} name="lTSDescription" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                {isSearchResultForm ?
+                                    <div className="flex items-center gap-x-6">
+                                        <div className="w-full flex items-center">
+                                            <label className="w-[180px]">Start Date</label>
+                                            <DatePicker
+                                                selected={startDate}
+                                                selectsStart
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                                onChange={handleStartDateChange}
 
-                                            className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
+                                                className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
                                         focus:border-primaryColor focus:outline-primaryColor"
-                                            placeholderText="Start Date"
-                                        />
-                                    </div>
-                                    <div className="w-full flex items-center">
-                                        <label className="w-[180px]">End Date</label>
-                                        <DatePicker
-                                            selected={endDate}
-                                            selectsEnd
-                                            startDate={startDate}
-                                            endDate={endDate}
-                                            onChange={handleEndDateChange}
+                                                placeholderText="Start Date"
+                                            />
+                                        </div>
+                                        <div className="w-full flex items-center">
+                                            <label className="w-[180px]">End Date</label>
+                                            <DatePicker
+                                                selected={endDate}
+                                                selectsEnd
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                                onChange={handleEndDateChange}
 
-                                            className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
+                                                className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2  py-1
                                         focus:border-primaryColor focus:outline-primaryColor"
-                                            placeholderText="End Date"
-                                        />
+                                                placeholderText="End Date"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                : <TextField register={register} label="Input Date" readOnly error={errors.inputDate} name="inputDate" onKeyDown={handleEnterKeyPress}
-                                    type="date" />
-                            }
+                                    : <TextField register={register} label="Input Date" readOnly error={errors.inputDate} name="inputDate" onKeyDown={handleEnterKeyPress}
+                                        type="date" />
+                                }
 
 
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/* QUERY INFORMATION (L&T) FORM ENDS */}
-                {/* QUERY INFORMATION (STANDARD) FORM STARTS */}
-                <div className="mt-6">
-                    <h1 className="font-semibold  mb-4 text-base
+                    {/* QUERY INFORMATION (L&T) FORM ENDS */}
+                    {/* QUERY INFORMATION (STANDARD) FORM STARTS */}
+                    <div className="mt-6">
+                        <h1 className="font-semibold  mb-4 text-base
     md:text-md
     lg:text-xl">Query Information (Standard)</h1>
 
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="serve To" error={errors.queryInformationStandardServeTo} name="queryInformationStandardServeTo" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="plaintiff" error={errors.sSDPlaintiff} name="sSDPlaintiff" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="defendants" error={errors.sSDDefendants} name="sSDDefendants" />
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="serve To" error={errors.queryInformationStandardServeTo} name="queryInformationStandardServeTo" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="plaintiff" error={errors.sSDPlaintiff} name="sSDPlaintiff" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="defendants" error={errors.sSDDefendants} name="sSDDefendants" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/* QUERY INFORMATION (STANDARD) FORM ENDS */}
-                {/* SERVICE RESULT SECTION STARTS */}
-                <div className="mt-6 flex items-center gap-x-6" ref={serviceResultSectionRef}>
+                    {/* QUERY INFORMATION (STANDARD) FORM ENDS */}
+                    {/* SERVICE RESULT SECTION STARTS */}
+                    <div className="mt-6 flex items-center gap-x-6" ref={serviceResultSectionRef}>
 
-                    <h1 className="font-semibold  text-base
+                        <h1 className="font-semibold  text-base
     md:text-md
     lg:text-xl">Service Result</h1>
 
-                    <label className="italic">
-                        {allServiceForm[serviceFormIndex]?.standardServiceType?.name ? (
-                            <>
-                                {allServiceForm[serviceFormIndex]?.standardServiceType?.name}
-                                <span className=" ml-2">
-                                    ({allServiceForm[serviceFormIndex]?.oSSTDescription})
-                                </span>
-                            </>
-                        ) : (
-                            allServiceForm[serviceFormIndex]?.lTServiceType?.name
-                        )}
-                    </label>
+                        <label className="italic">
+                            {allServiceForm[serviceFormIndex]?.standardServiceType?.name ? (
+                                <>
+                                    {allServiceForm[serviceFormIndex]?.standardServiceType?.name}
+                                    <span className=" ml-2">
+                                        ({allServiceForm[serviceFormIndex]?.oSSTDescription})
+                                    </span>
+                                </>
+                            ) : (
+                                allServiceForm[serviceFormIndex]?.lTServiceType?.name
+                            )}
+                        </label>
 
-
-                </div>
-                {/* SERVICE RESULT SECTION STAENDRTS */}
-                {/* SHOW RESULT  FORM STARTS */}
-                <div className="mt-6">
-                    <div>
-                        <h1 className="  font-semibold text-base
-    md:text-md
-    lg:text-xl ">Hints</h1>
-                        <div className="flex flex-row gap-x-4 mt-2 flex-wrap gap-y-4">
-                            <Hints keyName="Esc" label="Cancel" />
-                            <Hints keyName="f7 " label="Find" />
-                            <Hints keyName="f10" label="Save" />
-                        </div>
 
                     </div>
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start mt-4">
-                        <div className="flex items-center justify-between w-[96%]">
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="Result Input Date" error={errors.serviceResultInputDate} name="serviceResultInputDate" type="date"
-                                />
+                    {/* SERVICE RESULT SECTION STAENDRTS */}
+                    {/* SHOW RESULT  FORM STARTS */}
+                    <div className="mt-6">
+                        <div>
+                            <h1 className="  font-semibold text-base
+    md:text-md
+    lg:text-xl ">Hints</h1>
+                            <div className="flex flex-row gap-x-4 mt-2 flex-wrap gap-y-4">
+                                <Hints keyName="Esc" label="Cancel" />
+                                <Hints keyName="f7 " label="Find" />
+                                <Hints keyName="f10" label="Save" />
                             </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
 
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="svc Type" error={errors.serviceType} name="serviceType" defaultValue="L&T Residential"
-                                    readOnly />
-
-                            </div>
                         </div>
-                        <div className="flex items-center flex-wrap w-[96%] justify-between">
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <p className="text-primaryColor/80 text-sm cursor-pointer mt-1 font-medium" onClick={() => { dispatch(isDatePairModalReducer(true)) }}>Select Date Pairs</p>
-                                <p className="text-primaryColor/80 text-sm cursor-pointer mt-1 font-medium" >{datepairsData?.firstAttemptDate === "" || datepairsData?.firstAttemptDate === undefined ? allServiceForm[serviceFormIndex]?.datePairs?.firstAttemptDate : datepairsData?.firstAttemptDate}-{datepairsData?.secondAttemptDate === undefined || datepairsData?.secondAttemptDate === "" ? allServiceForm[serviceFormIndex]?.datePairs?.secondAttemptDate : datepairsData?.secondAttemptDate}</p>
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start mt-4">
+                            <div className="flex items-center justify-between w-[96%]">
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
 
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <Controller name="clientId" control={control} render={({ field }) => (
-                                    <Dropdown
-                                        options={clientIdOptions}
-                                        value={field.value}
-                                        // onChange={() => field.onChange}
-                                        onChange={(value) => {
-                                            field.onChange(value);
-                                            setIsGotToServiceForm(false)
-                                        }}
-                                        label="Client id"
-                                        error={errors.clientId?.message as string}
-
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="Result Input Date" error={errors.serviceResultInputDate} name="serviceResultInputDate" type="date"
                                     />
-                                )} />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%] ">
+
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="svc Type" error={errors.serviceType} name="serviceType" defaultValue="L&T Residential"
+                                        readOnly />
+
+                                </div>
                             </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="Job" error={errors.jobNo} name="jobNo" required readOnly />
+                            <div className="flex items-center flex-wrap w-[96%] justify-between">
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <p className="text-primaryColor/80 text-sm cursor-pointer mt-1 font-medium" onClick={() => { dispatch(isDatePairModalReducer(true)) }}>Select Date Pairs</p>
+                                    <p className="text-primaryColor/80 text-sm cursor-pointer mt-1 font-medium" >{datepairsData?.firstAttemptDate === "" || datepairsData?.firstAttemptDate === undefined ? allServiceForm[serviceFormIndex]?.datePairs?.firstAttemptDate : datepairsData?.firstAttemptDate}-{datepairsData?.secondAttemptDate === undefined || datepairsData?.secondAttemptDate === "" ? allServiceForm[serviceFormIndex]?.datePairs?.secondAttemptDate : datepairsData?.secondAttemptDate}</p>
 
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <Controller name="clientId" control={control} render={({ field }) => (
+                                        <Dropdown
+                                            options={clientIdOptions}
+                                            value={field.value}
+                                            // onChange={() => field.onChange}
+                                            onChange={(value) => {
+                                                field.onChange(value);
+                                                setIsGotToServiceForm(false)
+                                            }}
+                                            label="Client id"
+                                            error={errors.clientId?.message as string}
+
+                                        />
+                                    )} />
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="Job" error={errors.jobNo} name="jobNo" required readOnly />
+
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex items-center w-[100%] flex-wrap gap-x-10">
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <Controller name="serviceResultServerId" control={control} render={({ field }) => (
-                                    <Dropdown
-                                        options={serverIdOptions}
-                                        value={field.value}
-                                        onChange={(option) => {
-                                            field.onChange(option); // Call the function to update form state
-                                            handleServerIdChange(option); // Call your additional logic
-                                            setIsGotToServiceForm(false)
-                                            setIsOpenResult(true);
+                            <div className="flex items-center w-[100%] flex-wrap gap-x-10">
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <Controller name="serviceResultServerId" control={control} render={({ field }) => (
+                                        <Dropdown
+                                            options={serverIdOptions}
+                                            value={field.value}
+                                            onChange={(option) => {
+                                                field.onChange(option); // Call the function to update form state
+                                                handleServerIdChange(option); // Call your additional logic
+                                                setIsGotToServiceForm(false)
+                                                setIsOpenResult(true);
 
-                                        }}
-                                        label="server Id" error={errors.serviceResultServerId?.message as string}
-                                        isOpenOption={isGotToServiceForm}
-                                        onKeyDown={handleServerSelect}
-                                    />
-                                )} />
+                                            }}
+                                            label="server Id" error={errors.serviceResultServerId?.message as string}
+                                            isOpenOption={isGotToServiceForm}
+                                            onKeyDown={handleServerSelect}
+                                        />
+                                    )} />
 
 
-                            </div>
-                            <div className="w-[60%]">
-                                <div className="w-[100%] md:w-[46%] lg:w-[100%] flex flex-col w-full items-start gap-1">
-                                    <label className="font-normal sm:font-medium text-sm capitalize">
-                                        Previous Address:</label>
-                                    {(previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress) &&
+                                </div>
+                                <div className="w-[60%]">
+                                    <div className="w-[100%] md:w-[46%] lg:w-[100%] flex flex-col w-full items-start gap-1">
+                                        <label className="font-normal sm:font-medium text-sm capitalize">
+                                            Previous Address:</label>
+                                        {/* {(previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress) && */}
                                         <label
                                             className="w-full border-[1px] border-borderColor/10 bg-grayColorLight/50 border-solid rounded-lg px-2 py-1 focus:border-primaryColor focus:outline-primaryColor"
 
                                         >
-                                            {previousForm?.lTSAddress}
+                                            {lastestResultFormSaved?.lTSAddress}
                                         </label>
-                                    }
+                                        {/* } */}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="flex items-center w-[100%] flex-wrap gap-x-10">
-                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                                <Controller name="serviceResultResults" control={control} render={({ field }) => (
-                                    <Dropdown
-                                        options={resultOptions}
-                                        value={field.value}
-                                        onChange={(option) => {
-                                            field.onChange(option); // Call the function to update form state
-                                            handleResultIdChange(option); // Call your additional logic
-                                            setIsOpenResult(false)
-                                            const simulatedEvent = {
-                                                target: {
-                                                    form: document.querySelector("form"), // Assuming the dropdown is in a form
-                                                },
-                                            };
-                                            if (previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress) {
-                                                resultHandleEnterKeyPress(simulatedEvent, "suggested", 20);
-                                            }
-                                            else {
+                            <div className="flex items-center w-[100%] flex-wrap gap-x-10">
+                                <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                    <Controller name="serviceResultResults" control={control} render={({ field }) => (
+                                        <Dropdown
+                                            options={resultOptions}
+                                            value={field.value}
+                                            onChange={(option) => {
+                                                field.onChange(option); // Call the function to update form state
+                                                handleResultIdChange(option); // Call your additional logic
+                                                setIsOpenResult(false)
+                                                const simulatedEvent = {
+                                                    target: {
+                                                        form: document.querySelector("form"), // Assuming the dropdown is in a form
+                                                    },
+                                                };
+                                                // if (previousForm?.serviceResultServerId?._id !== undefined && allServiceForm[serviceFormIndex]?.serviceResultServerId?._id !== undefined && previousForm?.serviceResultServerId?._id === allServiceForm[serviceFormIndex]?.serviceResultServerId?._id || previousForm?.serviceResultServerId?._id === previousAddress) {
+                                                //     resultHandleEnterKeyPress(simulatedEvent, "suggested", 20);
+                                                // }
+                                                // else {
                                                 resultHandleEnterKeyPress(simulatedEvent, option, 20);
 
+                                                // }
                                             }
-                                        }
 
-                                        }
+                                            }
 
 
-                                        onValueChange={(value) => setIsConspicuous(value)} // Update state
-                                        isOpenOption={isOpenResult}
-                                        label="result" error={errors.serviceResultResults?.message as string}
-                                    // onKeyDown={resultHandleEnterKeyPress}
-                                    />
-                                )} />
-                            </div>
-                            <div>
-                                <LoadScript googleMapsApiKey="AIzaSyCVarmzRfQK8gU8fFh6bTmOtThP5iNfYaY">
+                                            onValueChange={(value) => setIsConspicuous(value)} // Update state
+                                            isOpenOption={isOpenResult}
+                                            label="result" error={errors.serviceResultResults?.message as string}
+                                        // onKeyDown={resultHandleEnterKeyPress}
+                                        />
+                                    )} />
+                                </div>
+                                <div>
+                                    {/* {isLoading && <div>Loading...</div>} */}
+                                    {/* 
                                     <GoogleMap
                                         center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
                                         zoom={8}
+
+                                        onLoad={handleMapLoad}
+
                                     >
                                         <DistanceMatrixService
                                             options={{
-                                                origins: [previousForm?.lTSAddress || ''],
-                                                destinations: [allServiceForm[serviceFormIndex]?.lTSAddress || ''],
+                                                origins: (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+                                                    selectedResultOrigins :
+                                                    [lastestResultFormSaved?.lTSAddress, lastestResultFormSaved?.lTSCity, lastestResultFormSaved?.lTState || ''],
+                                                destinations: (selectedResultOrigins[0] && selectedResultDestinations[0]) ?
+                                                    selectedResultDestinations :
+                                                    [allServiceForm[serviceFormIndex]?.lTSAddress, allServiceForm[serviceFormIndex]?.lTSCity, allServiceForm[serviceFormIndex]?.lTSState || ''],
+                                                // destinations: [selectedSearchResultData[0]?.lTSAddress || ''],
                                                 travelMode: "DRIVING",
                                             }}
                                             callback={handleDistanceMatrixResponse}
                                         />
-                                    </GoogleMap>
 
-                                </LoadScript>
-                                {previousForm?.serviceResultServerId?._id === currentServerId && currentServerId !== undefined && currentServerId !== "" ?
+                                    </GoogleMap> */}
+                                    {/* {selectedResultOrigins[0] && selectedResultDestinations[0] && (
+                                            <>
+                                                {console.log("run", selectedResultOrigins[0], selectedResultDestinations[0])}
+                                                <GoogleMap
+                                                    center={{ lat: -34.397, lng: 150.644 }} // Dummy center, adjust based on your requirements
+                                                    zoom={8}
+                                                    // key={mapKey} // Use the key prop to force re-render
+                                                    // key={`${selectedResultOrigins.join('-')}-${selectedResultDestinations.join('-')}`}
+
+                                                    onLoad={(map) => console.log("GoogleMap loaded", map)}
+                                                >
+                                                    <DistanceMatrixService
+                                                        options={{
+                                                            origins: selectedResultOrigins,
+                                                            destinations: selectedResultDestinations,
+                                                            travelMode: "DRIVING",
+                                                        }}
+                                                        callback={(response) => {
+                                                            console.log("DistanceMatrixService is being called");
+                                                            handleDistanceMatrixResponse(response);
+                                                        }}
+                                                    />
+                                                </GoogleMap>
+                                            </>
+                                        )} */}
                                     <TextField onKeyDown={moveToNextFieldFromTimeTrip} onChange={handleTimeTripChange} register={register} label="Suggested Time Trip (mins)" error={errors.timeTrip} name="timeTrip" />
-                                    :
-                                    // THIS INPUT IS EXTRA TO HANDLE NAVIGATION WHEN TIME TRIP FIELD IS VISIBLE 
-                                    <input className="opacity-0" onKeyDown={moveToNextFieldFromTimeTrip} />
-
-                                }
 
 
+
+
+                                </div>
                             </div>
-                        </div>
 
 
 
 
-
-                        <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                            <div className="w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="Date of service" error={errors.serviceResultDateOfService} name="serviceResultDateOfService" type="date" />
-                            </div>
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                            <div className="w-[30%]">
-                                <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="Time of service" error={errors.serviceResultTimeOfService} name="serviceResultTimeOfService" type="time" />
-                            </div>
-                        </div>
-                        {/* 1st attempt starts */}
-                        <div className="flex items-center flex-wrap gap-x-8 w-full">
 
                             <div className="w-[100%] md:w-[46%] lg:w-[100%]">
                                 <div className="w-[30%]">
                                     <TextField onKeyDown={handleEnterKeyPress}
-                                        register={register} label="1st date Attempt" error={errors.serviceResultFirstAttemptDate} name="serviceResultFirstAttemptDate" type="date" />
-
-                                </div> </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                                <div className="w-[30%]">
-                                    <TextField onKeyDown={(event) => event.key === "Tab" && event.shiftKey ? handleEnterKeyPress : resultHandleEnterKeyPress(event, "_", 21)}
-                                        register={register} label="1st time Attempt" error={errors.serviceResultFirstTimeOfService} name="serviceResultFirstTimeOfService" type="time" />
-
-                                </div>
-                            </div>
-                        </div>
-                        {/* 1st attempt ends */}
-                        {/* 2nd attempt starts */}
-                        <div className="flex items-center flex-wrap gap-x-8 w-full">
-                            <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                                <div className="w-[30%]">
-                                    <TextField onKeyDown={handleEnterKeyPress}
-                                        register={register} label="2nd date Attempt" error={errors.serviceResultSecondAttemptDate} name="serviceResultSecondAttemptDate" type="date" />
-                                </div>
-                            </div>
-                            <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                                <div className="w-[30%]">
-                                    <TextField onKeyDown={moveToNextField}
-                                        register={register} label="2nd time Attempt" error={errors.serviceResultSecondTimeOfService} name="serviceResultSecondTimeOfService" type="time" />
-                                </div>
-                            </div>
-                        </div>
-                        {/* 2nd attempt ends */}
-                        {/* 3rd attempt starts */}
-                        <div className="flex items-center flex-wrap gap-x-8 w-full">
-                            <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                                <div className="w-[30%]">
-                                    <TextField onKeyDown={handleEnterKeyPress}
-                                        register={register} label="3rd date Attempt" error={errors.serviceResultThirdAttemptDate} name="serviceResultThirdAttemptDate" type="date" />
+                                        register={register} label="Date of service" error={errors.serviceResultDateOfService} name="serviceResultDateOfService" type="date" />
                                 </div>
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[100%]">
                                 <div className="w-[30%]">
                                     <TextField onKeyDown={handleEnterKeyPress}
-                                        register={register} label="3rd time Attempt" error={errors.serviceResultThirdTimeOfService} name="serviceResultThirdTimeOfService" type="time" />
+                                        register={register} label="Time of service" error={errors.serviceResultTimeOfService} name="serviceResultTimeOfService" type="time" />
                                 </div>
                             </div>
-                        </div>
-                        {/* 3rd attempt ends */}
+                            {/* 1st attempt starts */}
+                            <div className="flex items-center flex-wrap gap-x-8 w-full">
+
+                                <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                    <div className="w-[30%]">
+                                        <TextField onKeyDown={handleEnterKeyPress}
+                                            register={register} label="1st date Attempt" error={errors.serviceResultFirstAttemptDate} name="serviceResultFirstAttemptDate" type="date" />
+
+                                    </div> </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                    <div className="w-[30%]">
+                                        <TextField onKeyDown={(event) => event.key === "Tab" && event.shiftKey ? handleEnterKeyPress : resultHandleEnterKeyPress(event, "_", 21)}
+                                            register={register} label="1st time Attempt" error={errors.serviceResultFirstTimeOfService} name="serviceResultFirstTimeOfService" type="time" />
+
+                                    </div>
+                                </div>
+                            </div>
+                            {/* 1st attempt ends */}
+                            {/* 2nd attempt starts */}
+                            <div className="flex items-center flex-wrap gap-x-8 w-full">
+                                <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                    <div className="w-[30%]">
+                                        <TextField onKeyDown={handleEnterKeyPress}
+                                            register={register} label="2nd date Attempt" error={errors.serviceResultSecondAttemptDate} name="serviceResultSecondAttemptDate" type="date" onChange={secondHanldetimeChange} />
+                                    </div>
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                    <div className="w-[30%]">
+                                        <TextField onKeyDown={moveToNextField}
+                                            register={register} label="2nd time Attempt" error={errors.serviceResultSecondTimeOfService} name="serviceResultSecondTimeOfService" type="time" />
+                                    </div>
+                                </div>
+                            </div>
+                            {/* 2nd attempt ends */}
+                            {/* 3rd attempt starts */}
+                            <div className="flex items-center flex-wrap gap-x-8 w-full">
+                                <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                    <div className="w-[30%]">
+                                        <TextField onKeyDown={handleEnterKeyPress}
+                                            register={register} label="3rd date Attempt" error={errors.serviceResultThirdAttemptDate} name="serviceResultThirdAttemptDate" type="date" />
+                                    </div>
+                                </div>
+                                <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                    <div className="w-[30%]">
+                                        <TextField onKeyDown={handleEnterKeyPress}
+                                            register={register} label="3rd time Attempt" error={errors.serviceResultThirdTimeOfService} name="serviceResultThirdTimeOfService" type="time" />
+                                    </div>
+                                </div>
+                            </div>
+                            {/* 3rd attempt ends */}
 
 
-                        <div className={`w-[100%] md:w-[46%] lg:w-[70%]
+                            <div className={`w-[100%] md:w-[46%] lg:w-[70%]
                            
                             `} ref={ltServedRef}
-                            tabIndex={28}
+                                tabIndex={28}
 
-                            onKeyDown={moveToNotServed}>
+                                onKeyDown={moveToNotServed}>
 
-                            <label>LT Served</label>
-                            <div className={`flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px]  bg-grayColorLight/50 border-solid rounded-lg px-2 py-1
+                                <label>LT Served</label>
+                                <div className={`flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px]  bg-grayColorLight/50 border-solid rounded-lg px-2 py-1
                                  ${isHightLIghtedLTServed ? "border-primaryColor border-[2px]" : "border-borderColor/10"}
                                 `}>
-                                {(resultId === "personal" || resultId === "personalplus") &&
-                                    lTSServed?.map(data => { return <div className="flex items-center gap-x-2 "><p>{data}</p> <IoMdAdd onClick={() => { removeLTSName(data) }} className="p-[2px] cursor-pointer  rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor" size={20} />  </div> })
+                                    {(resultId === "personal" || resultId === "personalplus") &&
+                                        lTSServed?.map(data => { return <div className="flex items-center gap-x-2 "><p>{data}</p> <IoMdAdd onClick={() => { removeLTSName(data) }} className="p-[2px] cursor-pointer  rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor" size={20} />  </div> })
 
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[70%]" ref={ltNotServedRef} tabIndex={29} onKeyDown={moveFromLtNotServed}>
-                            <div className="w-[30%]"></div>
-                            <label>LT Not Served</label>
-                            <div className={`flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px]  bg-grayColorLight/50 border-solid rounded-lg  
+                            <div className="w-[100%] md:w-[46%] lg:w-[70%]" ref={ltNotServedRef} tabIndex={29} onKeyDown={moveFromLtNotServed}>
+                                <div className="w-[30%]"></div>
+                                <label>LT Not Served</label>
+                                <div className={`flex items-center h-8 flex-wrap gap-x-2 w-full border-[1px]  bg-grayColorLight/50 border-solid rounded-lg  
                                 ${isHightLIghtedLTNotServed ? "border-primaryColor border-[2px]" : "border-borderColor/10"}
                                 `}
-                            >
-                                {(resultId === "personal" || resultId === "personalplus") &&
-                                    (lTSNotServed?.length === 0 ? (
-                                        <div className="h-8">
-                                        </div>
-                                    ) : (
-                                        Array?.isArray(lTSNotServed) &&
-                                        lTSNotServed?.map((data) => (
-                                            <div key={data} className="flex items-center gap-x-2 px-2 py-1">
-                                                <p>{data}</p>
-                                                <IoMdAdd
-                                                    onClick={() => { removeLTSNotName(data) }}
-                                                    className="p-[2px] cursor-pointer rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor"
-                                                    size={20}
-                                                />
+                                >
+                                    {(resultId === "personal" || resultId === "personalplus") &&
+                                        (lTSNotServed?.length === 0 ? (
+                                            <div className="h-8">
                                             </div>
+                                        ) : (
+                                            Array?.isArray(lTSNotServed) &&
+                                            lTSNotServed?.map((data) => (
+                                                <div key={data} className="flex items-center gap-x-2 px-2 py-1">
+                                                    <p>{data}</p>
+                                                    <IoMdAdd
+                                                        onClick={() => { removeLTSNotName(data) }}
+                                                        className="p-[2px] cursor-pointer rotate-45 rounded-full bg-whiteColor text-redColor border-[1px] border-redColor"
+                                                        size={20}
+                                                    />
+                                                </div>
+                                            ))
                                         ))
-                                    ))
-                                }
+                                    }
+
+
+                                </div>
 
 
                             </div>
 
+                            <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                <div className="w-[30%]">
+
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="substitute delivered To" error={errors.substituteDeliveredTo} name="substituteDeliveredTo" />
+                                </div>
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                <div className="w-[30%]">
+
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="corporate Recipient" error={errors.corporateRecipient} name="corporateRecipient" />
+                                </div>
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[100%]">
+                                <div className="w-[70%]">
+                                    <TextField onKeyDown={handleEnterKeyPress}
+                                        register={register} label="recipient Title" error={errors.serviceResultRecipientTitle} name="serviceResultRecipientTitle" />
+                                </div>
+                            </div>
+
 
                         </div>
+                    </div>
+                    {/* SHOW RESULT  FORM ENDS */}
 
-                        <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                            <div className="w-[30%]">
-
+                    {isConspicuous === "conspicuous" && <div className="w-full mt-6 border-[1px] border-solid border-borderColor rounded-lg">
+                        <h1 className="px-6 py-2 bg-cyanColor rounded-t-lg text-whiteColor font-semibold text-lg">Description</h1>
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start px-8 py-4">
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="substitute delivered To" error={errors.substituteDeliveredTo} name="substituteDeliveredTo" />
+                                    register={register} label="door" error={errors.serviceResultDoor} name="serviceResultDoor" />
                             </div>
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                            <div className="w-[30%]">
-
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="corporate Recipient" error={errors.corporateRecipient} name="corporateRecipient" />
+                                    register={register} label="door Locks" error={errors.serviceResultDoorLocks} name="serviceResultDoorLocks" />
                             </div>
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[100%]">
-                            <div className="w-[70%]">
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
                                 <TextField onKeyDown={handleEnterKeyPress}
-                                    register={register} label="recipient Title" error={errors.serviceResultRecipientTitle} name="serviceResultRecipientTitle" />
+                                    register={register} label="entry" error={errors.serviceResultEntry} name="serviceResultEntry" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="wall" error={errors.serviceResultWall} name="serviceResultWall" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="floor" error={errors.serviceResultFloor} name="serviceResultFloor" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="lock" error={errors.serviceResultLock} name="serviceResultLock" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <CheckBox onKeyDown={handleEnterKeyPress} register={register} label="Other Description" error={errors.serviceResultOtherDescription?.message} name="serviceResultOtherDescription" />
+                            </div>
+                        </div>
+                    </div>}
+                    {(isConspicuous === "substitute" || isConspicuous === "personal" || isConspicuous === "personalplus") &&
+
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="sex" error={errors.serviceResultSex} name="serviceResultSex" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="skin Color" error={errors.serviceResultSkinColor} name="serviceResultSkinColor" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="hair" error={errors.serviceResultHair} name="serviceResultHair" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="age" error={errors.serviceResultAge} name="serviceResultAge" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="height" error={errors.serviceResultHeight} name="serviceResultHeight" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="weight" error={errors.serviceResultWeight} name="serviceResultWeight" />
+                            </div>
+                        </div>
+                    }
+                    {/* DESCRIPTION FORM STARTS */}
+
+                    {/* DESCRIPTION FORM ENDS */}
+                    {/* OTHER  FORM STARTS */}
+                    <div className="mt-6">
+                        <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="Other Identifying Features" error={errors.serviceResultOtherFeatures} name="serviceResultOtherFeatures" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="Date of Mailing" error={errors.serviceResultDateOfMailing} name="serviceResultDateOfMailing" type="date" />
+                            </div>
+                            <div className="w-[100%] md:w-[46%] lg:w-[30%]">
+                                <TextField onKeyDown={handleEnterKeyPress}
+                                    register={register} label="Notary Date" error={errors.serviceResultDateOfNotary} name="serviceResultDateOfNotary" type="date" />
                             </div>
                         </div>
 
-
+                        <h1 className="font-semibold text-lg mt-4">
+                            Do not Proceed Past This Line
+                        </h1>
                     </div>
-                </div>
-                {/* SHOW RESULT  FORM ENDS */}
+                    {/* OTHER  FORM ENDS */}
 
-                {isConspicuous === "conspicuous" && <div className="w-full mt-6 border-[1px] border-solid border-borderColor rounded-lg">
-                    <h1 className="px-6 py-2 bg-cyanColor rounded-t-lg text-whiteColor font-semibold text-lg">Description</h1>
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start px-8 py-4">
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="door" error={errors.serviceResultDoor} name="serviceResultDoor" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="door Locks" error={errors.serviceResultDoorLocks} name="serviceResultDoorLocks" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="entry" error={errors.serviceResultEntry} name="serviceResultEntry" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="wall" error={errors.serviceResultWall} name="serviceResultWall" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="floor" error={errors.serviceResultFloor} name="serviceResultFloor" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="lock" error={errors.serviceResultLock} name="serviceResultLock" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <CheckBox onKeyDown={handleEnterKeyPress} register={register} label="Other Description" error={errors.serviceResultOtherDescription?.message} name="serviceResultOtherDescription" />
-                        </div>
-                    </div>
-                </div>}
-                {(isConspicuous === "substitute" || isConspicuous === "personal" || isConspicuous === "personalplus") &&
-
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start py-4">
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="sex" error={errors.serviceResultSex} name="serviceResultSex" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="skin Color" error={errors.serviceResultSkinColor} name="serviceResultSkinColor" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="hair" error={errors.serviceResultHair} name="serviceResultHair" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="age" error={errors.serviceResultAge} name="serviceResultAge" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="height" error={errors.serviceResultHeight} name="serviceResultHeight" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="weight" error={errors.serviceResultWeight} name="serviceResultWeight" />
-                        </div>
-                    </div>
-                }
-                {/* DESCRIPTION FORM STARTS */}
-
-                {/* DESCRIPTION FORM ENDS */}
-                {/* OTHER  FORM STARTS */}
-                <div className="mt-6">
-                    <div className="flex items-start w-full flex-wrap gap-x-8 gap-y-4 justify-start ">
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="Other Identifying Features" error={errors.serviceResultOtherFeatures} name="serviceResultOtherFeatures" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="Date of Mailing" error={errors.serviceResultDateOfMailing} name="serviceResultDateOfMailing" type="date" />
-                        </div>
-                        <div className="w-[100%] md:w-[46%] lg:w-[30%]">
-                            <TextField onKeyDown={handleEnterKeyPress}
-                                register={register} label="Notary Date" error={errors.serviceResultDateOfNotary} name="serviceResultDateOfNotary" type="date" />
-                        </div>
-                    </div>
-
-                    <h1 className="font-semibold text-lg mt-4">
-                        Do not Proceed Past This Line
-                    </h1>
-                </div>
-                {/* OTHER  FORM ENDS */}
-
-            </form >
+                </form >
+            </>
         }
+        {/* </LoadScript> */}
+
 
     </>
 }

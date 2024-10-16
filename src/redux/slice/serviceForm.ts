@@ -13,6 +13,7 @@ const initialState = {
     allServiceFormData: [] as serviceFormType[],
     allSearchServiceFormData: [] as serviceFormType[],
     isSearchServiceForm: false,
+    saveInputSearchData: "",
     selectedSearchServicetData: "",
     isNewFormAdd: false,
     isDataSaved: false,
@@ -25,7 +26,8 @@ const initialState = {
     datepairs: {
         firstAttemptDate: null,
         secondAttemptDate: null
-    }
+    },
+
 }
 const serviceForm = createSlice({
     name: "serviceForm",
@@ -59,6 +61,7 @@ const serviceForm = createSlice({
                 state.serviceFormIndex--;
             }
         },
+
         moveToStandardFormReducer: (state, action) => {
             state.isMoveToStandardForm = action.payload
         },
@@ -78,10 +81,15 @@ const serviceForm = createSlice({
             state.isSearchServiceForm = false
             state.selectedSearchServicetData = ""
 
-        }
+        },
+        saveInputSearchDataReducer: (state, action) => {
+            state.saveInputSearchData = action.payload
+
+        },
 
     },
     extraReducers: builder => {
+
         // BUILDERS FOR FETCHING ALL SERVICE FORMS
         builder.addCase(getAllServiceFormThunk.pending, (state) => {
             state.status = "loading"
@@ -89,8 +97,20 @@ const serviceForm = createSlice({
         builder.addCase(getAllServiceFormThunk.fulfilled, (state, action) => {
             state.status = "success"
             state.allServiceFormData = action.payload
+            state.serviceFormIndex = state?.allServiceFormData?.length - 1
         })
         builder.addCase(getAllServiceFormThunk.rejected, (state) => {
+            state.status = "failed"
+        })
+        builder.addCase(getAllResultServiceFormThunk.pending, (state) => {
+            state.status = "loading"
+        })
+        builder.addCase(getAllResultServiceFormThunk.fulfilled, (state, action) => {
+            state.status = "success"
+            state.allServiceFormData = action.payload
+            // state.serviceFormIndex = state?.allServiceFormData?.length - 1
+        })
+        builder.addCase(getAllResultServiceFormThunk.rejected, (state) => {
             state.status = "failed"
         })
         // BUILDERS FOR DELETE SERVICE FORMS
@@ -130,12 +150,31 @@ const serviceForm = createSlice({
 
 export const { addNewFormAddReducer, isDataSaveReducer, savedLTFormDataReducer, getNextServiceForm, getPreviousServiceForm, getFirstServiceForm
     , getLastServiceForm, moveToStandardFormReducer, getSelectedSearchServicetData, getIsSearchServiceForm, getCancelIsSearchServiceForm, isDatePairModalReducer
-    , addDatePairModalReducer } = serviceForm.actions
+    , addDatePairModalReducer, saveInputSearchDataReducer } = serviceForm.actions
 export default serviceForm.reducer
 
 // ASYNC THUNK STARTS
 // GET ALL SERVICE FORM
 export const getAllServiceFormThunk = createAsyncThunk("getAllServiceForm", async (_, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    dispatch(showSpinnerReducer(true));
+
+    if (!accessToken) {
+        localStorage.getItem("accessToken")
+    }
+    try {
+        const response = await api.get(`/service-form/all-service-forms`
+
+        )
+        return response?.data?.data
+    } catch (error) {
+        throw new Error(error)
+    }
+    finally {
+        dispatch(showSpinnerReducer(false));
+    }
+})
+export const getAllResultServiceFormThunk = createAsyncThunk("getAllResultServiceFormThunk", async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
     dispatch(showSpinnerReducer(true));
 
@@ -185,7 +224,7 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
 export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", async (data: any, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
     try {
-        const response = await axios.patch(`${baseUrl}/service-form/update`, data, {
+        const response = await axios.patch(`${baseUrl}/service-form/update`, data?.data, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
@@ -198,30 +237,32 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
         toast.error("Something went wrong. Try Later")
     } finally {
         dispatch(showSpinnerReducer(false))
-        window.location.reload();
+        if (data?.isSearch !== true) { window.location.reload(); }
 
     }
 })
 // ADD SERVICE FORM
 export const addServiceFormThunk = createAsyncThunk("addServiceForm", async (data: any, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
-
+    console.log(data)
     try {
-        const response = await axios.post(`${baseUrl}/service-form/create`, data, {
+        const response = await axios.post(`${baseUrl}/service-form/create`, data?.sendDataToAddApi, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
 
         })
-        dispatch(getAllServiceFormThunk())
         toast.success(`${response?.data?.message}`)
-        dispatch(showModalReducer(false))
+        dispatch(getAllServiceFormThunk())
+        // dispatch(showModalReducer(false))
 
     } catch (error) {
         toast.error(`${error?.response?.data?.message}`)
     } finally {
+        dispatch(getAllServiceFormThunk())
+
         dispatch(showSpinnerReducer(false))
-        window.location.reload();
+        if (data?.isDuplicate !== true) window.location.reload();
 
     }
 })

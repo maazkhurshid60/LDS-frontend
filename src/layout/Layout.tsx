@@ -15,7 +15,6 @@ const Layout = () => {
   const dispatch = useDispatch();
 
 
-
   return (
     <>
       {isShowSpinner && <Spinner text="loading" />}

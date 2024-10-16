@@ -480,7 +480,8 @@ const StandardTypeForm = () => {
             dispatch(savedLTFormDataReducer(LTData))
         } else {
             dispatch(savedLTFormDataReducer(LTData))
-            dispatch(addServiceFormThunk(LTData))
+            const allData = { isDuplicate: false, sendDataToAddApi: LTData }
+            dispatch(addServiceFormThunk(allData))
         }
     }
     // THIS USEEFECT WILL BE CALLED WHEN CTRL+S IS PRESSED TO SAVE DATA INSIDE SLICE
@@ -551,7 +552,7 @@ const StandardTypeForm = () => {
         const sendDataToAddApi = {
             jobNo: allServiceFormData[allServiceFormData?.length - 1]?.jobNo + 1,
             caption,
-            caseNo: parseInt(caseNo ?? '0'),
+            caseNo: caseNo !== "" ? parseInt(caseNo) : 0,
             clientId,
             inputDate: formattedDate,
             lTSFirstName: lTSFirstName,
@@ -577,8 +578,9 @@ const StandardTypeForm = () => {
             mailingAddresses: filterExistingFormMailingAdress,
             noOfMailingAddres: filterExistingFormMailingAdress?.length
         }
-        console.log("oLTIndexNo", oLTIndex)
-        dispatch(addServiceFormThunk(sendDataToAddApi))
+        const allData = { isDuplicate: true, sendDataToAddApi }
+        console.log("oLTIndexNo", allData)
+        dispatch(addServiceFormThunk(allData))
     }
 
 

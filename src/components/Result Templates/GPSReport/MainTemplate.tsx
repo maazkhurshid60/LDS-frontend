@@ -83,7 +83,7 @@ const GPSReport = () => {
         lat: 33.5888559, lng: 71.44292860000002
     }
     const mapCenter = address.length > 0 && address[0]
-    console.log(address)
+    console.log("address", address, "resultData", resultData)
     return (
         <>
             <div className="flex justify-end mt-5 mb-5 mr-5">
@@ -97,14 +97,15 @@ const GPSReport = () => {
                 />
             </div>
             <div ref={TransPerSlipReportPrintRef} className="p-6 bg-whiteColor capitalize">
-                <div className="flex ">
-                    <div className="w-[60%] ">
+
+                <div className="flex h-full">
+                    <div className="w-[60%] flex flex-col">
                         {resultData?.map((item, index) => (
-                            <div key={index} className="mb-6 w-[100%] mt-2  h-[100vh]">
+                            <div key={index} className="mb-6 w-full mt-4 flex-grow page-break"> {/* Added page-break class */}
                                 <h2 className="font-bold">Record #{index + 1}</h2>
-                                <div className="flex items-start justify-center gap-y-6 w-[100%] h-[60vh] ">
+                                <div className="flex items-start justify-center gap-y-6 w-full h-full">
                                     {/* LEFT PART STARTS */}
-                                    <div className="w-[100%] text-base font-bold flex flex-col gap-y-4">
+                                    <div className="w-full text-base font-bold flex flex-col gap-y-4">
                                         <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
                                             <div className="flex items-start gap-x-2">
                                                 <h1 className="w-[45%]">Job No#:</h1>
@@ -139,28 +140,22 @@ const GPSReport = () => {
                                         <div className="bg-grayColor/10 p-1 flex flex-col gap-y-2">
                                             <div className="flex items-start gap-x-2">
                                                 <h1 className="w-[45%]">Date and Time Of Service:</h1>
-                                                <p className="w-[100%] font-normal">{`${item?.serviceResultDateOfService} ${item?.serviceResultTimeOfService} hrs` || "______________________________"}</p>
+                                                <p className="w-[100%] font-normal">
+                                                    {item?.serviceResultDateOfService && item?.serviceResultTimeOfService
+                                                        ? `${item.serviceResultDateOfService} ${item.serviceResultTimeOfService} hrs`
+                                                        : "______________________________"}
+                                                </p>
                                             </div>
-                                            {address?.map(data => {
-                                                return <>
-                                                    <div className="flex items-start gap-x-2">
-                                                        <h1 className="w-[45%]">GPS:</h1>
-                                                        <p className="w-[100%] font-normal"><span className="mr-10">{data?.lat}</span> <span>{data?.lng}</span></p>
-                                                    </div>
-                                                </>
-                                            })}
-
                                         </div>
                                     </div>
                                     {/* LEFT PART ENDS */}
-
-
                                 </div>
                             </div>
-                        ))}</div>
-                    <div className="w-[35%] ">
+                        ))}
+                    </div>
+                    <div className="w-[35%] flex flex-col mt-4">
                         {address?.length > 0 ? address?.map((item, idx) => (
-                            <div className="mt-2 h-[100vh]" key={idx}>
+                            <div className="mt-2 flex-grow mb-4" key={idx}>
                                 {item.valid ? (
                                     <GoogleMap
                                         center={{ lat: item?.lat, lng: item?.lng }}
@@ -169,15 +164,15 @@ const GPSReport = () => {
                                     >
                                         <MarkerF
                                             position={{ lat: item?.lat, lng: item?.lng }}
-                                            label={`Location ${idx}`} // Use dynamic label
+                                            label={`Location ${idx}`}
                                         />
                                     </GoogleMap>
                                 ) : (
-                                    <div className="text-center border-dashed border-grayColor border-[1px] px-4 py-6 h-[65vh] flex items-center justify-center">{item.address || "No address found"}</div> // Display message
+                                    <div className="text-center border-dashed border-grayColor border-[1px] px-4 py-6 h-[65vh] flex items-center justify-center">{item.address || "No address found"}</div>
                                 )}
                             </div>
                         )) : (
-                            <div className="text-center  border-dashed border-grayColor border-[1px] px-4 py-6 h-[65vh]">No addresses available</div>
+                            <div className="text-center border-dashed border-grayColor border-[1px] px-4 py-6 h-[65vh]">No addresses available</div>
                         )}
                     </div>
                 </div>
@@ -193,8 +188,17 @@ const GPSReport = () => {
                     content={() => TransPerSlipReportPrintRef.current}
                 />
             </div>
+
+
         </>
     );
 }
 
+<style jsx>{`
+@media print {
+.page-break {
+page-break-after: always; /* This will ensure a new page for each record */
+}
+}
+`}</style>
 export default GPSReport;

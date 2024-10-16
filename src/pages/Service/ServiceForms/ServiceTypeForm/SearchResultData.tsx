@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import TableWithoutAction from "../../../../components/Tables/TableWithoutAction";
-import { getIsSearchServiceForm, getSelectedSearchServicetData } from "../../../../redux/slice/serviceForm";
+import { getIsSearchServiceForm, getSelectedSearchServicetData, saveInputSearchDataReducer } from "../../../../redux/slice/serviceForm";
 import Searchbar from "../../../../components/Searchbar/Searchbar";
 
 const SearchResultData = () => {
@@ -11,6 +11,8 @@ const SearchResultData = () => {
 
     // Get the data from the Redux store
     const searchResultFormData = useSelector((state: RootState) => state.serviceForm.allSearchServiceFormData);
+    const serachInputValue = useSelector((state: RootState) => state.serviceForm.saveInputSearchData);
+
 
     // Headers for the table
     const headersResult = [
@@ -21,7 +23,7 @@ const SearchResultData = () => {
 
     // Filter the data based on the search query
     const filteredSearchResultFormData = searchResultFormData?.filter(data => {
-        const searchLower = searchQuery.toLowerCase();
+        const searchLower = serachInputValue.toLowerCase();
         return (
             data?.jobNo?.toString().toLowerCase().includes(searchLower) ||
             data?.inputDate?.toLowerCase().includes(searchLower) ||
@@ -80,6 +82,7 @@ const SearchResultData = () => {
     // Handle search input change
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
+        dispatch(saveInputSearchDataReducer(event.target.value))
     };
 
     return (
@@ -94,7 +97,7 @@ const SearchResultData = () => {
             /> */}
             <div className="mt-4 flex flex-col  gap-4
                             sm:flex-row sm:items-center">
-                <Searchbar value={searchQuery} onChange={handleSearchChange} />
+                <Searchbar value={serachInputValue} onChange={handleSearchChange} />
             </div>
 
             {/* Table */}
