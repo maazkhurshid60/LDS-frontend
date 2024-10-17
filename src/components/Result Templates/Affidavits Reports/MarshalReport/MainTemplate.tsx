@@ -42,11 +42,15 @@ const MarshalReport = () => {
         serverName: "",
         licNo: "",
         locks: "",
-        serverAddress: ""
+        serverAddress: "",
+        firstAttemptTime: "",
+        secondAttemptTime: ""
     })
     useEffect(() => {
         setResultData(legalDeliveryDataa?.data)
     }, [])
+    console.log(resultData);
+
     return (
         <>
             <div className="absolute h-[83.5vh] overflow-y-scroll relative">
@@ -91,10 +95,12 @@ const MarshalReport = () => {
                                     serverName=""
                                     serverAddress=""
                                     locks=""
+                                    firstAttemptTime=""
+                                    secondAttemptTime=""
                                 />
                                 <Footer /></> : <>  <Header
                                     index={data?.oLTIndexNo}
-                                    affidavitName={data?.serviceType?.serviceTypeCod}
+                                    affidavitName={data?.serviceResultResults}
                                     lic={data?.serviceResultServerId?.licenseNo}
                                     serverName={data?.serviceResultServerId?.firstName}
                                     serverAddress={data?.serviceResultServerId?.address1}
@@ -113,7 +119,8 @@ const MarshalReport = () => {
                                     skinColor={data?.serviceResultSkinColor}
                                     age={data?.serviceResultAge}
 
-
+                                    firstAttemptTime={data?.serviceResultFirstTimeOfService}
+                                    secondAttemptTime={data?.serviceResultSecondTimeOfService}
 
                                     height={data?.serviceResultHeight}
                                     weight={data?.serviceResultWeight}

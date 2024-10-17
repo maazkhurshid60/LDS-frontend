@@ -223,6 +223,7 @@ export const deleteServiceFormThunk = createAsyncThunk("deleteServiceForm", asyn
 // UPDATE SERVICE FORM
 export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", async (data: any, { dispatch }) => {
     dispatch(showSpinnerReducer(true))
+    console.log(data)
     try {
         const response = await axios.patch(`${baseUrl}/service-form/update`, data?.data, {
             headers: {
@@ -234,6 +235,7 @@ export const updateServiceFormThunk = createAsyncThunk("updateServiceForm", asyn
         toast.success(`${response?.data?.message}`)
         dispatch(showModalReducer(false))
     } catch (error) {
+        console.log(error)
         toast.error("Something went wrong. Try Later")
     } finally {
         dispatch(showSpinnerReducer(false))

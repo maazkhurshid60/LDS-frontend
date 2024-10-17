@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDate } from "../../../../../utils/dateFormate"
 export interface bodyProps {
   sex?: string;
   skinColor?: string;
@@ -11,8 +12,8 @@ export interface bodyProps {
   serverAddress?: string
   serverLicense?: string | number
   mailingAddressDate?: string
-  name?:string
-  address?:string
+  name?: string
+  address?: string
 }
 const Body: React.FC<bodyProps> = (item) => {
   return <div className="flex flex-col items-start gap-y-2 text-sm">
@@ -22,7 +23,7 @@ const Body: React.FC<bodyProps> = (item) => {
     <p>I have been requested by the attomey for the Petitioner-Landlord to make an investigation to ascertain if the above name Tentant(s)
       (and undertentant) is at the present time in the millitary service.
     </p>
-    <p>ON &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{item?.dateOfService ? item?.dateOfService : "______________________________"} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <p className="font-bold">ON &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{item?.dateOfService ? formatDate(item?.dateOfService) : "______________________________"} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       {/* AT SOME_TIME_WILL_BE_THERE_FROM_BACKEND_API */}
       , I went to:&nbsp;<span className="font-semibold">{item?.address ? item?.address : "______________________________"}</span>&nbsp;</p>
     <p> Sex:<span className="font-semibold">{item?.sex}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skin Color:<span className="font-semibold">{item?.skinColor}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -42,19 +43,19 @@ const Body: React.FC<bodyProps> = (item) => {
       the United States or of New York State at the present time.
     </p>
     <div className="font-semibold flex items-center justify-between w-full">
-            <div>
-            <p>Sworn to before me on</p>
-            <p>{item?.mailingAddressDate? item?.mailingAddressDate:"______________________________"}</p>
-            </div>
-            <div>
-            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>
-            <p>Lic#{item?.serverLicense? item?.serverLicense:"______________________________"}</p>
-            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>
-            </p>
+      <div>
+        <p>Sworn to before me on</p>
+        <p>{item?.mailingAddressDate ? formatDate(item?.mailingAddressDate) : "______________________________"}</p>
+      </div>
+      <div>
+        <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>
+        <p>Lic#{item?.serverLicense ? item?.serverLicense : "______________________________"}</p>
+        <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span>
+        </p>
 
-            </div>
+      </div>
 
-        </div>
+    </div>
   </div>
 }
 export default Body

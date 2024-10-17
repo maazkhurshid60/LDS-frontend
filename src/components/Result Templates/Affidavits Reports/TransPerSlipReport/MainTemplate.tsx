@@ -56,6 +56,8 @@ const TransPerSlipReport = () => {
         setResultData(legalDeliveryDataa?.data)
 
     }, [])
+    console.log((resultData[0]?.serviceResultResults === "personalplus" || resultData[0]?.serviceResultResults === "personal") && resultData[0]?.serviceResultlTServed);
+
     return (
         <>
             <div className="absolute h-[83.5vh] overflow-y-scroll relative">
@@ -102,22 +104,26 @@ const TransPerSlipReport = () => {
 
                                 <Header />
                                 <Body
-                                    name={data?.firstNameServe}
+                                    name={data?.serviceResultServerId?.firstName}
                                     lic={data?.serviceResultServerId?.licenseNo}
                                     titleAction={data?.titleAction}
                                     nameServicesFirstName={data?.lTSFirstName}
                                     paperServed={data?.paperServed}
                                     index={data?.oLTIndexNo}
-                                    address={data?.addressServe}
+                                    address={data?.lTSAddress}
                                     apt={data?.lTSApt}
                                     city={data?.lTSCity}
                                     zip={data?.lTSZip}
-                                    typeOfService={data?.lTServiceType?.name}
+                                    // typeOfService={data?.lTServiceType?.name}
+                                    typeOfService={data?.serviceResultResults}
                                     serviceCompleted={data?.serviceCompleted}
                                     description={data?.oLTDescription}
-                                    personServed={data?.firstNameServe}
-                                    date={data?.inputDate}
-                                    time={data?.time}
+                                    personServed={(data?.serviceResultResults === "personalplus" || data?.serviceResultResults === "personal") && data?.serviceResultlTServed}
+                                    // date={data?.inputDate}
+                                    // time={data?.time}
+                                    date={data?.serviceResultSecondAttemptDate === "" ? data?.serviceResultFirstAttemptDate : data?.serviceResultSecondAttemptDate}
+                                    time={data?.serviceResultSecondTimeOfService === "" ? data?.serviceResultFirstTimeOfService : data?.serviceResultSecondTimeOfService}
+
                                     dateOfmailing={data?.serviceResultDateOfMailing}
                                     sex={data?.serviceResultSex}
                                     skinColor={data?.serviceResultSkinColor}

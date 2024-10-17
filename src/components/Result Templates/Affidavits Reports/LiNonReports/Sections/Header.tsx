@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = (item) => {
         <div className="font-bold ">
 
             <h1 className="flex items-center gap-x-2 text-lg underline">
-                Petitioner-landord-Against
+                Petitioner-Against
             </h1>
             <p className=" text-xl">{item?.firstNameServe ? item?.firstNameServe : "______________________________"}</p>
             <p className=" text-xl">{item?.address ? item?.address : "______________________________"}</p>

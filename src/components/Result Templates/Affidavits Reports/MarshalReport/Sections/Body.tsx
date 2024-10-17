@@ -1,5 +1,8 @@
 import React from "react";
 import { GrCheckboxSelected, GrCheckbox } from "react-icons/gr";
+import { formatDate } from "../../../../../utils/dateFormate";
+import { formatTime } from "../../../../../utils/timeFormate";
+
 export interface BodyProps {
     //RESULTS
     apt?: string | number;
@@ -26,12 +29,14 @@ export interface BodyProps {
     firstNames?: string
     serverName?: string
     serverAddress?: string
+    firstAttemptTime?: string
+    secondAttemptTime?: string
 }
 const Body: React.FC<BodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4">
         <p>State of New York, country of Queens ss:</p>
         <p>I, <span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span> being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
-            queens, New York  that on <span className="font-semibold">{item?.dateOfService ? item?.dateOfService : "______________________________"}</span>.</p>
+            queens, New York  that on <span className="font-semibold">{item?.dateOfService ? formatDate(item?.dateOfService) : "______________________________"}</span>.</p>
         <p>At the property sought to be recovered at <span className="font-semibold">{item?.address ? item?.address : "______________________________"}</span> Apt# <span className="font-semibold">{item?.apt ? item?.apt : "______________________________"}</span></p>
         <p>The ______________________________  was served on <span className="font-semibold">{item?.firstNames ? item?.firstNames : "______________________________"}</span></p>
         <p className="flex justify-start gap-x-4"><GrCheckbox size={18} /> Personal service on individual: individually served the within-named person with true copy(ies) of the paper(s) aforementioned.</p>
@@ -49,8 +54,8 @@ const Body: React.FC<BodyProps> = (item) => {
                     respondent(s) or to find a person suitable age and discretion who ______________________________ there at during either of the two service
                     attempts made on the following dates:
                 </p>
-                <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "______________________________"} </span> </p>
-                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "______________________________"}</span>  </p>
+                <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? formatDate(item?.firstDateAttempt) : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstAttemptTime ? formatTime(item?.firstAttemptTime) : "______________________________"} </span> </p>
+                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? formatDate(item?.secondDateAttempt) : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondAttemptTime ? formatTime(item?.secondAttemptTime) : "______________________________"}</span>  </p>
                 <p>Approx, Door Description:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <p>
                         Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -68,7 +73,7 @@ const Body: React.FC<BodyProps> = (item) => {
         <div className="font-semibold flex items-center justify-between w-full">
             <div>
                 <p>Sworn to before me on</p>
-                <p>{item?.dateOfMailing ? item?.dateOfMailing : "______________________________"}</p>
+                <p>{item?.dateOfMailing ? formatDate(item?.dateOfMailing) : "______________________________"}</p>
             </div>
             <div>
                 <p><span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span></p>

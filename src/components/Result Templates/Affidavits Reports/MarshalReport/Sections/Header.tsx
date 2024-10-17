@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = (item) => {
         </div>
         <div className=" font-medium flex items-center gap-x-4 text-xl uppercase">
             <p>Affidavit of</p>
-            <p>{item?.affidavitName}</p>
+            <p>{item?.affidavitName ? item?.affidavitName : "__________"}</p>
             <p>service</p>
         </div>
 

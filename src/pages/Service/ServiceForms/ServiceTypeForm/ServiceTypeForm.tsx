@@ -476,7 +476,9 @@ const StandardTypeForm = () => {
 
         }
         else if (!isNewFormAdding && allServiceFormData?.length > 0) {
-            dispatch(updateServiceFormThunk(updatedData))
+            const allData = { isDuplicate: false, data: updatedData }
+
+            dispatch(updateServiceFormThunk(allData))
             dispatch(savedLTFormDataReducer(LTData))
         } else {
             dispatch(savedLTFormDataReducer(LTData))

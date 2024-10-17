@@ -184,7 +184,7 @@ const ResultForm = () => {
         const addingData = {
             lTSFirstName: data?.lTSFirstName,
             datePairs: datepairsData,
-            oLTIndexNo: oLTIndex === "" ? null : oLTIndex + "/" + currentYear,
+            oLTIndexNo: oLTIndex === "" ? null : oLTIndex,
             lTSAddress: data?.lTSAddress,
             lTSState: data?.lTSState,
             lTSApt: data?.lTSApt,

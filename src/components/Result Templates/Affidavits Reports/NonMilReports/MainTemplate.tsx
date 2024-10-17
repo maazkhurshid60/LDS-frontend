@@ -39,6 +39,7 @@ const NonMilReport = () => {
         setResultData(legalDeliveryDataa?.data)
 
     }, [])
+    console.log(resultData);
 
 
     return (
@@ -72,12 +73,12 @@ const NonMilReport = () => {
                                 height={data?.serviceResultHeight}
                                 weight={data?.serviceResultWeight}
                                 hair={data?.serviceResultHair}
-                                dateOfService={data?.dateOfService}
+                                dateOfService={data?.serviceResultDateOfService}
                                 serverName={data?.serviceResultServerId?.firstName}
                                 serverAddress={data?.serviceResultServerId?.address1}
 
                                 serverLicense={data?.serviceResultServerId?.licenseNo}
-                                mailingAddressDate={data?.mailingAddressDate}
+                                mailingAddressDate={data?.serviceResultDateOfMailing}
                                 address={data?.lTSAddress}
                                 name={data?.lTSFirstName}
 

@@ -17,7 +17,9 @@ const StandardReport = () => {
     const [resultData, setResultData] = useState([]);
 
     const [header, setHeader] = useState({
-        index: ""
+        index: "",
+        plaintTiff: "",
+        defedants: ""
     })
     const [bodyData, setBodyData] = useState({
         dateOfService: "",
@@ -45,6 +47,7 @@ const StandardReport = () => {
         setResultData(legalDeliveryDataa?.data)
 
     }, [])
+    console.log(resultData)
     return (
         <>
             <div className="absolute h-[83.5vh] overflow-y-scroll relative">
@@ -53,7 +56,7 @@ const StandardReport = () => {
 
                         <TemplateOutlet>
                             {data?.serviceResultServerId?.serverCode === undefined || data?.serviceResultServerId?.serverCode === null ? <>
-                                <Header index="" />
+                                <Header index="" plaintTiff="" defedants="" />
                                 <Body dateOfService=""
                                     firstAttemptDate=""
                                     firstAttemptTime=""
@@ -76,7 +79,7 @@ const StandardReport = () => {
                                 />
                                 <Footer />
 
-                            </> : <> <Header index={data?.oLTIndexNo} />
+                            </> : <> <Header index={data?.oLTIndexNo} plaintTiff={data?.sSDPlaintiff} defedants={data?.sSDDefendants} />
                                 <Body dateOfService={data?.serviceResultDateOfService}
                                     firstAttemptDate={data?.serviceResultFirstAttemptDate}
                                     firstAttemptTime={data?.serviceResultFirstTimeOfService}
