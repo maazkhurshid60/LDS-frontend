@@ -8,7 +8,7 @@ export const addDeviceApi = async (data: deviceType[]) => {
 
         const response = await axios.post(`${baseUrl}/device/create`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
         })
         return response
@@ -22,7 +22,7 @@ export const deleteDeviceApi = async (id: string) => {
     try {
         const response = await axios.delete(`${baseUrl}/device/delete`, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
             data: {
                 id: id
@@ -42,7 +42,7 @@ export const updateDeviceApi = async (data: deviceType) => {
         const accessToken = localStorage.getItem("accessToken");
         const response = await axios.patch(`${baseUrl}/device/update`, data, {
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
         })
 
