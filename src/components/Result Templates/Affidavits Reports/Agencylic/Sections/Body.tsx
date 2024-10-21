@@ -1,6 +1,8 @@
 import React from "react";
 import { GrCheckboxSelected, GrCheckbox } from "react-icons/gr";
 import { formatDate } from "../../../../../utils/dateFormate";
+import { formatTime } from "../../../../../utils/timeFormate";
+
 export interface BodyProps {
     //RESULTS
     apt?: string | number;
@@ -54,8 +56,8 @@ const Body: React.FC<BodyProps> = (item) => {
                     respondent(s) or to find a person suitable age and discretion who ______________________________ there at during either of the two service
                     attempts made on the following dates:
                 </p>
-                <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? formatDate(item?.firstDateAttempt) : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstDateAttempt ? item?.firstDateAttempt : "______________________________"} </span> </p>
-                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? formatDate(item?.secondDateAttempt) : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondDateAttempt ? item?.secondDateAttempt : "______________________________"}</span>  </p>
+                <p>Prior Attempt Made On:<span className="font-semibold">{item?.firstDateAttempt ? formatDate(item?.firstDateAttempt) : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.firstTimeAttempt ? formatTime(item?.firstTimeAttempt) : "______________________________"} </span> </p>
+                <p>Second Attempt Made On:<span className="font-semibold">{item?.secondDateAttempt ? formatDate(item?.secondDateAttempt) : "______________________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="font-semibold">{item?.secondTimeAttempt ? formatTime(item?.secondTimeAttempt) : "______________________________"}</span>  </p>
                 <p>Approx, Description: Sex:<span className="font-semibold">{item?.sex ? item?.sex : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skin Color:<span className="font-semibold">{item?.skinColor ? item?.skinColor : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     Age:<span className="font-semibold">{item?.age ? item?.age : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Height:<span className="font-semibold">{item?.height ? item?.height : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     Weight:<span className="font-semibold">{item?.weight ? item?.weight : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hair:<span className="font-semibold">{item?.hair ? item?.hair : "______________________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
