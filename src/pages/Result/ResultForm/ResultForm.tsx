@@ -429,7 +429,8 @@ const ResultForm = () => {
             setValue("serviceResultFirstTimeOfService", selectedSearchResultData[0]?.serviceResultFirstTimeOfService === undefined || selectedSearchResultData[0]?.serviceResultFirstTimeOfService === "" ? lastestResultFormSaved?.serviceResultFirstTimeOfService : selectedSearchResultData[0]?.serviceResultFirstTimeOfService)
             setValue("serviceResultTimeOfService", selectedSearchResultData[0]?.serviceResultTimeOfService === undefined || selectedSearchResultData[0]?.serviceResultTimeOfService === "" ? lastestResultFormSaved?.serviceResultTimeOfService : selectedSearchResultData[0]?.serviceResultTimeOfService)
 
-
+            // setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary === undefined || selectedSearchResultData[0]?.serviceResultDateOfNotary === "" ? lastestResultFormSaved?.serviceResultDateOfNotary : selectedSearchResultData[0]?.serviceResultDateOfNotary)
+            setValue("serviceResultDateOfMailing", selectedSearchResultData[0]?.serviceResultDateOfMailing === undefined || selectedSearchResultData[0]?.serviceResultDateOfMailing === "" ? lastestResultFormSaved?.serviceResultDateOfMailing : selectedSearchResultData[0]?.serviceResultDateOfMailing)
             // setValue("serviceResultSecondTimeOfService", selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "NaN:NaN" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === "" || selectedSearchResultData[0]?.serviceResultSecondTimeOfService === undefined ? addMinutesToTime(lastestResultFormSaved?.serviceResultSecondTimeOfService, suggestedTimeTrip) : addMinutesToTime(selectedSearchResultData[0]?.serviceResultSecondTimeOfService, suggestedTimeTrip))
 
 
@@ -515,8 +516,8 @@ const ResultForm = () => {
             setValue("serviceResultHeight", JSON.stringify(selectedSearchResultData[0]?.serviceResultHeight))
             setValue("serviceResultWeight", JSON.stringify(selectedSearchResultData[0]?.serviceResultWeight))
             setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.serviceResultOtherFeatures)
-            setValue("serviceResultDateOfMailing", selectedSearchResultData[0]?.serviceResultDateOfMailing)
-            setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
+            // setValue("serviceResultDateOfMailing", selectedSearchResultData[0]?.serviceResultDateOfMailing)
+            // setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
             setValue("substituteDeliveredTo", selectedSearchResultData[0]?.serviceResultSubstitudeDeliveredTo)
             setValue("corporateRecipient", selectedSearchResultData[0]?.serviceResultRecipient)
         }
