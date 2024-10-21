@@ -35,9 +35,9 @@ export interface BodyProps {
 // formatDate(item?.dateOfmailing)
 // formatTime(item?.time)
 const Body: React.FC<BodyProps> = (item) => {
-    const timeString = item?.time
-    const date = new Date(timeString);
-    const time = date?.toLocaleTimeString('en-US', { hour12: false });
+    // const timeString = item?.time
+    // const date = new Date(timeString);
+    // const time = date?.toLocaleTimeString('en-US', { hour12: false });
     return <div className="flex flex-col items-start gap-y-2 text-sm">
         <p>State of New York, country of <span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "______________________________"}</span> ss:</p>
         <p>I, <span className="font-semibold">{item?.serverName ? item?.serverName : "______________________________"}</span> being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
