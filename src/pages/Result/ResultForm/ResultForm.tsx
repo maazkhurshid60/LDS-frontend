@@ -507,6 +507,7 @@ const ResultForm = () => {
             ];
 
 
+
             // Set the states
             setLTSServed(finalServed);
             setLTSNotServed(filteredNotServed);
