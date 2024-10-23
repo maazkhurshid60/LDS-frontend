@@ -22,6 +22,7 @@ const AgencyLic = () => {
     })
     const [bodyData, setBodyData] = useState({
         apt: "",
+        affidavitName: "",
         reciepientTitle: "",
         firstTimeAttempt: "",
         firstDateAttempt: "",
@@ -40,13 +41,16 @@ const AgencyLic = () => {
         firstNames: "",
         serverName: "",
         licNo: "",
-        serverAddress: ""
+        serverAddress: "",
+        substituteDelivered: ""
     })
     useEffect(() => {
         setResultData(legalDeliveryDataa?.data)
 
 
     }, [])
+
+    console.log("resultData", resultData[0]?.serviceResultSubstitudeDeliveredTo)
     return (
         <>
             <div className="absolute overflow-y-scroll relative">
@@ -62,6 +66,9 @@ const AgencyLic = () => {
                                     <Body
                                         //RESULTS
                                         apt=""
+                                        affidavitName=""
+
+                                        substituteDelivered=""
                                         reciepientTitle=""
                                         firstTimeAttempt=""
                                         firstDateAttempt=""
@@ -87,12 +94,14 @@ const AgencyLic = () => {
                                     />
                                     <Footer /></> : <> <Header
                                         index={data?.oLTIndexNo}
-                                        affidavitName={data?.serviceType?.serviceTypeCode}
+                                        affidavitName={data?.serviceResultResults}
                                         licNo={data?.serviceResultServerId?.licenseNo}
                                     />
                                     <Body
                                         //RESULTS
-                                        apt={data?.aptServe}
+                                        apt={data?.lTSApt}
+                                        affidavitName={data?.serviceResultResults}
+                                        substituteDelivered={data?.serviceResultSubstitudeDeliveredTo}
                                         reciepientTitle={data?.serviceResultRecipientTitle}
                                         firstTimeAttempt={data?.serviceResultFirstTimeOfService}
                                         firstDateAttempt={data?.serviceResultFirstAttemptDate}
@@ -107,6 +116,8 @@ const AgencyLic = () => {
                                         otherFeatures={data?.serviceResultOtherFeatures}
                                         dateOfMailing={data?.serviceResultDateOfMailing}
                                         dateOfService={data?.serviceResultDateOfService}
+                                        timeOfService={data?.serviceResultTimeOfService}
+
                                         lic={data?.serviceResultServerId?.licenseNo}
                                         //SERVICES
                                         inputDate={data?.inputDate}

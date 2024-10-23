@@ -80,7 +80,6 @@ const ResultForm = () => {
     const [currentServerId, setCurrentServerId] = useState<string>()
     const [resultId, setResultId] = useState<string>(undefined)
     const [datePairsDates, setDatePairsDates] = useState<any>();
-
     const addMinutesToTime = (timeString, minutesToAdd) => {
 
         // Add a fallback for when AM/PM is missing (assuming 12-hour format)
@@ -240,7 +239,7 @@ const ResultForm = () => {
             serviceResultDateOfMailing: data?.serviceResultDateOfMailing,
             serviceResultDateOfNotary: data?.serviceResultDateOfNotary,
             serviceResultRecipient: data?.corporateRecipient,
-            serviceResultSubstitudeDeliveredTo: data?.substituteDeliveredTo,
+            serviceResultSubstitudeDeliveredTo: data?.serviceResultSubstitudeDeliveredTo,
 
 
         }
@@ -519,8 +518,10 @@ const ResultForm = () => {
             setValue("serviceResultOtherFeatures", selectedSearchResultData[0]?.serviceResultOtherFeatures)
             // setValue("serviceResultDateOfMailing", selectedSearchResultData[0]?.serviceResultDateOfMailing)
             // setValue("serviceResultDateOfNotary", selectedSearchResultData[0]?.serviceResultDateOfNotary)
-            setValue("substituteDeliveredTo", selectedSearchResultData[0]?.serviceResultSubstitudeDeliveredTo)
+            setValue("serviceResultSubstitudeDeliveredTo", selectedSearchResultData[0]?.serviceResultSubstitudeDeliveredTo)
             setValue("corporateRecipient", selectedSearchResultData[0]?.serviceResultRecipient)
+            setIsConspicuous(selectedSearchResultData[0]?.serviceResultResults)
+
         }
 
 
@@ -1572,7 +1573,7 @@ const ResultForm = () => {
                                 <div className="w-[30%]">
 
                                     <TextField onKeyDown={handleEnterKeyPress}
-                                        register={register} label="substitute delivered To" error={errors.substituteDeliveredTo} name="substituteDeliveredTo" />
+                                        register={register} label="substitute delivered To" error={errors.serviceResultSubstitudeDeliveredTo} name="serviceResultSubstitudeDeliveredTo" />
                                 </div>
                             </div>
                             <div className="w-[100%] md:w-[46%] lg:w-[100%]">
