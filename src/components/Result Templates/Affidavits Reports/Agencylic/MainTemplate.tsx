@@ -16,7 +16,8 @@ const AgencyLic = () => {
     const [header, setHeader] = useState({
         index: "",
         affidavitName: "",
-        serviceName: "",
+        serverName: "",
+        serverAddress: "",
         licNo: "",
 
     })
@@ -50,7 +51,7 @@ const AgencyLic = () => {
 
     }, [])
 
-    console.log("resultData", resultData[0]?.serviceResultSubstitudeDeliveredTo)
+    console.log("resultData", resultData[0])
     return (
         <>
             <div className="absolute overflow-y-scroll relative">
@@ -61,13 +62,15 @@ const AgencyLic = () => {
                                 {data?.serviceResultServerId?.serverCode === undefined ? <> <Header
                                     index=""
                                     affidavitName=""
+                                    serverName=""
+                                    serverAddress=""
                                     licNo=""
                                 />
                                     <Body
                                         //RESULTS
                                         apt=""
                                         affidavitName=""
-
+                                        serviceTypeLTOrStandard=""
                                         substituteDelivered=""
                                         reciepientTitle=""
                                         firstTimeAttempt=""
@@ -96,6 +99,8 @@ const AgencyLic = () => {
                                         index={data?.oLTIndexNo}
                                         affidavitName={data?.serviceResultResults}
                                         licNo={data?.serviceResultServerId?.licenseNo}
+                                        serverName={data?.serviceResultServerId?.firstName + " " + data?.serviceResultServerId?.lastName}
+                                        serverAddress={data?.serviceResultServerId?.address1}
                                     />
                                     <Body
                                         //RESULTS
@@ -124,8 +129,9 @@ const AgencyLic = () => {
                                         time={data?.updatedAt}
                                         address={data?.lTSAddress}
                                         firstNames={data?.lTSFirstName}
-                                        serverName={data?.serviceResultServerId?.firstName}
+                                        serverName={data?.serviceResultServerId?.firstName + " " + data?.serviceResultServerId?.lastName}
                                         serverAddress={data?.serviceResultServerId?.address1}
+                                        serviceTypeLTOrStandard={data?.lTServiceType?.name}
                                     />
                                     <Footer /></>
                                 }

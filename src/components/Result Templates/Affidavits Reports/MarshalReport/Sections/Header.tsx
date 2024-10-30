@@ -2,30 +2,38 @@ import React from "react";
 export interface HeaderProps {
     index?: string | number;
     affidavitName?: string;
-    serverName?: string
-    lic?: string | number
-    serverAddress?: string
+    serverName?: any;
+    serverAddress?: string;
 
+    lic?: string | number
 }
 const Header: React.FC<HeaderProps> = (item) => {
-    return <div className="w-full flex items-center justify-between flex-wrap text-sm">
-        <div className="capitalize flex items-center gap-x-2">
-            <p>index #</p>
-            <p className="font-semibold">{item?.index ? item?.index : "__________"}</p>
+    console.log(item?.serverAddress)
+    return <div className="w-full font-inter font-bold flex items-center justify-between flex-wrap text-sm">
+        <div>
+            <p className="font-normal font-times">11/21</p>
+            <div className="capitalize flex items-center gap-x-2 font-normal font-times">
+                <p>index #</p>
+                <p className="font-semibold">{item?.index ? item?.index : "_________"}</p>
+            </div>
         </div>
-        <div className=" font-medium flex items-center gap-x-4 text-xl uppercase">
-            <p>Affidavit of</p>
-            <p>{item?.affidavitName ? item?.affidavitName : "__________"}</p>
+        <div className="  flex items-center gap-x-4 text-xl uppercase">
+            <p className="">Affidavit of</p>
+            <p className="italic font-times capitalize">{item?.affidavitName}</p>
             <p>service</p>
         </div>
+        <div className="font-times font-semibold">
 
-        <div className="flex items-start justify-start flex-col">
-            <p><span className="font-semibold">{item?.serverName ? item?.serverName : "__________"}</span></p>
-            <p>Lic#{item?.lic ? item?.lic : "__________"}</p>
-            <p><span className="font-semibold capitalize">{item?.serverAddress ? item?.serverAddress : "__________"}</span>
-            </p>
+            <p className="">{item?.serverName ? item?.serverName : "_________"}</p>
+
+            <div className=" flex items-center gap-x-2 text-base">
+                <p>Lic#</p>
+                <p className="">{item?.lic ? item?.lic : "_________"}</p>
+            </div>
+            <p className="">{item?.serverAddress ? item?.serverAddress : "_________"}</p>
 
         </div>
+
     </div>
 }
 

@@ -13,21 +13,21 @@ import rolesReducer from "./slice/roles";
 import serviceFormReducer from "./slice/serviceForm";
 import resultFormReducer from "./slice/resultForm";
 import legalDeliveryReducer from "./slice/legalDelivery";
-import showSpinnerReducer  from "./slice/spinner";
+import showSpinnerReducer from "./slice/spinner";
 // Combine all reducers
 const rootReducer = combineReducers({
     navbarTracking: navbarTrackingReducer,
     userDetail: userDetailReducer,
-    menuOpen:menuOpenReducer,
-    sidebar:sideBarWidthReducer,
-    userId:userIdReducer,
-    showModal:showModalReducer,
-    mailingAdress:mailingAdressesReducer,
-    roles:rolesReducer,
-    serviceForm:serviceFormReducer,
-    resultForm:resultFormReducer,
-    legalDelivery:legalDeliveryReducer,
-    showSpinner:showSpinnerReducer,
+    menuOpen: menuOpenReducer,
+    sidebar: sideBarWidthReducer,
+    userId: userIdReducer,
+    showModal: showModalReducer,
+    mailingAdress: mailingAdressesReducer,
+    roles: rolesReducer,
+    serviceForm: serviceFormReducer,
+    resultForm: resultFormReducer,
+    legalDelivery: legalDeliveryReducer,
+    showSpinner: showSpinnerReducer,
 });
 // Define RootState to encompass all slices
 export type RootState = ReturnType<typeof rootReducer>;
@@ -35,7 +35,7 @@ export type RootState = ReturnType<typeof rootReducer>;
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["userDetail","navbarTracking","legalDelivery"] // reducers you want to persist
+    whitelist: ["userDetail", "navbarTracking", "legalDelivery"] // reducers you want to persist
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 // Configure store with persisted reducer
