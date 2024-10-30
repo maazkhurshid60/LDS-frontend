@@ -5,7 +5,7 @@ import { formatTime } from "../../../../../utils/timeFormate";
 import { RxCross2 } from "react-icons/rx";
 
 export interface BodyProps {
-    //RESULTS
+    //RESULT
     apt?: string | number;
     reciepientTitle?: string;
     firstTimeAttempt?: string;
