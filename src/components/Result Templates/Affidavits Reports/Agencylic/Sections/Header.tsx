@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = (item) => {
         </div>
         <div className="  flex items-center gap-x-4 text-xl uppercase">
             <p className="">Affidavit of</p>
-            <p className="italic font-times capitalize">{item?.affidavitName}</p>
+            <p className="italic font-times capitalize"> {item?.affidavitName ? item?.affidavitName : "_________"}</p>
             <p>service</p>
         </div>
         <div className="font-times font-semibold">
