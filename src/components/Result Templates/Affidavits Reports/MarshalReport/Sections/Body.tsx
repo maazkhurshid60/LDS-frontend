@@ -35,18 +35,19 @@ export interface BodyProps {
     timeOfService?: string
     serviceTypeLTOrStandard?: string
     affidavitName?: string
+    serviceResultSubstitudeDeliveredTo?: string
 }
 const Body: React.FC<BodyProps> = (item) => {
     return <div className="flex flex-col gap-y-4 text-sm">
         <p>State of New York, County of Queens ss:</p>
-        <p>I, <span className="mx-6 font-semibold capitalize ">{item?.serverName ? item?.serverName : "__________________"}</span> Being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
-            <span className="mx-6 font-semibold capitalize ">{item?.serverAddress ? item?.serverAddress : "__________________"}</span>, New York  That on <span className="mx-6 font-semibold capitalize ">{item?.dateOfService ? formatDate(item?.dateOfService) : "__________________"}</span> at <span className="mx-6 font-semibold">{item?.timeOfService ? formatTime(item?.timeOfService) : "__________________"}</span>Apt# <span className="mx-6 font-semibold capitalize ">{item?.apt ? item?.apt : "__________________"}</span>.</p>
-        <p>At the property sought to be recovered at <span className="mx-6 font-semibold capitalize ">{item?.address ? item?.address : "__________________"}</span> </p>
+        <p>I, <span className="mx-6 font-semibold uppercase ">{item?.serverName ? item?.serverName : "__________________"}</span> Being duly sworn, deposes and says that deponent is not party to this proceeding, is over 18 years of age and resides in
+            <span className="mx-6 font-semibold uppercase ">{item?.serverAddress ? item?.serverAddress : "__________________"}</span>, New York  That on <span className="mx-6 font-semibold uppercase ">{item?.dateOfService ? formatDate(item?.dateOfService) : "__________________"}</span> at <span className="mx-6 font-semibold">{item?.timeOfService ? formatTime(item?.timeOfService) : "__________________"}</span>Apt# <span className="mx-6 font-semibold uppercase ">{item?.apt ? item?.apt : "__________________"}</span>.</p>
+        <p>At the property sought to be recovered at <span className="mx-6 font-semibold uppercase ">{item?.address ? item?.address : "__________________"}</span> </p>
         <p>The <span className="mx-6 font-semibold">{item?.serviceTypeLTOrStandard ? item?.serviceTypeLTOrStandard : "__________________"}</span> <br /> was served on : <span className="mx-6 font-semibold">{item?.firstNames ? item?.firstNames : "__________________"}</span></p>
         <p className="flex justify-start gap-x-4"> {(item?.affidavitName === "personal" || item?.affidavitName === "personalplus") ? <RxCross2 className="border-[2px] border-solid border-[#101010]" size={18} /> : <GrCheckbox size={18} />}  Personal service on Individual: Individually served the within-named person with true copy(ies) of the paper(s) aforementioned.</p>
-        <div className="flex justify-start gap-x-4"><GrCheckbox size={44} />
+        <div className="flex justify-start gap-x-4">{item?.affidavitName === "personalplus" ? <RxCross2 className="border-[2px] border-solid border-[#101010] w-[44px] h-[20px]" size={44} /> : <GrCheckbox size={44} />}
             <div>
-                <p>Deponent was unable to serve:</p>
+                <p>Deponent was unable to serve: {item?.affidavitName === "personalplus" && <span className="mx-6 font-semibold uppercase ">{item?.serviceResultSubstitudeDeliveredTo}</span>}</p>
                 <p>Additional respondents by personal delivery but by gaining admittance to said property and delivery and leaving a true copy thereof for each respondent personally with aftermentioned respondent who was
                     willing to accept same and was of suitable age and discretion who threat...thereby completing service to all respondents.
                 </p>
@@ -68,22 +69,22 @@ const Body: React.FC<BodyProps> = (item) => {
             {(item?.affidavitName === "conspicuous") ? <RxCross2 className="border-[2px] border-solid border-[#101010] w-[60px] h-[20px]" size={18} /> : <GrCheckbox size={65} />}
             <div>
                 <p>Posted on door: by affixing a true copy thereof  for each respondent on conspicuous part to with the entrance door of said property
-                    , the tenant(s)/ occupant(s) place of bussiness premises is recipients <span className="mx-6 font-semibold capitalize ">{item?.reciepientTitle ? item?.reciepientTitle : "__________________"}</span> with in state. Deponent was unable to find
+                    , the tenant(s)/ occupant(s) place of bussiness premises is recipients <span className="mx-6 font-semibold uppercase ">{item?.reciepientTitle ? item?.reciepientTitle : "__________________"}</span> with in state. Deponent was unable to find
                     respondent(s) or to find a person suitable age and discretion who __________________ there at during either of the two service
                     attempts made on the following dates:
                 </p>
-                <p>Prior Attempt Made On:<span className="mx-6 font-semibold capitalize ">{item?.firstDateAttempt ? formatDate(item?.firstDateAttempt) : "__________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="mx-6 font-semibold capitalize ">{item?.firstAttemptTime ? formatTime(item?.firstAttemptTime) : "__________________"} </span> </p>
-                <p>Second Attempt Made On:<span className="mx-6 font-semibold capitalize ">{item?.secondDateAttempt ? formatDate(item?.secondDateAttempt) : "__________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="mx-6 font-semibold capitalize ">{item?.secondAttemptTime ? formatTime(item?.secondAttemptTime) : "__________________"}</span>  </p>
+                <p>Prior Attempt Made On:<span className="mx-6 font-semibold uppercase ">{item?.firstDateAttempt ? formatDate(item?.firstDateAttempt) : "__________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="mx-6 font-semibold uppercase ">{item?.firstAttemptTime ? formatTime(item?.firstAttemptTime) : "__________________"} </span> </p>
+                <p>Second Attempt Made On:<span className="mx-6 font-semibold uppercase ">{item?.secondDateAttempt ? formatDate(item?.secondDateAttempt) : "__________________"}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at <span className="mx-6 font-semibold uppercase ">{item?.secondAttemptTime ? formatTime(item?.secondAttemptTime) : "__________________"}</span>  </p>
                 <p>Approx, Door Description:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <p>
-                        Color:<span className="mx-6 font-semibold capitalize ">{item?.skinColor ? item?.skinColor : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        Locks:<span className="mx-6 font-semibold capitalize ">{item?.locks ? item?.locks : "__________________"}</span>
+                        Color:<span className="mx-6 font-semibold uppercase ">{item?.skinColor ? item?.skinColor : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Locks:<span className="mx-6 font-semibold uppercase ">{item?.locks ? item?.locks : "__________________"}</span>
                     </p>
                 </p>
-                <p>Approx, Description: Sex:<span className="mx-6 font-semibold capitalize ">{item?.sex ? item?.sex : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skin Color:<span className="mx-6 font-semibold capitalize ">{item?.skinColor ? item?.skinColor : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Age:<span className="mx-6 font-semibold capitalize ">{item?.age ? item?.age : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Height:<span className="mx-6 font-semibold capitalize ">{item?.height ? item?.height : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Weight:<span className="mx-6 font-semibold capitalize ">{item?.height ? item?.height : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hair:<span className="mx-6 font-semibold capitalize ">{item?.hair ? item?.hair : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    other identifying features/comments:<span className="mx-6 font-semibold capitalize ">{item?.otherFeatures ? item?.otherFeatures : "__________________"}</span>
+                <p>Approx, Description: Sex:<span className="mx-6 font-semibold uppercase ">{item?.sex ? item?.sex : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skin Color:<span className="mx-6 font-semibold uppercase ">{item?.skinColor ? item?.skinColor : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Age:<span className="mx-6 font-semibold uppercase ">{item?.age ? item?.age : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Height:<span className="mx-6 font-semibold uppercase ">{item?.height ? item?.height : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Weight:<span className="mx-6 font-semibold uppercase ">{item?.height ? item?.height : "__________________"}lbs</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hair:<span className="mx-6 font-semibold uppercase ">{item?.hair ? item?.hair : "__________________"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    other identifying features/comments:<span className="mx-6 font-semibold uppercase ">{item?.otherFeatures ? item?.otherFeatures : "__________________"}</span>
                 </p>
             </div>
         </div>
@@ -93,7 +94,7 @@ const Body: React.FC<BodyProps> = (item) => {
                 <p>Sworn to before me on</p>
                 <p>{item?.dateOfMailing ? formatDate(item?.dateOfMailing) : "__________________"}</p>
             </div>
-            <div className="font-semibold capitalize border-t-[1.5px] border-t-[#000]">
+            <div className="font-semibold uppercase border-t-[1.5px] border-t-[#000]">
                 <p><span >{item?.serverName ? item?.serverName : "__________________"}</span></p>
                 <p>Lic#{item?.lic ? item?.lic : "__________________"}</p>
                 <p><span  >{item?.serverAddress ? item?.serverAddress : "__________________"}</span>

@@ -49,7 +49,7 @@ const MarshalReport = () => {
     useEffect(() => {
         setResultData(legalDeliveryDataa?.data)
     }, [])
-    console.log(resultData);
+    console.log(">>>>>>>>>>>>>>", resultData);
 
     return (
         <>
@@ -79,7 +79,7 @@ const MarshalReport = () => {
                                     age=""
 
 
-
+                                    serviceResultSubstitudeDeliveredTo=""
                                     height=""
                                     weight=""
                                     hair=""
@@ -127,7 +127,7 @@ const MarshalReport = () => {
                                     skinColor={data?.serviceResultSkinColor}
                                     age={data?.serviceResultAge}
                                     affidavitName={data?.serviceResultResults}
-
+                                    serviceResultSubstitudeDeliveredTo={data?.serviceResultSubstitudeDeliveredTo}
                                     firstAttemptTime={data?.serviceResultFirstTimeOfService}
                                     secondAttemptTime={data?.serviceResultSecondTimeOfService}
 

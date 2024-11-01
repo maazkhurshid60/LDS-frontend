@@ -34,6 +34,8 @@ export interface BodyProps {
     affidavitName?: string
     substituteDelivered?: string
     serviceTypeLTOrStandard?: any
+    serviceResultSubstitudeDeliveredTo?: string
+
 }
 const Body: React.FC<BodyProps> = (item) => {
     console.log(item?.serviceTypeLTOrStandard);
@@ -48,9 +50,9 @@ const Body: React.FC<BodyProps> = (item) => {
         <p>At the property sought to be recovered at <span className="mx-6 font-semibold">{item?.address ? item?.address : "__________________"}</span> Apt# <span className="mx-6 font-semibold">{item?.apt ? item?.apt : "__________________"}</span></p>
         <p>The <span className="mx-6 font-semibold">{item?.serviceTypeLTOrStandard ? item?.serviceTypeLTOrStandard : "__________________"}</span>  was served on : <span className="mx-6 font-semibold">{item?.firstNames ? item?.firstNames : "__________________"}</span></p>
         <p className="flex justify-start gap-x-4"> {(item?.affidavitName === "personal" || item?.affidavitName === "personalplus") ? <RxCross2 className="border-[2px] border-solid border-[#101010]" size={18} /> : <GrCheckbox size={18} />}  Personal service on Individual: Individually served the within-named person with true copy(ies) of the paper(s) aforementioned.</p>
-        <div className="flex justify-start gap-x-4"><GrCheckbox size={44} />
+        <div className="flex justify-start gap-x-4">{item?.affidavitName === "personalplus" ? <RxCross2 className="border-[2px] border-solid border-[#101010] w-[44px] h-[20px]" size={44} /> : <GrCheckbox size={44} />}
             <div>
-                <p>Deponent was unable to serve:</p>
+                <p>Deponent was unable to serve:{item?.affidavitName === "personalplus" && <span className="mx-6 font-semibold uppercase ">{item?.serviceResultSubstitudeDeliveredTo}</span>}</p>
                 <p>Additional respondents by personal delivery but by gaining admittance to said property and delivery and leaving a true copy thereof for each respondent personally with aftermentioned respondent who was
                     willing to accept same and was of suitable age and discretion who threat...thereby completing service to all respondents.
                 </p>

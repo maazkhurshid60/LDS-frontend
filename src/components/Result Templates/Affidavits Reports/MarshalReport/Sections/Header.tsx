@@ -19,18 +19,18 @@ const Header: React.FC<HeaderProps> = (item) => {
         </div>
         <div className="  flex items-center gap-x-4 text-xl uppercase">
             <p className="">Affidavit of</p>
-            <p className="italic font-times capitalize"> {item?.affidavitName ? item?.affidavitName : "_________"}</p>
+            <p className="italic font-times uppercase">  {item?.affidavitName === "personalplus" ? "Personal/Substitute" : (item?.affidavitName || "_________")}</p>
             <p>service</p>
         </div>
         <div className="font-times font-semibold">
 
-            <p className="">{item?.serverName ? item?.serverName : "_________"}</p>
+            <p className="uppercase">{item?.serverName ? item?.serverName : "_________"}</p>
 
             <div className=" flex items-center gap-x-2 text-base">
                 <p>Lic#</p>
-                <p className="">{item?.lic ? item?.lic : "_________"}</p>
+                <p className="uppercase">{item?.lic ? item?.lic : "_________"}</p>
             </div>
-            <p className="">{item?.serverAddress ? item?.serverAddress : "_________"}</p>
+            <p className="uppercase">{item?.serverAddress ? item?.serverAddress : "_________"}</p>
 
         </div>
 

@@ -29,39 +29,18 @@ const LTExtraNameReport = () => {
 
 
     }, [])
+
+    console.log(resultData?.map(data => data?.caseNo))
     return <>
         <div className="absolute h-[83.5vh] overflow-y-scroll relative">
-            {resultData?.map(data => {
-                return <>
-                    <TemplateOutlet>
-                        {data?.serviceResultServerId?.serverCode === undefined ? <><div className="w-full flex justify-center">
-                            <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
-                        </div>
+            <TemplateOutlet>
 
-                            <DataTable
-                                caseNo=""
-                                index=""
-                                address=""
-                                apt=""
-                                ltnames=""
-                                extraname=""
-                            /></> : <><div className="w-full flex justify-center">
-                                <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
-                            </div>
+                <div className="w-full flex justify-center">
+                    <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
+                </div>
+                <DataTable data={resultData} testCaseLength={resultData?.length} />
+            </TemplateOutlet>
 
-                            <DataTable
-                                caseNo={data?.caseNo}
-                                index={data?.oSSTIndexNo}
-                                address={data?.lTSAddress}
-                                apt={data?.lTSApt}
-                                ltnames={data?.lTSFirstName}
-
-                                extraname={data?.lTSFirstName.split(",")}
-                            /></>}
-
-                    </TemplateOutlet>
-                </>
-            })}
 
 
             <div className="flex justify-end mt-5 mb-5 mr-5">
@@ -77,38 +56,14 @@ const LTExtraNameReport = () => {
         </div>
         <div style={{ display: "none" }}>
             {/* The content to print */}
-            <div ref={ltExtraNameReportPrintRef} className="">
-                {resultData?.map(data => {
-                    return <>
-                        <TemplateOutlet>
-                            {data?.serviceResultServerId?.serverCode === undefined ? <><div className="w-full flex justify-center">
-                                <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
-                            </div>
+            <div ref={ltExtraNameReportPrintRef} className="mt-2">
+                <TemplateOutlet>
 
-                                <DataTable
-                                    caseNo=""
-                                    index=""
-                                    address=""
-                                    apt=""
-                                    ltnames=""
-                                    extraname=""
-                                /></> : <><div className="w-full flex justify-center">
-                                    <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
-                                </div>
-
-                                <DataTable
-                                    caseNo={data?.caseNo}
-                                    index={data?.oSSTIndexNo}
-                                    address={data?.lTSAddress}
-                                    apt={data?.lTSApt}
-                                    ltnames={data?.lTSFirstName}
-
-                                    extraname={data?.lTSFirstName.split(",")}
-                                /></>}
-
-                        </TemplateOutlet>
-                    </>
-                })}
+                    <div className="w-full flex justify-center ">
+                        <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase  ">L&T Extra Names Report</h1>
+                    </div>
+                    <DataTable data={resultData} testCaseLength={resultData?.length} />
+                </TemplateOutlet>
             </div>
         </div>
     </>

@@ -87,6 +87,7 @@ const AgencyLic = () => {
                                         dateOfMailing=""
                                         dateOfService=""
                                         lic=""
+                                        serviceResultSubstitudeDeliveredTo=""
                                         //SERVICES
                                         inputDate=""
                                         time=""
@@ -105,6 +106,7 @@ const AgencyLic = () => {
                                     <Body
                                         //RESULTS
                                         apt={data?.lTSApt}
+                                        serviceResultSubstitudeDeliveredTo={data?.serviceResultSubstitudeDeliveredTo}
                                         affidavitName={data?.serviceResultResults}
                                         substituteDelivered={data?.serviceResultSubstitudeDeliveredTo}
                                         reciepientTitle={data?.serviceResultRecipientTitle}
