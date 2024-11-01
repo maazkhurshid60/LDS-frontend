@@ -21,8 +21,8 @@ const DataTable: React.FC<DataTableProps> = (item) => {
             <thead className="text-xs border-[2px] border-solid border-blackColor">
                 <tr>
                     <th colSpan={10} className="text-center px-1 py-1 border-[1px] border-solid border-blackColor">
-                        <div className="w-[500px] mx-auto  flex justify-center print-header">
-                            <h1 className="font-bold flex items-center gap-x-2 text-xl uppercase">L&T Extra Names Report</h1>
+                        <div className="w-[500px] mx-auto items-center flex justify-center print-header">
+                            <h1 className="font-bold flex items-center justify-center gap-x-2 text-xl uppercase">L&T Extra Names Report</h1>
                         </div>
                     </th>
                 </tr>
