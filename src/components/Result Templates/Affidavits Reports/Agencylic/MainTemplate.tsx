@@ -160,16 +160,21 @@ const AgencyLic = () => {
                 <div ref={agencyLicPrintRef}>
                     {resultData?.map(data => {
                         return <>
-                            <div className="">
+                            <div>
                                 <TemplateOutlet>
                                     {data?.serviceResultServerId?.serverCode === undefined ? <> <Header
                                         index=""
                                         affidavitName=""
+                                        serverName=""
+                                        serverAddress=""
                                         licNo=""
                                     />
                                         <Body
                                             //RESULTS
                                             apt=""
+                                            affidavitName=""
+                                            serviceTypeLTOrStandard=""
+                                            substituteDelivered=""
                                             reciepientTitle=""
                                             firstTimeAttempt=""
                                             firstDateAttempt=""
@@ -185,6 +190,7 @@ const AgencyLic = () => {
                                             dateOfMailing=""
                                             dateOfService=""
                                             lic=""
+                                            serviceResultSubstitudeDeliveredTo=""
                                             //SERVICES
                                             inputDate=""
                                             time=""
@@ -195,12 +201,17 @@ const AgencyLic = () => {
                                         />
                                         <Footer /></> : <> <Header
                                             index={data?.oLTIndexNo}
-                                            affidavitName={data?.serviceType?.serviceTypeCode}
+                                            affidavitName={data?.serviceResultResults}
                                             licNo={data?.serviceResultServerId?.licenseNo}
+                                            serverName={data?.serviceResultServerId?.firstName + " " + data?.serviceResultServerId?.lastName}
+                                            serverAddress={data?.serviceResultServerId?.address1}
                                         />
                                         <Body
                                             //RESULTS
-                                            apt={data?.aptServe}
+                                            apt={data?.lTSApt}
+                                            serviceResultSubstitudeDeliveredTo={data?.serviceResultSubstitudeDeliveredTo}
+                                            affidavitName={data?.serviceResultResults}
+                                            substituteDelivered={data?.serviceResultSubstitudeDeliveredTo}
                                             reciepientTitle={data?.serviceResultRecipientTitle}
                                             firstTimeAttempt={data?.serviceResultFirstTimeOfService}
                                             firstDateAttempt={data?.serviceResultFirstAttemptDate}
@@ -215,14 +226,17 @@ const AgencyLic = () => {
                                             otherFeatures={data?.serviceResultOtherFeatures}
                                             dateOfMailing={data?.serviceResultDateOfMailing}
                                             dateOfService={data?.serviceResultDateOfService}
+                                            timeOfService={data?.serviceResultTimeOfService}
+
                                             lic={data?.serviceResultServerId?.licenseNo}
                                             //SERVICES
                                             inputDate={data?.inputDate}
                                             time={data?.updatedAt}
                                             address={data?.lTSAddress}
                                             firstNames={data?.lTSFirstName}
-                                            serverName={data?.serviceResultServerId?.firstName}
+                                            serverName={data?.serviceResultServerId?.firstName + " " + data?.serviceResultServerId?.lastName}
                                             serverAddress={data?.serviceResultServerId?.address1}
+                                            serviceTypeLTOrStandard={data?.lTServiceType?.name}
                                         />
                                         <Footer /></>
                                     }
@@ -231,7 +245,6 @@ const AgencyLic = () => {
                             </div>
                         </>
                     })}
-
 
                 </div>
             </div>

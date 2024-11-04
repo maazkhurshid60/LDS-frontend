@@ -176,9 +176,9 @@ const MarshalReport = () => {
                                 {data?.serviceResultServerId?.serverCode === undefined ? <>  <Header
                                     index=""
                                     affidavitName=""
-                                    lic=""
                                     serverName=""
                                     serverAddress=""
+                                    lic=""
 
                                 />
 
@@ -195,7 +195,7 @@ const MarshalReport = () => {
                                         age=""
 
 
-
+                                        serviceResultSubstitudeDeliveredTo=""
                                         height=""
                                         weight=""
                                         hair=""
@@ -211,19 +211,29 @@ const MarshalReport = () => {
                                         serverName=""
                                         serverAddress=""
                                         locks=""
+                                        firstAttemptTime=""
+                                        secondAttemptTime=""
+                                        timeOfService=""
+                                        serviceTypeLTOrStandard=""
+                                        affidavitName=""
+
+
+
                                     />
                                     <Footer /></> : <>  <Header
                                         index={data?.oLTIndexNo}
-                                        affidavitName={data?.serviceType?.serviceTypeCod}
+                                        affidavitName={data?.serviceResultResults}
                                         lic={data?.serviceResultServerId?.licenseNo}
-                                        serverName={data?.serviceResultServerId?.firstName}
+                                        serverName={data?.serviceResultServerId?.firstName + " " + data?.serviceResultServerId?.lastName}
                                         serverAddress={data?.serviceResultServerId?.address1}
+
+
 
                                     />
 
                                     <Body
                                         //RESULTS
-                                        apt={data?.aptServe}
+                                        apt={data?.lTSApt}
                                         reciepientTitle={data?.serviceResultRecipientTitle}
                                         firstTimeAttempt={data?.serviceResultFirstTimeOfService}
                                         firstDateAttempt={data?.serviceResultFirstAttemptDate}
@@ -232,8 +242,10 @@ const MarshalReport = () => {
                                         sex={data?.serviceResultSex}
                                         skinColor={data?.serviceResultSkinColor}
                                         age={data?.serviceResultAge}
-
-
+                                        affidavitName={data?.serviceResultResults}
+                                        serviceResultSubstitudeDeliveredTo={data?.serviceResultSubstitudeDeliveredTo}
+                                        firstAttemptTime={data?.serviceResultFirstTimeOfService}
+                                        secondAttemptTime={data?.serviceResultSecondTimeOfService}
 
                                         height={data?.serviceResultHeight}
                                         weight={data?.serviceResultWeight}
@@ -247,9 +259,13 @@ const MarshalReport = () => {
                                         time={data?.updatedAt}
                                         address={data?.lTSAddress}
                                         firstNames={data?.lTSFirstName}
-                                        serverName={data?.serviceResultServerId?.firstName}
+                                        serverName={data?.serviceResultServerId?.firstName + " " + data?.serviceResultServerId?.lastName}
                                         serverAddress={data?.serviceResultServerId?.address1}
                                         locks={data?.serviceResultDoorLocks}
+                                        timeOfService={data?.serviceResultTimeOfService}
+                                        serviceTypeLTOrStandard={data?.lTServiceType?.name}
+
+
                                     />
                                     <Footer /></>}
 
