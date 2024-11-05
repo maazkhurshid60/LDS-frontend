@@ -119,14 +119,14 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({
                             onChange={handleSearchChange}
                             ref={inputRef}
                         />
-                        {filteredOptions.length > 0 ? (
-                            filteredOptions.map((option, index) => (
+                        {filteredOptions?.length > 0 ? (
+                            filteredOptions?.map((option, index) => (
                                 <div
-                                    key={option.value}
-                                    onClick={() => handleOptionClick(option.value)}
+                                    key={option?.value}
+                                    onClick={() => handleOptionClick(option?.value)}
                                     className={`cursor-pointer capitalize font-medium p-2 text-xs ${highlightedIndex === index ? 'bg-gray-200' : ''}`}
                                 >
-                                    {option.label}
+                                    {option?.label}
                                 </div>
                             ))
                         ) : (

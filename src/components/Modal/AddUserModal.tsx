@@ -75,7 +75,7 @@ const AddUserModal = () => {
                 <Controller name="roles" control={control} render={({ field }) => (
                     <SelectMultipleDropdown
                         options={options}
-                        value={field.value}
+                        value={field?.value}
                         onChange={field.onChange}
                         label="Available Roles"
                         error={errors.roles?.message as string}
