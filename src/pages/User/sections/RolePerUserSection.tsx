@@ -23,13 +23,13 @@ const RolePerUserSection = () => {
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
     const allRolesdata = useSelector((state: RootState) => state?.roles?.allRoles?.tableData)
     const options = allRolesdata?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
-    const oneUser = useSelector((state: RootState) => state.userId.singleUser)
-    const userId = useSelector((state: RootState) => state.userId.userId)
-    const alluserData = useSelector((state: RootState) => state.userId.allUser.tableData)
+    const oneUser = useSelector((state: RootState) => state?.userId?.singleUser)
+    const userId = useSelector((state: RootState) => state?.userId?.userId)
+    const alluserData = useSelector((state: RootState) => state?.userId?.allUser?.tableData)
     const userInfo = useSelector((state: RootState) => state?.userDetail?.userDetails?.user);
 
-    const filteredRoles = allSelectedRoles.filter((obj1, i, arr) =>
-        arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
+    const filteredRoles = allSelectedRoles?.filter((obj1, i, arr) =>
+        arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
     const dispatch = useDispatch()
     // GET SELECTED ROLES
@@ -71,7 +71,7 @@ const RolePerUserSection = () => {
 
             const allRoles = [...filteredRoles]
             const roles = allRoles?.map((data, index) => data?.name)
-            const data = { userId: oneUser[0]._id, roles }
+            const data = { userId: oneUser[0]?._id, roles }
             dispatch(updateUserRole(data))
         }
 

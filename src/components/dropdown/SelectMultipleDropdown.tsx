@@ -56,8 +56,8 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({
     }, []);
 
     // Filter options based on search query
-    const filteredOptions = options.filter((option) =>
-        option.label.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredOptions = options?.filter((option) =>
+        option?.label?.toLowerCase()?.includes(searchQuery?.toLowerCase())
     );
 
     // Handle keydown for arrow keys and enter
@@ -67,7 +67,7 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({
             setHighlightedIndex((prevIndex) =>
                 prevIndex === -1
                     ? 0
-                    : Math.min(filteredOptions.length - 1, prevIndex + 1)
+                    : Math.min(filteredOptions?.length - 1, prevIndex + 1)
             );
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
@@ -80,7 +80,7 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({
             e.preventDefault();
             const selectedOption = filteredOptions[highlightedIndex];
             onChange(selectedOption.value);
-            getMailFunction(selectedOption.value);
+            getMailFunction(selectedOption?.value);
             setIsOpen(false); // Close dropdown after selection
         }
     };
@@ -92,7 +92,7 @@ const SelectMultipleDropdown: React.FC<SelectMultipleDropdownProp> = ({
     };
 
     // Get label of the selected value
-    const selectedLabel = options.find((option) => option.value === value)?.label || 'Select';
+    const selectedLabel = options?.find((option) => option?.value === value)?.label || 'Select';
 
     return (
         <div className="w-full" ref={dropdownRef} onKeyDown={handleKeyDown} tabIndex={0}>

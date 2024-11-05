@@ -22,8 +22,8 @@ const AddUserModal = () => {
     const { isLoading, error, data } = useGetAllData("/role/all-roles")
     const options = data?.map((options, index: number) => { return { label: options?.name, value: options?._id } })
     const [allSelectedRoles, setAllSelectedRoles] = useState<any>([])
-    const filteredRoles = allSelectedRoles.filter((obj1, i, arr) =>
-        arr.findIndex(obj2 => (obj2._id === obj1._id)) === i
+    const filteredRoles = allSelectedRoles?.filter((obj1, i, arr) =>
+        arr.findIndex(obj2 => (obj2?._id === obj1?._id)) === i
     )
     const dispatch = useDispatch()
     // ADD USER
