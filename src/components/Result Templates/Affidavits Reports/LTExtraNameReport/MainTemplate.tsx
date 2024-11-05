@@ -34,6 +34,8 @@ const LTExtraNameReport = () => {
                 </div>
             </div>
 
+
+
             {/* Hidden print container */}
             <div style={{ display: "none" }}>
                 <div ref={ltExtraNameReportPrintRef} className="mt-2 print-container">
