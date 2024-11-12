@@ -14,7 +14,7 @@ const ServerDownPage = () => {
             console.log("response>>>>>>>>>>>>>>>>>>>", response)
             toast?.success(`${response?.data}`)
         } catch (error) {
-            toast?.success(`Server Online Issue. Try again after sometime.`)
+            toast?.error(`Server Online Issue. Try again after sometime.`)
 
         }
     }
