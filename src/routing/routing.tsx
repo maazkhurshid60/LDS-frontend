@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/authentication/Login";
 import ServiceResult from "../pages/ServiceResult/ServiceResult";
@@ -24,13 +24,23 @@ import TransPerSlipReport from "../components/Result Templates/Affidavits Report
 import GPSReport from "../components/Result Templates/GPSReport/MainTemplate";
 import LtServiceType from "../pages/LtServiceType/LtServiceType";
 import StandardServiceType from "../pages/StandardServiceType copy/StandardServiceType";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import NotFoundPage from "../pages/NotFound";
+import ServerDownPage from "../pages/NotFound/ServerDownPage";
+
+
 
 
 const Routing = () => {
+
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/serverdownpage" element={<ServerDownPage />} />
+
+
                 <Route element={<Layout />}>
                     {/* Place the /service route at the top */}
                     <Route path="/" element={<Navigate to="/operations/service" />} />
@@ -47,8 +57,9 @@ const Routing = () => {
                     <Route path="/administration/server" element={<Server />} />
                     <Route path="/operations/legal-delivery" element={<LegalDelivery />} />
                     <Route path="/operations/result" element={<Result />} />
-                    <Route path="/operations/service" element={<Service />} />
-                    <Route path="/operations/service" element={<Service />} />
+                    <Route path="/operations/service" element={<Service />}
+                    />
+                    {/* <Route path="/operations/service" element={<Service />} /> */}
                     <Route path="/operations/legal-delivery/agency-license" element={<AgencyLic />} />
                     <Route path="/operations/legal-delivery/li-non-reports" element={<LiNonReports />} />
                     <Route path="/operations/legal-delivery/lT-extra-name-reports" element={<LTExtraNameReport />} />

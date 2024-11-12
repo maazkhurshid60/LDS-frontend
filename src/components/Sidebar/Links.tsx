@@ -10,6 +10,7 @@ import { openMenuFunction } from "../../redux/slice/menuOpen";
 import { RootState } from "../../redux/store";
 import Tooltip from "../Tooltip/Tooltip";
 import { emptyLegalDeliveryReducer } from "../../redux/slice/legalDelivery";
+import { showNotFoundPage } from "../../redux/slice/notFoundSlice";
 export interface widthProp {
     widthSmall: boolean
     userData: string
@@ -65,6 +66,9 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const showNotFound = useSelector((state: RootState) => state?.notFoundSlice?.isShow)
+
     return <div className={`mt-8 w-[100%]  m-auto  font-semibold relative 	`}>
         <div className="mr-4 flex flex-col justify-between h-[83vh]">
             <div ref={dropdownRef}>
@@ -99,8 +103,8 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                     ${subMenuShow ? "inline-block" : "hidden"}` : "relative"} bg-whiteColor overflow-hidden`}>
                                     {data.subMenu &&
                                         data.subMenu.map((subLink, subLinkId) => (
-
-                                            <Link to={subLink.to} onClick={() => subMenuFunction(subLink.linkName)}
+                                            // dispatch(showNotFoundPage(!showNotFound))
+                                            <Link to={subLink.to} onClick={() => { subMenuFunction(subLink.linkName), dispatch(showNotFoundPage(!showNotFound)) }}
                                                 className={`${subLink.linkName === activeSubLink
                                                     ? "text-primaryColorLight"
                                                     : "text-grayColor"
