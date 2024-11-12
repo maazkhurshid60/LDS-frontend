@@ -8,7 +8,6 @@ import Button from '../../components/Buttons/Button/Button'
 const ServerDownPage = () => {
     const [isServerDown, setIsServerDown] = useState(false)
     const serverDownFunction = async () => {
-        alert(isServerDown)
         const data = { status: isServerDown }
         try {
             const response = await axios.post(`${baseUrl}/server/control`, data)
