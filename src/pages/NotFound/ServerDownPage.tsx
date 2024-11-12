@@ -38,7 +38,7 @@ const ServerDownPage = () => {
             </div>
             {/* HEADER ENDS */}
             {/* FORM STARTS */}
-            <div className='m-auto'>
+            <div className='flex items-center justify-center'>
 
                 <ToggleButton
                     label={"Down the Server"}

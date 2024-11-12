@@ -21,7 +21,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ label, value, onChange }) =
                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full
                 rtl:peer-checked:after:-translate-x-full peer-checked:after:border-accentBlue peer-checked:after:border-[2px] 
                 peer-checked:after:border-solid after:content-[''] after:absolute after:top-[0px] after:start-[4px] 
-                after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 
+                after:bg-whiteColor after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 
                 after:transition-all after:duration-[500ms] dark:border-accentBlue peer-checked:bg-blue-600">
                 </div>
 
