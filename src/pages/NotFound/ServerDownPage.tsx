@@ -10,7 +10,7 @@ const ServerDownPage = () => {
     const serverDownFunction = async () => {
         const data = { status: isServerDown }
         try {
-            const response = await axios.post(`${baseUrl}/server/control`, data)
+            const response = await axios.post(`${baseUrl}/internal-server/control`, data)
             console.log("response>>>>>>>>>>>>>>>>>>>", response)
             toast?.success(`${response?.data}`)
         } catch (error) {
