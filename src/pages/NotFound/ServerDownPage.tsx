@@ -1,23 +1,54 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ToggleButton from '../../components/Toggle/ToggleButton'
 import axios from 'axios'
 import { baseUrl } from '../../apiservices/baseUrl/baseUrl'
 import { toast } from 'react-toastify'
 import Button from '../../components/Buttons/Button/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
+import { showNotFoundPage } from '../../redux/slice/navbarTracking'
+import { getAllServerStatusApi } from '../../apiservices/serverDownApi/serverDownApi'
 
 const ServerDownPage = () => {
     const [isServerDown, setIsServerDown] = useState(false)
+    const [serverId, setServerId] = useState(false)
+
+    const isSiteDown = useSelector((state: RootState) => state?.navbarTracking?.isShow)
+    const dispatch = useDispatch()
+    console.log("iserverdown", isServerDown);
+
     const serverDownFunction = async () => {
-        const data = { status: isServerDown }
+        const data = {
+            serverDownStatus: isServerDown,
+            statusId: serverId
+        }
+        // dispatch(showNotFoundPage(!isSiteDown))
         try {
-            const response = await axios.post(`https://lds-backend-prod.onrender.com/api/v1/internal-server/control`, data)
+            const response = await axios.patch(`https://lds-backend-prod.onrender.com/api/v1/server-down/update`, data)
             console.log("response>>>>>>>>>>>>>>>>>>>", response)
-            toast?.success(`${response?.data}`)
+            toast.success("Server State Has Updated")
+            // window.location.reload();
+
         } catch (error) {
             toast?.error(`Server Online Issue. Try again after sometime.`)
 
         }
     }
+
+    const getAllStatus = async () => {
+        try {
+            const response = await getAllServerStatusApi()
+            setIsServerDown(response?.data?.data[0]?.serverDownStatus)
+            setServerId(response?.data?.data[0]?._id)
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    useEffect(() => {
+        getAllStatus()
+    }, [])
 
 
     return (<div className="w-full bg-whiteColor flex items-center justify-center h-[100vh] ">
@@ -58,3 +89,23 @@ const ServerDownPage = () => {
 }
 
 export default ServerDownPage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

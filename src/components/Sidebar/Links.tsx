@@ -104,7 +104,7 @@ const Links: React.FC<widthProp> = ({ widthSmall, userData }) => {
                                     {data.subMenu &&
                                         data.subMenu.map((subLink, subLinkId) => (
                                             // dispatch(showNotFoundPage(!showNotFound))
-                                            <Link to={subLink.to} onClick={() => { subMenuFunction(subLink.linkName), dispatch(showNotFoundPage(!showNotFound)) }}
+                                            <Link to={subLink.to} onClick={() => { subMenuFunction(subLink.linkName) }}
                                                 className={`${subLink.linkName === activeSubLink
                                                     ? "text-primaryColorLight"
                                                     : "text-grayColor"

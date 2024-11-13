@@ -13,7 +13,8 @@ const Layout = () => {
   const menu = useSelector((state: RootState) => state.menuOpen.menuOpenStatus);
   const isShowSpinner = useSelector((state: RootState) => state.showSpinner.isShowSpinner);
   const dispatch = useDispatch();
-
+  const isSiteDown = useSelector((state: RootState) => state?.navbarTracking?.isShow)
+  console.log(isSiteDown)
 
   return (
     <>

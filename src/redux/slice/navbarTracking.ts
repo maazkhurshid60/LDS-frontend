@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     mainMenu: "Administeration", // Initially main menu selected
     subMenu: "User", // Initially submenu selected
+    isShow: false
 }
 const navbarTracking = createSlice({
     name: "navbarTracking",
@@ -15,12 +16,15 @@ const navbarTracking = createSlice({
         setSubMenuName: (state, action) => {
             state.subMenu = action.payload; // Update subMenu with selected value
         },
-        emptyNavbarData:(state)=>{
+        emptyNavbarData: (state) => {
             state.mainMenu = ""
             state.subMenu = ""
-        }
+        },
+        showNotFoundPage: ((state, action) => {
+            state.isShow = action.payload
+        })
     }
 })
 
-export const { setMainMenuName,setSubMenuName ,emptyNavbarData} = navbarTracking.actions;
+export const { setMainMenuName, setSubMenuName, emptyNavbarData, showNotFoundPage } = navbarTracking.actions;
 export default navbarTracking.reducer
