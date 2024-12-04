@@ -35,7 +35,7 @@ export const deleteServiceResultApi = async (id: string) => {
 
 // UPDATE SERVICE RESULT API
 export const updateServiceResultApi = async (data: serviceResultType) => {
-    console.log(data)
+    // console.log(data)
     try {
         const accessToken = localStorage.getItem("accessToken");
 

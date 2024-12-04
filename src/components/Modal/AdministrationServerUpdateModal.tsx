@@ -41,7 +41,7 @@ const AdministrationServerUpdateModal: React.FC<Props> = ({ singledata }) => {
 
         setValue("zip", formattedValue); // Update the form state
     };
-    console.log(">>>>>>>>>>", options)
+    // console.log(">>>>>>>>>>", options)
     const modalBody = <form className="flex items-center justify-start gap-x-8 gap-y-4 flex-wrap mb-8 h-[50vh] overflow-y-scroll ">
         <div className="w-full md:w-[38%] xl:w-[30%]">
             <TextField onKeyDown={handleEnterKeyPress} label="server Code" register={register} error={errors.serverCode} name="serverCode" placeholder="Enter Code" />

@@ -12,34 +12,41 @@ import { getAllServerStatusApi } from '../../apiservices/serverDownApi/serverDow
 const ServerDownPage = () => {
     const [isServerDown, setIsServerDown] = useState(false)
     const [serverId, setServerId] = useState(false)
+    const [serverStatusLength, setServerStatusLength] = useState([])
 
     const isSiteDown = useSelector((state: RootState) => state?.navbarTracking?.isShow)
     const dispatch = useDispatch()
-    console.log("iserverdown", isServerDown);
+    // console.log("iserverdown", serverStatusLength);
 
     const serverDownFunction = async () => {
-        const data = {
-            serverDownStatus: isServerDown,
-            statusId: serverId
-        }
-        // dispatch(showNotFoundPage(!isSiteDown))
         try {
-            const response = await axios.patch(`https://lds-backend-prod.onrender.com/api/v1/server-down/update`, data)
-            console.log("response>>>>>>>>>>>>>>>>>>>", response)
-            toast.success("Server State Has Updated")
+            const data = {
+                serverDownStatus: serverStatusLength?.length === 0 ? true : isServerDown,
+                statusId: serverId
+            };
+
+            const url = serverStatusLength?.length === 0
+                ? `https://lds-backend-prod.onrender.com/api/v1/server-down/create`
+                : `https://lds-backend-prod.onrender.com/api/v1/server-down/update`;
+
+            const method = serverStatusLength?.length === 0 ? axios.post : axios.patch;
+            const response = await method(url, data);
+
+            // console.log("response>>>>>>>>>>>>>>>>>>>", response);
+            toast.success("Server State Has Updated");
             // window.location.reload();
-
         } catch (error) {
-            toast?.error(`Server Online Issue. Try again after sometime.`)
-
+            toast?.error("Server Online Issue. Try again after sometime.");
         }
-    }
+    };
+
 
     const getAllStatus = async () => {
         try {
             const response = await getAllServerStatusApi()
             setIsServerDown(response?.data?.data[0]?.serverDownStatus)
             setServerId(response?.data?.data[0]?._id)
+            setServerStatusLength(response?.data?.data)
         } catch (error) {
             console.log(error);
 
