@@ -25,9 +25,13 @@ const ServerDownPage = () => {
                 statusId: serverId
             };
 
+            // const url = serverStatusLength?.length === 0
+            //     ? `https://lds-backend-prod.onrender.com/api/v1/server-down/create`
+            //     : `https://lds-backend-prod.onrender.com/api/v1/server-down/update`;
             const url = serverStatusLength?.length === 0
-                ? `https://lds-backend-prod.onrender.com/api/v1/server-down/create`
-                : `https://lds-backend-prod.onrender.com/api/v1/server-down/update`;
+                ? `https://lds-backend-server.onrender.com/api/v1/server-down/create`
+                : `https://lds-backend-server.onrender.com/api/v1/server-down/update`;
+
 
             const method = serverStatusLength?.length === 0 ? axios.post : axios.patch;
             const response = await method(url, data);
